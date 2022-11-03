@@ -1,6 +1,6 @@
 import React from "react";
 import Grid from "../types/Grid";
-import { isGridOOB } from '../helpers/gridHelpers';
+import { isGridOOB } from "../helpers/gridHelpers";
 import styles from "../../styles/Home.module.css";
 import { useTranslation } from "react-i18next";
 
@@ -21,11 +21,14 @@ const MechInput = ({
     onPositionChange,
     onProgramChange,
 }: MechInputProps) => {
-
     const { t } = useTranslation();
 
+    const instrPerRow = 19; // 19 instructions + 19 commas = 38 characters
     const programLength = program.split(",").length;
+    const rows = Math.ceil(programLength / 19);
     const currentInstructionIndex = pc % programLength;
+    const instructionRow = Math.floor(currentInstructionIndex / instrPerRow);
+    const instructionCol = currentInstructionIndex % instrPerRow;
     return (
         <div key={`input-row-${mechIndex}`} className={styles.input_row}>
             <p
@@ -34,9 +37,12 @@ const MechInput = ({
                     verticalAlign: "middle",
                     height: "20px",
                     lineHeight: "20px",
-                    width: '2.5rem'
+                    width: "2.5rem",
                 }}
-            >{t("mech")}{mechIndex}</p>
+            >
+                {t("mech")}
+                {mechIndex}
+            </p>
             <input
                 className={styles.program}
                 onChange={(event) => {
@@ -60,22 +66,32 @@ const MechInput = ({
                     });
                 }}
                 defaultValue={position.y}
-                style={{ width: "30px", textAlign: "center", marginRight: '0.8rem' }}
+                style={{
+                    width: "30px",
+                    textAlign: "center",
+                    marginRight: "0.8rem",
+                }}
             ></input>
 
             <div className={styles.programWrapper}>
                 <div
                     className={styles.instructionBox}
-                    style={{ left: `${currentInstructionIndex}rem` }}
+                    style={{
+                        left: `${instructionCol}rem`,
+                        top: `${instructionRow * 1.4}rem`,
+                    }}
                 />
-                <input
+                <textarea
                     className={styles.program}
                     onChange={(event) => {
                         onProgramChange(mechIndex, event.target.value);
                     }}
                     defaultValue={program}
-                    style={{ width: "300px" }}
-                ></input>
+                    style={{
+                        width: "calc(38ch + 2px)",
+                        height: `${rows * 1.4}rem`,
+                    }}
+                ></textarea>
             </div>
         </div>
     );
