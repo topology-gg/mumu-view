@@ -29,7 +29,7 @@ const resources = {
                 thesisLine1:
                     "Layer 1 blockchains assert identity by capital contribution - pay to mint. Layer 2 blockchains, with new affordance in compute capacity, would assert identity by skill verification - solve to mint.",
                 thesisLine2:
-                    'MovyMovy is a puzzle about visual & parallel assembly programming. Place & program the little robots ("mechs") on the board, and place the operators that execute formulas, to transport & transmute ingredients from Faucet to Sink. Solutions are ranked by throughput and cost.',
+                    'MuMu is a puzzle about visual & parallel assembly programming. Place & program the little robots ("mechs") on the board, and place the operators that execute formulas, to transport & transmute ingredients from Faucet to Sink. Solutions are ranked by throughput and cost.',
                 instructions: "Instructions",
                 instructionsLine1:
                     'Only Singleton mechanism ("mech") is available, whose instruction set is [<1>W</1>,<3>A</3>,<5>S</5>,<5>D</5>] for movement, <7>Z</7> for pick-up, <9>X</9> for drop, <11>G</11> for block-until-pick-up, and <13>H</13> for block-until-drop',
@@ -196,6 +196,8 @@ const resources = {
         translation: {
             MuMu: "BouBou",
             Subtitle: "Une experience realisée par Topology",
+            "Connect": "Connect ", // TODO
+            "Connected": "You are: ", // TODO
             frame: "Séquence",
             mech: "mech",
             newMech: "nouveau mech",
@@ -211,6 +213,9 @@ const resources = {
             Shake: "Secouer  ",
             Steam: "Vaporiser",
             Smash: "Fracasser",
+            "Submit to": "Submit to", // TODO
+            "demo-blank": "Blank", // TODO
+            "demo": "Demo", // TODO
             tutorial: {
                 title: "Comment jouer",
                 thesisTheme: "Thèse et Thème",
@@ -233,11 +238,11 @@ const resources = {
                 instructionsLine7:
                     'Le Faucet et le Sink sont représentés respectivement par un "F" et un "S" sur le damier.',
                 instructionsLine8:
-                    "Le Faucet peut produire <1 /> au rythme d'une unité par séquence.",
+                    "Le Faucet peut produire <1 /> au rythme d'une unité par séquence.", // TODO this was the old version. check English for the new version
                 formulaList: "Liste des Formules",
                 goal: "Objectif",
                 goalAffordance:
-                    "En utilisant le Faucet qui produit <1 /> au rythme d'une unité par séquence,",
+                    "En utilisant le Faucet qui produit <1 /> au rythme d'une unité par séquence,", // TODO this line is too long both before <1 /> and after <1 />, turning them into two lines; check frontend render for effect. can we shorten this?
                 goalDeliver: "Produit et livre <1 /> au Sink.",
                 goalLine2: "Minimise la latence et le coût de la solution.",
             },
@@ -257,6 +262,16 @@ const resources = {
                 delivery: "Livré",
                 staticCost: "Coût statique",
             },
+            leaderboard: { // TODO
+                title: "Top 20 Solutions",
+                rank: "Rank",
+                account: "Who",
+                delivered: "Delivered",
+                static_cost: "Static cost",
+                latency: "Average latency per delivery",
+                dynamic_cost: "Average dynamic cost per delivery",
+                block_number: "Block number"
+            }
         },
     },
 };
