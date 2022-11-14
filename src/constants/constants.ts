@@ -2,7 +2,7 @@ import { MechStatus, MechType } from "../types/MechState";
 import { OPERATOR_TYPES } from "../types/Operator";
 import Solution from "../types/Solution";
 
-export const DIM = 7;
+export const DIM = 8;
 export const PROGRAM_SIZE_MAX = 40
 
 const BLANK_SOLUTION: Solution = {

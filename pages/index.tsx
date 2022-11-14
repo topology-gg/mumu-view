@@ -52,7 +52,7 @@ const theme = createTheme({
             main: "#2d4249",
         },
         info: {
-            main: "#848f98",
+            main: "#DDDDDD",
         }
     },
     components: {
