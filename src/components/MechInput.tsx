@@ -44,13 +44,6 @@ const MechInput = ({
     const programLength = instructions.length;
     const currentInstructionIndex = pc % programLength;
 
-    const NORMAL_STYLE = { width: "700px" };
-    const INVALID_STYLE = {
-        ...NORMAL_STYLE,
-        backgroundColor: "#FFCBCB",
-        color: "#999999",
-    };
-    const [programStyle, setProgramStyle] = useState(NORMAL_STYLE);
     const [selectedInstructionIndex, setSelectedInstructionIndex] =
         useState<number>(null);
     const [selectedNewInstruction, setSelectedNewInstruction] =
@@ -69,9 +62,8 @@ const MechInput = ({
     const handleInsertInstruction = (instruction) => {
         const instructions = program.split(",") as string[];
         if (instructions.length > PROGRAM_SIZE_MAX) {
-            setProgramStyle((prev) => INVALID_STYLE);
+            return;
         } else {
-            setProgramStyle((prev) => NORMAL_STYLE);
             const newProgram = program.concat(`,${instruction}`);
             onProgramChange(mechIndex, newProgram);
         }
@@ -195,7 +187,11 @@ const MechInput = ({
 
                     <div
                         className={styles.programWrapper}
-                        style={{ height: "25px" }}
+                        style={{
+                            height:"25px",
+                            borderRadius: '5px',
+                            backgroundColor: program.split(",").length > PROGRAM_SIZE_MAX ? '#FFCBCB' : '#FFFFFF00'
+                        }}
                     >
                         {instructions.map((instruction, index) => (
                             <SingleInstruction
