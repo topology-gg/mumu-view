@@ -115,7 +115,6 @@ const MechInput = ({
                     }}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    style={{marginBottom:'0.2rem', alignItems:'center'}}
                 >
                     <div style={{ marginLeft: "1rem" }}>
                         <Unit
@@ -165,8 +164,8 @@ const MechInput = ({
                             width: "30px",
                             height: "25px",
                             textAlign: "center",
-                            border:"1px solid #CCCCCC",
-                            borderRadius:'10px 0 0 10px'
+                            border: "1px solid #CCCCCC",
+                            borderRadius: "10px 0 0 10px",
                         }}
                         disabled={disabled}
                     ></input>
@@ -184,17 +183,20 @@ const MechInput = ({
                         value={position.y}
                         style={{
                             width: "30px",
-                            height: '25px',
+                            height: "25px",
                             textAlign: "center",
                             marginRight: "0.8rem",
-                            border:"1px solid #CCCCCC",
-                            borderLeft:'0px',
-                            borderRadius:'0 10px 10px 0',
+                            border: "1px solid #CCCCCC",
+                            borderLeft: "0px",
+                            borderRadius: "0 10px 10px 0",
                         }}
                         disabled={disabled}
                     ></input>
 
-                    <div className={styles.programWrapper} style={{height:'25px'}}>
+                    <div
+                        className={styles.programWrapper}
+                        style={{ height: "25px" }}
+                    >
                         {instructions.map((instruction, index) => (
                             <SingleInstruction
                                 instruction={instruction}
