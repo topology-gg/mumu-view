@@ -15,6 +15,12 @@ p {
     font-size: 0.75rem;
 }
 
+.modal-header,
+.modal-body,
+.modal-footer {
+  padding: 2rem;
+}
+
 input {
     font-family: menlo;
 }

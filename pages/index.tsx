@@ -910,15 +910,15 @@ export default function Home() {
                             onChange = {event => {setSaveToName(prev => event.target.value)}}
                             defaultValue = {DEFAULT_SAVE_TO_NAME}
                             style={{width:'7rem', margin:'0 3px 0 3px', height:'24px'}}
-                            placeholder={'save to name'}
+                            placeholder={t('save to name')}
                         ></input>
                         <button
                             onClick={() => {handleSaveClick()}}
                             style={saveButtonStyle}
-                        > Save </button>
+                        > {t("Save")} </button>
                         <button
                             onClick={() => {handleClearClick()}}
-                        > Clear </button>
+                        > {t("Clear")} </button>
                     </div>
 
                         <div className={styles.programming_interface} style={{padding: '2rem',borderBottom:'1px solid #333333'}}>

@@ -55,6 +55,8 @@ export default function Tutorial() {
             </Button>
             <Modal open={open} onClose={handleClose}>
                 <Box sx={{ p: 2, fontFamily: "var(--font-family-secondary)" }}>
+                    <div style={{paddingLeft:'1rem', paddingTop:'1rem'}}>
+
                     <p
                         style={{
                             fontSize: "0.9rem",
@@ -64,13 +66,6 @@ export default function Tutorial() {
                     >
                         {t("tutorial.Overview")}
                     </p>
-                    {/* <p
-                        style={{
-                            marginBottom: "2rem",
-                        }}
-                    >
-                        {t("tutorial.overviewLine1")}
-                    </p> */}
                     <ol
                         style={{
                             width: "30rem",
@@ -480,16 +475,20 @@ export default function Tutorial() {
                         }}
                     >
                         <li style={CONTENT_LI_STYLE}>
-                            A program is a sequence of instructions.
+                            {t("tutorial.explain_program")}
+                            {/* A program is a sequence of instructions. */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
-                            Each mech has its own program.
+                            {t("tutorial.explain_mech")}
+                            {/* Each mech has its own program. */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
-                            During simulation, each mech runs its own program on repeat.
+                            {t("tutorial.explain_simulation")}
+                            {/* During simulation, each mech runs its own program on repeat. */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
-                            Available instructions:
+                            {t("tutorial.available_instructions")}
+                            {/* Available instructions: */}
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
                                 {INSTRUCTION_ICON_MAP['w']}{INSTRUCTION_ICON_MAP['a']}{INSTRUCTION_ICON_MAP['s']}{INSTRUCTION_ICON_MAP['d']}{INSTRUCTION_ICON_MAP['z']}{INSTRUCTION_ICON_MAP['x']}{INSTRUCTION_ICON_MAP['g']}{INSTRUCTION_ICON_MAP['h']}{INSTRUCTION_ICON_MAP['.']}
                             </i>
@@ -497,93 +496,59 @@ export default function Tutorial() {
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
                                 {INSTRUCTION_ICON_MAP['w']}/{INSTRUCTION_ICON_MAP['a']}/{INSTRUCTION_ICON_MAP['s']}/{INSTRUCTION_ICON_MAP['d']}
-                            </i>: move up/left/down/right by one grid on the canvas.
+                            </i>
+                            {t("tutorial.instruction_wasd")}
+                            {/* : move up/left/down/right by one grid on the canvas. */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
                                 {INSTRUCTION_ICON_MAP['z']}
-                            </i>: pick up an object, if available
+                            </i>
+                            {t("tutorial.instruction_z")}
+                            {/* : pick up an object, if available. */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
                                 {INSTRUCTION_ICON_MAP['x']}
-                            </i>: drop the object in possession, if available
+                            </i>
+                            {t("tutorial.instruction_x")}
+                            {/* : drop the object in possession, if available. */}
+
                         </li>
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
                                 {INSTRUCTION_ICON_MAP['g']}
-                            </i>: block program until pick up an object. This instruction becomes no-op if the mech already possesses an object.
+                            </i>
+                            {t("tutorial.instruction_g")}
+                            {/* : block program until pick up an object. This instruction becomes no-op if the mech already possesses an object. */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
-                                {INSTRUCTION_ICON_MAP['g']}
-                            </i>: block program until drop the object in possession.  This instruction becomes no-op if the mech is not possessing an object.
+                                {INSTRUCTION_ICON_MAP['h']}
+                            </i>
+                            {t("tutorial.instruction_h")}
+                            {/* : block program until drop the object in possession.  This instruction becomes no-op if the mech is not possessing an object. */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
                                 {INSTRUCTION_ICON_MAP['.']}
-                            </i>: no-op (no operation).
+                            </i>
+                            {t("tutorial.instruction_noop")}
+                            {/* : no-op (no operation). */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
-                            Program size shall not exceed 40 instructions.
+                            {t("tutorial.program_limit")}
+                            {/* Program size shall not exceed 40 instructions. */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
-                            On formula placement: operands and product must be contiguous grids i.e. for &(a,b)=c, a-b and b-c must both be neighbors. When the contiguity rule is violated, formula symbols are not rendered.
+                            {t("tutorial.formula_placement")}
+                            {/* On formula placement: operands and product must be contiguous grids i.e. for &(a,b)=c, a-b and b-c must both be neighbors. When the contiguity rule is violated, formula symbols are not rendered. */}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
-                            Faucet is marked as "F" on the board, while Sink is marked as "S" on the board.
+                            {t("tutorial.faucet_sink")}
+                            {/* Faucet is marked as "F" on the board, while Sink is marked as "S" on the board. */}
                         </li>
 
-
-{/*
-                        <li style={CONTENT_LI_STYLE}>
-                            <Trans t={t} i18nKey={"tutorial.instructionsLine1"}>
-                                Only Singleton mechanism ("mech") is available,
-                                whose instruction set is [<strong>W</strong>,
-                                <strong>A</strong>,<strong>S</strong>,
-                                <strong>D</strong>] for movement,{" "}
-                                <strong>Z</strong> for pick-up,{" "}
-                                <strong>X</strong> for drop, <strong>G</strong>{" "}
-                                for block-until-pick-up, and <strong>H</strong>{" "}
-                                for block-until-drop
-                            </Trans>
-                        </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            <Trans t={t} i18nKey="tutorial.instructionsLine2">
-                                More on <strong>G</strong>: the mech will wait
-                                at this instruction until its location has a
-                                free atom to be picked up. It then picks up the
-                                free atom in the same frame, and proceed to its
-                                next instruction in the next frame. If the mech
-                                is closed when encountering this instruction
-                                (i.e. not able to pick up), this instruction is
-                                treated as no-op.
-                            </Trans>
-                        </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            <Trans t={t} i18nKey="tutorial.instructionsLine3">
-                                More on <strong>H</strong>: the mech will wait
-                                at this instruction until its location is empty
-                                for drop-off. It then drops off the atom in
-                                possession in the same frame, and proceed to its
-                                next instruction in the next frame. If the mech
-                                is open when encountering this instruction (i.e.
-                                not possessing an atom for drop-off), this
-                                instruction is treated as no-op.
-                            </Trans>
-                        </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            {t("tutorial.instructionsLine4")}
-                        </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            {t("tutorial.instructionsLine6")}
-                        </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            {t("tutorial.instructionsLine7")}
-                        </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            {t("tutorial.instructionsLine8")}
-                        </li> */}
                     </ol>
 
                     <p
@@ -598,7 +563,7 @@ export default function Tutorial() {
                     <p
                         style={{
                             fontSize: "0.8rem",
-                            marginTop: "0.5rem",
+                            marginTop: "1rem",
                             marginBottom: "0",
                         }}
                     >
@@ -645,23 +610,38 @@ export default function Tutorial() {
                         }}
                     >
                         <li style={CONTENT_LI_STYLE}>
+                            <i className="material-icons" style={{ fontSize: "1rem" }}>
+                                {INSTRUCTION_ICON_MAP['w']}/{INSTRUCTION_ICON_MAP['a']}/{INSTRUCTION_ICON_MAP['s']}/{INSTRUCTION_ICON_MAP['d']}
+                            </i>
                             {t("tutorial.dynamicCostLine1")}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
+                            <i className="material-icons" style={{ fontSize: "1rem" }}>
+                                {INSTRUCTION_ICON_MAP['w']}/{INSTRUCTION_ICON_MAP['a']}/{INSTRUCTION_ICON_MAP['s']}/{INSTRUCTION_ICON_MAP['d']}
+                            </i>
                             {t("tutorial.dynamicCostLine2")}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
+                            <i className="material-icons" style={{ fontSize: "1rem" }}>
+                                {INSTRUCTION_ICON_MAP['z']} / {INSTRUCTION_ICON_MAP['g']}
+                            </i>
                             {t("tutorial.dynamicCostLine3")}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
+                            <i className="material-icons" style={{ fontSize: "1rem" }}>
+                                {INSTRUCTION_ICON_MAP['x']} / {INSTRUCTION_ICON_MAP['h']}
+                            </i>
                             {t("tutorial.dynamicCostLine4")}
                         </li>
                         <li style={CONTENT_LI_STYLE}>
+                            <i className="material-icons" style={{ fontSize: "1rem" }}>
+                                {INSTRUCTION_ICON_MAP['g']} / {INSTRUCTION_ICON_MAP['h']}
+                            </i>
                             {t("tutorial.dynamicCostLine5")}
                         </li>
                     </ol>
 
-
+                    </div>
                 </Box>
             </Modal>
         </div>

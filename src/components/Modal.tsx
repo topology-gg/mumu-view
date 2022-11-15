@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close'
 
 const Modal = ({ children, open, onClose }) => {
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} maxWidth='sm' fullWidth={true}>
       <IconButton
         aria-label="close"
         onClick={onClose}
