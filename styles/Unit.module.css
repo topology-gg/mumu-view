@@ -19,27 +19,27 @@
 }
 
 .atomVanillaFree, .atomVanillaPossessed {
-    background: url('../src/images/emoji_peach.png') no-repeat;
+    background: url('../src/images/wood.png') no-repeat;
     background-size: contain;
 }
 
 .atomHazelnutFree, .atomHazelnutPossessed {
-    background: url('../src/images/emoji_chick.png') no-repeat;
+    background: url('../src/images/cactus.png') no-repeat;
     background-size: contain;
 }
 
 .atomChocolateFree, .atomChocolatePossessed {
-    background: url('../src/images/emoji_chicken.png') no-repeat;
+    background: url('../src/images/tulip.png') no-repeat;
     background-size: contain;
 }
 
 .atomTruffleFree, .atomTrufflePossessed {
-    background: url('../src/images/emoji_unicorn.png') no-repeat;
+    background: url('../src/images/fox.png') no-repeat;
     background-size: contain;
 }
 
 .atomSaffronFree, .atomSaffronPossessed {
-    background: url('../src/images/emoji_bubbletea.png') no-repeat;
+    background: url('../src/images/fire.png') no-repeat;
     background-size: contain;
 }
 

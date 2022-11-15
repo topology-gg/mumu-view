@@ -378,9 +378,11 @@ export default function Home() {
         var adder_indices_in_str = []
         operators.forEach(function (operator: Operator) {
             for (const grid of operator.input){
+                if (!grid.x || !grid.y) return false
                 adder_indices_in_str = [...adder_indices_in_str, JSON.stringify(grid)]
             }
             for (const grid of operator.output){
+                if (!grid.x || !grid.y) return false
                 adder_indices_in_str = [...adder_indices_in_str, JSON.stringify(grid)]
             }
         })
@@ -554,7 +556,7 @@ export default function Home() {
                 // Parse program into array of instructions and store to react state
                 let instructionSets = programsToInstructionSets (programs)
                 setInstructionSets (instructionSets)
-                // console.log('running instructionSets', instructionSets)
+                console.log('running instructionSets', instructionSets)
 
                 // Prepare input
                 const boardConfig: BoardConfig = {
@@ -947,12 +949,13 @@ export default function Home() {
                                                         className={styles.program}
                                                         onChange={event => {
                                                             // if (event.target.value.length == 0) return;
-                                                            if (isNaN(parseInt(event.target.value))) return;
+                                                            // if (isNaN(parseInt(event.target.value))) return;
                                                             let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]))
                                                             newOperator.input[input_i].x = parseInt(event.target.value)
                                                             setOperator(operator_i, newOperator)}
                                                         }
                                                         defaultValue={operatorStates[operator_i].input[input_i].x}
+                                                        value={!isNaN(operatorStates[operator_i].input[input_i].x) ? operatorStates[operator_i].input[input_i].x : ''}
                                                         style={{
                                                             width:'30px', height:'25px',textAlign:'center',
                                                             border:"1px solid #CCCCCC",
@@ -964,12 +967,13 @@ export default function Home() {
                                                         className={styles.program}
                                                         onChange={event => {
                                                             // if (event.target.value.length == 0) return;
-                                                            if (isNaN(parseInt(event.target.value))) return;
+                                                            // if (isNaN(parseInt(event.target.value))) return;
                                                             let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]))
                                                             newOperator.input[input_i].y = parseInt(event.target.value)
                                                             setOperator(operator_i, newOperator)}
                                                         }
                                                         defaultValue={operatorStates[operator_i].input[input_i].y}
+                                                        value={!isNaN(operatorStates[operator_i].input[input_i].y) ? operatorStates[operator_i].input[input_i].y : ''}
                                                         style={{
                                                             width:'30px', height:'25px',textAlign:'center',
                                                             border:"1px solid #CCCCCC",
@@ -995,12 +999,13 @@ export default function Home() {
                                                     <input
                                                         className={styles.program}
                                                         onChange={event => {
-                                                            if (event.target.value.length == 0) return;
+                                                            // if (event.target.value.length == 0) return;
                                                             let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]))
                                                             newOperator.output[output_i].x = parseInt(event.target.value)
                                                             setOperator(operator_i, newOperator)}
                                                         }
                                                         defaultValue={operatorStates[operator_i].output[output_i].x}
+                                                        value={!isNaN(operatorStates[operator_i].output[output_i].x) ? operatorStates[operator_i].output[output_i].x : ''}
                                                         style={{
                                                             width:'30px', height:'25px',textAlign:'center',
                                                             border:"1px solid #CCCCCC",
@@ -1011,12 +1016,13 @@ export default function Home() {
                                                     <input
                                                         className={styles.program}
                                                         onChange={event => {
-                                                            if (event.target.value.length == 0) return;
+                                                            // if (event.target.value.length == 0) return;
                                                             let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]))
                                                             newOperator.output[output_i].y = parseInt(event.target.value)
                                                             setOperator(operator_i, newOperator)}
                                                         }
                                                         defaultValue={operatorStates[operator_i].output[output_i].y}
+                                                        value={!isNaN(operatorStates[operator_i].output[output_i].y) ? operatorStates[operator_i].output[output_i].y : ''}
                                                         style={{
                                                             width:'30px', height:'25px',textAlign:'center',
                                                             border:"1px solid #CCCCCC",

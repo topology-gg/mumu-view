@@ -1,7 +1,7 @@
 const resources = {
     en: {
         translation: {
-            MuMu: "MuMu: Season 0",
+            MuMu: "MuMu: Season 1",
             Subtitle: "An experiment by Topology",
             "Connect": "Connect ",
             "Connected": "You are: ",
@@ -31,8 +31,10 @@ const resources = {
                 thesisLine1:
                     "Layer 1 blockchains assert identity by capital contribution - pay to mint. Layer 2 blockchains, with new affordance in compute capacity, would assert identity by skill verification - solve to mint.",
                 thesisLine2:
-                    'MovyMovy is a puzzle about visual & parallel assembly programming. Place & program the little robots ("mechs") on the board, and place the operators that execute formulas, to transport & transmute ingredients from Faucet to Sink. Solutions are ranked by throughput and cost.',
-                instructions: "Instructions",
+                    'MuMu is a puzzle about visual & parallel assembly programming. Place & program the little robots ("mechs") on the board, and place the operators that execute formulas, to transport & transmute ingredients from Faucet to Sink. Solutions are ranked by throughput and cost.',
+                Overview: "Overview",
+                overviewLine1: "In the world of alchemy, substances can be transformed into one another via alchemic diagrams. Build diagrams by placing formulas and mechs, and orchestrating the mechs creatively.",
+                instructions: "Laws of the Alchemic Diagram",
                 instructionsLine1:
                     'Only Singleton mechanism ("mech") is available, whose instruction set is [<1>W</1>,<3>A</3>,<5>S</5>,<5>D</5>] for movement, <7>Z</7> for pick-up, <9>X</9> for drop, <11>G</11> for block-until-pick-up, and <13>H</13> for block-until-drop',
                 instructionsLine2:
@@ -48,11 +50,11 @@ const resources = {
                     'Faucet is marked as "F" on the board, while Sink is marked as "S" on the board.',
                 instructionsLine8:
                     "Program size shall not exceed 40 instructions.",
-                formulaList: "Formula list",
+                formulaList: "Formula List",
                 goal: "Goal",
                 goalAffordance:
                     "With Faucet replenishing <1 /> at one unit per frame,",
-                goalDeliver: "Produce and deliver <1 /> to Sink.",
+                goalDeliver: "Build diagrams that produce & deliver <1 /> to Sink.",
                 goalLine2: "Minimize the latency and cost of your solution.",
                 goalLine3_1: "Register at ",
                 goalLine3_2: " to show who you are on the leaderboard.",
@@ -100,7 +102,7 @@ const resources = {
     },
     scn: {
         translation: {
-            MuMu: "挪挪: 第0季",
+            MuMu: "挪挪: 第1季",
             Subtitle: "Topology 的一项实验",
             "Connect": "连接 ",
             "Connected": "你是: ",
@@ -198,7 +200,7 @@ const resources = {
     },
     tcn: {
         translation: {
-            MuMu: "挪挪: 第0季",
+            MuMu: "挪挪: 第1季",
             Subtitle: "Topology 的一項實驗",
             "Connect": "連接 ",
             "Connected": "你是: ",

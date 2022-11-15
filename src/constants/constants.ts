@@ -45,7 +45,6 @@ const DEMO_SOLUTION_2: Solution = {
         {id: 'mech5', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:5, y:4 }, pc_next: 0},
         {id: 'mech6', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:6, y:5 }, pc_next: 0},
         {id: 'mech7', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:6, y:4 }, pc_next: 0},
-        {id: 'mech8', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:2, y:5 }, pc_next: 0},
     ],
     programs: [
         'Z,D,X,A,Z,D,D,X,A,A',
@@ -54,9 +53,8 @@ const DEMO_SOLUTION_2: Solution = {
         'G,S,X,W,G,S,D,X,A,W',
         'G,S,S,S,X,W,W,W',
         'G,A,A,A,A,S,X,W,D,D,D,D',
-        'G,S,X,W',
-        'G,S,S,H,W,W',
-        'G,S,D,D,D,D,X,A,A,A,W,Z,S,D,D,D,X,A,A,W,Z,S,D,D,X,A,W,Z,S,D,X,A,A,A,A,W',
+        'G,S,S,D,X,A,W,W',
+        'G,S,S,S,D,H,A,W,W,W',
     ],
     operators: [
         { input:[{x:1,y:0}, {x:2,y:0}], output:[{x:3,y:0}], typ:OPERATOR_TYPES.STIR},
