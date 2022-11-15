@@ -143,7 +143,7 @@ export default function Home() {
 
     let operatorInputHighlightInit: boolean[] = Array(numOperators).fill(false)
     const [operatorInputHighlight, setOperatorInputHighlight] = useState<boolean[]>(operatorInputHighlightInit)
-    const [operatorStyles, setOperatorStyles] = useState<React.CSSProperties[]>([{}])
+    const [operatorStyles, setOperatorStyles] = useState<React.CSSProperties[]>(operatorStates.map((op, _) => { return{backgroundColor: op.typ.color + '55'} }))
 
     const [mechIndexHighlighted, setMechIndexHighlighted] = useState<number>(-1)
 
@@ -669,22 +669,17 @@ export default function Home() {
         setMechInitPositions (prev => viewSolution.mechs.map(mech => mech.index))
         setNumOperators (prev => viewSolution.operators.length)
         setOperatorStates (prev => viewSolution.operators)
+        setOperatorStyles ( prev => viewSolution.operators.map(
+            (op, _) => { return{backgroundColor: op.typ.color + '55'} }
+        ))
     }
 
     function handleMouseOverOperatorInput (operator_i: number) {
-        let newHighlight = []
-        let newOperatorStyles: React.CSSProperties[] = []
-        for (let i=0; i<numOperators; i++){
-            if (i==operator_i){
-                newHighlight.push (true)
-                newOperatorStyles.push ({backgroundColor:'#FFFE71'})
-            }
-            else {
-                newHighlight.push (false)
-                newOperatorStyles.push ({})
-            }
+        let newHighlight = operatorInputHighlight
+        let newOperatorStyles: React.CSSProperties[] = operatorStyles
 
-        }
+        newOperatorStyles[operator_i] = {backgroundColor:'#FFFE71'}
+        newHighlight[operator_i] = true
         setOperatorInputHighlight(prev => newHighlight)
         setOperatorStyles(prev => newOperatorStyles)
     }
@@ -694,7 +689,7 @@ export default function Home() {
         let newOperatorStyles: React.CSSProperties[] = []
         for (let i=0; i<numOperators; i++){
             newHighlight.push (false)
-            newOperatorStyles.push ({})
+            newOperatorStyles.push ({backgroundColor: operatorStates[i].typ.color + '55'})
         }
         setOperatorInputHighlight(prev => newHighlight)
         setOperatorStyles(prev => newOperatorStyles)

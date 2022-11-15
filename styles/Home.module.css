@@ -74,6 +74,7 @@
     flex-direction: row;
     border-radius: 10px;
     margin-bottom: 0.2rem;
+    align-items: center;
 }
 
 .input_row:hover {
@@ -83,6 +84,7 @@
 .input_grid {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .input_name {

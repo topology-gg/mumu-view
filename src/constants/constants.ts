@@ -73,10 +73,11 @@ export const DEMO_SOLUTIONS = [
 ];
 
 export const INSTRUCTION_ICON_MAP = {
-    w: "expand_less",
-    a: "chevron_left",
-    s: "expand_more",
-    d: "chevron_right",
+    // w: "expand_less",
+    w: "arrow_upward",
+    a: "arrow_back",
+    s: "arrow_downward",
+    d: "arrow_forward",
     z: "add",
     x: "close",
     g: "add_circle",

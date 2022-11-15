@@ -50,7 +50,7 @@ const NewInstruction = ({
             onClick={handleClick}
             active={false}
             selected={selected}
-            sx={{ borderColor: "info.main" }}
+            sx={{}}
         >
             <InputBase
                 inputRef={inputRef}
