@@ -25,6 +25,11 @@ export default function simulator(
     boardConfig: BoardConfig, // including atom faucet, operator, atom sink - these don't change in frames
 ): Frame[] {
 
+    // logging
+    console.log("> simulator receives mechs:", mechs)
+    console.log("> simulator receives instructionSets:", instructionSets)
+    console.log("> simulator receives boardConfig:", boardConfig)
+
     // guardrail
     if (!boardConfig) {return []}
 
@@ -148,7 +153,11 @@ function _simulate_one_cycle (
     //
     // for (const mech of mechs_curr) {
     mechs_curr.map((mech: MechState, mech_i: number) => {
-        const instruction = instruction_per_mech[mech_i]
+
+        // backward compatibility: convert instruction to lowercase letter; convert '_' to '.'
+        let instruction: string = instruction_per_mech[mech_i].toLowerCase()
+        if (instruction == '_') instruction = '.'
+
         var mech_new = {id:mech.id, typ:mech.typ, index:mech.index, status:mech.status, pc_next:mech.pc_next}
 
         // console.log (`mech${mech_i} running ${instruction}`)
@@ -156,7 +165,7 @@ function _simulate_one_cycle (
         // add note
         notes += `intended ${instruction}/`
 
-        if (instruction == 'D'){ // x-positive
+        if (instruction == 'd'){ // x-positive
 
             // non-blocking
             mech_new.pc_next += 1
@@ -188,7 +197,7 @@ function _simulate_one_cycle (
                 notes += 'fail/'
             }
         }
-        else if (instruction == 'A'){ // x-negative
+        else if (instruction == 'a'){ // x-negative
 
             // non-blocking
             mech_new.pc_next += 1
@@ -220,7 +229,7 @@ function _simulate_one_cycle (
                 notes += 'fail/'
             }
         }
-        else if (instruction == 'S'){ // y-positive
+        else if (instruction == 's'){ // y-positive
 
             // non-blocking
             mech_new.pc_next += 1
@@ -251,7 +260,7 @@ function _simulate_one_cycle (
                 notes += 'fail/'
             }
         }
-        else if (instruction == 'W'){ // y-negative
+        else if (instruction == 'w'){ // y-negative
 
             // non-blocking
             mech_new.pc_next += 1
@@ -282,7 +291,7 @@ function _simulate_one_cycle (
                 notes += 'fail/'
             }
         }
-        else if (instruction == 'Z'){ // GET
+        else if (instruction == 'z'){ // GET
 
             // non-blocking
             mech_new.pc_next += 1
@@ -314,7 +323,7 @@ function _simulate_one_cycle (
                 notes += 'fail/'
             }
         }
-        else if (instruction == 'X'){ // PUT
+        else if (instruction == 'x'){ // PUT
 
             // non-blocking
             mech_new.pc_next += 1
@@ -346,7 +355,7 @@ function _simulate_one_cycle (
                 notes += 'fail/'
             }
         }
-        else if (instruction == 'G'){ // block-until-pickup
+        else if (instruction == 'g'){ // block-until-pickup
             // Note: the mech will wait at this instruction until its location has a free atom to be picked up;
             // it then picks up the free atom in the same frame, and proceed to its next instruction in the next frame;
             // if the mech is closed when encountering this instruction (i.e. not able to pick up), this instruction is treated as no-op.
@@ -391,7 +400,7 @@ function _simulate_one_cycle (
             }
 
         }
-        else if (instruction == 'H'){ // block-until-drop
+        else if (instruction == 'h'){ // block-until-drop
             // the mech will wait at this instruction until its location is empty for drop-off;
             // it then drops off the atom in possession in the same frame, and proceed to its next instruction in the next frame;
             // if the mech is open when encountering this instruction
@@ -438,7 +447,7 @@ function _simulate_one_cycle (
                 notes += 'success/'
             }
         }
-        else if (instruction == '_'){
+        else if (instruction == '.'){
             // non-blocking
             mech_new.pc_next += 1
         }

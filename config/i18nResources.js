@@ -1,7 +1,7 @@
 const resources = {
     en: {
         translation: {
-            MuMu: "MuMu: Season 0",
+            MuMu: "MuMu: Season 1",
             Subtitle: "An experiment by Topology",
             "Connect": "Connect ",
             "Connected": "You are: ",
@@ -25,34 +25,39 @@ const resources = {
             "Submit to": "Submit to",
             "demo-blank": "Blank",
             "demo": "Demo",
+            'Save':'Save',
+            'Clear':'Clear',
+            'save to name':'save to name',
             tutorial: {
                 title: "How to play",
                 thesisTheme: "Thesis & Theme",
                 thesisLine1:
                     "Layer 1 blockchains assert identity by capital contribution - pay to mint. Layer 2 blockchains, with new affordance in compute capacity, would assert identity by skill verification - solve to mint.",
                 thesisLine2:
-                    'MovyMovy is a puzzle about visual & parallel assembly programming. Place & program the little robots ("mechs") on the board, and place the operators that execute formulas, to transport & transmute ingredients from Faucet to Sink. Solutions are ranked by throughput and cost.',
-                instructions: "Instructions",
-                instructionsLine1:
-                    'Only Singleton mechanism ("mech") is available, whose instruction set is [<1>W</1>,<3>A</3>,<5>S</5>,<5>D</5>] for movement, <7>Z</7> for pick-up, <9>X</9> for drop, <11>G</11> for block-until-pick-up, and <13>H</13> for block-until-drop',
-                instructionsLine2:
-                    "More on <1>G</1>: the mech will wait at this instruction until its location has a free object to be picked up. It then picks up the free object in the same frame, and proceed to its next instruction in the next frame. If the mech is closed when encountering this instruction (i.e. not able to pick up), this instruction is treated as no-op.",
-                instructionsLine3:
-                    "More on <1>H</1>: the mech will wait at this instruction until its location is empty for drop-off. It then drops off the object in possession in the same frame, and proceed to its next instruction in the next frame. If the mech is open when encountering this instruction (i.e. not possessing an object for drop-off), this instruction is treated as no-op.",
-                instructionsLine4: "_ as instruction means no-operation.",
-                instructionsLine5:
-                    "During simulation, each mech cycles through its own program (sequence of instructions) on repeat.",
-                instructionsLine6:
-                    "On operator placement: operands and product must be contiguous grids i.e. for a+b=c, a&b and b&c must both be neighbors. When the contiguity rule is violated, operator symbols are not rendered.",
-                instructionsLine7:
-                    'Faucet is marked as "F" on the board, while Sink is marked as "S" on the board.',
-                instructionsLine8:
-                    "Program size shall not exceed 40 instructions.",
-                formulaList: "Formula list",
+                    'MuMu is a puzzle about visual & parallel assembly programming. Place & program the little robots ("mechs") on the board, and place the operators that execute formulas, to transport & transmute ingredients from Faucet to Sink. Solutions are ranked by throughput and cost.',
+                Overview: "Overview",
+                overviewLine1: "In the world of alchemy, substances can be transformed into one another via alchemic diagrams. Build diagrams by placing formulas and mechs, and orchestrating the mechs creatively.",
+                instructions: "Laws of the Alchemic Diagram",
+
+                explain_program: "A program is a sequence of instructions.",
+                explain_mech: "Each mech has its own program.",
+                explain_simulation: "During simulation, each mech runs its own program on repeat.",
+                available_instructions: "Available instructions:",
+                instruction_wasd: ": move up/left/down/right by one grid on the canvas.",
+                instruction_z: ": pick up an object, if available.",
+                instruction_x: ": drop the object in possession, if available.",
+                instruction_g: ": block program until pick up an object. This instruction becomes no-op if the mech already possesses an object.",
+                instruction_h: ": block program until drop the object in possession.  This instruction becomes no-op if the mech is not possessing an object.",
+                instruction_noop: ": no-op (no operation).",
+                program_limit: "Program size shall not exceed 40 instructions.",
+                formula_placement: "On formula placement: operands and product must be contiguous grids i.e. for &(a,b)=c, a-b and b-c must both be neighbors. When the contiguity rule is violated, formula symbols are not rendered.",
+                faucet_sink: 'Faucet is marked as "F" on the board, while Sink is marked as "S" on the board.',
+
+                formulaList: "Formula List",
                 goal: "Goal",
                 goalAffordance:
                     "With Faucet replenishing <1 /> at one unit per frame,",
-                goalDeliver: "Produce and deliver <1 /> to Sink.",
+                goalDeliver: "Build diagrams that produce & deliver <1 /> to Sink.",
                 goalLine2: "Minimize the latency and cost of your solution.",
                 goalLine3_1: "Register at ",
                 goalLine3_2: " to show who you are on the leaderboard.",
@@ -64,11 +69,11 @@ const resources = {
                 staticCostLine4: "Steam: 750 / formula",
                 staticCostLine5: "Smash: 1000 / formula",
                 dynamicCostTitle: "Dynamic Cost",
-                dynamicCostLine1: "Mech movement (W,A,S,D) when carrying object: 10 / frame",
-                dynamicCostLine2: "Mech movement (W,A,S,D) when not carrying object: 20 / frame",
-                dynamicCostLine3: "Mech pickup object (Z / G): 25 / frame",
-                dynamicCostLine4: "Mech drop object (X / H): 25 / frame",
-                dynamicCostLine5: "Mech blocked (G / H): 3 / frame",
+                dynamicCostLine1: " moving when carrying object: 10 / frame",
+                dynamicCostLine2: " moving when not carrying object: 20 / frame",
+                dynamicCostLine3: " pickup object: 25 / frame",
+                dynamicCostLine4: " drop object: 25 / frame",
+                dynamicCostLine5: " blocked: 3 / frame",
             },
             delivery: {
                 accumulatedCost: "Accumulated cost",
@@ -87,7 +92,7 @@ const resources = {
                 staticCost: "Static cost",
             },
             leaderboard: {
-                title: "Top 20 Solutions",
+                title: "Top 20 Diagrams",
                 rank: "Rank",
                 account: "Who",
                 delivered: "Delivered in 80 frames",
@@ -100,7 +105,7 @@ const resources = {
     },
     scn: {
         translation: {
-            MuMu: "挪挪: 第0季",
+            MuMu: "挪挪: 第1季",
             Subtitle: "Topology 的一项实验",
             "Connect": "连接 ",
             "Connected": "你是: ",
@@ -124,6 +129,9 @@ const resources = {
             "Submit to": "提交至",
             "demo-blank": "空白",
             "demo": "范例",
+            'Save':'暂存',
+            'Clear':'清除暂存',
+            'save to name':'暂存名',
             tutorial: {
                 title: "玩法",
                 thesisTheme: "主题",
@@ -131,27 +139,29 @@ const resources = {
                     "在一层网络链上，人们通过付费交易来获取身份。而二层网络链具备扩容的运算容量，人们可以通过验证技能来获取身份。",
                 thesisLine2:
                     "「挪挪」是一款结合了组合型语言和并行处理的多维度优化谜题。在面板上摆放小机械，通过编程预设机械的行为，然后按照配方摆放，将水龙头 (Faucet) 产出的原料合成目标产品，最后运送至水槽 (Sink)。玩家提交的解决方案将以吞吐量和成本进行排名。",
-                instructions: "玩法",
-                instructionsLine1:
-                    "目前仅单例机械 (Singleton) 可用，其指令集包括：[W,A,S,D] 控制移动（每帧移动一格）；Z 捡起物品；X 放下原子；G 阻挡程序来捡起物品；H 阻挡程序来放下物品。",
-                instructionsLine2:
-                    "补充说明 <1>G</1> 指令：当满足条件，机械位置的面板上有能够被捡起的物品时，机械程序将运行该指令，同帧捡起物品并取消阻挡。如果执行此指令时机械处于关闭状态（即无法捡起更多物品），此指令将形同无操作，无法阻挡。",
-                instructionsLine3:
-                    "补充说明 H 指令：当满足条件，机械位置的面板上产生空缺能够容纳物品时，机械程序将运行该指令，即同帧放下物品并取消阻挡。如果执行此指令时机械处于开启状态（即无物品可放置），此指令将形同无操作，无法阻挡。",
-                instructionsLine4: "_ 指令为无操作 (No Operation)。",
-                instructionsLine5:
-                    "在运行过程中，每个机械将按顺序循环执行其自身程序（指令序列）。",
-                instructionsLine6:
-                    "配方摆放的连续性规则：输入和输出必须位于相邻的网格。示例 &(A, B) = C 中， A 和 B，B 和 C 都必须是相邻位置。违反连续性规则时，面板上不会渲染配方符号。",
-                instructionsLine7:
-                    '在面板上水龙头标记为 F，水槽标记为 S。',
-                instructionsLine8:
-                    "每个机械的程序长度上限为 40 个指令。",
+                Overview: "简介",
+                overviewLine1: "在炼金术的世界，物质透过炼成阵可转换成其他物质。建造炼成阵吧：摆放配方与机械，并巧妙安排机械指令。",
+                instructions: "炼成阵法则",
+
+                explain_program: "程序是一段指令序列。",
+                explain_mech: "每个机械皆有其程序。",
+                explain_simulation: "模拟时，每个机械循环执行自己的程序。",
+                available_instructions: "可用的指令：",
+                instruction_wasd: ": 在图纸上往上/下/左/右移动一格。",
+                instruction_z: ": 将物质捡起。",
+                instruction_x: ": 将物质放下。",
+                instruction_g: ": 阻塞程序直到能够捡起物质，并捡起物质。若机械已携带物质，则此指令形同无操作。",
+                instruction_h: ": 阻塞程序直到能够放下物质，并放下物质。若机械未携带物质，则此指令形同无操作。",
+                instruction_noop: ": 无操作。",
+                program_limit: "任意机械的程序长度上限为 40 个指令。",
+                formula_placement: "配方摆法的连续性规则：输入和输出必须位于连续的网格。以 &(A, B) = C 为例，A 和 B 以及 B 和 C 都必须是邻居关系。违反连续性规则时，版面上不会渲染配方符号。",
+                faucet_sink: '水龙头在图纸上以 "F" 标示；水槽则以 "S" 标示。',
+
                 formulaList: "配方列表",
                 goal: "目標",
                 goalAffordance: "利用水龙头以每帧添加一单位 <1 /> 的特性，",
-                goalDeliver: "制造 <1 /> 并运送到任意水槽。",
-                goalLine2: "优化解决方案的延迟和成本。",
+                goalDeliver: "设计炼成阵以制造 <1 /> 并运送到任意水槽。",
+                goalLine2: "优化炼成阵的延迟和成本。",
                 goalLine3_1: "在 ",
                 goalLine3_2: "上绑定 Discord 保存记录获取排名。",
                 costTitle: "成本",
@@ -162,11 +172,11 @@ const resources = {
                 staticCostLine4: "蒸蒸：750 / 配方",
                 staticCostLine5: "砸砸：1000 / 配方",
                 dynamicCostTitle: "动态成本",
-                dynamicCostLine1: "机械未携带物品时移动 (W,A,S,D)：10 / 帧 ",
-                dynamicCostLine2: "机械携带物品时移动 (W,A,S,D)：20 / 帧 ",
-                dynamicCostLine3: "机械捡起物品 (Z / G)：25 / 帧 ",
-                dynamicCostLine4: "机械放下物品 (X / H)：25 / 帧 ",
-                dynamicCostLine5: "机械程序阻挡 (G / H)：3 / 帧 ",
+                dynamicCostLine1: " 未携带物品时移动：10 / 帧 ",
+                dynamicCostLine2: " 携带物品时移动：20 / 帧 ",
+                dynamicCostLine3: " 捡起物品：25 / 帧 ",
+                dynamicCostLine4: " 放下物品：25 / 帧 ",
+                dynamicCostLine5: " 程序阻挡：3 / 帧 ",
             },
             delivery: {
                 accumulatedCost: "累计成本",
@@ -185,7 +195,7 @@ const resources = {
                 staticCost: "静态成本",
             },
             leaderboard: {
-                title: "天下前 20 最优解",
+                title: "天下前 20 炼成阵",
                 rank: "排名",
                 account: "谁",
                 delivered: "80 帧内总运送",
@@ -198,7 +208,7 @@ const resources = {
     },
     tcn: {
         translation: {
-            MuMu: "挪挪: 第0季",
+            MuMu: "挪挪: 第1季",
             Subtitle: "Topology 的一項實驗",
             "Connect": "連接 ",
             "Connected": "你是: ",
@@ -222,6 +232,9 @@ const resources = {
             "Submit to": "提交至",
             "demo-blank": "空白",
             "demo": "範例",
+            'Save':'暫存',
+            'Clear':'清除暫存',
+            'save to name':'暫存名',
             tutorial: {
                 title: "怎麼玩",
                 thesisTheme: "主題",
@@ -229,27 +242,29 @@ const resources = {
                     "在第1層區塊鏈上，人們透過貢獻資本來鑄造身份。第2層區塊鏈具備擴展的運算容量，人們可以通過驗證技能來鑄造身份。",
                 thesisLine2:
                     "<挪挪>是一種結合組合語言和並行處理的多維度優化謎題。在板上擺放小機械們，透過編程描述他們的行為，然後擺放配方，將水龍頭 (Faucet) 產出的原料轉換成目標產物，投遞於水槽 (Sink)。玩家提交的解決方案將以吞吐量和成本進行排名。",
-                instructions: "玩法",
-                instructionsLine1:
-                    "目前只有單例機械 (Singleton) 可用，其指令集：[<1>W</1>,<3>A</3>,<5>S</5>,<5>D</5>] 為移動 (每幀移動一格)、<7>Z</7> 為撿起物件、<9>X</9> 為放下原子、<11>G</11> 為阻塞程序直到能夠撿起物件，還有 <13>H</13> 為阻塞程序直到能夠放下物件。",
-                instructionsLine2:
-                    "補充說明 <1>G</1> 指令: 機械程序將阻塞於此指令，直到機械位置的板上有能夠被撿起的物件。當條件滿足，機械將於同幀撿起物件，並取消阻塞。如果執行此指令時機械處於關閉狀態（即不可能再撿起更多物件），此指令將形同無操作，不會阻塞。",
-                instructionsLine3:
-                    "補充說明 <1>H</1> 指令: 機械程序將阻塞於此指令，直到機械位置的板上產生空缺能夠容納物件。當條件滿足，機械將於同幀放下物件，並取消阻塞。如果執行此指令時機械處於開放狀態（即無物件可放），此指令將形同無操作，不會阻塞。",
-                instructionsLine4: "_ 指令為無操作 (no operation)。",
-                instructionsLine5:
-                    "在運行過程中，每個機械將循環執行其自身程序（指令序列）。",
-                instructionsLine6:
-                    "配方擺法的連續性規則：輸入和輸出必須位於連續的網格。以 &(A, B) = C 為例，A 和 B 以及 B 和 C 都必須是鄰居關係。違反連續性規則時，版面上不會渲染配方符號。",
-                instructionsLine7:
-                    '水龍頭在板上以 "F" 標示；水槽則以 "S" 標示。',
-                instructionsLine8:
-                    "任一機械的程序長度上限為 40 個指令。",
+                Overview: "簡介",
+                overviewLine1: "在煉金術的世界，物質透過煉成陣可轉換成其他物質。建造煉成陣吧：擺放配方與機械，並巧妙安排機械指令。",
+                instructions: "煉成陣法則",
+
+                explain_program: "程序是一段指令序列。",
+                explain_mech: "每個機械皆有其程序。",
+                explain_simulation: "模擬時，每個機械循環執行自己的程序。",
+                available_instructions: "可用的指令:",
+                instruction_wasd: ": 在圖紙上往上/下/左/右移動一格。",
+                instruction_z: ": 將物質撿起。",
+                instruction_x: ": 將物質放下。",
+                instruction_g: ": 阻塞程序直到能夠撿起物質，並撿起物質. 若機械已攜帶物質，則此指令形同無操作。",
+                instruction_h: ": 阻塞程序直到能夠放下物質，並放下物質. 若機械未攜帶物質，則此指令形同無操作。",
+                instruction_noop: ": 無操作。",
+                program_limit: "任意機械的程序長度上限為 40 個指令。",
+                formula_placement: "配方擺法的連續性規則：輸入和輸出必須位於連續的網格。以 &(A, B) = C 為例，A 和 B 以及 B 和 C 都必須是鄰居關係。違反連續性規則時，版面上不會渲染配方符號。",
+                faucet_sink: '水龍頭在圖紙上以 "F" 標示；水槽則以 "S" 標示。',
+
                 formulaList: "配方列表",
                 goal: "目標",
                 goalAffordance: "利用水龍頭以每幀添補一單位 <1 /> 的特性，",
-                goalDeliver: "製造 <1 /> 並遞送至任一水槽。",
-                goalLine2: "優化解決方案的延遲和成本。",
+                goalDeliver: "設計煉成陣以製造 <1 /> 並遞送至任一水槽。",
+                goalLine2: "優化煉成陣的延遲和成本。",
                 goalLine3_1: "在 ",
                 goalLine3_2: "上綁定 Discord ID 以名留青史。",
                 costTitle: "成本",
@@ -260,11 +275,11 @@ const resources = {
                 staticCostLine4: "蒸蒸: 750 / 配方",
                 staticCostLine5: "砸砸: 1000 / 配方",
                 dynamicCostTitle: "動態成本",
-                dynamicCostLine1: "機械無攜帶物件時移動 (W,A,S,D): 10 / 幀",
-                dynamicCostLine2: "機械有攜帶物件時移動 (W,A,S,D): 20 / 幀",
-                dynamicCostLine3: "機械撿起物件 (Z / G): 25 / 幀",
-                dynamicCostLine4: "機械放下物件 (X / H): 25 / 幀",
-                dynamicCostLine5: "機械程序阻塞 (G / H): 3 / 幀",
+                dynamicCostLine1: " 無攜帶物件時移動: 10 / 幀",
+                dynamicCostLine2: " 有攜帶物件時移動: 20 / 幀",
+                dynamicCostLine3: " 撿起物件: 25 / 幀",
+                dynamicCostLine4: " 放下物件: 25 / 幀",
+                dynamicCostLine5: " 程序阻塞: 3 / 幀",
             },
             delivery: {
                 accumulatedCost: "累計成本",
@@ -283,7 +298,7 @@ const resources = {
                 staticCost: "靜態成本",
             },
             leaderboard: {
-                title: "天下前 20 最優解",
+                title: "天下前 20 炼成阵",
                 rank: "排行",
                 account: "誰",
                 delivered: "80 幀內總遞送",

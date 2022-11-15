@@ -18,6 +18,7 @@ const InstructionToken = ({
     return (
         <Card
             sx={{
+                border: "1px solid #ffffff00",
                 width: "1.1rem",
                 mr: "2px",
                 display: "flex",
@@ -35,6 +36,7 @@ const InstructionToken = ({
                 ":hover": {
                     bgcolor: selected ? "secondary.main" : "secondary.light",
                     color: "secondary.contrastText",
+                    border: "1px solid #ffffff00",
                 },
                 ...sx,
             }}

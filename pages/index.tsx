@@ -52,7 +52,7 @@ const theme = createTheme({
             main: "#2d4249",
         },
         info: {
-            main: "#848f98",
+            main: "#DDDDDD",
         }
     },
     components: {
@@ -69,7 +69,7 @@ const theme = createTheme({
 export default function Home() {
 
     // Constants
-    const N_CYCLES = 80
+    const N_CYCLES = 100
     const ANIM_FRAME_LATENCY = 250
     const INIT_PROGRAM = '.'
     const INSTRUCTION_KEYS = ['w','a','s','d','z','x','g','h','.']
@@ -143,7 +143,7 @@ export default function Home() {
 
     let operatorInputHighlightInit: boolean[] = Array(numOperators).fill(false)
     const [operatorInputHighlight, setOperatorInputHighlight] = useState<boolean[]>(operatorInputHighlightInit)
-    const [operatorStyles, setOperatorStyles] = useState<React.CSSProperties[]>([{}])
+    const [operatorStyles, setOperatorStyles] = useState<React.CSSProperties[]>(operatorStates.map((op, _) => { return{backgroundColor: op.typ.color + '55'} }))
 
     const [mechIndexHighlighted, setMechIndexHighlighted] = useState<number>(-1)
 
@@ -378,9 +378,11 @@ export default function Home() {
         var adder_indices_in_str = []
         operators.forEach(function (operator: Operator) {
             for (const grid of operator.input){
+                if (!grid.x || !grid.y) return false
                 adder_indices_in_str = [...adder_indices_in_str, JSON.stringify(grid)]
             }
             for (const grid of operator.output){
+                if (!grid.x || !grid.y) return false
                 adder_indices_in_str = [...adder_indices_in_str, JSON.stringify(grid)]
             }
         })
@@ -554,7 +556,7 @@ export default function Home() {
                 // Parse program into array of instructions and store to react state
                 let instructionSets = programsToInstructionSets (programs)
                 setInstructionSets (instructionSets)
-                // console.log('running instructionSets', instructionSets)
+                console.log('running instructionSets', instructionSets)
 
                 // Prepare input
                 const boardConfig: BoardConfig = {
@@ -667,22 +669,17 @@ export default function Home() {
         setMechInitPositions (prev => viewSolution.mechs.map(mech => mech.index))
         setNumOperators (prev => viewSolution.operators.length)
         setOperatorStates (prev => viewSolution.operators)
+        setOperatorStyles ( prev => viewSolution.operators.map(
+            (op, _) => { return{backgroundColor: op.typ.color + '55'} }
+        ))
     }
 
     function handleMouseOverOperatorInput (operator_i: number) {
-        let newHighlight = []
-        let newOperatorStyles: React.CSSProperties[] = []
-        for (let i=0; i<numOperators; i++){
-            if (i==operator_i){
-                newHighlight.push (true)
-                newOperatorStyles.push ({backgroundColor:'#FFFE71'})
-            }
-            else {
-                newHighlight.push (false)
-                newOperatorStyles.push ({})
-            }
+        let newHighlight = operatorInputHighlight
+        let newOperatorStyles: React.CSSProperties[] = operatorStyles
 
-        }
+        newOperatorStyles[operator_i] = {backgroundColor:'#FFFE71'}
+        newHighlight[operator_i] = true
         setOperatorInputHighlight(prev => newHighlight)
         setOperatorStyles(prev => newOperatorStyles)
     }
@@ -692,7 +689,7 @@ export default function Home() {
         let newOperatorStyles: React.CSSProperties[] = []
         for (let i=0; i<numOperators; i++){
             newHighlight.push (false)
-            newOperatorStyles.push ({})
+            newOperatorStyles.push ({backgroundColor: operatorStates[i].typ.color + '55'})
         }
         setOperatorInputHighlight(prev => newHighlight)
         setOperatorStyles(prev => newOperatorStyles)
@@ -913,15 +910,15 @@ export default function Home() {
                             onChange = {event => {setSaveToName(prev => event.target.value)}}
                             defaultValue = {DEFAULT_SAVE_TO_NAME}
                             style={{width:'7rem', margin:'0 3px 0 3px', height:'24px'}}
-                            placeholder={'save to name'}
+                            placeholder={t('save to name')}
                         ></input>
                         <button
                             onClick={() => {handleSaveClick()}}
                             style={saveButtonStyle}
-                        > Save </button>
+                        > {t("Save")} </button>
                         <button
                             onClick={() => {handleClearClick()}}
-                        > Clear </button>
+                        > {t("Clear")} </button>
                     </div>
 
                         <div className={styles.programming_interface} style={{padding: '2rem',borderBottom:'1px solid #333333'}}>
@@ -947,12 +944,13 @@ export default function Home() {
                                                         className={styles.program}
                                                         onChange={event => {
                                                             // if (event.target.value.length == 0) return;
-                                                            if (isNaN(parseInt(event.target.value))) return;
+                                                            // if (isNaN(parseInt(event.target.value))) return;
                                                             let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]))
                                                             newOperator.input[input_i].x = parseInt(event.target.value)
                                                             setOperator(operator_i, newOperator)}
                                                         }
                                                         defaultValue={operatorStates[operator_i].input[input_i].x}
+                                                        value={!isNaN(operatorStates[operator_i].input[input_i].x) ? operatorStates[operator_i].input[input_i].x : ''}
                                                         style={{
                                                             width:'30px', height:'25px',textAlign:'center',
                                                             border:"1px solid #CCCCCC",
@@ -964,12 +962,13 @@ export default function Home() {
                                                         className={styles.program}
                                                         onChange={event => {
                                                             // if (event.target.value.length == 0) return;
-                                                            if (isNaN(parseInt(event.target.value))) return;
+                                                            // if (isNaN(parseInt(event.target.value))) return;
                                                             let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]))
                                                             newOperator.input[input_i].y = parseInt(event.target.value)
                                                             setOperator(operator_i, newOperator)}
                                                         }
                                                         defaultValue={operatorStates[operator_i].input[input_i].y}
+                                                        value={!isNaN(operatorStates[operator_i].input[input_i].y) ? operatorStates[operator_i].input[input_i].y : ''}
                                                         style={{
                                                             width:'30px', height:'25px',textAlign:'center',
                                                             border:"1px solid #CCCCCC",
@@ -995,12 +994,13 @@ export default function Home() {
                                                     <input
                                                         className={styles.program}
                                                         onChange={event => {
-                                                            if (event.target.value.length == 0) return;
+                                                            // if (event.target.value.length == 0) return;
                                                             let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]))
                                                             newOperator.output[output_i].x = parseInt(event.target.value)
                                                             setOperator(operator_i, newOperator)}
                                                         }
                                                         defaultValue={operatorStates[operator_i].output[output_i].x}
+                                                        value={!isNaN(operatorStates[operator_i].output[output_i].x) ? operatorStates[operator_i].output[output_i].x : ''}
                                                         style={{
                                                             width:'30px', height:'25px',textAlign:'center',
                                                             border:"1px solid #CCCCCC",
@@ -1011,12 +1011,13 @@ export default function Home() {
                                                     <input
                                                         className={styles.program}
                                                         onChange={event => {
-                                                            if (event.target.value.length == 0) return;
+                                                            // if (event.target.value.length == 0) return;
                                                             let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]))
                                                             newOperator.output[output_i].y = parseInt(event.target.value)
                                                             setOperator(operator_i, newOperator)}
                                                         }
                                                         defaultValue={operatorStates[operator_i].output[output_i].y}
+                                                        value={!isNaN(operatorStates[operator_i].output[output_i].y) ? operatorStates[operator_i].output[output_i].y : ''}
                                                         style={{
                                                             width:'30px', height:'25px',textAlign:'center',
                                                             border:"1px solid #CCCCCC",
