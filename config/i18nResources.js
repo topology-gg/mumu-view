@@ -25,6 +25,9 @@ const resources = {
             "Submit to": "Submit to",
             "demo-blank": "Blank",
             "demo": "Demo",
+            'Save':'Save',
+            'Clear':'Clear',
+            'save to name':'save to name',
             tutorial: {
                 title: "How to play",
                 thesisTheme: "Thesis & Theme",
@@ -89,7 +92,7 @@ const resources = {
                 staticCost: "Static cost",
             },
             leaderboard: {
-                title: "Top 20 Solutions",
+                title: "Top 20 Diagrams",
                 rank: "Rank",
                 account: "Who",
                 delivered: "Delivered in 80 frames",
@@ -126,6 +129,9 @@ const resources = {
             "Submit to": "提交至",
             "demo-blank": "空白",
             "demo": "范例",
+            'Save':'暂存',
+            'Clear':'清除暂存',
+            'save to name':'暂存名',
             tutorial: {
                 title: "玩法",
                 thesisTheme: "主题",
@@ -189,7 +195,7 @@ const resources = {
                 staticCost: "静态成本",
             },
             leaderboard: {
-                title: "天下前 20 最优解",
+                title: "天下前 20 炼成阵",
                 rank: "排名",
                 account: "谁",
                 delivered: "80 帧内总运送",
@@ -226,6 +232,9 @@ const resources = {
             "Submit to": "提交至",
             "demo-blank": "空白",
             "demo": "範例",
+            'Save':'暫存',
+            'Clear':'清除暫存',
+            'save to name':'暫存名',
             tutorial: {
                 title: "怎麼玩",
                 thesisTheme: "主題",
@@ -289,7 +298,7 @@ const resources = {
                 staticCost: "靜態成本",
             },
             leaderboard: {
-                title: "天下前 20 最優解",
+                title: "天下前 20 炼成阵",
                 rank: "排行",
                 account: "誰",
                 delivered: "80 幀內總遞送",

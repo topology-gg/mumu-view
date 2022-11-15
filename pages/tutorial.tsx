@@ -55,6 +55,8 @@ export default function Tutorial() {
             </Button>
             <Modal open={open} onClose={handleClose}>
                 <Box sx={{ p: 2, fontFamily: "var(--font-family-secondary)" }}>
+                    <div style={{paddingLeft:'1rem', paddingTop:'1rem'}}>
+
                     <p
                         style={{
                             fontSize: "0.9rem",
@@ -561,7 +563,7 @@ export default function Tutorial() {
                     <p
                         style={{
                             fontSize: "0.8rem",
-                            marginTop: "0.5rem",
+                            marginTop: "1rem",
                             marginBottom: "0",
                         }}
                     >
@@ -639,7 +641,7 @@ export default function Tutorial() {
                         </li>
                     </ol>
 
-
+                    </div>
                 </Box>
             </Modal>
         </div>
