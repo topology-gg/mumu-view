@@ -1,24 +1,22 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import simulator from "./simulator";
 import MechState, { MechStatus, MechType } from '../src/types/MechState';
 import AtomState, { AtomStatus, AtomType } from '../src/types/AtomState';
 import AtomFaucetState from '../src/types/AtomFaucetState';
-import AtomSinkState from '../src/types/AtomSinkState';
 import BoardConfig from '../src/types/BoardConfig';
 import Frame from '../src/types/Frame';
 import Unit from './unit';
 import UnitState, {BgStatus, BorderStatus, UnitText} from '../src/types/UnitState';
 import Grid from '../src/types/Grid';
-import Operator, { OperatorType, OPERATOR_TYPES } from '../src/types/Operator';
+import Operator, { OPERATOR_TYPES } from '../src/types/Operator';
 import Delivery from './delivery'
 import Summary from './summary';
 import Tutorial from './tutorial';
-import MechInput from '../src/components/MechInput';
-import { isIdenticalGrid, isGridOOB, areGridsNeighbors } from '../src/helpers/gridHelpers';
+import { isGridOOB, areGridsNeighbors } from '../src/helpers/gridHelpers';
 import OperatorGridBg from '../src/components/OperatorGridBg';
-import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS, INSTRUCTION_ICON_MAP } from '../src/constants/constants';
+import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS } from '../src/constants/constants';
 import { useTranslation } from 'react-i18next';
 import "../config/i18n"
 import LanguageSelector from '../src/components/LanguageSelector';
@@ -36,9 +34,8 @@ import {
     removeSolutionFromLocal,
 } from '../src/helpers/localStorage'
 import SavedSolutionElement from '../src/components/savedSolutionElement';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { reorder } from '../src/helpers/reorder';
 import SocialMedia from '../src/components/SocialMedia';
+import MechProgramming from '../src/components/MechProgramming';
 
 const theme = createTheme({
     typography: {
@@ -72,7 +69,6 @@ export default function Home() {
     const N_CYCLES = 100
     const ANIM_FRAME_LATENCY = 250
     const INIT_PROGRAM = '.'
-    const INSTRUCTION_KEYS = ['w','a','s','d','z','x','g','h','.']
     const MECH_INIT_X = 0
     const MECH_INIT_Y = 0
     const ATOM_INIT_XY = [] // [{x:5, y:3}]
@@ -608,18 +604,6 @@ export default function Home() {
 
     }
 
-    function setMechInitPosition (mech_i: number, position: Grid){
-        // if (position.x < DIM && position.x >= 0 && position.y < DIM && position.y >= 0) {
-        setMechInitPositions(
-            // (prev) => ({ ...prev, [mech_i]: position })
-            (prev) => {
-                let prev_copy = JSON.parse(JSON.stringify(mechInitPositions))
-                prev_copy[mech_i] = position
-                return prev_copy
-            }
-        )
-        // }
-    }
 
     function setOperator (operator_i: number, new_operator: Operator){
         setOperatorStates(
@@ -695,70 +679,6 @@ export default function Home() {
         setOperatorStyles(prev => newOperatorStyles)
     }
 
-    function handleMouseOverMechInput (mech_i: number) {
-        setMechIndexHighlighted(prev => mech_i)
-    }
-
-    function handleMouseOutMechInput (mech_i: number) {
-        setMechIndexHighlighted(prev => -1)
-    }
-
-    function handleKeyMechInputProgram (event, typ: string) { // typ takes 'down' or 'up'
-
-        const key = event.key
-        if (INSTRUCTION_KEYS.includes(key)) {
-            // console.log(`> key ${typ} mech input program:`, event.key)
-            const bool = typ == 'down' ? true : false
-            setProgramKeyDown ( prev => {
-                let prev_copy = JSON.parse(JSON.stringify(prev))
-                prev_copy[key] = bool
-                return prev_copy;
-            })
-        }
-
-    }
-
-    // refactor this part to a child component
-    //////
-    let programKeyDownInit = {}
-    for (const key of INSTRUCTION_KEYS){
-        programKeyDownInit[key] = false
-    }
-    const [programKeyDown, setProgramKeyDown] = useState<{[key: string]: boolean}>(programKeyDownInit)
-
-    let colors: {[key: string]: string} = {}
-    INSTRUCTION_KEYS.map((key, key_i) => {
-        const isDown = programKeyDown[key]
-        if (isDown) {
-            colors[key] = '#FFFE71'
-        }
-        else {
-            colors[key] = '#FFFFFFFF'
-        }
-    })
-    const IconizedInstructionPanel = (
-        <div style={{
-            display:'flex', flexDirection:'row', margin:'0rem 0 2rem 0', justifyContent:'center'
-        }}>
-            {
-                INSTRUCTION_KEYS.map((key,key_i) => {
-                    return (
-                        <div style={{
-                            display:'flex', flexDirection:'column', textAlign:'center', width:'2.5rem', marginRight:'0.3rem',
-                            padding: '0.3rem', border:'1px solid #CCCCCC', borderRadius:'0.8rem', backgroundColor: colors[key],
-                            transitionDuration: '50ms'
-                        }}>
-                            <i className="material-icons" style={{fontSize:'1rem'}}>{INSTRUCTION_ICON_MAP[key]}</i>
-                            <p style={{marginTop:'0.1rem', marginBottom:'0'}}>{key}</p>
-                        </div>
-                    )
-                })
-            }
-        </div>
-    )
-
-    //////
-
     function computeSaveButtonStyle (): React.CSSProperties {
 
         if (typeof window == "undefined") return;
@@ -814,18 +734,6 @@ export default function Home() {
         const newNamespace: string[] = getNamespaceFromLocal()
         setNamespace (prev => newNamespace) // trigger rerender
     }
-
-    const onDragEnd = ({ destination, source }: DropResult) => {
-        // dropped outside the list
-        if (!destination) return;
-
-        const newPrograms = reorder(programs, source.index, destination.index);
-        const newPositions = reorder(mechInitPositions, source.index, destination.index);
-
-        setPrograms(newPrograms);
-        setMechInitPositions(newPositions);
-    };
-
     // Lazy style objects
     const makeshift_button_style = {marginLeft:'0.2rem', marginRight:'0.2rem', height:'1.5rem'}
     const makeshift_run_button_style = runnable ? makeshift_button_style : {...makeshift_button_style, color: '#CCCCCC'}
@@ -1041,57 +949,17 @@ export default function Home() {
 
                         <div className={styles.programming_interface} style={{padding: '2rem',borderBottom:'1px solid #333333'}}>
                             <p style={{fontSize:'0.9rem', marginTop:'0'}}>{t("Mech programming")}</p>
-                            { IconizedInstructionPanel }
-                            <DragDropContext onDragEnd={onDragEnd}>
-                                <Droppable droppableId='mech-input-list' isDropDisabled={animationState !== 'Stop'}>
-                                    {(provided) => (
-                                        <div ref={provided.innerRef} {...provided.droppableProps}>
-                                            {(animationState=='Stop') ?
-                                                Array.from({length:numMechs}).map ((_,mech_i) => (
-                                                    <MechInput
-                                                        key={`mech-input-${mech_i}`}
-                                                        mechIndex={mech_i}
-                                                        position={mechInitPositions[mech_i]}
-                                                        program={programs[mech_i]}
-                                                        pc={0}
-                                                        onPositionChange={(index, position) => {
-                                                            setMechInitPosition(index, position);
-                                                        }}
-                                                        onProgramChange={(index, program) =>
-                                                            setPrograms((prev) => (prev.map((p, i) => i === index ? program : p)))
-                                                        }
-                                                        disabled = {animationState == 'Stop' ? false : true}
-                                                        handleMouseOver={() => {handleMouseOverMechInput(mech_i)}}
-                                                        handleMouseOut={() => {handleMouseOutMechInput(mech_i)}}
-                                                        handleKeyDown={(event) => {handleKeyMechInputProgram(event, 'down')}}
-                                                        handleKeyUp={(event) => {handleKeyMechInputProgram(event, 'up')}}
-                                                        unitBgStatus={mech_carries[mech_i]}
-                                                    />
-                                                ))
-                                            :
-                                                Array.from({length:numMechs}).map ((_,mech_i) => (
-                                                    <MechInput
-                                                        key={`mech-input-${mech_i}`}
-                                                        mechIndex={mech_i}
-                                                        position={mechInitPositions[mech_i]}
-                                                        program={programs[mech_i]}
-                                                        pc={mechStates[mech_i].pc_next}
-                                                        onPositionChange={(index, position) => {}}
-                                                        onProgramChange={(index, program) => {}}
-                                                        disabled = {animationState == 'Stop' ? false : true}
-                                                        handleMouseOver={() => {handleMouseOverMechInput(mech_i)}}
-                                                        handleMouseOut={() => {handleMouseOutMechInput(mech_i)}}
-                                                        handleKeyDown={() => {}}
-                                                        handleKeyUp={() => {}}
-                                                        unitBgStatus={mech_carries[mech_i]}
-                                                    />
-                                                ))
-                                            }
-                                            {provided.placeholder}
-                                        </div>
-                                    )}
-                                </Droppable>
-                            </DragDropContext>
+                            <MechProgramming 
+                                animationState={animationState} 
+                                mechCarries={mech_carries} 
+                                mechIndexHighlighted={mechIndexHighlighted}
+                                mechInitPositions={mechInitPositions} 
+                                mechStates={mechStates}
+                                onMechInitPositionsChange={setMechInitPositions}
+                                onMechIndexHighlight={setMechIndexHighlighted}
+                                onProgramsChange={setPrograms}
+                                programs={programs}
+                            />
                         </div>
                     {/* </div> */}
 

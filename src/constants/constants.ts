@@ -72,6 +72,10 @@ export const DEMO_SOLUTIONS = [
     DEMO_SOLUTION_2
 ];
 
+export const INSTRUCTION_KEYS = ['w','a','s','d','z','x','g','h','.'];
+
+export type InstructionKey = typeof INSTRUCTION_KEYS[number];
+
 export const INSTRUCTION_ICON_MAP = {
     // w: "expand_less",
     w: "arrow_upward",
