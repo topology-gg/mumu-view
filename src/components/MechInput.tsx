@@ -63,7 +63,6 @@ const MechInput = ({
         if (instructions.length > PROGRAM_SIZE_MAX) {
             return;
         } else {
-            setProgramStyle((prev) => NORMAL_STYLE);
             const newProgram = [...instructions, instruction].join(",");
             onProgramChange(mechIndex, newProgram);
         }
