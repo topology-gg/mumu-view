@@ -40,7 +40,7 @@ const MechInput = ({
 }: MechInputProps) => {
     const { t } = useTranslation();
 
-    const instructions: string[] = program.split(",");
+    const instructions: string[] = program ? program.split(",") : [];
     const programLength = instructions.length;
     const currentInstructionIndex = pc % programLength;
 
@@ -60,11 +60,11 @@ const MechInput = ({
     };
 
     const handleInsertInstruction = (instruction) => {
-        const instructions = program.split(",") as string[];
         if (instructions.length > PROGRAM_SIZE_MAX) {
             return;
         } else {
-            const newProgram = program.concat(`,${instruction}`);
+            setProgramStyle((prev) => NORMAL_STYLE);
+            const newProgram = [...instructions, instruction].join(",");
             onProgramChange(mechIndex, newProgram);
         }
     };
