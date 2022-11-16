@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     const client = await clientPromise
     const { account } = req.query
 
-    const db = client.db('mumu_indexer')
+    const db = client.db('mumu_indexer_s1_2')
     const solutions = await db
         .collection('mumu-s1-events')
         .find({
