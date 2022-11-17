@@ -46,6 +46,7 @@ const IconizedInstructionPanel = ({
                             cursor: "pointer",
                         }}
                         onClick={() => onPress(key)}
+                        key={`iconized-instruction-panel-${key_i}`}
                     >
                         <i
                             className="material-icons"

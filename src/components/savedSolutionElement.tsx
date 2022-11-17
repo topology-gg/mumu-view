@@ -1,18 +1,21 @@
 import React from 'react'
 import Solution from '../types/Solution'
 
-export default function SavedSolutionElement ({ key, name, onLoadClick, onClearClick }) {
+export default function SavedSolutionElement ({ index, name, onLoadClick, onClearClick }) {
 
     const CLEAR_BUTTON_DIM = 16
 
     // render table row
     return (
-        <div style={{
+        <div
+            style={{
             position:'relative',
-            height:'35px',
-            width: '50px',
-            marginRight: '5px'
-        }}>
+                height:'35px',
+                width: '50px',
+                marginRight: '5px'
+            }}
+            key={`saved-solution-element-div-${index}`}
+        >
             <button
                 style={{
                     border: '1px solid #555555',
@@ -24,7 +27,6 @@ export default function SavedSolutionElement ({ key, name, onLoadClick, onClearC
                     right: '0',
                 }}
                 onClick={onLoadClick}
-                key={key}
             >
                 {name}
             </button>
@@ -42,7 +44,6 @@ export default function SavedSolutionElement ({ key, name, onLoadClick, onClearC
                     zIndex: '1'
                 }}
                 onClick={onClearClick}
-                key={key+'-clear'}
             >
                 {'x'}
             </button>

@@ -809,7 +809,10 @@ export default function Home() {
                             mounted ?
                             namespace.map((name: string,name_i: number) => {
                                 return (
-                                    <SavedSolutionElement key={`saved-solution-element-${name_i}`} name={name}
+                                    <SavedSolutionElement
+                                        key={`saved-solution-element-${name_i}`}
+                                        index={name_i}
+                                        name={name}
                                         onLoadClick={() => {
                                             const solution = getSolutionFromLocal (name)
                                             handleLoadSolutionClick (solution)
@@ -817,7 +820,6 @@ export default function Home() {
                                         onClearClick={() => {
                                             handleClearSpecificClick (name)
                                         }}
-
                                     />
                                 )
                             }):
@@ -1036,7 +1038,10 @@ export default function Home() {
                                 <div key={`row-${i}`} className={styles.grid_row}>
                                     {
                                         Array.from({length:DIM}).map ((_,j) => ( // j is x
-                                            <Tooltip title={`${j},${i}`} disableInteractive arrow>
+                                            <Tooltip
+                                                title={`${j},${i}`} disableInteractive arrow
+                                                key={`tooltip-${j}`}
+                                            >
                                                 <div>
                                                     <Unit
                                                         key={`unit-${j}-${i}`}
