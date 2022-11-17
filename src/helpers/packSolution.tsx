@@ -174,11 +174,12 @@ function encodeInstructionSet (instructionSet) {
     let encodedInstructionSet = []
 
     for (const instruction of instructionSet) {
-        if ( !(instruction in instruction_encode) ){
-            encodedInstructionSet.push (pack(8)) // no op
+        const instruction_lowercase: string = instruction.toLowerCase()
+        if ( !(instruction_lowercase in INSTRUCTION_ENCODE) ){
+            encodedInstructionSet.push (pack(8)) // no-op
         }
         else {
-            encodedInstructionSet.push (pack(instruction_encode[instruction]))
+            encodedInstructionSet.push ( pack(INSTRUCTION_ENCODE[instruction_lowercase]) )
         }
     }
 
@@ -188,7 +189,7 @@ function encodeInstructionSet (instructionSet) {
 //
 // Encoding / structs from Cairo implementation
 //
-const instruction_encode = {
+const INSTRUCTION_ENCODE = {
     w : 0,
     a : 1,
     s : 2,
