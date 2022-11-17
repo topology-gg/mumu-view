@@ -115,7 +115,7 @@ export default function Home() {
 
         let instructionSets = programsToInstructionSets (programs)
         const args = packSolution (instructionSets, mechInitPositions, operatorStates)
-        // console.log ('> useMemo: args =', args)
+        console.log ('> useMemo: args =', args)
 
         const tx = {
             contractAddress: SIMULATOR_ADDR,
