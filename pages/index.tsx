@@ -104,7 +104,6 @@ export default function Home() {
     const [numMechs, setNumMechs] = useState(DEMO_SOLUTIONS[0].programs.length)
     const [programs, setPrograms] = useState<string[]>(DEMO_SOLUTIONS[0].programs);
     const [mechInitPositions, setMechInitPositions] = useState<Grid[]> (DEMO_SOLUTIONS[0].mechs.map(mech => mech.index))
-    const [instructionSets, setInstructionSets] = useState<string[][]>();
 
     // React states for operators
     const [numOperators, setNumOperators] = useState(DEMO_SOLUTIONS[0].operators.length)
@@ -124,7 +123,7 @@ export default function Home() {
         }
         return [tx]
 
-    }, [instructionSets, mechInitPositions, operatorStates])
+    }, [programs, mechInitPositions, operatorStates])
 
     // React states for animation control
     const [animationState, setAnimationState] = useState ('Stop');
@@ -550,7 +549,6 @@ export default function Home() {
 
                 // Parse program into array of instructions and store to react state
                 let instructionSets = programsToInstructionSets (programs)
-                setInstructionSets (instructionSets)
                 console.log('running instructionSets', instructionSets)
 
                 // Prepare input
