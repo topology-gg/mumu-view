@@ -30,6 +30,7 @@ const resources = {
             'Save':'Save',
             'Clear':'Clear all',
             'save to name':'save to name',
+            'Export': 'Export as JSON',
             tutorial: {
                 title: "How to play",
                 thesisTheme: "Thesis & Theme",
