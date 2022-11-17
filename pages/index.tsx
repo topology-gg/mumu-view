@@ -733,6 +733,12 @@ export default function Home() {
         const newNamespace: string[] = getNamespaceFromLocal()
         setNamespace (prev => newNamespace) // trigger rerender
     }
+    function handleClearSpecificClick (name: string) {
+        removeSolutionFromLocal (name)
+        console.log ('remove saved solution:', name)
+        const newNamespace: string[] = getNamespaceFromLocal()
+        setNamespace (prev => newNamespace) // trigger rerender
+    }
     // Lazy style objects
     const makeshift_button_style = {marginLeft:'0.2rem', marginRight:'0.2rem', height:'1.5rem'}
     const makeshift_run_button_style = runnable ? makeshift_button_style : {...makeshift_button_style, color: '#CCCCCC'}
@@ -803,10 +809,16 @@ export default function Home() {
                             mounted ?
                             namespace.map((name: string,name_i: number) => {
                                 return (
-                                    <SavedSolutionElement key={`saved-solution-element-${name_i}`} name={name} onClick={() => {
-                                        const solution = getSolutionFromLocal (name)
-                                        handleLoadSolutionClick (solution)
-                                    }}/>
+                                    <SavedSolutionElement key={`saved-solution-element-${name_i}`} name={name}
+                                        onLoadClick={() => {
+                                            const solution = getSolutionFromLocal (name)
+                                            handleLoadSolutionClick (solution)
+                                        }}
+                                        onClearClick={() => {
+                                            handleClearSpecificClick (name)
+                                        }}
+
+                                    />
                                 )
                             }):
                             <div/>

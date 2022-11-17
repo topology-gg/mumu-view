@@ -28,7 +28,7 @@ const resources = {
             "demo-blank": "Blank",
             "demo": "Demo",
             'Save':'Save',
-            'Clear':'Clear',
+            'Clear':'Clear all',
             'save to name':'save to name',
             tutorial: {
                 title: "How to play",
@@ -132,7 +132,7 @@ const resources = {
             "demo-blank": "空白",
             "demo": "范例",
             'Save':'暂存',
-            'Clear':'清除暂存',
+            'Clear':'清除所有暂存',
             'save to name':'暂存名',
             tutorial: {
                 title: "玩法",
@@ -235,7 +235,7 @@ const resources = {
             "demo-blank": "空白",
             "demo": "範例",
             'Save':'暫存',
-            'Clear':'清除暫存',
+            'Clear':'清除所有暫存',
             'save to name':'暫存名',
             tutorial: {
                 title: "怎麼玩",
