@@ -838,6 +838,23 @@ export default function Home() {
                         <button
                             onClick={() => {handleClearClick()}}
                         > {t("Clear")} </button>
+                        <button
+                            onClick={() => {
+                                const solution: Solution = {
+                                    mechs: mechInitStates,
+                                    programs: programs,
+                                    operators: operatorStates
+                                }
+                                const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+                                    JSON.stringify(solution)
+                                )}`;
+                                const link = document.createElement("a");
+                                link.href = jsonString;
+                                link.download = "mumu_export.json";
+
+                                link.click();
+                            }}
+                        > {t("Export")} </button>
                     </div>
 
                         <div className={styles.programming_interface} style={{padding: '2rem',borderBottom:'1px solid #333333'}}>
