@@ -18,29 +18,37 @@
   color: #BBBBBB
 }
 
+/* art sources: https://googlefonts.github.io/noto-emoji-animation/ */
+
 .atomVanillaFree, .atomVanillaPossessed {
-    background: url('../src/images/wood.png') no-repeat;
-    background-size: contain;
+    background: url('../src/images/wood.gif') no-repeat;
+    background-position: center;
+    background-size: 95%;
 }
 
 .atomHazelnutFree, .atomHazelnutPossessed {
-    background: url('../src/images/cactus.png') no-repeat;
-    background-size: contain;
+    background: url('../src/images/clover.gif') no-repeat;
+    background-position: center;
+    background-size: 85%
 }
 
 .atomChocolateFree, .atomChocolatePossessed {
-    background: url('../src/images/tulip.png') no-repeat;
-    background-size: contain;
+    background: url('../src/images/rose.gif') no-repeat;
+    background-position: center;
+    background-size: 85%;
 }
 
 .atomTruffleFree, .atomTrufflePossessed {
-    background: url('../src/images/fox.png') no-repeat;
-    background-size: contain;
+    background: url('../src/images/fox.gif') no-repeat;
+    background-position: center;
+    background-size: 80%;
 }
 
 .atomSaffronFree, .atomSaffronPossessed {
-    background: url('../src/images/fire.png') no-repeat;
-    background-size: contain;
+    /* background: url('../src/images/fire.png') no-repeat; */
+    background: url('../src/images/fire.gif') no-repeat;
+    background-position: center;
+    background-size: 90%;
 }
 
 .mechSingletonOpen {
