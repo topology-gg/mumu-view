@@ -189,14 +189,14 @@ function encodeInstructionSet (instructionSet) {
 // Encoding / structs from Cairo implementation
 //
 const instruction_encode = {
-    W : 0,
-    A : 1,
-    S : 2,
-    D : 3,
-    Z : 4,
-    X : 5,
-    G : 6,
-    H : 7,
+    w : 0,
+    a : 1,
+    s : 2,
+    d : 3,
+    z : 4,
+    x : 5,
+    g : 6,
+    h : 7,
     // _ : 8
 }
 
