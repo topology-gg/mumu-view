@@ -374,11 +374,11 @@ export default function Home() {
         var adder_indices_in_str = []
         operators.forEach(function (operator: Operator) {
             for (const grid of operator.input){
-                if (!grid.x || !grid.y) return false
+                if (isNaN(grid.x) || isNaN(grid.y)) return false
                 adder_indices_in_str = [...adder_indices_in_str, JSON.stringify(grid)]
             }
             for (const grid of operator.output){
-                if (!grid.x || !grid.y) return false
+                if (isNaN(grid.x) || isNaN(grid.y)) return false
                 adder_indices_in_str = [...adder_indices_in_str, JSON.stringify(grid)]
             }
         })
@@ -949,11 +949,11 @@ export default function Home() {
 
                         <div className={styles.programming_interface} style={{padding: '2rem',borderBottom:'1px solid #333333'}}>
                             <p style={{fontSize:'0.9rem', marginTop:'0'}}>{t("Mech programming")}</p>
-                            <MechProgramming 
-                                animationState={animationState} 
-                                mechCarries={mech_carries} 
+                            <MechProgramming
+                                animationState={animationState}
+                                mechCarries={mech_carries}
                                 mechIndexHighlighted={mechIndexHighlighted}
-                                mechInitPositions={mechInitPositions} 
+                                mechInitPositions={mechInitPositions}
                                 mechStates={mechStates}
                                 onMechInitPositionsChange={setMechInitPositions}
                                 onMechIndexHighlight={setMechIndexHighlighted}
