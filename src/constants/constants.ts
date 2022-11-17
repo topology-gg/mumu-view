@@ -4,6 +4,7 @@ import Solution from "../types/Solution";
 
 export const DIM = 8;
 export const PROGRAM_SIZE_MAX = 40
+export const N_CYCLES = 100
 
 const BLANK_SOLUTION: Solution = {
     mechs: [],

@@ -1,3 +1,5 @@
+import { N_CYCLES } from "../src/constants/constants";
+
 const resources = {
     en: {
         translation: {
@@ -95,7 +97,7 @@ const resources = {
                 title: "Top 20 Diagrams",
                 rank: "Rank",
                 account: "Who",
-                delivered: "Delivered in 80 frames",
+                delivered: `Delivered in ${N_CYCLES} frames`,
                 static_cost: "Static cost",
                 latency: "Average latency per delivery",
                 dynamic_cost: "Average dynamic cost per delivery",
@@ -198,7 +200,7 @@ const resources = {
                 title: "天下前 20 炼成阵",
                 rank: "排名",
                 account: "谁",
-                delivered: "80 帧内总运送",
+                delivered: `${N_CYCLES} 帧内总运送`,
                 static_cost: "静态成本",
                 latency: "运送平均延迟",
                 dynamic_cost: "运送平均动态成本",
@@ -301,7 +303,7 @@ const resources = {
                 title: "天下前 20 炼成阵",
                 rank: "排行",
                 account: "誰",
-                delivered: "80 幀內總遞送",
+                delivered: `${N_CYCLES} 幀內總遞送`,
                 static_cost: "靜態成本",
                 latency: "平均遞送延遲",
                 dynamic_cost: "平均遞送動態成本",

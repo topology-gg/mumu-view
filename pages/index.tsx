@@ -16,7 +16,7 @@ import Summary from './summary';
 import Tutorial from './tutorial';
 import { isGridOOB, areGridsNeighbors } from '../src/helpers/gridHelpers';
 import OperatorGridBg from '../src/components/OperatorGridBg';
-import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS } from '../src/constants/constants';
+import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS, N_CYCLES } from '../src/constants/constants';
 import { useTranslation } from 'react-i18next';
 import "../config/i18n"
 import LanguageSelector from '../src/components/LanguageSelector';
@@ -66,7 +66,6 @@ const theme = createTheme({
 export default function Home() {
 
     // Constants
-    const N_CYCLES = 100
     const ANIM_FRAME_LATENCY = 250
     const INIT_PROGRAM = '.'
     const MECH_INIT_X = 0
