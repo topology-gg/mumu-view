@@ -166,7 +166,8 @@ export default function Home() {
     const mechStates = (frame && (animationState!='Stop')) ? frame.mechs : mechInitStates
     const unitStates = setVisualForStates (atomStates, mechStates, unitStatesInit) as UnitState[][]
     const delivered = frame?.delivered_accumulated
-    const cost_accumulated = animationState=='Stop' ? 0 :frame?.cost_accumulated
+    // const cost_accumulated = animationState=='Stop' ? 0 :frame?.cost_accumulated
+    const cost_accumulated = frame?.cost_accumulated || 0
 
     let mech_carries: BgStatus[] = Array(mechInitPositions.length).fill(BgStatus.EMPTY)
     atomStates.forEach((atom: AtomState, atom_i: number) => {
@@ -655,6 +656,8 @@ export default function Home() {
         setOperatorStyles ( prev => viewSolution.operators.map(
             (op, _) => { return{backgroundColor: op.typ.color + '55'} }
         ))
+
+        setAnimationFrame (prev => 0)
     }
 
     function handleMouseOverOperatorInput (operator_i: number) {
