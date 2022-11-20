@@ -6,6 +6,13 @@ export const DIM = 8;
 export const PROGRAM_SIZE_MAX = 40
 export const N_CYCLES = 100
 
+export const PRECISION = 6
+export const TO_PRECISION = (x) => {
+    // credit: https://stackoverflow.com/a/11818658
+    var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (PRECISION || -1) + '})?');
+    return x.toString().match(re)[0];
+}
+
 const BLANK_SOLUTION: Solution = {
     mechs: [],
     programs: [],
