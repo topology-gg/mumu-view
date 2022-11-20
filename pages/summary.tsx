@@ -5,6 +5,7 @@ import { BgStatus } from '../src/types/UnitState';
 import Frame from '../src/types/Frame';
 import styles from '../styles/Home.module.css'
 import { useTranslation } from 'react-i18next';
+import { TO_PRECISION } from '../src/constants/constants'
 
 export default function Summary ({ frames, n_cycles }) {
 
@@ -39,10 +40,10 @@ export default function Summary ({ frames, n_cycles }) {
     }
     const n_deliveries = frame_indices_at_delivery.length
     const average_latency_str = n_deliveries == 0 ? `>${n_cycles}` : (
-        frame_indices_at_delivery[n_deliveries-1] / n_deliveries
+        TO_PRECISION( frame_indices_at_delivery[n_deliveries-1] / n_deliveries )
     ).toString();
     const average_dynamic_cost_str = n_deliveries == 0 ? `n/a` : (
-        (costs_accumulated_at_delivery[n_deliveries-1] - static_cost) / n_deliveries
+        TO_PRECISION( (costs_accumulated_at_delivery[n_deliveries-1] - static_cost) / n_deliveries )
     ).toString();
 
     // Makeshift styling the reported numbers
