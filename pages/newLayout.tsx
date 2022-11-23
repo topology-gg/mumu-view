@@ -24,15 +24,9 @@ import { SIMULATOR_ADDR } from "../src/components/SimulatorContract";
 import Solution from "../src/types/Solution";
 import Leaderboard from "../src/components/Leaderboard";
 import { Box, Tooltip } from "@mui/material";
-import {
-    saveSolutionToLocal,
-    getSolutionFromLocal,
-    getNamespaceFromLocal,
-    removeSolutionFromLocal,
-} from "../src/helpers/localStorage";
-import SavedSolutionElement from "../src/components/savedSolutionElement";
 import MechProgramming from "../src/components/MechProgramming";
 import Layout from "../src/components/Layout";
+import LoadSave from "../src/components/LoadSave";
 
 export default function Home() {
     // Constants
@@ -114,14 +108,6 @@ export default function Home() {
     );
 
     const [mechIndexHighlighted, setMechIndexHighlighted] = useState<number>(-1);
-
-    // Local storage
-    const DEFAULT_SAVE_TO_NAME = "";
-    const [saveToName, setSaveToName] = useState<string>(DEFAULT_SAVE_TO_NAME);
-    const saveButtonStyle = mounted ? computeSaveButtonStyle() : {};
-
-    const initNamespace: string[] = getNamespaceFromLocal();
-    const [namespace, setNamespace] = useState<string[]>(initNamespace);
 
     //
     // States derived from React states
@@ -667,66 +653,6 @@ export default function Home() {
         setOperatorStyles((prev) => newOperatorStyles);
     }
 
-    function computeSaveButtonStyle(): React.CSSProperties {
-        if (typeof window == "undefined") return;
-
-        let valid = true;
-
-        // rejecting 'namespace'
-        if (saveToName == "namespace") {
-            // console.log ('> rejecting namespace as name')
-            valid = false;
-        }
-
-        // rejecting empty string
-        else if (saveToName.length == 0) {
-            // console.log ('> rejecting empty string as name')
-            valid = false;
-        }
-
-        // check for collision
-        else {
-            const namespaceStr = localStorage.getItem("namespace");
-            if (namespaceStr) {
-                const namespace: string[] = JSON.parse(namespaceStr);
-                if (namespace.includes(saveToName)) {
-                    // console.log (`> rejecting ${saveToName} because of collision`)
-                    valid = false;
-                }
-            }
-        }
-
-        // affect style
-        if (valid) return {};
-        else return { pointerEvents: "none", backgroundColor: "gray" };
-    }
-
-    function handleSaveClick() {
-        const solution: Solution = {
-            mechs: mechInitStates,
-            programs: programs,
-            operators: operatorStates,
-        };
-        saveSolutionToLocal(saveToName, solution);
-        console.log("> saved solution:", solution);
-        const newNamespace: string[] = getNamespaceFromLocal();
-        setNamespace((prev) => newNamespace); // trigger rerender
-    }
-    function handleClearClick() {
-        const namespace: string[] = getNamespaceFromLocal();
-        namespace.forEach((name, name_i) => {
-            removeSolutionFromLocal(name);
-            console.log("remove saved solution:", name);
-        });
-        const newNamespace: string[] = getNamespaceFromLocal();
-        setNamespace((prev) => newNamespace); // trigger rerender
-    }
-    function handleClearSpecificClick(name: string) {
-        removeSolutionFromLocal(name);
-        console.log("remove saved solution:", name);
-        const newNamespace: string[] = getNamespaceFromLocal();
-        setNamespace((prev) => newNamespace); // trigger rerender
-    }
     // Lazy style objects
     const makeshift_button_style = { marginLeft: "0.2rem", marginRight: "0.2rem", height: "1.5rem" };
     const makeshift_run_button_style = runnable
@@ -741,93 +667,15 @@ export default function Home() {
                     {t("Submit to")}{" "}
                 </button>
             </div>
-            <div style={{ marginBottom: "1rem" }}>
-                {Array.from({ length: DEMO_SOLUTIONS.length }).map((_, i) =>
-                    i == 0 ? (
-                        <button key={`load-demo-${i}`} onClick={() => handleLoadSolutionClick(DEMO_SOLUTIONS[0])}>
-                            {t("demo-blank")}
-                        </button>
-                    ) : (
-                        <button key={`load-demo-${i}`} onClick={() => handleLoadSolutionClick(DEMO_SOLUTIONS[i])}>
-                            {t(`demo`)}
-                            {i - 1}
-                        </button>
-                    )
-                )}
-                {!mounted ? (
-                    <div />
-                ) : namespace.length == 0 ? (
-                    <div />
-                ) : (
-                    <div style={{ fontSize: "0.9rem", marginLeft: "0.4rem", marginRight: "0.4rem" }}>|</div>
-                )}
-                {mounted ? (
-                    namespace.map((name: string, name_i: number) => {
-                        return (
-                            <SavedSolutionElement
-                                key={`saved-solution-element-${name_i}`}
-                                name={name}
-                                onLoadClick={() => {
-                                    const solution = getSolutionFromLocal(name);
-                                    handleLoadSolutionClick(solution);
-                                }}
-                                onClearClick={() => {
-                                    handleClearSpecificClick(name);
-                                }}
-                            />
-                        );
-                    })
-                ) : (
-                    <div />
-                )}
-                <div style={{ fontSize: "0.9rem", marginLeft: "0.4rem", marginRight: "0.4rem" }}>|</div>
 
-                <input
-                    onChange={(event) => {
-                        setSaveToName((prev) => event.target.value);
-                    }}
-                    defaultValue={DEFAULT_SAVE_TO_NAME}
-                    style={{ width: "7rem", margin: "0 3px 0 3px", height: "24px" }}
-                    placeholder={t("save to name")}
-                ></input>
-                <button
-                    onClick={() => {
-                        handleSaveClick();
-                    }}
-                    style={saveButtonStyle}
-                >
-                    {" "}
-                    {t("Save")}{" "}
-                </button>
-                <button
-                    onClick={() => {
-                        handleClearClick();
-                    }}
-                >
-                    {" "}
-                    {t("Clear")}{" "}
-                </button>
-                <button
-                    onClick={() => {
-                        const solution: Solution = {
-                            mechs: mechInitStates,
-                            programs: programs,
-                            operators: operatorStates,
-                        };
-                        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-                            JSON.stringify(solution)
-                        )}`;
-                        const link = document.createElement("a");
-                        link.href = jsonString;
-                        link.download = "mumu_export.json";
+            <LoadSave
+                onLoadSolutionClick={handleLoadSolutionClick}
+                mechInitStates={mechInitStates}
+                operatorStates={operatorStates}
+                programs={programs}
+            />
 
-                        link.click();
-                    }}
-                >
-                    {" "}
-                    {t("Export")}{" "}
-                </button>
-            </div>
+            <Leaderboard loadSolution={handleLoadSolutionClick} />
         </>
     );
 
@@ -871,7 +719,7 @@ export default function Home() {
                     )
                 )}
             </div>
-            <div className={styles.summary} style={{ display: "flex", flexDirection: "row" }}>
+            <div style={{ display: "flex", flexDirection: "row", padding: "1rem" }}>
                 <div
                     style={{
                         display: "flex",
@@ -934,12 +782,14 @@ export default function Home() {
                     </button>
 
                     <button style={makeshift_button_style} onClick={() => handleClick("PrevFrame")}>
-                        {" "}
-                        {t("decrementFrame")}{" "}
+                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
+                            fast_rewind
+                        </i>
                     </button>
                     <button style={makeshift_button_style} onClick={() => handleClick("NextFrame")}>
-                        {" "}
-                        {t("incrementFrame")}{" "}
+                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
+                            fast_forward
+                        </i>
                     </button>
                 </div>
             </div>
@@ -954,9 +804,6 @@ export default function Home() {
             </div>
             <div className={styles.summary}>
                 <Summary frames={frames} n_cycles={N_CYCLES} />
-            </div>
-            <div className={styles.summary}>
-                <Leaderboard loadSolution={handleLoadSolutionClick} />
             </div>
         </>
     );
