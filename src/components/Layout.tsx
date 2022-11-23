@@ -15,14 +15,14 @@ const gridStyles: SxProps = {
     flexDirection: "row",
 };
 
+const Panel = ({ children }) => {
+    return <Box sx={{ textAlign: "center", flex: 1 }}>{children}</Box>;
+};
+
 export default function Layout({ controlPanel, board, stats, mechProgramming, formulaProgramming }) {
     const { t } = useTranslation();
 
     const [openedAccordion, setOpenedAccordion] = useState<string>();
-
-    const Panel = ({ children }) => {
-        return <Box sx={{ textAlign: "center", flex: 1 }}>{children}</Box>;
-    };
 
     return (
         <>
