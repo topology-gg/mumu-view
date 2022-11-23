@@ -11,6 +11,12 @@ export enum BgStatus {
     ATOM_TRUFFLE_POSSESSED = 'truffle_possessed',
     ATOM_SAFFRON_FREE = 'saffron_free',
     ATOM_SAFFRON_POSSESSED = 'saffron_possessed',
+    ATOM_TURTLE_FREE = 'turtle_free',
+    ATOM_TURTLE_POSSESSED = 'turtle_possessed',
+    ATOM_SANDGLASS_FREE = 'sandglass_free',
+    ATOM_SANDGLASS_POSSESSED = 'sandglass_possessed',
+    ATOM_WILTED_FREE = 'wilted_free',
+    ATOM_WILTED_POSSESSED = 'wilted_possessed',
 }
 
 export enum BorderStatus {
