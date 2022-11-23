@@ -2,9 +2,9 @@ import { MechStatus, MechType } from "../types/MechState";
 import { OPERATOR_TYPES } from "../types/Operator";
 import Solution from "../types/Solution";
 
-export const DIM = 8;
+export const DIM = 10;
 export const PROGRAM_SIZE_MAX = 40
-export const N_CYCLES = 100
+export const N_CYCLES = 150
 
 export const PRECISION = 6
 export const TO_PRECISION = (x) => {
@@ -53,6 +53,8 @@ const DEMO_SOLUTION_2: Solution = {
         {id: 'mech5', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:5, y:4 }, pc_next: 0},
         {id: 'mech6', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:6, y:5 }, pc_next: 0},
         {id: 'mech7', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:6, y:4 }, pc_next: 0},
+        {id: 'mech8', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:2, y:5 }, pc_next: 0},
+        {id: 'mech9', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:4, y:5 }, pc_next: 0},
     ],
     programs: [
         'Z,D,X,A,Z,D,D,X,A,A',
@@ -61,8 +63,10 @@ const DEMO_SOLUTION_2: Solution = {
         'G,S,X,W,G,S,D,X,A,W',
         'G,S,S,S,X,W,W,W',
         'G,A,A,A,A,S,X,W,D,D,D,D',
-        'G,S,S,D,X,A,W,W',
-        'G,S,S,S,D,H,A,W,W,W',
+        'G,S,S,S,S,D,D,D,X,A,A,A,W,W,W,W',
+        'G,W,W,W,W,D,D,D,X,A,A,A,S,S,S,S',
+        'G,A,A,S,S,S,S,X,D,D,D,W,W,W,W,G,A,A,A,S,S,S,S,X,D,D,W,W,W,W',
+        'G,A,A,A,A,S,S,S,S,X,W,W,W,W,D,D,D,D,D,G,S,S,S,S,D,D,D,D,X,W,W,W,W,A,A,A,A,A',
     ],
     operators: [
         { input:[{x:1,y:0}, {x:2,y:0}], output:[{x:3,y:0}], typ:OPERATOR_TYPES.STIR},

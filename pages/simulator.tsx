@@ -48,6 +48,10 @@ export default function simulator(
         else if (operator.typ.symbol == '%') base_cost += STATIC_COSTS.SHAKE
         else if (operator.typ.symbol == '^') base_cost += STATIC_COSTS.STEAM
         else if (operator.typ.symbol == '#') base_cost += STATIC_COSTS.SMASH
+        else if (operator.typ.symbol == '§') base_cost += STATIC_COSTS.EVOLVE
+        else if (operator.typ.symbol == '|') base_cost += STATIC_COSTS.SLOW
+        else if (operator.typ.symbol == '~') base_cost += STATIC_COSTS.WILT
+        else if (operator.typ.symbol == '!') base_cost += STATIC_COSTS.BAKE
     })
 
     //

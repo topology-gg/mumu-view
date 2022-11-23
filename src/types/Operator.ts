@@ -60,4 +60,44 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
             AtomType.SAFFRON,
         ],
     },
-};
+    EVOLVE: {
+        description: "vanilla § chocolate § chocolate = turtle",
+        symbol: "§",
+        name: "Evolve",
+        color: "#DB7093",
+        input_atom_types: [
+            AtomType.VANILLA,
+            AtomType.CHOCOLATE,
+            AtomType.CHOCOLATE,
+        ],
+        output_atom_types: [AtomType.TURTLE],
+    },
+    SLOW: {
+        description: "turtle = sandglass, sandglass",
+        symbol: "|",
+        name: "Slow",
+        color: "#665656",
+        input_atom_types: [AtomType.TURTLE],
+        output_atom_types: [AtomType.SANDGLASS, AtomType.SANDGLASS],
+    },
+    WILT: {
+        description: "chocolate ~ sandglass = wilted, hazelnut, hazelnut",
+        symbol: "~",
+        name: "Wilt",
+        color: "#4E925A",
+        input_atom_types: [AtomType.CHOCOLATE, AtomType.SANDGLASS],
+        output_atom_types: [
+            AtomType.WILTED,
+            AtomType.HAZELNUT,
+            AtomType.HAZELNUT,
+        ],
+    },
+    BAKE: {
+        description: "vanilla ! wilted = saffron, saffron",
+        symbol: "!",
+        name: "Bake",
+        color: "#F21414",
+        input_atom_types: [AtomType.VANILLA, AtomType.WILTED],
+        output_atom_types: [AtomType.SAFFRON, AtomType.SAFFRON],
+    },
+}
