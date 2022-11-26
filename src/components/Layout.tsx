@@ -19,7 +19,7 @@ const Panel = ({ children }) => {
     return <Box sx={{ textAlign: "center", flex: 1 }}>{children}</Box>;
 };
 
-export default function Layout({ controlPanel, board, stats, mechProgramming, formulaProgramming }) {
+export default function Layout({ controlPanel, board, stats, mechProgramming, formulaProgramming, midScreenControls }) {
     const { t } = useTranslation();
 
     const [openedAccordion, setOpenedAccordion] = useState<string>();
@@ -51,6 +51,8 @@ export default function Layout({ controlPanel, board, stats, mechProgramming, fo
                             <Panel>{stats}</Panel>
                         </Grid>
                     </Grid>
+                    <Divider />
+                    {midScreenControls}
                     <Divider />
                     <Box flex={1} flexShrink={0} overflow="scroll">
                         <Panel>

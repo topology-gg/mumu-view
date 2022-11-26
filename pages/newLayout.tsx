@@ -719,81 +719,85 @@ export default function Home() {
                     )
                 )}
             </div>
-            <div style={{ display: "flex", flexDirection: "row", padding: "1rem" }}>
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    <p
-                        style={{
-                            padding: "0",
-                            textAlign: "center",
-                            verticalAlign: "middle",
-                            margin: "0",
-                            height: "20px",
-                            lineHeight: "20px",
-                            fontSize: "0.8rem",
-                        }}
-                    >
-                        {" "}
-                        {t("frame")} # {animationFrame}{" "}
-                    </p>
-
-                    <input
-                        id="typeinp"
-                        type="range"
-                        min="0"
-                        max={N_CYCLES}
-                        value={animationFrame}
-                        onChange={handleSlideChange}
-                        step="1"
-                        style={{ width: "20rem" }}
-                    />
-                </div>
-
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}
-                    <button style={makeshift_run_button_style} onClick={() => handleClick("ToggleRun")}>
-                        {" "}
-                        {animationState != "Run" ? (
-                            <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                                play_arrow
-                            </i>
-                        ) : (
-                            <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                                pause
-                            </i>
-                        )}{" "}
-                    </button>
-                    <button style={makeshift_button_style} onClick={() => handleClick("Stop")}>
-                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                            stop
-                        </i>
-                    </button>
-
-                    <button style={makeshift_button_style} onClick={() => handleClick("PrevFrame")}>
-                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                            fast_rewind
-                        </i>
-                    </button>
-                    <button style={makeshift_button_style} onClick={() => handleClick("NextFrame")}>
-                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                            fast_forward
-                        </i>
-                    </button>
-                </div>
-            </div>
         </Box>
+    );
+
+    const midScreenControls = (
+        <div style={{ display: "flex", flexDirection: "row", padding: "1rem", justifyContent: "center" }}>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flex: 1,
+                }}
+            >
+                <p
+                    style={{
+                        padding: "0",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                        margin: "0",
+                        width: "100px" /* Make room for dynamic text */,
+                        height: "20px",
+                        lineHeight: "20px",
+                        fontSize: "0.8rem",
+                    }}
+                >
+                    {" "}
+                    {t("frame")} # {animationFrame}{" "}
+                </p>
+
+                <input
+                    id="typeinp"
+                    type="range"
+                    min="0"
+                    max={N_CYCLES}
+                    value={animationFrame}
+                    onChange={handleSlideChange}
+                    step="1"
+                    style={{ flex: 1 }}
+                />
+            </div>
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}
+                <button style={makeshift_run_button_style} onClick={() => handleClick("ToggleRun")}>
+                    {" "}
+                    {animationState != "Run" ? (
+                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
+                            play_arrow
+                        </i>
+                    ) : (
+                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
+                            pause
+                        </i>
+                    )}{" "}
+                </button>
+                <button style={makeshift_button_style} onClick={() => handleClick("Stop")}>
+                    <i className="material-icons" style={{ fontSize: "1.2rem" }}>
+                        stop
+                    </i>
+                </button>
+
+                <button style={makeshift_button_style} onClick={() => handleClick("PrevFrame")}>
+                    <i className="material-icons" style={{ fontSize: "1.2rem" }}>
+                        fast_rewind
+                    </i>
+                </button>
+                <button style={makeshift_button_style} onClick={() => handleClick("NextFrame")}>
+                    <i className="material-icons" style={{ fontSize: "1.2rem" }}>
+                        fast_forward
+                    </i>
+                </button>
+            </div>
+        </div>
     );
 
     const stats = (
@@ -1001,6 +1005,7 @@ export default function Home() {
                 stats={stats}
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}
+                midScreenControls={midScreenControls}
             />
         </>
     );
