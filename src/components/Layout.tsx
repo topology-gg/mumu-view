@@ -15,8 +15,8 @@ const gridStyles: SxProps = {
     flexDirection: "row",
 };
 
-const Panel = ({ children }) => {
-    return <Box sx={{ textAlign: "center", flex: 1 }}>{children}</Box>;
+const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
+    return <Box sx={{ textAlign: "center", flex: 1, ...sx }}>{children}</Box>;
 };
 
 export default function Layout({ controlPanel, board, stats, mechProgramming, formulaProgramming, midScreenControls }) {
@@ -27,10 +27,10 @@ export default function Layout({ controlPanel, board, stats, mechProgramming, fo
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Box sx={{ height: "100vh" }} display="flex" flexDirection="column">
+                <Box sx={{ height: { md: "100vh" } }} display="flex" flexDirection="column">
                     <Grid container spacing={1} flex={1.25} disableEqualOverflow>
-                        <Grid xs={3} sx={gridStyles}>
-                            <Panel>
+                        <Grid xs={12} md={3} sx={gridStyles}>
+                            <Panel sx={{ pl: 2 }}>
                                 <div className={styles.title}>
                                     <h2>{t("MuMu")}</h2>
                                     <p>{t("Subtitle")}</p>
@@ -44,11 +44,11 @@ export default function Layout({ controlPanel, board, stats, mechProgramming, fo
                                 {controlPanel}
                             </Panel>
                         </Grid>
-                        <Grid xs={6} sx={gridStyles}>
+                        <Grid xs={12} md={6} sx={gridStyles}>
                             <Panel>{board}</Panel>
                         </Grid>
-                        <Grid xs={3} sx={gridStyles}>
-                            <Panel>{stats}</Panel>
+                        <Grid xs={12} md={3} sx={gridStyles}>
+                            <Panel sx={{ pr: 2 }}>{stats}</Panel>
                         </Grid>
                     </Grid>
                     <Divider />
