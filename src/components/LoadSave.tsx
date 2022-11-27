@@ -21,7 +21,7 @@ interface LoadSaveProps {
     operatorStates: Operator[];
 }
 
-const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorStates }) => {
+const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorStates }: LoadSaveProps) => {
     const { t } = useTranslation();
 
     const [open, setOpen] = useState<boolean>(false);
@@ -113,97 +113,112 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
                 {t("load_save")}
             </Button>
             <Modal open={open} onClose={handleClose}>
-                <Box sx={{ p: 2, fontFamily: "var(--font-family-secondary)" }}>
-                    {Array.from({ length: DEMO_SOLUTIONS.length }).map((_, i) =>
-                        i == 0 ? (
-                            <button
-                                key={`load-demo-${i}`}
-                                onClick={() => {
-                                    onLoadSolutionClick(DEMO_SOLUTIONS[0]);
-                                    handleClose();
-                                }}
-                            >
-                                {t("demo-blank")}
-                            </button>
-                        ) : (
-                            <button
-                                key={`load-demo-${i}`}
-                                onClick={() => {
-                                    onLoadSolutionClick(DEMO_SOLUTIONS[i]);
-                                    handleClose();
-                                }}
-                            >
-                                {t(`demo`)}
-                                {i - 1}
-                            </button>
-                        )
-                    )}
-                    {mounted ? (
-                        namespace.map((name: string, name_i: number) => {
-                            return (
-                                <SavedSolutionElement
-                                    key={`saved-solution-element-${name_i}`}
-                                    name={name}
-                                    onLoadClick={() => {
-                                        const solution = getSolutionFromLocal(name);
-                                        onLoadSolutionClick(solution);
+                <Box
+                    sx={{
+                        p: 2,
+                        fontFamily: "var(--font-family-secondary)",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
+                    }}
+                >
+                    <Box>
+                        {Array.from({ length: DEMO_SOLUTIONS.length }).map((_, i) =>
+                            i == 0 ? (
+                                <button
+                                    key={`load-demo-${i}`}
+                                    onClick={() => {
+                                        onLoadSolutionClick(DEMO_SOLUTIONS[0]);
                                         handleClose();
                                     }}
-                                    onClearClick={() => {
-                                        handleClearSpecificClick(name);
+                                >
+                                    {t("demo-blank")}
+                                </button>
+                            ) : (
+                                <button
+                                    key={`load-demo-${i}`}
+                                    onClick={() => {
+                                        onLoadSolutionClick(DEMO_SOLUTIONS[i]);
+                                        handleClose();
                                     }}
-                                />
-                            );
-                        })
-                    ) : (
-                        <div />
-                    )}
+                                >
+                                    {t(`demo`)}
+                                    {i - 1}
+                                </button>
+                            )
+                        )}
+                    </Box>
 
-                    <input
-                        onChange={(event) => {
-                            setSaveToName((prev) => event.target.value);
-                        }}
-                        defaultValue={DEFAULT_SAVE_TO_NAME}
-                        style={{ width: "7rem", margin: "0 3px 0 3px", height: "24px" }}
-                        placeholder={t("save to name")}
-                    ></input>
-                    <button
-                        onClick={() => {
-                            handleSaveClick();
-                        }}
-                        style={saveButtonStyle}
-                    >
-                        {" "}
-                        {t("Save")}{" "}
-                    </button>
-                    <button
-                        onClick={() => {
-                            handleClearClick();
-                        }}
-                    >
-                        {" "}
-                        {t("Clear")}{" "}
-                    </button>
-                    <button
-                        onClick={() => {
-                            const solution: Solution = {
-                                mechs: mechInitStates,
-                                programs: programs,
-                                operators: operatorStates,
-                            };
-                            const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-                                JSON.stringify(solution)
-                            )}`;
-                            const link = document.createElement("a");
-                            link.href = jsonString;
-                            link.download = "mumu_export.json";
+                    <Box sx={{ display: "flex", gap: 1 }}>
+                        {mounted ? (
+                            namespace.map((name: string, name_i: number) => {
+                                return (
+                                    <SavedSolutionElement
+                                        key={`saved-solution-element-${name_i}`}
+                                        name={name}
+                                        onLoadClick={() => {
+                                            const solution = getSolutionFromLocal(name);
+                                            onLoadSolutionClick(solution);
+                                            handleClose();
+                                        }}
+                                        onClearClick={() => {
+                                            handleClearSpecificClick(name);
+                                        }}
+                                    />
+                                );
+                            })
+                        ) : (
+                            <div />
+                        )}
+                    </Box>
 
-                            link.click();
-                        }}
-                    >
-                        {" "}
-                        {t("Export")}{" "}
-                    </button>
+                    <Box>
+                        <input
+                            onChange={(event) => {
+                                setSaveToName((prev) => event.target.value);
+                            }}
+                            defaultValue={DEFAULT_SAVE_TO_NAME}
+                            style={{ width: "7rem", margin: "0 3px 0 3px", height: "24px" }}
+                            placeholder={t("save to name")}
+                        ></input>
+                        <button
+                            onClick={() => {
+                                handleSaveClick();
+                            }}
+                            style={saveButtonStyle}
+                        >
+                            {" "}
+                            {t("Save")}{" "}
+                        </button>
+                        <button
+                            onClick={() => {
+                                handleClearClick();
+                            }}
+                        >
+                            {" "}
+                            {t("Clear")}{" "}
+                        </button>
+                        <button
+                            onClick={() => {
+                                const solution: Solution = {
+                                    mechs: mechInitStates,
+                                    programs: programs,
+                                    operators: operatorStates,
+                                };
+                                const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+                                    JSON.stringify(solution)
+                                )}`;
+                                const link = document.createElement("a");
+                                link.href = jsonString;
+                                link.download = "mumu_export.json";
+
+                                link.click();
+                            }}
+                        >
+                            {" "}
+                            {t("Export")}{" "}
+                        </button>
+                    </Box>
                 </Box>
             </Modal>
         </Box>
