@@ -833,7 +833,7 @@ export default function Home() {
 
                         <div style={{fontSize:'0.9rem', marginLeft:'0.4rem', marginRight:'0.4rem'}}>|</div>
 
-                        <button id={'submit-button'} onClick={() => handleClickSubmit()}> {t('Submit to')} </button>
+                        {/* <button id={'submit-button'} onClick={() => handleClickSubmit()}> {t('Submit to')} </button> */}
                     </div>
 
                     <div style={{display:'flex', flexDirection:'row', height:'20px', marginBottom:'1rem'}}>
