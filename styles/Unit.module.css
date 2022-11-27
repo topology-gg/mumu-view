@@ -51,6 +51,27 @@
     background-size: 90%;
 }
 
+.atomTurtleFree, .atomTurtlePossessed {
+  /* background: url('../src/images/fire.png') no-repeat; */
+  background: url('../src/images/turtle.gif') no-repeat;
+  background-position: center;
+  background-size: 90%;
+}
+
+.atomSandglassFree, .atomSandglassPossessed {
+  /* background: url('../src/images/fire.png') no-repeat; */
+  background: url('../src/images/sandglass.gif') no-repeat;
+  background-position: center;
+  background-size: 90%;
+}
+
+.atomWiltedFree, .atomWiltedPossessed {
+  /* background: url('../src/images/fire.png') no-repeat; */
+  background: url('../src/images/wilted.gif') no-repeat;
+  background-position: center;
+  background-size: 90%;
+}
+
 .mechSingletonOpen {
   border-color: #BBBBBB;
 }

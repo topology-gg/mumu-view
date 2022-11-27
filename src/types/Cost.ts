@@ -4,7 +4,11 @@ export const STATIC_COSTS:  {[key:string] : number} = {
     SHAKE: 500,
     STEAM: 750,
     SMASH: 1000,
-    SINGLETON: 150
+    SINGLETON: 150,
+    EVOLVE: 500,
+    SLOW: 750,
+    WILT: 750,
+    BAKE: 1000
 }
 
 export const DYNAMIC_COSTS: {[key:string] : number} = {

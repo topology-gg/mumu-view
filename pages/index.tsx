@@ -288,6 +288,15 @@ export default function Home() {
             else if (atom.typ == AtomType.SAFFRON) {
                 newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SAFFRON_FREE
             }
+            else if (atom.typ == AtomType.TURTLE) {
+                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TURTLE_FREE
+            }
+            else if (atom.typ == AtomType.SANDGLASS) {
+                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SANDGLASS_FREE
+            }
+            else if (atom.typ == AtomType.WILTED) {
+                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_FREE
+            }
         }
         else if (atom.status == AtomStatus.POSSESSED){
             if (atom.typ == AtomType.VANILLA) {
@@ -304,6 +313,15 @@ export default function Home() {
             }
             else if (atom.typ == AtomType.SAFFRON) {
                 newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SAFFRON_POSSESSED
+            }
+            else if (atom.typ == AtomType.TURTLE) {
+                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TURTLE_POSSESSED
+            }
+            else if (atom.typ == AtomType.SANDGLASS) {
+                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SANDGLASS_POSSESSED
+            }
+            else if (atom.typ == AtomType.WILTED) {
+                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_POSSESSED
             }
         }
         return newStates
@@ -473,6 +491,18 @@ export default function Home() {
                             break;
                         case 'SMASH':
                             prev_copy.push ({ input:[{x:0,y:0}], output:[{x:0,y:0}, {x:0,y:0}, {x:0,y:0}, {x:0,y:0}, {x:0,y:0}], typ:OPERATOR_TYPES.SMASH})
+                            break;
+                        case 'EVOLVE':
+                            prev_copy.push ({ input:[{x:0,y:0}, {x:0,y:0}, {x:0,y:0}], output:[{x:0,y:0}], typ:OPERATOR_TYPES.EVOLVE})
+                            break;
+                        case 'SLOW':
+                            prev_copy.push ({ input:[{x:0,y:0}], output:[{x:0,y:0}, {x:0,y:0}], typ:OPERATOR_TYPES.SLOW})
+                            break;
+                        case 'WILT':
+                            prev_copy.push ({ input:[{x:0,y:0}, {x:0,y:0}], output:[{x:0,y:0}, {x:0,y:0}, {x:0,y:0}], typ:OPERATOR_TYPES.WILT})
+                            break;
+                        case 'BAKE':
+                            prev_copy.push ({ input:[{x:0,y:0}, {x:0,y:0}], output:[{x:0,y:0}, {x:0,y:0}], typ:OPERATOR_TYPES.BAKE})
                             break;
                         default:
                             throw `invalid operator type encountered: ${typ}`
@@ -784,6 +814,18 @@ export default function Home() {
                         </button>
                         <button style={makeshift_button_style} onClick={() => handleOperatorClick('+', 'SMASH')}>
                         {t('newOperation', {operation: '#'})}
+                        </button>
+                        <button style={makeshift_button_style} onClick={() => handleOperatorClick('+', 'EVOLVE')}>
+                        {t('newOperation', {operation: '§'})}
+                        </button>
+                        <button style={makeshift_button_style} onClick={() => handleOperatorClick('+', 'SLOW')}>
+                        {t('newOperation', {operation: '|'})}
+                        </button>
+                        <button style={makeshift_button_style} onClick={() => handleOperatorClick('+', 'WILT')}>
+                        {t('newOperation', {operation: '~'})}
+                        </button>
+                        <button style={makeshift_button_style} onClick={() => handleOperatorClick('+', 'BAKE')}>
+                        {t('newOperation', {operation: '!'})}
                         </button>
                         <button style={makeshift_button_style} onClick={() => handleOperatorClick('-', '')}>
                         {t('removeOp')}
