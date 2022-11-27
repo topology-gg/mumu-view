@@ -44,7 +44,7 @@ export default function Layout({ controlPanel, board, stats, mechProgramming, fo
                                 {controlPanel}
                             </Panel>
                         </Grid>
-                        <Grid xs={12} md={6} sx={gridStyles}>
+                        <Grid xs={12} md={6} pb={2} sx={gridStyles}>
                             <Panel>{board}</Panel>
                         </Grid>
                         <Grid xs={12} md={3} sx={gridStyles}>
