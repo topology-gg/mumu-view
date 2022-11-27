@@ -82,12 +82,6 @@ button:hover {
     background-color: #FF6347;
 }
 
-.leaderboard_row {
-    width: 8rem;
-    text-align: center;
-    vertical-align: middle;
-}
-
 .solution_row:hover {
     background-color: #FFFE71;
     cursor: pointer;
@@ -176,7 +170,7 @@ https://stackoverflow.com/questions/18389224/how-to-style-html5-range-input-to-h
       height: 10px;
       cursor: ew-resize;
       background: #2d4249;
-      box-shadow: -200px 0 0 200px #937882;
+      box-shadow: -2000px 0 0 2000px #937882;
     }
 
 }
@@ -223,6 +217,7 @@ input[type="range"]::-ms-fill-upper {
 /* ref: https://alvarotrigo.com/blog/css-highlight-text/ */
 strong {
     position: relative;
+    z-index: 1;
 }
 strong::before {
     /* Highlight color */

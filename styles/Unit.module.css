@@ -1,10 +1,10 @@
 .unit {
   display: flex;
-  font-size: 0.8em;
+  font-size: 0.75em;
   margin: 0.2rem;
   padding: 0rem;
-  width: 3rem;
-  height: 3rem;
+  width: 2.2rem;
+  height: 2.2rem;
   position: relative;
   text-align: center;
   justify-content: center;
@@ -121,7 +121,7 @@
 
 .unitId {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  font-size: 0.7rem;
+  top: 0.3rem;
+  left: 0.3rem;
+  font-size: 0.6rem;
 }

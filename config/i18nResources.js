@@ -5,8 +5,8 @@ const resources = {
         translation: {
             MuMu: "MuMu: Season 2",
             Subtitle: "An experiment by Topology",
-            "Connect": "Connect ",
-            "Connected": "You are: ",
+            Connect: "Connect ",
+            Connected: "You are: ",
             frame: "Frame",
             mech: "mech",
             newMech: "new mech",
@@ -21,16 +21,17 @@ const resources = {
             "Mech programming": "Mech programming",
             "Formula placement": "Operator placement",
             "Stir ": "Stir ",
-            "Shake": "Shake",
-            "Steam": "Steam",
-            "Smash": "Smash",
+            Shake: "Shake",
+            Steam: "Steam",
+            Smash: "Smash",
             "Submit to": "Submit to",
+            load_save: "Load / Save",
             "demo-blank": "Blank",
-            "demo": "Demo",
-            'Save':'Save',
-            'Clear':'Clear all',
-            'save to name':'save to name',
-            'Export': 'Export as JSON',
+            demo: "Demo",
+            Save: "Save",
+            Clear: "Clear all",
+            "save to name": "save to name",
+            Export: "Export as JSON",
             tutorial: {
                 title: "How to play",
                 thesisTheme: "Thesis & Theme",
@@ -39,7 +40,8 @@ const resources = {
                 thesisLine2:
                     'MuMu is a puzzle about visual & parallel assembly programming. Place & program the little robots ("mechs") on the board, and place the operators that execute formulas, to transport & transmute ingredients from Faucet to Sink. Solutions are ranked by throughput and cost.',
                 Overview: "Overview",
-                overviewLine1: "In the world of alchemy, substances can be transformed into one another via alchemic diagrams. Build diagrams by placing formulas and mechs, and orchestrating the mechs creatively.",
+                overviewLine1:
+                    "In the world of alchemy, substances can be transformed into one another via alchemic diagrams. Build diagrams by placing formulas and mechs, and orchestrating the mechs creatively.",
                 instructions: "Laws of the Alchemic Diagram",
 
                 explain_program: "A program is a sequence of instructions.",
@@ -49,17 +51,19 @@ const resources = {
                 instruction_wasd: ": move up/left/down/right by one grid on the canvas.",
                 instruction_z: ": pick up an object, if available.",
                 instruction_x: ": drop the object in possession, if available.",
-                instruction_g: ": block program until pick up an object. This instruction becomes no-op if the mech already possesses an object.",
-                instruction_h: ": block program until drop the object in possession.  This instruction becomes no-op if the mech is not possessing an object.",
+                instruction_g:
+                    ": block program until pick up an object. This instruction becomes no-op if the mech already possesses an object.",
+                instruction_h:
+                    ": block program until drop the object in possession.  This instruction becomes no-op if the mech is not possessing an object.",
                 instruction_noop: ": no-op (no operation).",
                 program_limit: "Program size shall not exceed 40 instructions.",
-                formula_placement: "On formula placement: operands and product must be contiguous grids i.e. for &(a,b)=c, a-b and b-c must both be neighbors. When the contiguity rule is violated, formula symbols are not rendered.",
+                formula_placement:
+                    "On formula placement: operands and product must be contiguous grids i.e. for &(a,b)=c, a-b and b-c must both be neighbors. When the contiguity rule is violated, formula symbols are not rendered.",
                 faucet_sink: 'Faucet is marked as "F" on the board, while Sink is marked as "S" on the board.',
 
                 formulaList: "Formula List",
                 goal: "Goal",
-                goalAffordance:
-                    "With Faucet replenishing <1 /> at one unit per frame,",
+                goalAffordance: "With Faucet replenishing <1 /> at one unit per frame,",
                 goalDeliver: "Build diagrams that produce & deliver <1 /> to Sink.",
                 goalLine2: "Minimize the latency and cost of your solution.",
                 goalLine3_1: "Register at ",
@@ -102,16 +106,16 @@ const resources = {
                 static_cost: "Static cost",
                 latency: "Average latency per delivery",
                 dynamic_cost: "Average dynamic cost per delivery",
-                block_number: "Block number"
-            }
+                block_number: "Block number",
+            },
         },
     },
     scn: {
         translation: {
             MuMu: "挪挪: 第2季",
             Subtitle: "Topology 的一项实验",
-            "Connect": "连接 ",
-            "Connected": "你是: ",
+            Connect: "连接 ",
+            Connected: "你是: ",
             frame: "帧",
             mech: "机械",
             newMech: "添加机械",
@@ -126,15 +130,15 @@ const resources = {
             "Mech programming": "机械编程",
             "Formula placement": "摆放配方",
             "Stir ": "搅搅",
-            "Shake": "摇摇",
-            "Steam": "蒸蒸",
-            "Smash": "砸砸",
+            Shake: "摇摇",
+            Steam: "蒸蒸",
+            Smash: "砸砸",
             "Submit to": "提交至",
             "demo-blank": "空白",
-            "demo": "范例",
-            'Save':'暂存',
-            'Clear':'清除所有暂存',
-            'save to name':'暂存名',
+            demo: "范例",
+            Save: "暂存",
+            Clear: "清除所有暂存",
+            "save to name": "暂存名",
             tutorial: {
                 title: "玩法",
                 thesisTheme: "主题",
@@ -143,7 +147,8 @@ const resources = {
                 thesisLine2:
                     "「挪挪」是一款结合了组合型语言和并行处理的多维度优化谜题。在面板上摆放小机械，通过编程预设机械的行为，然后按照配方摆放，将水龙头 (Faucet) 产出的原料合成目标产品，最后运送至水槽 (Sink)。玩家提交的解决方案将以吞吐量和成本进行排名。",
                 Overview: "简介",
-                overviewLine1: "在炼金术的世界，物质透过炼成阵可转换成其他物质。建造炼成阵吧：摆放配方与机械，并巧妙安排机械指令。",
+                overviewLine1:
+                    "在炼金术的世界，物质透过炼成阵可转换成其他物质。建造炼成阵吧：摆放配方与机械，并巧妙安排机械指令。",
                 instructions: "炼成阵法则",
 
                 explain_program: "程序是一段指令序列。",
@@ -157,7 +162,8 @@ const resources = {
                 instruction_h: ": 阻塞程序直到能够放下物质，并放下物质。若机械未携带物质，则此指令形同无操作。",
                 instruction_noop: ": 无操作。",
                 program_limit: "任意机械的程序长度上限为 40 个指令。",
-                formula_placement: "配方摆法的连续性规则：输入和输出必须位于连续的网格。以 &(A, B) = C 为例，A 和 B 以及 B 和 C 都必须是邻居关系。违反连续性规则时，版面上不会渲染配方符号。",
+                formula_placement:
+                    "配方摆法的连续性规则：输入和输出必须位于连续的网格。以 &(A, B) = C 为例，A 和 B 以及 B 和 C 都必须是邻居关系。违反连续性规则时，版面上不会渲染配方符号。",
                 faucet_sink: '水龙头在图纸上以 "F" 标示；水槽则以 "S" 标示。',
 
                 formulaList: "配方列表",
@@ -205,16 +211,16 @@ const resources = {
                 static_cost: "静态成本",
                 latency: "运送平均延迟",
                 dynamic_cost: "运送平均动态成本",
-                block_number: "区块高度"
-            }
-        }
+                block_number: "区块高度",
+            },
+        },
     },
     tcn: {
         translation: {
             MuMu: "挪挪: 第2季",
             Subtitle: "Topology 的一項實驗",
-            "Connect": "連接 ",
-            "Connected": "你是: ",
+            Connect: "連接 ",
+            Connected: "你是: ",
             frame: "幀",
             mech: "機械",
             newMech: "添加機械",
@@ -229,15 +235,15 @@ const resources = {
             "Mech programming": "機械編程",
             "Formula placement": "擺放配方",
             "Stir ": "攪攪",
-            "Shake": "搖搖",
-            "Steam": "蒸蒸",
-            "Smash": "砸砸",
+            Shake: "搖搖",
+            Steam: "蒸蒸",
+            Smash: "砸砸",
             "Submit to": "提交至",
             "demo-blank": "空白",
-            "demo": "範例",
-            'Save':'暫存',
-            'Clear':'清除所有暫存',
-            'save to name':'暫存名',
+            demo: "範例",
+            Save: "暫存",
+            Clear: "清除所有暫存",
+            "save to name": "暫存名",
             tutorial: {
                 title: "怎麼玩",
                 thesisTheme: "主題",
@@ -246,7 +252,8 @@ const resources = {
                 thesisLine2:
                     "<挪挪>是一種結合組合語言和並行處理的多維度優化謎題。在板上擺放小機械們，透過編程描述他們的行為，然後擺放配方，將水龍頭 (Faucet) 產出的原料轉換成目標產物，投遞於水槽 (Sink)。玩家提交的解決方案將以吞吐量和成本進行排名。",
                 Overview: "簡介",
-                overviewLine1: "在煉金術的世界，物質透過煉成陣可轉換成其他物質。建造煉成陣吧：擺放配方與機械，並巧妙安排機械指令。",
+                overviewLine1:
+                    "在煉金術的世界，物質透過煉成陣可轉換成其他物質。建造煉成陣吧：擺放配方與機械，並巧妙安排機械指令。",
                 instructions: "煉成陣法則",
 
                 explain_program: "程序是一段指令序列。",
@@ -260,7 +267,8 @@ const resources = {
                 instruction_h: ": 阻塞程序直到能夠放下物質，並放下物質. 若機械未攜帶物質，則此指令形同無操作。",
                 instruction_noop: ": 無操作。",
                 program_limit: "任意機械的程序長度上限為 40 個指令。",
-                formula_placement: "配方擺法的連續性規則：輸入和輸出必須位於連續的網格。以 &(A, B) = C 為例，A 和 B 以及 B 和 C 都必須是鄰居關係。違反連續性規則時，版面上不會渲染配方符號。",
+                formula_placement:
+                    "配方擺法的連續性規則：輸入和輸出必須位於連續的網格。以 &(A, B) = C 為例，A 和 B 以及 B 和 C 都必須是鄰居關係。違反連續性規則時，版面上不會渲染配方符號。",
                 faucet_sink: '水龍頭在圖紙上以 "F" 標示；水槽則以 "S" 標示。',
 
                 formulaList: "配方列表",
@@ -308,8 +316,8 @@ const resources = {
                 static_cost: "靜態成本",
                 latency: "平均遞送延遲",
                 dynamic_cost: "平均遞送動態成本",
-                block_number: "區塊高度"
-            }
+                block_number: "區塊高度",
+            },
         },
     },
     fr: {
@@ -352,12 +360,10 @@ const resources = {
                     "Détails sur le placement des opérateurs: les opérandes et produits doivent être continues i.e. pour a+b=c, a&b et b&c doivent être voisins. Quand la règle de continuité est violée, les opérateurs ne sont pas affichés.",
                 instructionsLine7:
                     'Le Faucet et le Sink sont représentés respectivement par un "F" et un "S" sur le damier.',
-                instructionsLine8:
-                    "Le Faucet peut produire <1 /> au rythme d'une unité par séquence.",
+                instructionsLine8: "Le Faucet peut produire <1 /> au rythme d'une unité par séquence.",
                 formulaList: "Liste des Formules",
                 goal: "Objectif",
-                goalAffordance:
-                    "En utilisant le Faucet qui produit <1 /> au rythme d'une unité par séquence,",
+                goalAffordance: "En utilisant le Faucet qui produit <1 /> au rythme d'une unité par séquence,",
                 goalDeliver: "Produit et livre <1 /> au Sink.",
                 goalLine2: "Minimise la latence et le coût de la solution.",
             },
@@ -383,8 +389,8 @@ const resources = {
         translation: {
             MuMu: "MuMu: シーズン 2",
             Subtitle: "topologyによる実験",
-            "Connect": "接続する ",
-            "Connected": "あなたのアドレス: ",
+            Connect: "接続する ",
+            Connected: "あなたのアドレス: ",
             frame: "フレーム",
             mech: "メカ",
             newMech: "メカを追加",
@@ -399,24 +405,25 @@ const resources = {
             "Mech programming": "メカをプログラミングして配置する",
             "Formula placement": "演算子を配置する",
             "Stir ": "混ぜる ",
-            "Shake": "振る",
-            "Steam": "蒸す",
-            "Smash": "砕く",
+            Shake: "振る",
+            Steam: "蒸す",
+            Smash: "砕く",
             "Submit to": "提出する",
             "demo-blank": "白紙",
-            "demo": "デモ",
-            'Save':'保存',
-            'Clear':'全削除する',
-            'save to name':'名前をつけて保存',
+            demo: "デモ",
+            Save: "保存",
+            Clear: "全削除する",
+            "save to name": "名前をつけて保存",
             tutorial: {
                 title: "遊び方",
                 thesisTheme: "仮説とテーマ",
                 thesisLine1:
                     "レイヤー1のブロックチェーンは、資本による貢献によってアイデンティティを主張します。レイヤー2のブロックチェーンは 計算能力という新たな余裕を持ち スキル検証によってアイデンティティを主張します。pay to mintからsolve to mintへ。",
                 thesisLine2:
-                    'MuMuは、ビジュアルと並列のアセンブリプログラミングをテーマとしたパズルです。小さなロボット(メカ)をボード上に配置し、プログラミングし、数式を実行するオペレーターを配置して、材料を蛇口からシンクまで運搬・変換します。解答は処理能力とコストでランク付けされます。',
+                    "MuMuは、ビジュアルと並列のアセンブリプログラミングをテーマとしたパズルです。小さなロボット(メカ)をボード上に配置し、プログラミングし、数式を実行するオペレーターを配置して、材料を蛇口からシンクまで運搬・変換します。解答は処理能力とコストでランク付けされます。",
                 Overview: "概要",
-                overviewLine1: "錬金術の世界では、錬金術の合成レシピによって物質を変化させることができます。メカをプログラムし、数式とメカを創造的に配置して合成レシピを構築してください。",
+                overviewLine1:
+                    "錬金術の世界では、錬金術の合成レシピによって物質を変化させることができます。メカをプログラムし、数式とメカを創造的に配置して合成レシピを構築してください。",
                 instructions: "錬金術の合成レシピのルール",
 
                 explain_program: "プログラムは指示の連なりです。",
@@ -426,17 +433,19 @@ const resources = {
                 instruction_wasd: ": キャンバス場で1マス上下左右に動きます",
                 instruction_z: ": 可能であれば物体を拾います",
                 instruction_x: ": 可能であれば持っている物体を落とします。",
-                instruction_g: ": 物体を拾うまでのブロックプログラムです。この指示はメカがすでにオブジェクトを所有している場合は、実行されません。",
-                instruction_h: ": 持っている物体を落とすまでのブロックプログラムです。この指示はメカが物体を持っていない場合は実行されません。",
+                instruction_g:
+                    ": 物体を拾うまでのブロックプログラムです。この指示はメカがすでにオブジェクトを所有している場合は、実行されません。",
+                instruction_h:
+                    ": 持っている物体を落とすまでのブロックプログラムです。この指示はメカが物体を持っていない場合は実行されません。",
                 instruction_noop: ": 操作なし",
                 program_limit: "プログラムは40以上の指示を持つことはできません。",
-                formula_placement: "数式の配置について：被演算子と積は連続したグリッドである必要があります。例えば &(a,b)=c の場合、a-b と b-c は共に隣接していなければなりません。このルールに違反した場合、数式記号は描画ません。",
-                faucet_sink: '蛇口は盤面に「F」、シンクは盤面に「S」と記載されています。',
+                formula_placement:
+                    "数式の配置について：被演算子と積は連続したグリッドである必要があります。例えば &(a,b)=c の場合、a-b と b-c は共に隣接していなければなりません。このルールに違反した場合、数式記号は描画ません。",
+                faucet_sink: "蛇口は盤面に「F」、シンクは盤面に「S」と記載されています。",
 
                 formulaList: "数式リスト",
                 goal: "ゲームの目的",
-                goalAffordance:
-                    "蛇口は<1 /> を1フレームあたり1ユニット補充します。",
+                goalAffordance: "蛇口は<1 /> を1フレームあたり1ユニット補充します。",
                 goalDeliver: " <1 /> を生み出してシンクまで届ける合成レシピを構築してください。",
                 goalLine2: "それにかかるフレーム数（レイテンシー）とコストを最小化してください。",
                 goalLine3_1: "",
@@ -479,8 +488,8 @@ const resources = {
                 static_cost: "静的コスト",
                 latency: "１運搬あたりの平均フレーム数",
                 dynamic_cost: "１運搬あたりの平均動的コスト",
-                block_number: "ブロック番号"
-            }
+                block_number: "ブロック番号",
+            },
         },
     },
 };
