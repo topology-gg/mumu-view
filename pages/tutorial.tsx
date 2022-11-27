@@ -3,6 +3,7 @@ import UnitState, {
     BgStatus,
     BorderStatus,
     UnitText,
+    AtomTypeToBg,
 } from "../src/types/UnitState";
 import { CSSProperties, useState } from "react";
 import Modal from "../src/components/Modal";
@@ -14,6 +15,16 @@ import { Trans, useTranslation } from "react-i18next";
 import { INSTRUCTION_ICON_MAP } from "../src/constants/constants";
 
 export default function Tutorial() {
+
+    const { t } = useTranslation();
+    const [open, setOpen] = useState<boolean>(false);
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     function compute_formula_li_style(backgroundColor: string): CSSProperties {
         return {
             display: "flex",
@@ -31,16 +42,47 @@ export default function Tutorial() {
         alignItems:'center',
     };
 
-    const { t } = useTranslation();
+    var list = []
+    Object.entries(OPERATOR_TYPES).forEach(
+        ([key, value]) => list.push(
+            <li
+                style={compute_formula_li_style(value.color + FORMULA_LI_OPACITY_STR)}
+            >
+                <p className={styles.input_name}>{t(value.name)}</p>
+                {value.symbol}
+                (
+                {
+                    value.input_atom_types.map( val => (
+                        <Unit
+                            state={{
+                                bg_status: AtomTypeToBg[val],
+                                border_status: null, unit_text: UnitText.EMPTY, unit_id: null,
+                            }}
+                            handleMouseOut={() => {}} handleMouseOver={() => {}}
+                            mechHighlight={false} isSmall={true}
+                        />
+                    ))
+                }
+                )
 
-    const [open, setOpen] = useState<boolean>(false);
+                <p style={{margin: "0 0.5rem 0 0.5rem"}}> = </p>
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
+                {
+                    value.output_atom_types.map( val => (
+                        <Unit
+                            state={{
+                                bg_status: AtomTypeToBg[val],
+                                border_status: null, unit_text: UnitText.EMPTY, unit_id: null,
+                            }}
+                            handleMouseOut={() => {}} handleMouseOver={() => {}}
+                            mechHighlight={false} isSmall={true}
+                        />
+                    ))
+                }
+            </li>
+        )
+    );
+
 
     // OPERATOR_TYPES.STIR.symbol
 
@@ -166,294 +208,8 @@ export default function Tutorial() {
                             marginBottom: "2rem",
                         }}
                     >
-                        <li
-                            style={compute_formula_li_style(
-                                OPERATOR_TYPES.STIR.color +
-                                    FORMULA_LI_OPACITY_STR
-                            )}
-                        >
-                            <p className={styles.input_name}>{t("Stir ")}</p>
-                            {OPERATOR_TYPES.STIR.symbol}(
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_VANILLA_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                            ,
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_VANILLA_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                            )
-                            <p
-                                style={{
-                                    marginLeft: "0.5rem",
-                                    marginRight: "0.5rem",
-                                }}
-                            >
-                                =
-                            </p>
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_HAZELNUT_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                        </li>
+                        {list}
 
-                        <li
-                            style={compute_formula_li_style(
-                                OPERATOR_TYPES.SHAKE.color +
-                                    FORMULA_LI_OPACITY_STR
-                            )}
-                        >
-                            <p className={styles.input_name}>{t("Shake")}</p>
-                            {OPERATOR_TYPES.SHAKE.symbol}(
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_HAZELNUT_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                            ,
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_HAZELNUT_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                            )
-                            <p
-                                style={{
-                                    marginLeft: "0.5rem",
-                                    marginRight: "0.5rem",
-                                }}
-                            >
-                                =
-                            </p>
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_CHOCOLATE_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                        </li>
-
-                        <li
-                            style={compute_formula_li_style(
-                                OPERATOR_TYPES.STEAM.color +
-                                    FORMULA_LI_OPACITY_STR
-                            )}
-                        >
-                            <p className={styles.input_name}>{t("Steam")}</p>
-                            {OPERATOR_TYPES.STEAM.symbol}(
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_HAZELNUT_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                            ,
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_CHOCOLATE_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                            ,
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_CHOCOLATE_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                            )
-                            <p
-                                style={{
-                                    marginLeft: "0.5rem",
-                                    marginRight: "0.5rem",
-                                }}
-                            >
-                                =
-                            </p>
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_TRUFFLE_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />{" "}
-                            ,
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_VANILLA_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                        </li>
-
-                        <li
-                            style={compute_formula_li_style(
-                                OPERATOR_TYPES.SMASH.color +
-                                    FORMULA_LI_OPACITY_STR
-                            )}
-                        >
-                            <p className={styles.input_name}>{t("Smash")}</p>
-                            {OPERATOR_TYPES.SMASH.symbol}(
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_TRUFFLE_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                            )
-                            <p
-                                style={{
-                                    marginLeft: "0.5rem",
-                                    marginRight: "0.5rem",
-                                }}
-                            >
-                                =
-                            </p>
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_VANILLA_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />{" "}
-                            ,
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_VANILLA_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />{" "}
-                            ,
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_VANILLA_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />{" "}
-                            ,
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_VANILLA_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                            ,
-                            <Unit
-                                state={{
-                                    bg_status: BgStatus.ATOM_SAFFRON_FREE,
-                                    border_status: null,
-                                    unit_text: UnitText.EMPTY,
-                                    unit_id: null,
-                                }}
-                                handleMouseOut={() => {}}
-                                handleMouseOver={() => {}}
-                                mechHighlight={false}
-                                isSmall={true}
-                            />
-                        </li>
                     </ol>
 
 

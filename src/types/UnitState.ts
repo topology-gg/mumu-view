@@ -1,4 +1,6 @@
 
+import { AtomType } from "./AtomState"
+
 export enum BgStatus {
     EMPTY = 'empty',
     ATOM_VANILLA_FREE = 'vanilla_free',
@@ -17,6 +19,17 @@ export enum BgStatus {
     ATOM_SANDGLASS_POSSESSED = 'sandglass_possessed',
     ATOM_WILTED_FREE = 'wilted_free',
     ATOM_WILTED_POSSESSED = 'wilted_possessed',
+}
+
+export const AtomTypeToBg: { [key in AtomType]: BgStatus } = {
+    [AtomType.VANILLA]: BgStatus.ATOM_VANILLA_FREE,
+    [AtomType.HAZELNUT]: BgStatus.ATOM_HAZELNUT_FREE,
+    [AtomType.CHOCOLATE]: BgStatus.ATOM_CHOCOLATE_FREE,
+    [AtomType.TRUFFLE]: BgStatus.ATOM_TRUFFLE_FREE,
+    [AtomType.SAFFRON]: BgStatus.ATOM_SAFFRON_FREE,
+    [AtomType.TURTLE]: BgStatus.ATOM_TURTLE_FREE,
+    [AtomType.SANDGLASS]: BgStatus.ATOM_SANDGLASS_FREE,
+    [AtomType.WILTED]: BgStatus.ATOM_WILTED_FREE,
 }
 
 export enum BorderStatus {
