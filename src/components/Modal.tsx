@@ -8,7 +8,7 @@ interface ModalProps {
     children: React.ReactNode;
     open: boolean;
     onClose: () => void;
-    maxWidth: false | Breakpoint;
+    maxWidth?: false | Breakpoint;
 }
 
 const Modal = ({ children, open, onClose, maxWidth = "sm" }: ModalProps) => {
