@@ -23,7 +23,7 @@ import packSolution, { programsToInstructionSets } from "../src/helpers/packSolu
 import { SIMULATOR_ADDR } from "../src/components/SimulatorContract";
 import Solution from "../src/types/Solution";
 import Leaderboard from "../src/components/Leaderboard";
-import { Box, Tooltip } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import MechProgramming from "../src/components/MechProgramming";
 import Layout from "../src/components/Layout";
 import LoadSave from "../src/components/LoadSave";
@@ -65,11 +65,12 @@ export default function Home() {
     }, []);
 
     // React states for mechs & programs
-    const [numMechs, setNumMechs] = useState(DEMO_SOLUTIONS[0].programs.length);
     const [programs, setPrograms] = useState<string[]>(DEMO_SOLUTIONS[0].programs);
     const [mechInitPositions, setMechInitPositions] = useState<Grid[]>(
         DEMO_SOLUTIONS[0].mechs.map((mech) => mech.index)
     );
+
+    const numMechs = programs.length;
 
     // React states for operators
     const [numOperators, setNumOperators] = useState(DEMO_SOLUTIONS[0].operators.length);
@@ -379,7 +380,6 @@ export default function Home() {
     function handleMechClick(mode: string) {
         if (animationState != "Stop") return; // only when in Stop mode can player add/remove mechs
         if (mode === "+" && numMechs < MAX_NUM_MECHS) {
-            setNumMechs((prev) => prev + 1);
             setMechInitPositions(
                 // Array.from({length:numMechs+1}).fill({ x: MECH_INIT_X, y: MECH_INIT_Y }) as Grid[]
                 (prev) => {
@@ -391,21 +391,6 @@ export default function Home() {
             setPrograms((prev) => {
                 let prev_copy = JSON.parse(JSON.stringify(prev));
                 prev_copy.push(INIT_PROGRAM);
-                return prev_copy;
-            });
-        } else if (mode === "-" && numMechs > MIN_NUM_MECHS) {
-            setNumMechs((prev) => prev - 1);
-            setMechInitPositions(
-                // Array.from({length:numMechs-1}).fill({ x: MECH_INIT_X, y: MECH_INIT_Y }) as Grid[]
-                (prev) => {
-                    let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
-                    prev_copy.pop();
-                    return prev_copy;
-                }
-            );
-            setPrograms((prev) => {
-                let prev_copy = JSON.parse(JSON.stringify(prev));
-                prev_copy.pop();
                 return prev_copy;
             });
         }
@@ -678,7 +663,6 @@ export default function Home() {
         console.log("load solution:", viewSolution);
         setViewSolution((prev) => viewSolution);
 
-        setNumMechs((prev) => viewSolution.mechs.length);
         setPrograms((prev) => viewSolution.programs);
         setMechInitPositions((prev) => viewSolution.mechs.map((mech) => mech.index));
         setNumOperators((prev) => viewSolution.operators.length);
@@ -874,14 +858,6 @@ export default function Home() {
 
     const mechProgramming = (
         <div>
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <button style={makeshift_button_style} onClick={() => handleMechClick("+")}>
-                    {t("newMech")}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleMechClick("-")}>
-                    {t("removeMech")}{" "}
-                </button>
-            </Box>
             <MechProgramming
                 animationState={animationState}
                 mechCarries={mech_carries}
@@ -893,6 +869,11 @@ export default function Home() {
                 onProgramsChange={setPrograms}
                 programs={programs}
             />
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Button color="secondary" variant="outlined" onClick={() => handleMechClick("+")}>
+                    {t("newMech")}
+                </Button>
+            </Box>
         </div>
     );
 
