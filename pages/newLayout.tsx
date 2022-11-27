@@ -837,7 +837,7 @@ export default function Home() {
     );
 
     const formulaProgramming = (
-        <div>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
                 <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "STIR")}>
                     {t("newOperation", { operation: "&" })}
@@ -855,139 +855,141 @@ export default function Home() {
                     {t("removeOp")}
                 </button>
             </Box>
-            {Array.from({ length: numOperators }).map((_, operator_i) => (
-                <div
-                    key={`input-row-${operator_i}`}
-                    className={styles.input_row}
-                    onMouseOver={() => handleMouseOverOperatorInput(operator_i)}
-                    onMouseOut={() => handleMouseOutOperatorInput(operator_i)}
-                    style={operatorStyles[operator_i]}
-                >
-                    <p className={styles.input_name}>{t(operatorStates[operator_i].typ.name)}</p>
+            <Box>
+                {Array.from({ length: numOperators }).map((_, operator_i) => (
+                    <div
+                        key={`input-row-${operator_i}`}
+                        className={styles.input_row}
+                        onMouseOver={() => handleMouseOverOperatorInput(operator_i)}
+                        onMouseOut={() => handleMouseOutOperatorInput(operator_i)}
+                        style={operatorStyles[operator_i]}
+                    >
+                        <p className={styles.input_name}>{t(operatorStates[operator_i].typ.name)}</p>
 
-                    {Array.from({ length: operatorStates[operator_i].input.length }).map((_, input_i) => (
-                        <div key={`input-row-${operator_i}-input-${input_i}`} className={styles.input_grid}>
-                            {input_i == 0 ? (
-                                <p style={{ textAlign: "right" }} className={styles.input_text}>
-                                    {operatorStates[operator_i].typ.symbol}(
-                                </p>
-                            ) : (
-                                <></>
-                            )}
-                            <input
-                                className={styles.program}
-                                onChange={(event) => {
-                                    // if (event.target.value.length == 0) return;
-                                    // if (isNaN(parseInt(event.target.value))) return;
-                                    let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
-                                    newOperator.input[input_i].x = parseInt(event.target.value);
-                                    setOperator(operator_i, newOperator);
-                                }}
-                                defaultValue={operatorStates[operator_i].input[input_i].x}
-                                value={
-                                    !isNaN(operatorStates[operator_i].input[input_i].x)
-                                        ? operatorStates[operator_i].input[input_i].x
-                                        : ""
-                                }
-                                style={{
-                                    width: "30px",
-                                    height: "25px",
-                                    textAlign: "center",
-                                    border: "1px solid #CCCCCC",
-                                    borderRadius: "10px 0 0 10px",
-                                }}
-                                disabled={animationState == "Stop" ? false : true}
-                            ></input>
-                            <input
-                                className={styles.program}
-                                onChange={(event) => {
-                                    // if (event.target.value.length == 0) return;
-                                    // if (isNaN(parseInt(event.target.value))) return;
-                                    let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
-                                    newOperator.input[input_i].y = parseInt(event.target.value);
-                                    setOperator(operator_i, newOperator);
-                                }}
-                                defaultValue={operatorStates[operator_i].input[input_i].y}
-                                value={
-                                    !isNaN(operatorStates[operator_i].input[input_i].y)
-                                        ? operatorStates[operator_i].input[input_i].y
-                                        : ""
-                                }
-                                style={{
-                                    width: "30px",
-                                    height: "25px",
-                                    textAlign: "center",
-                                    border: "1px solid #CCCCCC",
-                                    borderLeft: "0px",
-                                    borderRadius: "0 10px 10px 0",
-                                }}
-                                disabled={animationState == "Stop" ? false : true}
-                            ></input>
-                            {input_i == operatorStates[operator_i].input.length - 1 ? (
-                                <p className={styles.input_text}>{`)=`}</p>
-                            ) : (
-                                <p className={styles.input_text}>{", "}</p>
-                            )}
-                        </div>
-                    ))}
+                        {Array.from({ length: operatorStates[operator_i].input.length }).map((_, input_i) => (
+                            <div key={`input-row-${operator_i}-input-${input_i}`} className={styles.input_grid}>
+                                {input_i == 0 ? (
+                                    <p style={{ textAlign: "right" }} className={styles.input_text}>
+                                        {operatorStates[operator_i].typ.symbol}(
+                                    </p>
+                                ) : (
+                                    <></>
+                                )}
+                                <input
+                                    className={styles.program}
+                                    onChange={(event) => {
+                                        // if (event.target.value.length == 0) return;
+                                        // if (isNaN(parseInt(event.target.value))) return;
+                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        newOperator.input[input_i].x = parseInt(event.target.value);
+                                        setOperator(operator_i, newOperator);
+                                    }}
+                                    defaultValue={operatorStates[operator_i].input[input_i].x}
+                                    value={
+                                        !isNaN(operatorStates[operator_i].input[input_i].x)
+                                            ? operatorStates[operator_i].input[input_i].x
+                                            : ""
+                                    }
+                                    style={{
+                                        width: "30px",
+                                        height: "25px",
+                                        textAlign: "center",
+                                        border: "1px solid #CCCCCC",
+                                        borderRadius: "10px 0 0 10px",
+                                    }}
+                                    disabled={animationState == "Stop" ? false : true}
+                                ></input>
+                                <input
+                                    className={styles.program}
+                                    onChange={(event) => {
+                                        // if (event.target.value.length == 0) return;
+                                        // if (isNaN(parseInt(event.target.value))) return;
+                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        newOperator.input[input_i].y = parseInt(event.target.value);
+                                        setOperator(operator_i, newOperator);
+                                    }}
+                                    defaultValue={operatorStates[operator_i].input[input_i].y}
+                                    value={
+                                        !isNaN(operatorStates[operator_i].input[input_i].y)
+                                            ? operatorStates[operator_i].input[input_i].y
+                                            : ""
+                                    }
+                                    style={{
+                                        width: "30px",
+                                        height: "25px",
+                                        textAlign: "center",
+                                        border: "1px solid #CCCCCC",
+                                        borderLeft: "0px",
+                                        borderRadius: "0 10px 10px 0",
+                                    }}
+                                    disabled={animationState == "Stop" ? false : true}
+                                ></input>
+                                {input_i == operatorStates[operator_i].input.length - 1 ? (
+                                    <p className={styles.input_text}>{`)=`}</p>
+                                ) : (
+                                    <p className={styles.input_text}>{", "}</p>
+                                )}
+                            </div>
+                        ))}
 
-                    {Array.from({ length: operatorStates[operator_i].output.length }).map((_, output_i) => (
-                        <div key={`input-row-${operator_i}-input-${output_i}`} className={styles.input_grid}>
-                            <input
-                                className={styles.program}
-                                onChange={(event) => {
-                                    // if (event.target.value.length == 0) return;
-                                    let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
-                                    newOperator.output[output_i].x = parseInt(event.target.value);
-                                    setOperator(operator_i, newOperator);
-                                }}
-                                defaultValue={operatorStates[operator_i].output[output_i].x}
-                                value={
-                                    !isNaN(operatorStates[operator_i].output[output_i].x)
-                                        ? operatorStates[operator_i].output[output_i].x
-                                        : ""
-                                }
-                                style={{
-                                    width: "30px",
-                                    height: "25px",
-                                    textAlign: "center",
-                                    border: "1px solid #CCCCCC",
-                                    borderRadius: "10px 0 0 10px",
-                                }}
-                                disabled={animationState == "Stop" ? false : true}
-                            ></input>
-                            <input
-                                className={styles.program}
-                                onChange={(event) => {
-                                    // if (event.target.value.length == 0) return;
-                                    let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
-                                    newOperator.output[output_i].y = parseInt(event.target.value);
-                                    setOperator(operator_i, newOperator);
-                                }}
-                                defaultValue={operatorStates[operator_i].output[output_i].y}
-                                value={
-                                    !isNaN(operatorStates[operator_i].output[output_i].y)
-                                        ? operatorStates[operator_i].output[output_i].y
-                                        : ""
-                                }
-                                style={{
-                                    width: "30px",
-                                    height: "25px",
-                                    textAlign: "center",
-                                    border: "1px solid #CCCCCC",
-                                    borderLeft: "0px",
-                                    borderRadius: "0 10px 10px 0",
-                                }}
-                                disabled={animationState == "Stop" ? false : true}
-                            ></input>
-                            {output_i != operatorStates[operator_i].output.length - 1 && (
-                                <p className={styles.input_text}>{`,`}</p>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            ))}
-        </div>
+                        {Array.from({ length: operatorStates[operator_i].output.length }).map((_, output_i) => (
+                            <div key={`input-row-${operator_i}-input-${output_i}`} className={styles.input_grid}>
+                                <input
+                                    className={styles.program}
+                                    onChange={(event) => {
+                                        // if (event.target.value.length == 0) return;
+                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        newOperator.output[output_i].x = parseInt(event.target.value);
+                                        setOperator(operator_i, newOperator);
+                                    }}
+                                    defaultValue={operatorStates[operator_i].output[output_i].x}
+                                    value={
+                                        !isNaN(operatorStates[operator_i].output[output_i].x)
+                                            ? operatorStates[operator_i].output[output_i].x
+                                            : ""
+                                    }
+                                    style={{
+                                        width: "30px",
+                                        height: "25px",
+                                        textAlign: "center",
+                                        border: "1px solid #CCCCCC",
+                                        borderRadius: "10px 0 0 10px",
+                                    }}
+                                    disabled={animationState == "Stop" ? false : true}
+                                ></input>
+                                <input
+                                    className={styles.program}
+                                    onChange={(event) => {
+                                        // if (event.target.value.length == 0) return;
+                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        newOperator.output[output_i].y = parseInt(event.target.value);
+                                        setOperator(operator_i, newOperator);
+                                    }}
+                                    defaultValue={operatorStates[operator_i].output[output_i].y}
+                                    value={
+                                        !isNaN(operatorStates[operator_i].output[output_i].y)
+                                            ? operatorStates[operator_i].output[output_i].y
+                                            : ""
+                                    }
+                                    style={{
+                                        width: "30px",
+                                        height: "25px",
+                                        textAlign: "center",
+                                        border: "1px solid #CCCCCC",
+                                        borderLeft: "0px",
+                                        borderRadius: "0 10px 10px 0",
+                                    }}
+                                    disabled={animationState == "Stop" ? false : true}
+                                ></input>
+                                {output_i != operatorStates[operator_i].output.length - 1 && (
+                                    <p className={styles.input_text}>{`,`}</p>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                ))}
+            </Box>
+        </Box>
     );
 
     // Render
