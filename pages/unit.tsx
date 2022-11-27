@@ -57,6 +57,33 @@ export default function Unit({ state, handleMouseOver, handleMouseOut, mechHighl
         // nuclei = 1;
     }
 
+    else if (state.bg_status === BgStatus.ATOM_TURTLE_FREE) {
+        className += styles.atomTurtleFree + ' ';
+        // nuclei = 1;
+    }
+    else if (state.bg_status === BgStatus.ATOM_TURTLE_POSSESSED) {
+        className += styles.atomTurtlePossessed + ' ';
+        // nuclei = 1;
+    }
+
+    else if (state.bg_status === BgStatus.ATOM_SANDGLASS_FREE) {
+        className += styles.atomSandglassFree + ' ';
+        // nuclei = 1;
+    }
+    else if (state.bg_status === BgStatus.ATOM_SANDGLASS_POSSESSED) {
+        className += styles.atomSandglassPossessed + ' ';
+        // nuclei = 1;
+    }
+
+    else if (state.bg_status === BgStatus.ATOM_WILTED_FREE) {
+        className += styles.atomWiltedFree + ' ';
+        // nuclei = 1;
+    }
+    else if (state.bg_status === BgStatus.ATOM_WILTED_POSSESSED) {
+        className += styles.atomWiltedPossessed + ' ';
+        // nuclei = 1;
+    }
+
     //
     // Compute mech styles
     //

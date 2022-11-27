@@ -3,7 +3,7 @@ import { N_CYCLES } from "../src/constants/constants";
 const resources = {
     en: {
         translation: {
-            MuMu: "MuMu: Season 1",
+            MuMu: "MuMu: Season 2",
             Subtitle: "An experiment by Topology",
             Connect: "Connect ",
             Connected: "You are: ",
@@ -112,7 +112,7 @@ const resources = {
     },
     scn: {
         translation: {
-            MuMu: "挪挪: 第1季",
+            MuMu: "挪挪: 第2季",
             Subtitle: "Topology 的一项实验",
             Connect: "连接 ",
             Connected: "你是: ",
@@ -217,7 +217,7 @@ const resources = {
     },
     tcn: {
         translation: {
-            MuMu: "挪挪: 第1季",
+            MuMu: "挪挪: 第2季",
             Subtitle: "Topology 的一項實驗",
             Connect: "連接 ",
             Connected: "你是: ",
@@ -387,7 +387,7 @@ const resources = {
     },
     jp: {
         translation: {
-            MuMu: "MuMu: シーズン 1",
+            MuMu: "MuMu: シーズン 2",
             Subtitle: "topologyによる実験",
             Connect: "接続する ",
             Connected: "あなたのアドレス: ",

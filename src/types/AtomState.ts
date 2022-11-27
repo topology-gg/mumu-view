@@ -13,6 +13,9 @@ export enum AtomType {
     CHOCOLATE = 'CHOCOLATE',
     TRUFFLE = 'TRUFFLE',
     SAFFRON = 'SAFFRON',
+    TURTLE = 'TURTLE',
+    SANDGLASS = 'SANDGLASS',
+    WILTED = 'WILTED',
 }
 
 export default interface AtomState {
