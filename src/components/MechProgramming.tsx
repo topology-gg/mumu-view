@@ -90,8 +90,7 @@ const MechProgramming = ({
     }
 
     function handleMechDescriptionChange(mech_i: number, description: string) {
-        let newDescriptions: string[] = new Array(); 
-        mechDescriptions.forEach(val => newDescriptions.push(val))
+        let newDescriptions: string[] = JSON.parse(JSON.stringify(mechDescriptions));
         newDescriptions[mech_i] = description;
         onMechDescriptionChange(newDescriptions);
     }

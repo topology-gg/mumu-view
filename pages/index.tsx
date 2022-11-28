@@ -399,8 +399,7 @@ export default function Home() {
             });
             setMechDescriptions(
                (prev) => {
-                    let prev_copy: string[] = new Array(); 
-                    prev.forEach(val => prev_copy.push(val))
+                     let prev_copy = JSON.parse(JSON.stringify(prev));
                     prev_copy.push(INIT_DESCRIPTION);
                     return prev_copy; 
                }
