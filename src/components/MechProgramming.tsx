@@ -85,6 +85,12 @@ const MechProgramming = ({
         onMechInitPositionsChange(newPositions);
     }
 
+    function handleProgramDelete(index: number) {
+        onProgramsChange(programs.filter((_v, i) => i !== index));
+        onMechInitPositionsChange(mechInitPositions.filter((_v, i) => i !== index));
+        onMechIndexHighlight(-1);
+    }
+
     return (
         <>
             <IconizedInstructionPanel programKeyDown={programKeyDown} onPress={handleInstructionPanelPress} />
@@ -107,6 +113,7 @@ const MechProgramming = ({
                                           onProgramChange={(index, program) =>
                                               onProgramsChange(programs.map((p, i) => (i === index ? program : p)))
                                           }
+                                          onProgramDelete={handleProgramDelete}
                                           disabled={animationState == "Stop" ? false : true}
                                           handleMouseOver={() => {
                                               handleMouseOverMechInput(mech_i);

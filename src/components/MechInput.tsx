@@ -8,6 +8,9 @@ import Unit from "../../pages/unit";
 import { BgStatus, UnitText } from "../types/UnitState";
 import SingleInstruction from "./SingleInstruction";
 import NewInstruction from "./NewInstruction";
+import Button from "@mui/material/Button";
+import { Delete } from "@mui/icons-material";
+import { Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@mui/material";
 
 interface MechInputProps {
     mechIndex: number;
@@ -16,6 +19,7 @@ interface MechInputProps {
     pc: number;
     onPositionChange: (mechIndex: number, position: Grid) => void;
     onProgramChange: (mechIndex: number, program: string) => void;
+    onProgramDelete?: (mechIndex: number) => void;
     disabled: boolean;
     handleMouseOver: () => void;
     handleMouseOut: () => void;
@@ -31,6 +35,7 @@ const MechInput = ({
     pc,
     onPositionChange,
     onProgramChange,
+    onProgramDelete,
     disabled,
     handleMouseOver,
     handleMouseOut,
@@ -44,10 +49,9 @@ const MechInput = ({
     const programLength = instructions.length;
     const currentInstructionIndex = pc % programLength;
 
-    const [selectedInstructionIndex, setSelectedInstructionIndex] =
-        useState<number>(null);
-    const [selectedNewInstruction, setSelectedNewInstruction] =
-        useState<boolean>(false);
+    const [selectedInstructionIndex, setSelectedInstructionIndex] = useState<number>(null);
+    const [selectedNewInstruction, setSelectedNewInstruction] = useState<boolean>(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
     const handleKeyDown: KeyboardEventHandler = (event) => {
         if (event.code === "Backspace") {
@@ -81,9 +85,7 @@ const MechInput = ({
         } else if (event.key === "ArrowLeft") {
             setSelectedInstructionIndex((prev) => (prev > 0 ? prev - 1 : 0));
         } else if (event.key === "ArrowRight") {
-            setSelectedInstructionIndex((prev) =>
-                prev < instructions.length - 1 ? prev + 1 : prev
-            );
+            setSelectedInstructionIndex((prev) => (prev < instructions.length - 1 ? prev + 1 : prev));
         } else if (Object.keys(INSTRUCTION_ICON_MAP).includes(instruction)) {
             const newInstructions = [...instructions];
             newInstructions[selectedInstructionIndex] = instruction;
@@ -91,139 +93,168 @@ const MechInput = ({
         }
     };
 
-    return (
-        <Draggable draggableId={mechIndex.toString()} index={mechIndex}>
-            {(provided, _snapshot) => (
-                <div
-                    ref={provided.innerRef}
-                    key={`input-row-${mechIndex}`}
-                    className={styles.input_row}
-                    onMouseOver={() => {
-                        handleMouseOver();
-                    }}
-                    onMouseOut={() => {
-                        handleMouseOut();
-                    }}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                >
-                    <div style={{ marginLeft: "1rem" }}>
-                        <Unit
-                            state={{
-                                bg_status: unitBgStatus,
-                                border_status: null,
-                                unit_text: UnitText.EMPTY,
-                                unit_id: null,
-                            }}
-                            handleMouseOut={() => {}}
-                            handleMouseOver={() => {}}
-                            mechHighlight={false}
-                            isSmall={true}
-                        />
-                    </div>
+    const handleDelete = () => {
+        if (!onProgramDelete) return;
 
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        onProgramDelete(mechIndex);
+        setDeleteDialogOpen(false);
+    };
+
+    return (
+        <>
+            <Draggable draggableId={mechIndex.toString()} index={mechIndex}>
+                {(provided, _snapshot) => (
                     <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
+                        ref={provided.innerRef}
+                        key={`input-row-${mechIndex}`}
+                        className={styles.input_row}
+                        onMouseOver={() => {
+                            handleMouseOver();
                         }}
+                        onMouseOut={() => {
+                            handleMouseOut();
+                        }}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
                     >
-                        <p
+                        <div style={{ marginLeft: "1rem" }}>
+                            <Unit
+                                state={{
+                                    bg_status: unitBgStatus,
+                                    border_status: null,
+                                    unit_text: UnitText.EMPTY,
+                                    unit_id: null,
+                                }}
+                                handleMouseOut={() => {}}
+                                handleMouseOver={() => {}}
+                                mechHighlight={false}
+                                isSmall={true}
+                            />
+                        </div>
+
+                        <div
                             style={{
-                                margin: "0 1rem 0 1rem",
-                                width: "2.5rem",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                             }}
                         >
-                            {t("mech")}
-                            {mechIndex}
-                        </p>
-                    </div>
-
-                    <input
-                        className={styles.program}
-                        onChange={(event) => {
-                            if (isNaN(parseInt(event.target.value))) return;
-                            onPositionChange(mechIndex, {
-                                ...position,
-                                x: parseInt(event.target.value),
-                            });
-                        }}
-                        defaultValue={position.x}
-                        value={position.x}
-                        style={{
-                            width: "30px",
-                            height: "25px",
-                            textAlign: "center",
-                            border: "1px solid #CCCCCC",
-                            borderRadius: "10px 0 0 10px",
-                        }}
-                        disabled={disabled}
-                    ></input>
-
-                    <input
-                        className={styles.program}
-                        onChange={(event) => {
-                            if (isNaN(parseInt(event.target.value))) return;
-                            onPositionChange(mechIndex, {
-                                ...position,
-                                y: parseInt(event.target.value),
-                            });
-                        }}
-                        defaultValue={position.y}
-                        value={position.y}
-                        style={{
-                            width: "30px",
-                            height: "25px",
-                            textAlign: "center",
-                            marginRight: "0.8rem",
-                            border: "1px solid #CCCCCC",
-                            borderLeft: "0px",
-                            borderRadius: "0 10px 10px 0",
-                        }}
-                        disabled={disabled}
-                    ></input>
-
-                    <div
-                        className={styles.programWrapper}
-                        style={{
-                            height:"25px",
-                            borderRadius: '5px',
-                            backgroundColor: program.split(",").length > PROGRAM_SIZE_MAX ? '#FFCBCB' : '#FFFFFF00'
-                        }}
-                    >
-                        {instructions.map((instruction, index) => (
-                            <SingleInstruction
-                                instruction={instruction}
-                                active={currentInstructionIndex === index}
-                                selected={selectedInstructionIndex === index}
-                                onSelect={() => {
-                                    setSelectedInstructionIndex(index);
-                                    setSelectedNewInstruction(false);
+                            <p
+                                style={{
+                                    margin: "0 1rem 0 1rem",
+                                    width: "2.5rem",
                                 }}
-                                onBlur={() =>
-                                    setSelectedInstructionIndex((prev) =>
-                                        prev === index ? null : prev
-                                    )
-                                }
-                                onKeyUp={handleChangeInstruction}
-                            />
-                        ))}
-                        <NewInstruction
-                            onInsert={handleInsertInstruction}
-                            onSelect={() => {
-                                setSelectedInstructionIndex(null);
-                                setSelectedNewInstruction(true);
+                            >
+                                {t("mech")}
+                                {mechIndex}
+                            </p>
+                        </div>
+
+                        <IconButton disabled={!onProgramDelete} size="small" color="secondary" onClick={handleDelete}>
+                            <Delete fontSize="small" />
+                        </IconButton>
+
+                        <input
+                            className={styles.program}
+                            onChange={(event) => {
+                                if (isNaN(parseInt(event.target.value))) return;
+                                onPositionChange(mechIndex, {
+                                    ...position,
+                                    x: parseInt(event.target.value),
+                                });
                             }}
-                            onBlur={() => setSelectedNewInstruction(false)}
-                            selected={selectedNewInstruction}
-                            onKeyDown={handleKeyDown}
-                            onKeyUp={handleKeyUp}
-                        />
+                            defaultValue={position.x}
+                            value={position.x}
+                            style={{
+                                width: "30px",
+                                height: "25px",
+                                textAlign: "center",
+                                border: "1px solid #CCCCCC",
+                                borderRadius: "10px 0 0 10px",
+                            }}
+                            disabled={disabled}
+                        ></input>
+
+                        <input
+                            className={styles.program}
+                            onChange={(event) => {
+                                if (isNaN(parseInt(event.target.value))) return;
+                                onPositionChange(mechIndex, {
+                                    ...position,
+                                    y: parseInt(event.target.value),
+                                });
+                            }}
+                            defaultValue={position.y}
+                            value={position.y}
+                            style={{
+                                width: "30px",
+                                height: "25px",
+                                textAlign: "center",
+                                marginRight: "0.8rem",
+                                border: "1px solid #CCCCCC",
+                                borderLeft: "0px",
+                                borderRadius: "0 10px 10px 0",
+                            }}
+                            disabled={disabled}
+                        ></input>
+
+                        <div
+                            className={styles.programWrapper}
+                            style={{
+                                height: "25px",
+                                borderRadius: "5px",
+                                backgroundColor: program.split(",").length > PROGRAM_SIZE_MAX ? "#FFCBCB" : "#FFFFFF00",
+                            }}
+                        >
+                            {instructions.map((instruction, index) => (
+                                <SingleInstruction
+                                    instruction={instruction}
+                                    active={currentInstructionIndex === index}
+                                    selected={selectedInstructionIndex === index}
+                                    onSelect={() => {
+                                        setSelectedInstructionIndex(index);
+                                        setSelectedNewInstruction(false);
+                                    }}
+                                    onBlur={() => setSelectedInstructionIndex((prev) => (prev === index ? null : prev))}
+                                    onKeyUp={handleChangeInstruction}
+                                />
+                            ))}
+                            <NewInstruction
+                                onInsert={handleInsertInstruction}
+                                onSelect={() => {
+                                    setSelectedInstructionIndex(null);
+                                    setSelectedNewInstruction(true);
+                                }}
+                                onBlur={() => setSelectedNewInstruction(false)}
+                                selected={selectedNewInstruction}
+                                onKeyDown={handleKeyDown}
+                                onKeyUp={handleKeyUp}
+                            />
+                        </div>
                     </div>
-                </div>
-            )}
-        </Draggable>
+                )}
+            </Draggable>
+
+            <Dialog open={deleteDialogOpen}>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {t("removeMechConfirm", { mech: `mech${mechIndex}` })}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button color="secondary" onClick={() => setDeleteDialogOpen(false)}>
+                        {t("no")}
+                    </Button>
+                    <Button variant="contained" color="error" onClick={handleDeleteConfirm} autoFocus>
+                        {t("removeMech")}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
     );
 };
 
