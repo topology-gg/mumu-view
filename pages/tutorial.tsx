@@ -13,6 +13,7 @@ import styles from "../styles/Home.module.css";
 import { OPERATOR_TYPES } from "../src/types/Operator";
 import { Trans, useTranslation } from "react-i18next";
 import { INSTRUCTION_ICON_MAP } from "../src/constants/constants";
+import { STATIC_COSTS } from "../src/types/Cost";
 
 export default function Tutorial() {
 
@@ -82,6 +83,15 @@ export default function Tutorial() {
             </li>
         )
     );
+
+    var formulaCosts = []
+    Object.entries(OPERATOR_TYPES).forEach(
+        ([key, value]) => formulaCosts.push(
+            <li style={CONTENT_LI_STYLE}>
+                {t(value.name)}: {STATIC_COSTS[key]} / {t("formula")}
+            </li>
+        )
+    )
 
 
     // OPERATOR_TYPES.STIR.symbol
@@ -335,18 +345,9 @@ export default function Tutorial() {
                         <li style={CONTENT_LI_STYLE}>
                             {t("tutorial.staticCostLine1")}
                         </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            {t("tutorial.staticCostLine2")}
-                        </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            {t("tutorial.staticCostLine3")}
-                        </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            {t("tutorial.staticCostLine4")}
-                        </li>
-                        <li style={CONTENT_LI_STYLE}>
-                            {t("tutorial.staticCostLine5")}
-                        </li>
+
+                        {formulaCosts}
+
                     </ol>
 
                     <p
