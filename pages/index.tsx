@@ -69,8 +69,8 @@ export default function Home() {
     const [mechInitPositions, setMechInitPositions] = useState<Grid[]>(
         DEMO_SOLUTIONS[0].mechs.map((mech) => mech.index)
     );
-
     const numMechs = programs.length;
+    const [mechComments, setMechComments] = useState<string[]>(Array(numMechs).fill(""));
 
     // React states for operators
     const [numOperators, setNumOperators] = useState(DEMO_SOLUTIONS[0].operators.length);
@@ -861,9 +861,11 @@ export default function Home() {
             <MechProgramming
                 animationState={animationState}
                 mechCarries={mech_carries}
+                mechComments={mechComments}
                 mechIndexHighlighted={mechIndexHighlighted}
                 mechInitPositions={mechInitPositions}
                 mechStates={mechStates}
+                onMechCommentsChange={setMechComments}
                 onMechInitPositionsChange={setMechInitPositions}
                 onMechIndexHighlight={setMechIndexHighlighted}
                 onProgramsChange={setPrograms}

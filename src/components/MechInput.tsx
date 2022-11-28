@@ -13,10 +13,12 @@ import { Delete } from "@mui/icons-material";
 import { Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@mui/material";
 
 interface MechInputProps {
+    comment: string;
     mechIndex: number;
     position: Grid;
     program: string;
     pc: number;
+    onCommentChange: (comment: string) => void;
     onPositionChange: (mechIndex: number, position: Grid) => void;
     onProgramChange: (mechIndex: number, program: string) => void;
     onProgramDelete?: (mechIndex: number) => void;
@@ -29,10 +31,12 @@ interface MechInputProps {
 }
 
 const MechInput = ({
+    comment,
     mechIndex,
     position,
     program,
     pc,
+    onCommentChange,
     onPositionChange,
     onProgramChange,
     onProgramDelete,
@@ -235,6 +239,25 @@ const MechInput = ({
                                 onKeyUp={handleKeyUp}
                             />
                         </div>
+
+                        <input
+                            className={styles.program}
+                            onChange={(event) => {
+                                onCommentChange(event.target.value);
+                            }}
+                            value={comment}
+                            size={31}
+                            maxLength={31}
+                            placeholder="Add a comment"
+                            style={{
+                                width: "auto",
+                                height: "25px",
+                                border: "1px solid #CCCCCC",
+                                borderRadius: "10px",
+                                padding: "0 10px",
+                            }}
+                            disabled={disabled}
+                        ></input>
                     </div>
                 )}
             </Draggable>

@@ -11,25 +11,29 @@ import MechInput from "./MechInput";
 interface MechProgrammingProps {
     animationState: string;
     mechCarries: BgStatus[];
+    mechComments: string[];
     mechIndexHighlighted: number;
-    mechStates: MechState[];
     mechInitPositions: Grid[];
-    programs: string[];
-    onProgramsChange: (programs: string[]) => void;
-    onMechInitPositionsChange: (mechInitPositions: Grid[]) => void;
+    mechStates: MechState[];
+    onMechCommentsChange: (comments: string[]) => void;
     onMechIndexHighlight: (index: number) => void;
+    onMechInitPositionsChange: (mechInitPositions: Grid[]) => void;
+    onProgramsChange: (programs: string[]) => void;
+    programs: string[];
 }
 
 const MechProgramming = ({
     animationState,
     mechCarries,
+    mechComments,
     mechIndexHighlighted,
     mechInitPositions,
     mechStates,
-    programs,
-    onProgramsChange,
-    onMechInitPositionsChange,
+    onMechCommentsChange,
     onMechIndexHighlight,
+    onMechInitPositionsChange,
+    onProgramsChange,
+    programs,
 }: MechProgrammingProps) => {
     let programKeyDownInit = {};
     for (const key of INSTRUCTION_KEYS) {
@@ -45,7 +49,9 @@ const MechProgramming = ({
 
         const newPrograms = reorder(programs, source.index, destination.index);
         const newPositions = reorder(mechInitPositions, source.index, destination.index);
+        const newMechComments = reorder(mechComments, source.index, destination.index);
 
+        onMechCommentsChange(newMechComments);
         onProgramsChange(newPrograms);
         onMechInitPositionsChange(newPositions);
     };
@@ -79,6 +85,12 @@ const MechProgramming = ({
         console.log("key pressed", key);
     };
 
+    function handleMechCommentChange(index: number, comment: string) {
+        const newComments = [...mechComments];
+        newComments[index] = comment;
+        onMechCommentsChange(newComments);
+    }
+
     function handleMechInitPositionChange(mech_i: number, position: Grid) {
         let newPositions = JSON.parse(JSON.stringify(mechInitPositions));
         newPositions[mech_i] = position;
@@ -103,10 +115,12 @@ const MechProgramming = ({
                                 ? Array.from({ length: numMechs }).map((_, mech_i) => (
                                       <MechInput
                                           key={`mech-input-${mech_i}`}
+                                          comment={mechComments[mech_i]}
                                           mechIndex={mech_i}
                                           position={mechInitPositions[mech_i]}
                                           program={programs[mech_i]}
                                           pc={0}
+                                          onCommentChange={(comment) => handleMechCommentChange(mech_i, comment)}
                                           onPositionChange={(index, position) => {
                                               handleMechInitPositionChange(index, position);
                                           }}
@@ -133,10 +147,12 @@ const MechProgramming = ({
                                 : Array.from({ length: numMechs }).map((_, mech_i) => (
                                       <MechInput
                                           key={`mech-input-${mech_i}`}
+                                          comment={mechComments[mech_i]}
                                           mechIndex={mech_i}
                                           position={mechInitPositions[mech_i]}
                                           program={programs[mech_i]}
                                           pc={mechStates[mech_i].pc_next}
+                                          onCommentChange={(comment) => handleMechCommentChange(mech_i, comment)}
                                           onPositionChange={(index, position) => {}}
                                           onProgramChange={(index, program) => {}}
                                           disabled={animationState == "Stop" ? false : true}
