@@ -14,10 +14,10 @@ interface MechProgrammingProps {
     mechIndexHighlighted: number;
     mechStates: MechState[];
     mechInitPositions: Grid[];
-    mechDescriptions: Uint8Array[];
+    mechDescriptions: string[];
     programs: string[];
     onProgramsChange: (programs: string[]) => void;
-    onMechDescriptionChange: (descriptions: Uint8Array[]) => void;
+    onMechDescriptionChange: (descriptions: string[]) => void;
     onMechInitPositionsChange: (mechInitPositions: Grid[]) => void;
     onMechIndexHighlight: (index: number) => void;
 }
@@ -89,8 +89,8 @@ const MechProgramming = ({
         onMechInitPositionsChange(newPositions);
     }
 
-    function handleMechDescriptionChange(mech_i: number, description: Uint8Array) {
-        let newDescriptions: Uint8Array[] = new Array(); 
+    function handleMechDescriptionChange(mech_i: number, description: string) {
+        let newDescriptions: string[] = new Array(); 
         mechDescriptions.forEach(val => newDescriptions.push(val))
         newDescriptions[mech_i] = description;
         onMechDescriptionChange(newDescriptions);

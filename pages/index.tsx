@@ -34,8 +34,7 @@ export default function Home() {
     const INIT_PROGRAM = ".";
     const MECH_INIT_X = 0;
     const MECH_INIT_Y = 0;
-    const encoder = new TextEncoder();
-    const INIT_DESCRIPTION = encoder.encode("New Mech")
+    const INIT_DESCRIPTION = "New Mech"
     const ATOM_INIT_XY = []; // [{x:5, y:3}]
     const UNIT_STATE_INIT: UnitState = {
         bg_status: BgStatus.EMPTY,
@@ -71,7 +70,7 @@ export default function Home() {
     const [mechInitPositions, setMechInitPositions] = useState<Grid[]>(
         DEMO_SOLUTIONS[0].mechs.map((mech) => mech.index)
     );
-    const [mechDescriptions, setMechDescriptions] = useState<Uint8Array[]>(
+    const [mechDescriptions, setMechDescriptions] = useState<string[]>(
         DEMO_SOLUTIONS[0].mechs.map((mech) => mech.description)
     )
 
@@ -400,7 +399,7 @@ export default function Home() {
             });
             setMechDescriptions(
                (prev) => {
-                    let prev_copy: Uint8Array[] = new Array(); 
+                    let prev_copy: string[] = new Array(); 
                     prev.forEach(val => prev_copy.push(val))
                     prev_copy.push(INIT_DESCRIPTION);
                     return prev_copy; 

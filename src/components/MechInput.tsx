@@ -16,11 +16,11 @@ import { NumericType } from "mongodb";
 interface MechInputProps {
     mechIndex: number;
     position: Grid;
-    description:Uint8Array;
+    description: string;
     program: string;
     pc: number;
     onPositionChange: (mechIndex: number, position: Grid) => void;
-    onDescriptionChange: (mechIndex: number, description: Uint8Array) => void;
+    onDescriptionChange: (mechIndex: number, description: string) => void;
     onProgramChange: (mechIndex: number, program: string) => void;
     onProgramDelete?: (mechIndex: number) => void;
     disabled: boolean;
@@ -108,11 +108,6 @@ const MechInput = ({
         onProgramDelete(mechIndex);
         setDeleteDialogOpen(false);
     };
-
-    const decoder = (description: ArrayBufferLike) => {
-        let decoder = new TextDecoder("utf-8");
-        return decoder.decode(description);
-    }
 
     return (
         <>
@@ -250,16 +245,16 @@ const MechInput = ({
                             className={styles.programWrapper}
                             onChange={(event) => {
                                 let encoder = new TextEncoder();
-                                onDescriptionChange(mechIndex, encoder.encode(event.target.value));
+                                onDescriptionChange(mechIndex, event.target.value);
                             }}
-                            defaultValue={decoder(description.buffer)}
-                            value={decoder(description.buffer)}
+                            defaultValue={description}
+                            value={description}
                             style={{
                                 height: "25px",
-                                width: Math.max(description.byteLength / 2, 7) + "%",
+                                width: Math.max(description.length / 2, 7) + "%",
                                 margin: "0 1rem 0 1rem",
                                 borderRadius: "5px",
-                                backgroundColor: description.byteLength > DESCRIPTION_SIZE_MAX ? "#FFCBCB" : "#FFFFFF00",
+                                backgroundColor: description.length > DESCRIPTION_SIZE_MAX ? "#FFCBCB" : "#FFFFFF00",
                             }}
                             disabled={disabled}
                         ></input>
