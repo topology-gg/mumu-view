@@ -677,11 +677,12 @@ export default function Home() {
     }
 
     function handleMouseOverOperatorInput(operator_i: number) {
-        let newHighlight = operatorInputHighlight;
+        let newHighlight = [...operatorInputHighlight];
         let newOperatorStyles: React.CSSProperties[] = operatorStyles;
 
         newOperatorStyles[operator_i] = { backgroundColor: "#FFFE71" };
         newHighlight[operator_i] = true;
+
         setOperatorInputHighlight((prev) => newHighlight);
         setOperatorStyles((prev) => newOperatorStyles);
     }
