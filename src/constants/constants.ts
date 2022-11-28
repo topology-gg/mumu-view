@@ -4,6 +4,7 @@ import Solution from "../types/Solution";
 
 export const DIM = 10;
 export const PROGRAM_SIZE_MAX = 40
+export const DESCRIPTION_SIZE_MAX = 31
 export const N_CYCLES = 150
 
 export const PRECISION = 6
@@ -13,6 +14,8 @@ export const TO_PRECISION = (x) => {
     return x.toString().match(re)[0];
 }
 
+const encoder = new TextEncoder()
+
 const BLANK_SOLUTION: Solution = {
     mechs: [],
     programs: [],
@@ -21,7 +24,7 @@ const BLANK_SOLUTION: Solution = {
 
 const DEMO_SOLUTION_0: Solution = {
     mechs: [
-        {id: 'mech0', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:3, y:3 }, pc_next: 0},
+        {id: 'mech0', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:3, y:3 }, description: encoder.encode("Main mech"), pc_next: 0},
     ],
     programs: [
         'D,S,A,W'
@@ -31,8 +34,8 @@ const DEMO_SOLUTION_0: Solution = {
 
 const DEMO_SOLUTION_1: Solution = {
     mechs: [
-        {id: 'mech0', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:2, y:2 }, pc_next: 0},
-        {id: 'mech1', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:5, y:5 }, pc_next: 0},
+        {id: 'mech0', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:2, y:2 }, description: encoder.encode("Main mech"), pc_next: 0},
+        {id: 'mech1', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:5, y:5 }, description: encoder.encode("Secondary mech"), pc_next: 0},
     ],
     programs: [
         'D,S,A,W',
@@ -45,16 +48,16 @@ const DEMO_SOLUTION_1: Solution = {
 
 const DEMO_SOLUTION_2: Solution = {
     mechs: [
-        {id: 'mech0', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:0, y:0 }, pc_next: 0},
-        {id: 'mech1', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:0, y:0 }, pc_next: 0},
-        {id: 'mech2', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:3, y:0 }, pc_next: 0},
-        {id: 'mech3', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:4, y:2 }, pc_next: 0},
-        {id: 'mech4', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:3, y:0 }, pc_next: 0},
-        {id: 'mech5', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:5, y:4 }, pc_next: 0},
-        {id: 'mech6', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:6, y:5 }, pc_next: 0},
-        {id: 'mech7', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:6, y:4 }, pc_next: 0},
-        {id: 'mech8', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:2, y:5 }, pc_next: 0},
-        {id: 'mech9', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:4, y:5 }, pc_next: 0},
+        {id: 'mech0', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:0, y:0 }, description: encoder.encode("Main mech"), pc_next: 0},
+        {id: 'mech1', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:0, y:0 }, description: encoder.encode("Secondary mech"), pc_next: 0},
+        {id: 'mech2', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:3, y:0 }, description: encoder.encode("Secondary mech"), pc_next: 0},
+        {id: 'mech3', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:4, y:2 }, description: encoder.encode("Secondary mech"), pc_next: 0},
+        {id: 'mech4', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:3, y:0 }, description: encoder.encode("Secondary mech"), pc_next: 0},
+        {id: 'mech5', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:5, y:4 }, description: encoder.encode("Secondary mech"), pc_next: 0},
+        {id: 'mech6', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:6, y:5 }, description: encoder.encode("Secondary mech"), pc_next: 0},
+        {id: 'mech7', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:6, y:4 }, description: encoder.encode("Secondary mech"), pc_next: 0},
+        {id: 'mech8', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:2, y:5 }, description: encoder.encode("Secondary mech"), pc_next: 0},
+        {id: 'mech9', typ: MechType.SINGLETON, status: MechStatus.OPEN, index: { x:4, y:5 }, description: encoder.encode("Secondary mech"), pc_next: 0},
     ],
     programs: [
         'Z,D,X,A,Z,D,D,X,A,A',

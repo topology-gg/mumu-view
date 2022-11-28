@@ -15,5 +15,6 @@ export default interface MechState {
     typ: MechType
     status: MechStatus
     index: Grid
+    description: Uint8Array
     pc_next: number
 }
