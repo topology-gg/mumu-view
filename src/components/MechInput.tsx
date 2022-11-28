@@ -2,7 +2,7 @@ import React, { KeyboardEventHandler, useState } from "react";
 import Grid from "../types/Grid";
 import styles from "../../styles/Home.module.css";
 import { useTranslation } from "react-i18next";
-import { INSTRUCTION_ICON_MAP, PROGRAM_SIZE_MAX } from "../constants/constants";
+import { INSTRUCTION_ICON_MAP, PROGRAM_SIZE_MAX, DESCRIPTION_SIZE_MAX } from "../constants/constants";
 import { Draggable } from "react-beautiful-dnd";
 import Unit from "../../pages/unit";
 import { BgStatus, UnitText } from "../types/UnitState";
@@ -11,13 +11,16 @@ import NewInstruction from "./NewInstruction";
 import Button from "@mui/material/Button";
 import { Delete } from "@mui/icons-material";
 import { Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@mui/material";
+import { NumericType } from "mongodb";
 
 interface MechInputProps {
     mechIndex: number;
     position: Grid;
+    description:Uint8Array;
     program: string;
     pc: number;
     onPositionChange: (mechIndex: number, position: Grid) => void;
+    onDescriptionChange: (mechIndex: number, description: Uint8Array) => void;
     onProgramChange: (mechIndex: number, program: string) => void;
     onProgramDelete?: (mechIndex: number) => void;
     disabled: boolean;
@@ -31,9 +34,11 @@ interface MechInputProps {
 const MechInput = ({
     mechIndex,
     position,
+    description,
     program,
     pc,
     onPositionChange,
+    onDescriptionChange,
     onProgramChange,
     onProgramDelete,
     disabled,
@@ -103,6 +108,11 @@ const MechInput = ({
         onProgramDelete(mechIndex);
         setDeleteDialogOpen(false);
     };
+
+    const decoder = (description: ArrayBufferLike) => {
+        let decoder = new TextDecoder("utf-8");
+        return decoder.decode(description);
+    }
 
     return (
         <>
@@ -235,6 +245,24 @@ const MechInput = ({
                                 onKeyUp={handleKeyUp}
                             />
                         </div>
+
+                        <input
+                            className={styles.programWrapper}
+                            onChange={(event) => {
+                                let encoder = new TextEncoder();
+                                onDescriptionChange(mechIndex, encoder.encode(event.target.value));
+                            }}
+                            defaultValue={decoder(description.buffer)}
+                            value={decoder(description.buffer)}
+                            style={{
+                                height: "25px",
+                                width: Math.max(description.byteLength / 2, 7) + "%",
+                                margin: "0 1rem 0 1rem",
+                                borderRadius: "5px",
+                                backgroundColor: description.byteLength > DESCRIPTION_SIZE_MAX ? "#FFCBCB" : "#FFFFFF00",
+                            }}
+                            disabled={disabled}
+                        ></input>
                     </div>
                 )}
             </Draggable>
