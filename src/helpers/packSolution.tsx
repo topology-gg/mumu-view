@@ -176,7 +176,7 @@ function encodeInstructionSet (instructionSet) {
     for (const instruction of instructionSet) {
         const instruction_lowercase: string = instruction.toLowerCase()
         if ( !(instruction_lowercase in INSTRUCTION_ENCODE) ){
-            encodedInstructionSet.push (pack(8)) // no-op
+            encodedInstructionSet.push (pack(50)) // no-op
         }
         else {
             encodedInstructionSet.push ( pack(INSTRUCTION_ENCODE[instruction_lowercase]) )
@@ -198,6 +198,7 @@ const INSTRUCTION_ENCODE = {
     x : 5,
     g : 6,
     h : 7,
+    c: 8,
     // _ : 8
 }
 

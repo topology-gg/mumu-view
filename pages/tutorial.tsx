@@ -297,6 +297,12 @@ export default function Tutorial() {
                         </li>
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
+                                {INSTRUCTION_ICON_MAP['c']}
+                            </i>
+                            {t("tutorial.instruction_c")}
+                        </li>
+                        <li style={CONTENT_LI_STYLE}>
+                            <i className="material-icons" style={{ fontSize: "1rem" }}>
                                 {INSTRUCTION_ICON_MAP['.']}
                             </i>
                             {t("tutorial.instruction_noop")}
@@ -392,9 +398,15 @@ export default function Tutorial() {
                         </li>
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
-                                {INSTRUCTION_ICON_MAP['g']} / {INSTRUCTION_ICON_MAP['h']}
+                                {INSTRUCTION_ICON_MAP['c']}
                             </i>
                             {t("tutorial.dynamicCostLine5")}
+                        </li>
+                        <li style={CONTENT_LI_STYLE}>
+                            <i className="material-icons" style={{ fontSize: "1rem" }}>
+                                {INSTRUCTION_ICON_MAP['g']} / {INSTRUCTION_ICON_MAP['h']}
+                            </i>
+                            {t("tutorial.dynamicCostLine6")}
                         </li>
                     </ol>
 

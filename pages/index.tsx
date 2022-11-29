@@ -27,6 +27,7 @@ import { Box, Button, Tooltip } from "@mui/material";
 import MechProgramming from "../src/components/MechProgramming";
 import Layout from "../src/components/Layout";
 import LoadSave from "../src/components/LoadSave";
+import theme from "../styles/theme";
 
 export default function Home() {
     // Constants
@@ -102,11 +103,6 @@ export default function Home() {
 
     let operatorInputHighlightInit: boolean[] = Array(numOperators).fill(false);
     const [operatorInputHighlight, setOperatorInputHighlight] = useState<boolean[]>(operatorInputHighlightInit);
-    const [operatorStyles, setOperatorStyles] = useState<React.CSSProperties[]>(
-        operatorStates.map((op, _) => {
-            return { backgroundColor: op.typ.color + "55" };
-        })
-    );
 
     const [mechIndexHighlighted, setMechIndexHighlighted] = useState<number>(-1);
 
@@ -667,34 +663,24 @@ export default function Home() {
         setMechInitPositions((prev) => viewSolution.mechs.map((mech) => mech.index));
         setNumOperators((prev) => viewSolution.operators.length);
         setOperatorStates((prev) => viewSolution.operators);
-        setOperatorStyles((prev) =>
-            viewSolution.operators.map((op, _) => {
-                return { backgroundColor: op.typ.color + "55" };
-            })
-        );
 
         setAnimationFrame((prev) => 0);
     }
 
     function handleMouseOverOperatorInput(operator_i: number) {
-        let newHighlight = operatorInputHighlight;
-        let newOperatorStyles: React.CSSProperties[] = operatorStyles;
+        let newHighlight = Array(numOperators).fill(false);
 
-        newOperatorStyles[operator_i] = { backgroundColor: "#FFFE71" };
         newHighlight[operator_i] = true;
+
         setOperatorInputHighlight((prev) => newHighlight);
-        setOperatorStyles((prev) => newOperatorStyles);
     }
 
     function handleMouseOutOperatorInput(operator_i: number) {
         let newHighlight = [];
-        let newOperatorStyles: React.CSSProperties[] = [];
         for (let i = 0; i < numOperators; i++) {
             newHighlight.push(false);
-            newOperatorStyles.push({ backgroundColor: operatorStates[i].typ.color + "55" });
         }
         setOperatorInputHighlight((prev) => newHighlight);
-        setOperatorStyles((prev) => newOperatorStyles);
     }
 
     // Lazy style objects
@@ -915,7 +901,11 @@ export default function Home() {
                         className={styles.input_row}
                         onMouseOver={() => handleMouseOverOperatorInput(operator_i)}
                         onMouseOut={() => handleMouseOutOperatorInput(operator_i)}
-                        style={operatorStyles[operator_i]}
+                        style={{
+                            backgroundColor: operatorInputHighlight[operator_i]
+                                ? theme.palette.primary.main
+                                : operatorStates[operator_i].typ.color + "55",
+                        }}
                     >
                         <p className={styles.input_name}>{t(operatorStates[operator_i].typ.name)}</p>
 
