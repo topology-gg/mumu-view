@@ -84,7 +84,7 @@ export const DEMO_SOLUTIONS = [
     DEMO_SOLUTION_2
 ];
 
-export const INSTRUCTION_KEYS = ['w','a','s','d','z','x','g','h','.'];
+export const INSTRUCTION_KEYS = ['w','a','s','d','z','x','g','h','c','.'];
 
 export type InstructionKey = typeof INSTRUCTION_KEYS[number];
 
@@ -98,6 +98,7 @@ export const INSTRUCTION_ICON_MAP = {
     x: "close",
     g: "add_circle",
     h: "cancel",
+    c: "child_care",
     ".": "minimize",
     _: "minimize",
 };
