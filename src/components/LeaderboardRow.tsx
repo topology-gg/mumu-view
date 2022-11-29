@@ -98,6 +98,7 @@ export default function LeaderboardRow({ solution, index, loadSolution }) {
                 typ: MechType.SINGLETON,
                 status: MechStatus.OPEN,
                 index: { x: mech.index.x, y: mech.index.y },
+                description: mech.description,
                 pc_next: 0,
             } as MechState;
         }),
