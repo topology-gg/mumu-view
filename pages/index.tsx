@@ -92,7 +92,7 @@ export default function Home() {
             calldata: args,
         };
         return [tx];
-    }, [programs, mechInitPositions, operatorStates]);
+    }, [programs, mechInitPositions, mechDescriptions, operatorStates]);
 
     // React states for animation control
     const [animationState, setAnimationState] = useState("Stop");
