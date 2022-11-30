@@ -35,6 +35,7 @@ export default function Home() {
     const INIT_PROGRAM = ".";
     const MECH_INIT_X = 0;
     const MECH_INIT_Y = 0;
+    const INIT_DESCRIPTION = "New Mech"
     const ATOM_INIT_XY = []; // [{x:5, y:3}]
     const UNIT_STATE_INIT: UnitState = {
         bg_status: BgStatus.EMPTY,
@@ -65,11 +66,14 @@ export default function Home() {
         setMounted(true);
     }, []);
 
-    // React states for mechs & programs
+    // React states for mechs, programs and descriptions
     const [programs, setPrograms] = useState<string[]>(DEMO_SOLUTIONS[0].programs);
     const [mechInitPositions, setMechInitPositions] = useState<Grid[]>(
         DEMO_SOLUTIONS[0].mechs.map((mech) => mech.index)
     );
+    const [mechDescriptions, setMechDescriptions] = useState<string[]>(
+        DEMO_SOLUTIONS[0].mechs.map((mech) => mech.description)
+    )
 
     const numMechs = programs.length;
 
@@ -80,7 +84,7 @@ export default function Home() {
     // React useMemo
     const calls = useMemo(() => {
         let instructionSets = programsToInstructionSets(programs);
-        const args = packSolution(instructionSets, mechInitPositions, operatorStates);
+        const args = packSolution(instructionSets, mechInitPositions, mechDescriptions, operatorStates);
         // console.log ('> useMemo: args =', args)
 
         const tx = {
@@ -89,7 +93,7 @@ export default function Home() {
             calldata: args,
         };
         return [tx];
-    }, [programs, mechInitPositions, operatorStates]);
+    }, [programs, mechInitPositions, mechDescriptions, operatorStates]);
 
     // React states for animation control
     const [animationState, setAnimationState] = useState("Stop");
@@ -111,7 +115,7 @@ export default function Home() {
     //
     const runnable = isRunnable();
     const mechInitStates: MechState[] = mechInitPositions.map((pos, mech_i) => {
-        return { status: MechStatus.OPEN, index: pos, id: `mech${mech_i}`, typ: MechType.SINGLETON, pc_next: 0 };
+        return { status: MechStatus.OPEN, index: pos, id: `mech${mech_i}`, typ: MechType.SINGLETON, description: mechDescriptions[mech_i], pc_next: 0 };
     });
     const atomInitStates: AtomState[] = ATOM_INIT_XY.map(function (xy, i) {
         return {
@@ -389,6 +393,13 @@ export default function Home() {
                 prev_copy.push(INIT_PROGRAM);
                 return prev_copy;
             });
+            setMechDescriptions(
+               (prev) => {
+                     let prev_copy = JSON.parse(JSON.stringify(prev));
+                    prev_copy.push(INIT_DESCRIPTION);
+                    return prev_copy; 
+               }
+            )
         }
     }
 
@@ -661,6 +672,7 @@ export default function Home() {
 
         setPrograms((prev) => viewSolution.programs);
         setMechInitPositions((prev) => viewSolution.mechs.map((mech) => mech.index));
+        setMechDescriptions((prev) => viewSolution.mechs.map((mech) => mech.description));
         setNumOperators((prev) => viewSolution.operators.length);
         setOperatorStates((prev) => viewSolution.operators);
 
@@ -855,8 +867,10 @@ export default function Home() {
                 mechCarries={mech_carries}
                 mechIndexHighlighted={mechIndexHighlighted}
                 mechInitPositions={mechInitPositions}
+                mechDescriptions={mechDescriptions}
                 mechStates={mechStates}
                 onMechInitPositionsChange={setMechInitPositions}
+                onMechDescriptionChange={setMechDescriptions}
                 onMechIndexHighlight={setMechIndexHighlighted}
                 onProgramsChange={setPrograms}
                 programs={programs}

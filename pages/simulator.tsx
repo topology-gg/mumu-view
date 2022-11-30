@@ -162,7 +162,7 @@ function _simulate_one_cycle (
         let instruction: string = instruction_per_mech[mech_i].toLowerCase()
         if (instruction == '_') instruction = '.'
 
-        var mech_new = {id:mech.id, typ:mech.typ, index:mech.index, status:mech.status, pc_next:mech.pc_next}
+        var mech_new = {id:mech.id, typ:mech.typ, index:mech.index, status:mech.status, description:mech.description, pc_next:mech.pc_next}
 
         // console.log (`mech${mech_i} running ${instruction}`)
 

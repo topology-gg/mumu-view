@@ -116,6 +116,10 @@
     padding: 0
 }
 
+.programComment:focus {
+    outline: none;
+}
+
 .instructionBox {
   position: absolute;
   background-color: #70190026;

@@ -8,6 +8,7 @@ interface Mech {
     type: number
     status: number
     index: Grid
+    description: string
 }
 
 export function programsToInstructionSets (programs) {
@@ -22,10 +23,10 @@ export function programsToInstructionSets (programs) {
     return instructionSets
 }
 
-export default function packSolution (instructionSets: string[][], mechInitPositions: Grid[], operatorStates: Operator[]) {
+export default function packSolution (instructionSets: string[][], mechInitPositions: Grid[], mechDesciptions: string[], operatorStates: Operator[]) {
 
-    if (!instructionSets || !mechInitPositions || !operatorStates){
-        console.log('oops?', instructionSets, mechInitPositions, operatorStates)
+    if (!instructionSets || !mechInitPositions || !operatorStates || !mechDesciptions){
+        console.log('oops?', instructionSets, mechInitPositions, mechDesciptions, operatorStates)
         return []
     }
 
@@ -47,8 +48,22 @@ export default function packSolution (instructionSets: string[][], mechInitPosit
             type: 0,
             status: 0, // open
             index: grid,
+            description: "0",
         })
     });
+    const bufferToInt = (buffer) => {
+        let acc = BigInt(0);
+        for (let i=0; i < buffer.length; i++) {
+            acc = acc * BigInt(256) + BigInt(buffer[i]);
+        }
+        return acc;
+    }
+    mechDesciptions.forEach((description: string, index: number) => {
+        let encoder = new TextEncoder();
+        let buffer = encoder.encode(description)
+        let acc = bufferToInt(buffer);
+        mech_array[index].description = acc.toString();
+    })
 
     // Prepare input arg on solution's operators
     let operator_type_array = []
@@ -149,10 +164,11 @@ function serialize_mech (mech: Mech) {
     //     type: number
     //     status: number
     //     index: Grid
+    //     description: string
     // }
 
-    let arr = [mech.id, mech.type, mech.status]
-    arr = arr.concat(serialize_grid(mech.index))
+    let arr: any[] = [mech.id, mech.type, mech.status]
+    arr = arr.concat(serialize_grid(mech.index)).concat([mech.description])
 
     return arr
 }

@@ -2,7 +2,7 @@ import React, { KeyboardEventHandler, useState } from "react";
 import Grid from "../types/Grid";
 import styles from "../../styles/Home.module.css";
 import { useTranslation } from "react-i18next";
-import { INSTRUCTION_ICON_MAP, PROGRAM_SIZE_MAX } from "../constants/constants";
+import { INSTRUCTION_ICON_MAP, PROGRAM_SIZE_MAX, DESCRIPTION_SIZE_MAX } from "../constants/constants";
 import { Draggable } from "react-beautiful-dnd";
 import Unit from "../../pages/unit";
 import { BgStatus, UnitText } from "../types/UnitState";
@@ -11,13 +11,16 @@ import NewInstruction from "./NewInstruction";
 import Button from "@mui/material/Button";
 import { Delete } from "@mui/icons-material";
 import { Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@mui/material";
+import { NumericType } from "mongodb";
 
 interface MechInputProps {
     mechIndex: number;
     position: Grid;
+    description: string;
     program: string;
     pc: number;
     onPositionChange: (mechIndex: number, position: Grid) => void;
+    onDescriptionChange: (mechIndex: number, description: string) => void;
     onProgramChange: (mechIndex: number, program: string) => void;
     onProgramDelete?: (mechIndex: number) => void;
     disabled: boolean;
@@ -31,9 +34,11 @@ interface MechInputProps {
 const MechInput = ({
     mechIndex,
     position,
+    description,
     program,
     pc,
     onPositionChange,
+    onDescriptionChange,
     onProgramChange,
     onProgramDelete,
     disabled,
@@ -235,6 +240,47 @@ const MechInput = ({
                                 onKeyUp={handleKeyUp}
                             />
                         </div>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
+                            <p
+                                style={{
+                                    marginLeft: "1rem",
+                                    color: "#999999",
+                                }}
+                            >
+                                //
+                            </p>
+                        </div>
+
+                        <input
+                            className={styles.programComment}
+                            onChange={(event) => {
+                                let encoder = new TextEncoder();
+                                onDescriptionChange(mechIndex, event.target.value);
+                            }}
+                            defaultValue={description}
+                            value={description}
+                            size={DESCRIPTION_SIZE_MAX}
+                            maxLength={DESCRIPTION_SIZE_MAX}
+                            style={{
+                                height: "25px",
+                                width: "auto",
+                                marginLeft: "0.3rem",
+                                padding: "0 5px",
+                                color: "#999999",
+                                border: "none",
+                                borderRadius: "7px",
+                                fontSize: '12px',
+                            }}
+                            disabled={disabled}
+                        ></input>
+
                     </div>
                 )}
             </Draggable>

@@ -14,8 +14,10 @@ interface MechProgrammingProps {
     mechIndexHighlighted: number;
     mechStates: MechState[];
     mechInitPositions: Grid[];
+    mechDescriptions: string[];
     programs: string[];
     onProgramsChange: (programs: string[]) => void;
+    onMechDescriptionChange: (descriptions: string[]) => void;
     onMechInitPositionsChange: (mechInitPositions: Grid[]) => void;
     onMechIndexHighlight: (index: number) => void;
 }
@@ -25,10 +27,12 @@ const MechProgramming = ({
     mechCarries,
     mechIndexHighlighted,
     mechInitPositions,
+    mechDescriptions,
     mechStates,
     programs,
     onProgramsChange,
     onMechInitPositionsChange,
+    onMechDescriptionChange,
     onMechIndexHighlight,
 }: MechProgrammingProps) => {
     let programKeyDownInit = {};
@@ -85,9 +89,16 @@ const MechProgramming = ({
         onMechInitPositionsChange(newPositions);
     }
 
+    function handleMechDescriptionChange(mech_i: number, description: string) {
+        let newDescriptions: string[] = JSON.parse(JSON.stringify(mechDescriptions));
+        newDescriptions[mech_i] = description;
+        onMechDescriptionChange(newDescriptions);
+    }
+
     function handleProgramDelete(index: number) {
         onProgramsChange(programs.filter((_v, i) => i !== index));
         onMechInitPositionsChange(mechInitPositions.filter((_v, i) => i !== index));
+        onMechDescriptionChange(mechDescriptions.filter((_v, i) => i !== index));
         onMechIndexHighlight(-1);
     }
 
@@ -105,10 +116,14 @@ const MechProgramming = ({
                                           key={`mech-input-${mech_i}`}
                                           mechIndex={mech_i}
                                           position={mechInitPositions[mech_i]}
+                                          description={mechDescriptions[mech_i]}
                                           program={programs[mech_i]}
                                           pc={0}
                                           onPositionChange={(index, position) => {
                                               handleMechInitPositionChange(index, position);
+                                          }}
+                                          onDescriptionChange={(index, description) => {
+                                              handleMechDescriptionChange(index, description);
                                           }}
                                           onProgramChange={(index, program) =>
                                               onProgramsChange(programs.map((p, i) => (i === index ? program : p)))
@@ -135,9 +150,11 @@ const MechProgramming = ({
                                           key={`mech-input-${mech_i}`}
                                           mechIndex={mech_i}
                                           position={mechInitPositions[mech_i]}
+                                          description={mechDescriptions[mech_i]}
                                           program={programs[mech_i]}
                                           pc={mechStates[mech_i].pc_next}
                                           onPositionChange={(index, position) => {}}
+                                          onDescriptionChange={(index, description) => {}}
                                           onProgramChange={(index, program) => {}}
                                           disabled={animationState == "Stop" ? false : true}
                                           handleMouseOver={() => {
