@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DEMO_SOLUTIONS } from "../constants/constants";
@@ -108,10 +108,17 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
     }
 
     return (
+        <Tooltip title={t("load_save")} arrow>
+
         <Box sx={{ mb: 2 }}>
-            <Button color="secondary" variant="outlined" onClick={handleOpen}>
+            {/* <Button color="secondary" variant="outlined" onClick={handleOpen}>
                 {t("load_save")}
-            </Button>
+            </Button> */}
+            <button onClick={handleOpen}>
+                <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.1rem' }}>
+                    save
+                </i>
+            </button>
             <Modal open={open} onClose={handleClose}>
                 <Box
                     sx={{
@@ -222,6 +229,8 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
                 </Box>
             </Modal>
         </Box>
+
+        </Tooltip>
     );
 };
 

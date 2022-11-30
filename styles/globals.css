@@ -32,6 +32,8 @@ button {
     height: 1.5rem;
     border: 1px solid #333333;
     border-radius: 3px;
+    background-color: #FFFFFF;
+    outline: none;
 }
 button:hover {
     background-color: #FFFE71;
@@ -117,12 +119,13 @@ table {
 }
 
 #submit-button{
-    background: #EFEFEF url('../public/rsz_1starknet_icon.png') no-repeat;
-    background-position: 93% 50%;
-    margin-left: 0.2rem;
-    margin-right: 0.2rem;
+    /* background: #FFFFFF url('../public/rsz_1starknet_icon.png') no-repeat; */
+    background: #FFFFFF;
+    /* background-position: 85% 50%; */
+    /* margin-left: 0.2rem;
+    margin-right: 0.2rem; */
     height: 1.5rem;
-    padding-right: 1.6rem;
+    /* padding-right: 1.5rem; */
     border: 1px solid #333333;
     border-radius: 3px;
 }

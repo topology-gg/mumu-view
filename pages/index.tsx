@@ -684,30 +684,35 @@ export default function Home() {
     }
 
     // Lazy style objects
-    const makeshift_button_style = { marginLeft: "0.2rem", marginRight: "0.2rem", height: "1.5rem" };
+    const makeshift_button_style = { marginLeft: "0.2rem", marginRight: "0.2rem", height: "1.5rem"};
     const makeshift_run_button_style = runnable
         ? makeshift_button_style
         : { ...makeshift_button_style, color: "#CCCCCC" };
 
-    const controlPanel = (
-        <>
-            <div style={{ marginBottom: "1rem" }}>
-                {/* <button id={"submit-button"} onClick={() => handleClickSubmit()}>
-                    {" "}
-                    {t("Submit to")}{" "}
-                </button> */}
-            </div>
-
+    const loadSave = (
             <LoadSave
                 onLoadSolutionClick={handleLoadSolutionClick}
                 mechInitStates={mechInitStates}
                 operatorStates={operatorStates}
                 programs={programs}
             />
+    )
 
-            <Leaderboard loadSolution={handleLoadSolutionClick} />
-        </>
-    );
+    const leaderboard = (
+        <Leaderboard loadSolution={handleLoadSolutionClick} />
+    )
+
+    const submission = (
+        <Tooltip title={t("submission")} arrow>
+            <div style={{ marginBottom: "1rem" }}>
+                <button id={"submit-button"} onClick={() => handleClickSubmit()}>
+                    <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.12rem' }}>
+                        send
+                    </i>
+                </button>
+            </div>
+        </Tooltip>
+    )
 
     const board = (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -753,7 +758,7 @@ export default function Home() {
     );
 
     const midScreenControls = (
-        <div style={{ display: "flex", flexDirection: "row", padding: "1rem", justifyContent: "center" }}>
+        <div style={{ display: "flex", flexDirection: "row", padding: "1rem 25rem", justifyContent: "center" }}>
             <div
                 style={{
                     display: "flex",
@@ -767,15 +772,15 @@ export default function Home() {
                         padding: "0",
                         textAlign: "center",
                         verticalAlign: "middle",
-                        margin: "0",
-                        width: "100px" /* Make room for dynamic text */,
+                        margin: "0 1rem",
+                        // width: "100px" /* Make room for dynamic text */,
                         height: "20px",
                         lineHeight: "20px",
                         fontSize: "0.8rem",
                     }}
                 >
                     {" "}
-                    {t("frame")} # {animationFrame}{" "}
+                    {t("frame")}# {animationFrame} / {N_CYCLES}
                 </p>
 
                 <input
@@ -795,6 +800,7 @@ export default function Home() {
                     flexDirection: "row",
                     justifyContent: "center",
                     alignItems: "center",
+                    margin: "0 1rem",
                 }}
             >
                 {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}
@@ -831,7 +837,7 @@ export default function Home() {
     );
 
     const stats = (
-        <>
+        <div style={{padding:'0 3rem'}}>
             {" "}
             <div className={styles.delivered_atoms}>
                 <Delivery delivered={delivered} cost_accumulated={cost_accumulated} />
@@ -839,7 +845,7 @@ export default function Home() {
             <div className={styles.summary}>
                 <Summary frames={frames} n_cycles={N_CYCLES} />
             </div>
-        </>
+        </div>
     );
 
     const mechProgramming = (
@@ -1045,7 +1051,9 @@ export default function Home() {
             </Head>
 
             <Layout
-                controlPanel={controlPanel}
+                loadSave = {loadSave}
+                leaderboard = {leaderboard}
+                submission = {submission}
                 board={board}
                 stats={stats}
                 mechProgramming={mechProgramming}
