@@ -276,6 +276,7 @@ const MechInput = ({
                                 color: "#999999",
                                 border: "none",
                                 borderRadius: "7px",
+                                fontSize: '12px',
                             }}
                             disabled={disabled}
                         ></input>
