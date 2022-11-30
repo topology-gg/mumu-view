@@ -34,7 +34,7 @@ export default function Layout({ loadSave, leaderboard, submission, board, stats
                     <Grid container spacing={1} flex={1.25} disableEqualOverflow>
                         <Grid xs={12} md={4} sx={gridStyles}>
                             {/* <Panel sx={{ pl: 2 }}> */}
-                            <Panel sx={{ pt: 9 }}>
+                            <Panel sx={{ pt: 8 }}>
                                 <div className={styles.title}>
                                     <h2>{t("MuMu")}</h2>
                                     <p>{t("Subtitle")}</p>
@@ -44,23 +44,23 @@ export default function Layout({ loadSave, leaderboard, submission, board, stats
 
                                 <LanguageSelector />
 
-                                <Grid container spacing={2}>
-                                    <Grid xs={0} md={4}></Grid>
+                                <Grid container spacing={2} height={10}>
+                                    <Grid xs={0} md={3}></Grid>
 
-                                    <Grid xs={3} md={1}>
+                                    <Grid xs={3} md={1.5}>
                                         <Tutorial />
                                     </Grid>
-                                    <Grid xs={3} md={1}>
+                                    <Grid xs={3} md={1.5}>
                                         {loadSave}
                                     </Grid>
-                                    <Grid xs={3} md={1}>
+                                    <Grid xs={3} md={1.5}>
                                         {leaderboard}
                                     </Grid>
-                                    <Grid xs={3} md={1}>
+                                    <Grid xs={3} md={1.5}>
                                         {submission}
                                     </Grid>
 
-                                    <Grid xs={0} md={4}></Grid>
+                                    <Grid xs={0} md={3}></Grid>
                                 </Grid>
 
                             </Panel>

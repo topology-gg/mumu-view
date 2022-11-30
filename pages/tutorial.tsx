@@ -107,7 +107,7 @@ export default function Tutorial() {
             {/* <Button color="secondary" variant="outlined" onClick={handleOpen}>
                 {t("tutorial.title")}
             </Button> */}
-            <button onClick={handleOpen}>
+            <button onClick={handleOpen} className={'big-button'}>
                 <i className="material-icons" style={{ fontSize: "1rem" }}>
                     menu_book
                 </i>

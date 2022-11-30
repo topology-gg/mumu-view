@@ -705,7 +705,7 @@ export default function Home() {
     const submission = (
         <Tooltip title={t("submission")} arrow>
             <div style={{ marginBottom: "1rem" }}>
-                <button id={"submit-button"} onClick={() => handleClickSubmit()}>
+                <button id={"submit-button"} onClick={() => handleClickSubmit()} className={'big-button'}>
                     <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.12rem' }}>
                         send
                     </i>

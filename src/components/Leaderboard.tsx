@@ -29,7 +29,7 @@ const Leaderboard = ({ loadSolution }) => {
             {/* <Button color="secondary" variant="outlined" onClick={handleOpen}>
                 {t("leaderboard.title")}
             </Button> */}
-            <button onClick={handleOpen}>
+            <button onClick={handleOpen} className={'big-button'}>
                 <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.12rem' }}>
                     military_tech
                 </i>

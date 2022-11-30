@@ -114,7 +114,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
             {/* <Button color="secondary" variant="outlined" onClick={handleOpen}>
                 {t("load_save")}
             </Button> */}
-            <button onClick={handleOpen}>
+            <button onClick={handleOpen} className={'big-button'}>
                 <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.1rem' }}>
                     save
                 </i>
