@@ -8,7 +8,7 @@ import UnitState, {
 import { CSSProperties, useState } from "react";
 import Modal from "../src/components/Modal";
 import Button from "@mui/material/Button";
-import { Box } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import styles from "../styles/Home.module.css";
 import { OPERATOR_TYPES } from "../src/types/Operator";
 import { Trans, useTranslation } from "react-i18next";
@@ -97,14 +97,21 @@ export default function Tutorial() {
     // OPERATOR_TYPES.STIR.symbol
 
     return (
+        <Tooltip title={t("tutorial.title")} arrow>
+
         <div
-            style={{
-                marginBottom: "2rem",
-            }}
+            // style={{
+            //     marginBottom: "2rem",
+            // }}
         >
-            <Button color="secondary" variant="outlined" onClick={handleOpen}>
+            {/* <Button color="secondary" variant="outlined" onClick={handleOpen}>
                 {t("tutorial.title")}
-            </Button>
+            </Button> */}
+            <button onClick={handleOpen} className={'big-button'}>
+                <i className="material-icons" style={{ fontSize: "1rem" }}>
+                    menu_book
+                </i>
+            </button>
             <Modal open={open} onClose={handleClose}>
                 <Box sx={{ p: 2, fontFamily: "var(--font-family-secondary)" }}>
                     <div style={{paddingLeft:'1rem', paddingTop:'1rem'}}>
@@ -297,6 +304,12 @@ export default function Tutorial() {
                         </li>
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
+                                {INSTRUCTION_ICON_MAP['c']}
+                            </i>
+                            {t("tutorial.instruction_c")}
+                        </li>
+                        <li style={CONTENT_LI_STYLE}>
+                            <i className="material-icons" style={{ fontSize: "1rem" }}>
                                 {INSTRUCTION_ICON_MAP['.']}
                             </i>
                             {t("tutorial.instruction_noop")}
@@ -392,9 +405,15 @@ export default function Tutorial() {
                         </li>
                         <li style={CONTENT_LI_STYLE}>
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
-                                {INSTRUCTION_ICON_MAP['g']} / {INSTRUCTION_ICON_MAP['h']}
+                                {INSTRUCTION_ICON_MAP['c']}
                             </i>
                             {t("tutorial.dynamicCostLine5")}
+                        </li>
+                        <li style={CONTENT_LI_STYLE}>
+                            <i className="material-icons" style={{ fontSize: "1rem" }}>
+                                {INSTRUCTION_ICON_MAP['g']} / {INSTRUCTION_ICON_MAP['h']}
+                            </i>
+                            {t("tutorial.dynamicCostLine6")}
                         </li>
                     </ol>
 
@@ -402,5 +421,7 @@ export default function Tutorial() {
                 </Box>
             </Modal>
         </div>
+
+        </Tooltip>
     );
 }
