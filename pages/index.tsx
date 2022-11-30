@@ -397,7 +397,7 @@ export default function Home() {
                (prev) => {
                      let prev_copy = JSON.parse(JSON.stringify(prev));
                     prev_copy.push(INIT_DESCRIPTION);
-                    return prev_copy; 
+                    return prev_copy;
                }
             )
         }
@@ -875,10 +875,13 @@ export default function Home() {
                 onProgramsChange={setPrograms}
                 programs={programs}
             />
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Button color="secondary" variant="outlined" onClick={() => handleMechClick("+")}>
+            <Box sx={{ display: "flex", flexDirection: "row", marginTop: '0.6rem', marginLeft: '0.3rem' }}>
+                {/* <Button color="secondary" variant="outlined" onClick={() => handleMechClick("+")}>
                     {t("newMech")}
-                </Button>
+                </Button> */}
+                <button onClick={() => handleMechClick("+")}>
+                    {t("newMech")}
+                </button>
             </Box>
         </div>
     );
