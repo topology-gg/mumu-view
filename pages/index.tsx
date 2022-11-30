@@ -901,9 +901,6 @@ export default function Home() {
                 <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "SMASH")}>
                     {t("newOperation", { operation: "#" })}
                 </button>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("-", "")}>
-                    {t("removeOp")}
-                </button>
                 <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "EVOLVE")}>
                     {t("newOperation", { operation: "§" })}
                 </button>
@@ -915,6 +912,9 @@ export default function Home() {
                 </button>
                 <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "BAKE")}>
                     {t("newOperation", { operation: "!" })}
+                </button>
+                <button style={makeshift_button_style} onClick={() => handleOperatorClick("-", "")}>
+                    {t("removeOp")}
                 </button>
             </Box>
             <Box>
