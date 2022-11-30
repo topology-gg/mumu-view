@@ -32,6 +32,8 @@ button {
     height: 1.5rem;
     border: 1px solid #333333;
     border-radius: 3px;
+    background-color: #FFFFFF;
+    outline: none;
 }
 button:hover {
     background-color: #FFFE71;
@@ -116,13 +118,15 @@ table {
     border-collapse:collapse;
 }
 
+.big-button {
+    width: 3rem;
+    height: 3rem;
+}
+
 #submit-button{
-    background: #EFEFEF url('../public/rsz_1starknet_icon.png') no-repeat;
-    background-position: 93% 50%;
-    margin-left: 0.2rem;
-    margin-right: 0.2rem;
-    height: 1.5rem;
-    padding-right: 1.6rem;
+    /* background: #FFFFFF url('../public/rsz_1starknet_icon.png') no-repeat; */
+    background: #FFFFFF;
+    /* background-position: 85% 50%; */
     border: 1px solid #333333;
     border-radius: 3px;
 }
@@ -154,7 +158,7 @@ https://stackoverflow.com/questions/18389224/how-to-style-html5-range-input-to-h
       overflow: hidden;
       width: 40px;
       -webkit-appearance: none;
-      background-color: #98c0bb;
+      background-color: #EEEEEE;
     }
 
     input[type='range']::-webkit-slider-runnable-track {
@@ -170,23 +174,27 @@ https://stackoverflow.com/questions/18389224/how-to-style-html5-range-input-to-h
       height: 10px;
       cursor: ew-resize;
       background: #2d4249;
-      box-shadow: -2000px 0 0 2000px #937882;
+      /* box-shadow: -2000px 0 0 2000px #937882; */
     }
 
 }
 /** FF*/
 input[type="range"]::-moz-range-progress {
-  background-color: #43e5f7;
+  /* background-color: #43e5f7; */
+  background-color: #EEEEEE;
 }
 input[type="range"]::-moz-range-track {
-  background-color: #9a905d;
+  /* background-color: #9a905d; */
+  background-color: #EEEEEE;
 }
 /* IE*/
 input[type="range"]::-ms-fill-lower {
-  background-color: #43e5f7;
+  /* background-color: #43e5f7; */
+  background-color: #EEEEEE;
 }
 input[type="range"]::-ms-fill-upper {
-  background-color: #9a905d;
+  /* background-color: #9a905d; */
+  background-color: #EEEEEE;
 }
 
 /*

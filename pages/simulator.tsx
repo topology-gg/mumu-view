@@ -451,6 +451,39 @@ function _simulate_one_cycle (
                 notes += 'success/'
             }
         }
+        else if (instruction == 'c'){ // CARELESS PUT
+
+            // non-blocking
+            mech_new.pc_next += 1
+
+            if (mech.status == MechStatus.CLOSE) {
+                mech_new.status = MechStatus.OPEN
+                let index = 0
+                let populated = grid_populated_bools_new[JSON.stringify(mech.index)]
+
+                atoms_new.forEach(function (atom: AtomState, i: number, theArray: AtomState[]) {
+                    if (atom.possessed_by == mech.id && !populated){
+                        var atom_new = theArray[i]
+                        atom_new.status = AtomStatus.FREE
+                        atom_new.possessed_by = null
+                        theArray[i] = atom_new
+                        grid_populated_bools_new[JSON.stringify(mech.index)] = true
+                    } else if (atom.possessed_by == mech.id){
+                        index = i
+                    }
+                });
+
+                if (index != 0){
+                    atoms_new.splice(index, 1)
+                }
+
+                // update cost
+                cost_accumulated_new += DYNAMIC_COSTS.SINGLETON_CARELESS_PUT
+
+                // add note
+                notes += 'success/'
+            }
+        }
         else if (instruction == '.'){
             // non-blocking
             mech_new.pc_next += 1

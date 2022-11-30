@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSolutions } from "../../lib/api";
 import LeaderboardRow from "./LeaderboardRow";
 import { useTranslation } from "react-i18next";
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from "@mui/material";
 import Modal from "./Modal";
 
 const Leaderboard = ({ loadSolution }) => {
@@ -23,10 +23,18 @@ const Leaderboard = ({ loadSolution }) => {
         setOpen(false);
     };
     return (
-        <>
-            <Button color="secondary" variant="outlined" onClick={handleOpen}>
+        <Tooltip title={t("leaderboard.title")} arrow>
+
+            <div>
+            {/* <Button color="secondary" variant="outlined" onClick={handleOpen}>
                 {t("leaderboard.title")}
-            </Button>
+            </Button> */}
+            <button onClick={handleOpen} className={'big-button'}>
+                <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.12rem' }}>
+                    military_tech
+                </i>
+            </button>
+
             <Modal maxWidth="lg" open={open} onClose={handleClose}>
                 <Box sx={{ p: 2, fontFamily: "var(--font-family-secondary)" }}>
                     <p
@@ -90,7 +98,9 @@ const Leaderboard = ({ loadSolution }) => {
                     )}
                 </Box>
             </Modal>
-        </>
+            </div>
+
+        </Tooltip>
     );
 };
 

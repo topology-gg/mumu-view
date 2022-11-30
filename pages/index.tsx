@@ -27,6 +27,7 @@ import { Box, Button, Tooltip } from "@mui/material";
 import MechProgramming from "../src/components/MechProgramming";
 import Layout from "../src/components/Layout";
 import LoadSave from "../src/components/LoadSave";
+import theme from "../styles/theme";
 
 export default function Home() {
     // Constants
@@ -106,11 +107,6 @@ export default function Home() {
 
     let operatorInputHighlightInit: boolean[] = Array(numOperators).fill(false);
     const [operatorInputHighlight, setOperatorInputHighlight] = useState<boolean[]>(operatorInputHighlightInit);
-    const [operatorStyles, setOperatorStyles] = useState<React.CSSProperties[]>(
-        operatorStates.map((op, _) => {
-            return { backgroundColor: op.typ.color + "55" };
-        })
-    );
 
     const [mechIndexHighlighted, setMechIndexHighlighted] = useState<number>(-1);
 
@@ -679,61 +675,56 @@ export default function Home() {
         setMechDescriptions((prev) => viewSolution.mechs.map((mech) => mech.description));
         setNumOperators((prev) => viewSolution.operators.length);
         setOperatorStates((prev) => viewSolution.operators);
-        setOperatorStyles((prev) =>
-            viewSolution.operators.map((op, _) => {
-                return { backgroundColor: op.typ.color + "55" };
-            })
-        );
 
         setAnimationFrame((prev) => 0);
     }
 
     function handleMouseOverOperatorInput(operator_i: number) {
-        let newHighlight = operatorInputHighlight;
-        let newOperatorStyles: React.CSSProperties[] = operatorStyles;
+        let newHighlight = Array(numOperators).fill(false);
 
-        newOperatorStyles[operator_i] = { backgroundColor: "#FFFE71" };
         newHighlight[operator_i] = true;
+
         setOperatorInputHighlight((prev) => newHighlight);
-        setOperatorStyles((prev) => newOperatorStyles);
     }
 
     function handleMouseOutOperatorInput(operator_i: number) {
         let newHighlight = [];
-        let newOperatorStyles: React.CSSProperties[] = [];
         for (let i = 0; i < numOperators; i++) {
             newHighlight.push(false);
-            newOperatorStyles.push({ backgroundColor: operatorStates[i].typ.color + "55" });
         }
         setOperatorInputHighlight((prev) => newHighlight);
-        setOperatorStyles((prev) => newOperatorStyles);
     }
 
     // Lazy style objects
-    const makeshift_button_style = { marginLeft: "0.2rem", marginRight: "0.2rem", height: "1.5rem" };
+    const makeshift_button_style = { marginLeft: "0.2rem", marginRight: "0.2rem", height: "1.5rem"};
     const makeshift_run_button_style = runnable
         ? makeshift_button_style
         : { ...makeshift_button_style, color: "#CCCCCC" };
 
-    const controlPanel = (
-        <>
-            <div style={{ marginBottom: "1rem" }}>
-                {/* <button id={"submit-button"} onClick={() => handleClickSubmit()}>
-                    {" "}
-                    {t("Submit to")}{" "}
-                </button> */}
-            </div>
-
+    const loadSave = (
             <LoadSave
                 onLoadSolutionClick={handleLoadSolutionClick}
                 mechInitStates={mechInitStates}
                 operatorStates={operatorStates}
                 programs={programs}
             />
+    )
 
-            <Leaderboard loadSolution={handleLoadSolutionClick} />
-        </>
-    );
+    const leaderboard = (
+        <Leaderboard loadSolution={handleLoadSolutionClick} />
+    )
+
+    const submission = (
+        <Tooltip title={t("submission")} arrow>
+            <div style={{ marginBottom: "1rem" }}>
+                <button id={"submit-button"} onClick={() => handleClickSubmit()} className={'big-button'}>
+                    <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.12rem' }}>
+                        send
+                    </i>
+                </button>
+            </div>
+        </Tooltip>
+    )
 
     const board = (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -779,7 +770,7 @@ export default function Home() {
     );
 
     const midScreenControls = (
-        <div style={{ display: "flex", flexDirection: "row", padding: "1rem", justifyContent: "center" }}>
+        <div style={{ display: "flex", flexDirection: "row", padding: "1rem 25rem", justifyContent: "center" }}>
             <div
                 style={{
                     display: "flex",
@@ -793,15 +784,15 @@ export default function Home() {
                         padding: "0",
                         textAlign: "center",
                         verticalAlign: "middle",
-                        margin: "0",
-                        width: "100px" /* Make room for dynamic text */,
+                        margin: "0 1rem",
+                        // width: "100px" /* Make room for dynamic text */,
                         height: "20px",
                         lineHeight: "20px",
                         fontSize: "0.8rem",
                     }}
                 >
                     {" "}
-                    {t("frame")} # {animationFrame}{" "}
+                    {t("frame")}# {animationFrame} / {N_CYCLES}
                 </p>
 
                 <input
@@ -821,6 +812,7 @@ export default function Home() {
                     flexDirection: "row",
                     justifyContent: "center",
                     alignItems: "center",
+                    margin: "0 1rem",
                 }}
             >
                 {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}
@@ -857,7 +849,7 @@ export default function Home() {
     );
 
     const stats = (
-        <>
+        <div style={{padding:'0 3rem'}}>
             {" "}
             <div className={styles.delivered_atoms}>
                 <Delivery delivered={delivered} cost_accumulated={cost_accumulated} />
@@ -865,7 +857,7 @@ export default function Home() {
             <div className={styles.summary}>
                 <Summary frames={frames} n_cycles={N_CYCLES} />
             </div>
-        </>
+        </div>
     );
 
     const mechProgramming = (
@@ -929,7 +921,11 @@ export default function Home() {
                         className={styles.input_row}
                         onMouseOver={() => handleMouseOverOperatorInput(operator_i)}
                         onMouseOut={() => handleMouseOutOperatorInput(operator_i)}
-                        style={operatorStyles[operator_i]}
+                        style={{
+                            backgroundColor: operatorInputHighlight[operator_i]
+                                ? theme.palette.primary.main
+                                : operatorStates[operator_i].typ.color + "55",
+                        }}
                     >
                         <p className={styles.input_name}>{t(operatorStates[operator_i].typ.name)}</p>
 
@@ -1069,7 +1065,9 @@ export default function Home() {
             </Head>
 
             <Layout
-                controlPanel={controlPanel}
+                loadSave = {loadSave}
+                leaderboard = {leaderboard}
+                submission = {submission}
                 board={board}
                 stats={stats}
                 mechProgramming={mechProgramming}

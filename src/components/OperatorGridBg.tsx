@@ -17,7 +17,7 @@ const OperatorGridBg = ({ operators, highlighted }: { operators: Operator[], hig
     }
 
     return (
-        <div className={styles.gridWrapper}>
+        <div className={styles.gridWrapper} style={{zIndex:10}}>
             <svg
                 className={styles.grid}
                 viewBox={`0 0 ${DIM * GRID_SIZE} ${DIM * GRID_SIZE}`}
