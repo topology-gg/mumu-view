@@ -9,6 +9,7 @@ export default function Unit({ state, handleMouseOver, handleMouseOut, mechHighl
     // Compute atom styles
     let divStyle: React.CSSProperties = mechHighlight ? {borderWidth:'3px'} : {borderWidth: '1px'}
     if (isSmall) divStyle = {...divStyle, width:'1.6rem', height:'1.6rem'}
+    divStyle = {...divStyle, zIndex:'20'}
 
     let className: string = '';
     let nuclei: number = 0;
