@@ -241,23 +241,45 @@ const MechInput = ({
                             />
                         </div>
 
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
+                            <p
+                                style={{
+                                    marginLeft: "1rem",
+                                    color: "#999999",
+                                }}
+                            >
+                                //
+                            </p>
+                        </div>
+
                         <input
-                            className={styles.programWrapper}
+                            className={styles.programComment}
                             onChange={(event) => {
                                 let encoder = new TextEncoder();
                                 onDescriptionChange(mechIndex, event.target.value);
                             }}
                             defaultValue={description}
                             value={description}
+                            size={DESCRIPTION_SIZE_MAX}
+                            maxLength={DESCRIPTION_SIZE_MAX}
                             style={{
                                 height: "25px",
-                                width: Math.max(description.length / 2, 7) + "%",
-                                margin: "0 1rem 0 1rem",
-                                borderRadius: "5px",
-                                backgroundColor: description.length > DESCRIPTION_SIZE_MAX ? "#FFCBCB" : "#FFFFFF00",
+                                width: "auto",
+                                marginLeft: "0.3rem",
+                                padding: "0 5px",
+                                color: "#999999",
+                                border: "none",
+                                borderRadius: "7px",
                             }}
                             disabled={disabled}
                         ></input>
+
                     </div>
                 )}
             </Draggable>

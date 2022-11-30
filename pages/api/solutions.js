@@ -6,9 +6,9 @@ export default async function handler(req, res) {
     const client = await clientPromise
     const { account } = req.query
 
-    const db = client.db('mumu_indexer_s1_3')
+    const db = client.db('mumu_indexer_s2_1')
     const solutions = await db
-        .collection('mumu-s1-events')
+        .collection('mumu-s2-events')
         .find({
             instructions: {
                 $not: { $size: 0 }
