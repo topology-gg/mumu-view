@@ -72,41 +72,57 @@ export default function Layout({ loadSave, leaderboard, submission, board, stats
                             <Panel sx={{ pr: 2 }}>{stats}</Panel>
                         </Grid>
                     </Grid>
-                    <Divider />
+                    {/* <Divider /> */}
                     {midScreenControls}
-                    <Divider />
-                    <Box flex={1} flexShrink={0} overflow="scroll">
-                        <Panel>
-                            <Accordion
-                                key="accordion-1"
-                                expanded={openedAccordion == "accordion1"}
-                                onChange={(_, expanded) => setOpenedAccordion(expanded ? "accordion1" : null)}
-                            >
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                >
-                                    {t("Formula placement")}
-                                </AccordionSummary>
-                                <AccordionDetails>{formulaProgramming}</AccordionDetails>
-                            </Accordion>
-                            <Accordion
-                                key="accordion-2"
-                                expanded={openedAccordion == "accordion2"}
-                                onChange={(_, expanded) => setOpenedAccordion(expanded ? "accordion2" : null)}
-                            >
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                >
-                                    {t("Mech programming")}
-                                </AccordionSummary>
-                                <AccordionDetails>{mechProgramming}</AccordionDetails>
-                            </Accordion>
-                        </Panel>
-                    </Box>
+                    {/* <Divider /> */}
+
+                    <Grid container spacing={1} flex={1.25} overflow="scroll" sx={{marginTop:1}}>
+                        <Grid xs={0} md={0.5}></Grid>
+                        <Grid xs={12} md={11}>
+                            <Box flex={1} flexShrink={0} overflow="scroll" sx={{ border: 1, borderRadius:4 }}>
+
+                                {/* <Panel> */}
+                                    <Accordion
+                                        key="accordion-1"
+                                        expanded={openedAccordion == "accordion1"}
+                                        onChange={(_, expanded) => setOpenedAccordion(expanded ? "accordion1" : null)}
+                                        style={{boxShadow: "none"}}
+                                    >
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                        >
+                                            {t("Formula placement")}
+                                        </AccordionSummary>
+                                        <AccordionDetails>{formulaProgramming}</AccordionDetails>
+                                    </Accordion>
+
+                                    <Accordion
+                                        key="accordion-2"
+                                        expanded={openedAccordion == "accordion2"}
+                                        onChange={(_, expanded) => setOpenedAccordion(expanded ? "accordion2" : null)}
+                                        style={{boxShadow: "none"}}
+                                    >
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                        >
+                                            {t("Mech programming")}
+                                        </AccordionSummary>
+                                        <AccordionDetails>{mechProgramming}</AccordionDetails>
+                                    </Accordion>
+                                {/* </Panel> */}
+                            </Box>
+                        </Grid>
+                        <Grid xs={0} md={0.5}></Grid>
+                    </Grid>
+
+
+
+
+
                 </Box>
             </ThemeProvider>
         </>
