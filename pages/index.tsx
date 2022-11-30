@@ -115,7 +115,7 @@ export default function Home() {
     //
     const runnable = isRunnable();
     const mechInitStates: MechState[] = mechInitPositions.map((pos, mech_i) => {
-        return { status: MechStatus.OPEN, index: pos, id: `mech${mech_i}`, typ: MechType.SINGLETON, description: INIT_DESCRIPTION, pc_next: 0 };
+        return { status: MechStatus.OPEN, index: pos, id: `mech${mech_i}`, typ: MechType.SINGLETON, description: mechDescriptions[mech_i], pc_next: 0 };
     });
     const atomInitStates: AtomState[] = ATOM_INIT_XY.map(function (xy, i) {
         return {
