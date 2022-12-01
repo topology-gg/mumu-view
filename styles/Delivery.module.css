@@ -2,8 +2,11 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  justify-content: center;
+  width: auto;
+  height: 2rem;
+  /* margin-left: 1rem; */
+  /* margin-right: 1rem; */
 }
 
 .deliveryUnit:last-child {

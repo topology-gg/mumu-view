@@ -38,7 +38,7 @@ export default function Delivery({ delivered, cost_accumulated }) {
         <div style={{alignItems:'center', margin:'0 auto'}}>
             <p>{t('delivery.accumulatedCost')}: {cost_accumulated}</p>
             <p>
-                {t('delivery.delivered')}
+                {t('delivery.delivered')}:
                 {
                     Object.keys(counts).map(function(key: string,i: number){
                         // const bg_status = key == AtomType.HAZELNUT ? BgStatus.ATOM_HAZELNUT_FREE : BgStatus.ATOM_VANILLA_FREE
