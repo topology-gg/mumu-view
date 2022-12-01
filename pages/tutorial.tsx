@@ -263,7 +263,7 @@ export default function Tutorial() {
                             {t("tutorial.available_instructions")}
                             {/* Available instructions: */}
                             <i className="material-icons" style={{ fontSize: "1rem" }}>
-                                {INSTRUCTION_ICON_MAP['w']}{INSTRUCTION_ICON_MAP['a']}{INSTRUCTION_ICON_MAP['s']}{INSTRUCTION_ICON_MAP['d']}{INSTRUCTION_ICON_MAP['z']}{INSTRUCTION_ICON_MAP['x']}{INSTRUCTION_ICON_MAP['g']}{INSTRUCTION_ICON_MAP['h']}{INSTRUCTION_ICON_MAP['.']}
+                                {INSTRUCTION_ICON_MAP['w']}{INSTRUCTION_ICON_MAP['a']}{INSTRUCTION_ICON_MAP['s']}{INSTRUCTION_ICON_MAP['d']}{INSTRUCTION_ICON_MAP['z']}{INSTRUCTION_ICON_MAP['x']}{INSTRUCTION_ICON_MAP['g']}{INSTRUCTION_ICON_MAP['h']}{INSTRUCTION_ICON_MAP['c']}{INSTRUCTION_ICON_MAP['.']}
                             </i>
                         </li>
                         <li style={CONTENT_LI_STYLE}>
