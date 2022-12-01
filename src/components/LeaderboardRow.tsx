@@ -89,6 +89,50 @@ export default function LeaderboardRow({ solution, index, loadSolution }) {
             });
             input_offset += 1;
             output_offset += 5;
+        } else if (operator_type == 4) {
+            // EVOLVE
+            operators.push({
+                input: [
+                    solution.operators_inputs[input_offset],
+                    solution.operators_inputs[input_offset + 1],
+                    solution.operators_inputs[input_offset + 2],
+                ],
+                output: [solution.operators_outputs[output_offset]],
+                typ: OPERATOR_TYPES.EVOLVE,
+            });
+            input_offset += 3;
+            output_offset += 1;
+        } else if (operator_type == 5) {
+            // SLOW
+            operators.push({
+                input: [solution.operators_inputs[input_offset]],
+                output: [solution.operators_outputs[output_offset], solution.operators_outputs[output_offset + 1]],
+                typ: OPERATOR_TYPES.SLOW,
+            });
+            input_offset += 1;
+            output_offset += 2;
+        } else if (operator_type == 6) {
+            // WILT
+            operators.push({
+                input: [solution.operators_inputs[input_offset], solution.operators_inputs[input_offset + 1]],
+                output: [
+                    solution.operators_outputs[output_offset],
+                    solution.operators_outputs[output_offset + 1],
+                    solution.operators_outputs[output_offset + 2],
+                ],
+                typ: OPERATOR_TYPES.WILT,
+            });
+            input_offset += 2;
+            output_offset += 3;
+        } else if (operator_type == 7) {
+            // BAKE
+            operators.push({
+                input: [solution.operators_inputs[input_offset], solution.operators_inputs[input_offset + 1]],
+                output: [solution.operators_outputs[output_offset], solution.operators_outputs[output_offset + 1]],
+                typ: OPERATOR_TYPES.BAKE,
+            });
+            input_offset += 2;
+            output_offset += 2;
         }
     }
 
