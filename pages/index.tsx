@@ -148,7 +148,13 @@ export default function Home() {
                 bgStatus = BgStatus.ATOM_TRUFFLE_FREE;
             } else if (atom.typ == AtomType.SAFFRON) {
                 bgStatus = BgStatus.ATOM_SAFFRON_FREE;
-            }
+            } else if (atom.typ == AtomType.TURTLE) {
+                bgStatus = BgStatus.ATOM_TURTLE_FREE;
+            } else if (atom.typ == AtomType.SANDGLASS) {
+                bgStatus = BgStatus.ATOM_SANDGLASS_FREE;
+            } else if (atom.typ == AtomType.WILTED) {
+                bgStatus = BgStatus.ATOM_WILTED_FREE;
+            } 
 
             mech_carries[mech_index] = bgStatus;
         }

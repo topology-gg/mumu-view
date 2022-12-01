@@ -87,6 +87,18 @@ export default function packSolution (instructionSets: string[][], mechInitPosit
         else if (operator_type_str == JSON.stringify(OPERATOR_TYPES.SMASH)){
             operator_type_array.push (3)
         }
+        else if (operator_type_str == JSON.stringify(OPERATOR_TYPES.EVOLVE)){
+            operator_type_array.push (4)
+        }
+        else if (operator_type_str == JSON.stringify(OPERATOR_TYPES.SLOW)){
+            operator_type_array.push (5)
+        }
+        else if (operator_type_str == JSON.stringify(OPERATOR_TYPES.WILT)){
+            operator_type_array.push (6)
+        }
+        else if (operator_type_str == JSON.stringify(OPERATOR_TYPES.BAKE)){
+            operator_type_array.push (7)
+        }
 
     }
 
