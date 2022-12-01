@@ -7,6 +7,11 @@ export const PROGRAM_SIZE_MAX = 40
 export const DESCRIPTION_SIZE_MAX = 31
 export const N_CYCLES = 150
 
+export const MAX_NUM_MECHS = 25; // setting this to 25 for Season 2
+export const MIN_NUM_MECHS = 0;
+export const MAX_NUM_OPERATORS = 20;
+export const MIN_NUM_OPERATORS = 0;
+
 export const PRECISION = 6
 export const TO_PRECISION = (x) => {
     // credit: https://stackoverflow.com/a/11818658

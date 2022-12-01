@@ -28,6 +28,7 @@ import MechProgramming from "../src/components/MechProgramming";
 import Layout from "../src/components/Layout";
 import LoadSave from "../src/components/LoadSave";
 import theme from "../styles/theme";
+import { MAX_NUM_MECHS, MIN_NUM_MECHS, MAX_NUM_OPERATORS, MIN_NUM_OPERATORS } from "../src/constants/constants";
 
 export default function Home() {
     // Constants
@@ -53,10 +54,6 @@ export default function Home() {
         { x: DIM - 1, y: 0 },
         { x: DIM - 1, y: DIM - 1 },
     ];
-    const MAX_NUM_MECHS = 20;
-    const MIN_NUM_MECHS = 0;
-    const MAX_NUM_OPERATORS = 20;
-    const MIN_NUM_OPERATORS = 0;
 
     const { t } = useTranslation();
 
