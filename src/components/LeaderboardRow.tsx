@@ -6,6 +6,7 @@ import Operator, { OPERATOR_TYPES } from "../types/Operator";
 import { useStardiscRegistryByAccount } from "../../lib/api";
 import { MechStatus, MechType } from "../types/MechState";
 import { TableCell, TableRow } from "@mui/material";
+import { INSTRUCTION_DECODE } from '../helpers/packSolution';
 
 const SCALE = 10 ** 6;
 
@@ -138,20 +139,7 @@ export default function LeaderboardRow({ solution, index, loadSolution }) {
 
 // decode instruction from Cairo return (numbers) into characters
 function decode_instruction(x: number) {
-    // From Cairo:
-    // namespace ns_instructions {
-    //     const W = 0;  // up
-    //     const A = 1;  // left
-    //     const S = 2;  // down
-    //     const D = 3;  // right
-    //     const Z = 4;  // get
-    //     const X = 5;  // put
-    //     const G = 6;  // block-get
-    //     const H = 7;  // block-put
-    //     const SKIP = 8;  // skip
-    // }
-    const letters = ["W", "A", "S", "D", "Z", "X", "G", "H", "_"];
-    return letters[x];
+    return INSTRUCTION_DECODE [x];
 }
 
 // reference: https://stackoverflow.com/a/66228871

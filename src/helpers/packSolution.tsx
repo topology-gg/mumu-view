@@ -205,7 +205,7 @@ function encodeInstructionSet (instructionSet) {
 //
 // Encoding / structs from Cairo implementation
 //
-const INSTRUCTION_ENCODE = {
+export const INSTRUCTION_ENCODE = {
     w : 0,
     a : 1,
     s : 2,
@@ -215,7 +215,20 @@ const INSTRUCTION_ENCODE = {
     g : 6,
     h : 7,
     c: 8,
-    // _ : 8
+    // _ : 50 (from contract)
+}
+
+export const INSTRUCTION_DECODE = { // note: this should be the reverse mapping of INSTRUCTION_ENCODE
+    0: 'w',
+    1: 'a',
+    2: 's',
+    3: 'd',
+    4: 'z',
+    5: 'x',
+    6: 'g',
+    7: 'h',
+    8: 'c',
+    50: '_'
 }
 
 // const STIR = 0;
