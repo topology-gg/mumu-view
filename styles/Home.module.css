@@ -147,7 +147,6 @@
   /* justify-content: center; */
   /* flex-wrap: wrap; */
   max-width: 800px;
-  margin-top: 2rem;
   background-color: #FDF5E677;
 }
 
@@ -161,7 +160,7 @@
 }
 
 .delivered_atoms {
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
   border: 1px solid #7e7e7e;
   border-radius: 10px;
   padding: 1rem;
@@ -172,7 +171,7 @@
 }
 
 .summary {
-    margin-top: 2rem;
+    margin-top: 1rem;
     border: 1px solid #7e7e7e;
     border-radius: 10px;
     padding: 1rem;

@@ -730,7 +730,7 @@ export default function Home() {
     )
 
     const board = (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt:'2rem' }}>
             <div className={styles.grid_parent}>
                 <OperatorGridBg operators={operatorStates} highlighted={operatorInputHighlight} />
                 {Array.from({ length: DIM }).map(
@@ -861,7 +861,7 @@ export default function Home() {
     );
 
     const stats = (
-        <div style={{padding:'0 3rem'}}>
+        <div>
             {" "}
             <div className={styles.delivered_atoms}>
                 <Delivery delivered={delivered} cost_accumulated={cost_accumulated} />

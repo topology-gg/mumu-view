@@ -14,7 +14,7 @@ export default function Convo() {
         "Welcome to the World of MuMu!",
         "In the world of MuMu, you can craft diagrams that transform substances into powerful magical element.",
         "Tutorial levels are coming soon to help you get started!",
-        "Meanwhile, go to 'Setting' > 'How to play' to dig into the mechanics.'"
+        "Meanwhile, go to 'Setting' > 'How to play' to dig into the mechanics."
     ]
 
     return (

@@ -87,7 +87,7 @@ export default function Layout({ loadSave, leaderboard, submission, board, stats
                             </Panel>
                         </Grid>
                         <Grid xs={12} md={4} sx={gridStyles}>
-                            <Panel sx={{ pr: 2 }}>{stats}</Panel>
+                            <Panel sx={{ mt: '2rem', mr: 8 }}>{stats}</Panel>
                         </Grid>
                     </Grid>
                     {/* <Divider /> */}
