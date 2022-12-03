@@ -45,7 +45,7 @@ export default function Layout({ loadSave, leaderboard, submission, board, stats
                         <Grid xs={12} md={4} sx={gridStyles}>
                             {/* <Panel sx={{ pl: 2 }}> */}
                             <Panel sx={{
-                                pt: 11, border: 1, borderRadius:4,
+                                pt: 9, border: 1, borderRadius:4,
                                 mt:'2rem', ml:'3rem', mb: '1rem',
                             }}>
                                 {/* <div className={styles.title}>

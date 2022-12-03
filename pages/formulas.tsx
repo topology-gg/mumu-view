@@ -45,7 +45,7 @@ export default function Formulas() {
             <li
                 style={compute_formula_li_style(value.color + FORMULA_LI_OPACITY_STR)}
             >
-                <p className={styles.input_name}>{t(value.name)}</p>
+                <p className={styles.input_name}>{t(value.name)}:</p>
                 {value.symbol}
                 (
                 {

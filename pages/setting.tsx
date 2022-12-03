@@ -27,7 +27,7 @@ export default function Setting({ leaderboard }) {
     };
 
     return (
-        <Tooltip title={t("tutorial.setting")} arrow>
+        <Tooltip title={t("setting")} arrow>
 
         <div
             // style={{
