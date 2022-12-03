@@ -154,7 +154,7 @@ export default function Home() {
                 bgStatus = BgStatus.ATOM_SANDGLASS_FREE;
             } else if (atom.typ == AtomType.WILTED) {
                 bgStatus = BgStatus.ATOM_WILTED_FREE;
-            } 
+            }
 
             mech_carries[mech_index] = bgStatus;
         }
@@ -730,7 +730,7 @@ export default function Home() {
     )
 
     const board = (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt:'2rem' }}>
             <div className={styles.grid_parent}>
                 <OperatorGridBg operators={operatorStates} highlighted={operatorInputHighlight} />
                 {Array.from({ length: DIM }).map(
@@ -773,21 +773,27 @@ export default function Home() {
     );
 
     const midScreenControls = (
-        <div style={{ display: "flex", flexDirection: "row", padding: "1rem 25rem", justifyContent: "center" }}>
+        // <div style={{ display: "flex", flexDirection: "row", padding: "1rem 25rem", justifyContent: "center" }}>
+        <Box>
             <div
+                className={styles.midScreenControls}
+                style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}
+            >
+            {/* <div
                 style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    flex: 1,
+                    // flex: 1,
                 }}
-            >
+            > */}
                 <p
                     style={{
                         padding: "0",
                         textAlign: "center",
                         verticalAlign: "middle",
-                        margin: "0 1rem",
+                        width: '6.5rem',
+                        margin: "0 0.5rem 0 0",
                         // width: "100px" /* Make room for dynamic text */,
                         height: "20px",
                         lineHeight: "20px",
@@ -806,9 +812,10 @@ export default function Home() {
                     value={animationFrame}
                     onChange={handleSlideChange}
                     step="1"
-                    style={{ flex: 1 }}
+                    style={{width:'6.5rem'}}
+                    // style={{ flex: 1 }}
                 />
-            </div>
+            {/* </div>
             <div
                 style={{
                     display: "flex",
@@ -817,9 +824,9 @@ export default function Home() {
                     alignItems: "center",
                     margin: "0 1rem",
                 }}
-            >
+            > */}
                 {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}
-                <button style={makeshift_run_button_style} onClick={() => handleClick("ToggleRun")}>
+                <button style={ {...makeshift_run_button_style, marginLeft:'0.5rem'} } onClick={() => handleClick("ToggleRun")}>
                     {" "}
                     {animationState != "Run" ? (
                         <i className="material-icons" style={{ fontSize: "1.2rem" }}>
@@ -847,12 +854,14 @@ export default function Home() {
                         fast_forward
                     </i>
                 </button>
-            </div>
+            {/* </div> */}
+        {/* </div> */}
         </div>
+        </Box>
     );
 
     const stats = (
-        <div style={{padding:'0 3rem'}}>
+        <div>
             {" "}
             <div className={styles.delivered_atoms}>
                 <Delivery delivered={delivered} cost_accumulated={cost_accumulated} />

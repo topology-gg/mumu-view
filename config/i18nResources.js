@@ -3,6 +3,7 @@ import { N_CYCLES } from "../src/constants/constants";
 const resources = {
     en: {
         translation: {
+            setting: "Setting",
             MuMu: "MuMu: Season 2",
             Subtitle: "An experiment by Topology",
             Connect: "Connect ",
@@ -118,6 +119,7 @@ const resources = {
     },
     scn: {
         translation: {
+            setting: "设定",
             MuMu: "挪挪: 第2季",
             Subtitle: "Topology 的一项实验",
             Connect: "连接 ",
@@ -233,6 +235,7 @@ const resources = {
     },
     tcn: {
         translation: {
+            setting: "設定",
             MuMu: "挪挪: 第2季",
             Subtitle: "Topology 的一項實驗",
             Connect: "連接 ",
