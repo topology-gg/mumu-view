@@ -7,6 +7,9 @@ import styles from "../styles/Home.module.css";
 import { Trans, useTranslation } from "react-i18next";
 import Tutorial from "./tutorial";
 import LanguageSelector from "../src/components/LanguageSelector";
+import SocialMedia from "../src/components/SocialMedia";
+import ConnectWalletStardisc from "../src/components/ConnectWalletStardisc";
+
 
 export default function Setting({ leaderboard }) {
 
@@ -40,12 +43,15 @@ export default function Setting({ leaderboard }) {
                 </i>
             </button>
             <Modal open={open} onClose={handleClose}>
-                <Box sx={{ p: 5, height: '20rem', fontFamily: "var(--font-family-secondary)" }}>
+                <Box sx={{ p: 5, height: '25rem', fontFamily: "var(--font-family-secondary)" }}>
                     <Panel>
                         <div className={styles.title}>
                             <h2>{t("MuMu")}</h2>
                             <p>{t("Subtitle")}</p>
+                            <SocialMedia />
                         </div>
+
+                        <ConnectWalletStardisc />
 
                         <LanguageSelector />
 

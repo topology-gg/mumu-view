@@ -22,7 +22,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         description: "vanilla & vanilla = hazelnut",
         symbol: "&",
         name: "Stir ",
-        color: "#A7D2CB",
+        color: "#81D8D0",
         input_atom_types: [AtomType.VANILLA, AtomType.VANILLA],
         output_atom_types: [AtomType.HAZELNUT],
     },
