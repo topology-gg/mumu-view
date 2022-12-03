@@ -9,6 +9,8 @@ import SocialMedia from "./SocialMedia";
 import Grid from "@mui/system/Unstable_Grid";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import theme from "../../styles/theme";
+import Setting from "../../pages/setting";
+import Formulas from "../../pages/formulas";
 
 import LoadSave from "./LoadSave";
 import Leaderboard from "./Leaderboard";
@@ -42,44 +44,48 @@ export default function Layout({ loadSave, leaderboard, submission, board, stats
                                 </div>
                                 <ConnectWalletStardisc />
 
-                                <LanguageSelector />
-
                                 <Grid container spacing={2} height={10}>
-                                    <Grid xs={0} md={3}></Grid>
+                                    <Grid xs={0} md={3.75}></Grid>
 
-                                    <Grid xs={3} md={1.5}>
-                                        <Tutorial />
+                                    <Grid xs={4} md={1.5}>
+                                        {/* <Tutorial /> */}
+                                        <Setting leaderboard={leaderboard}/>
                                     </Grid>
-                                    <Grid xs={3} md={1.5}>
+                                    <Grid xs={4} md={1.5}>
                                         {loadSave}
                                     </Grid>
-                                    <Grid xs={3} md={1.5}>
-                                        {leaderboard}
-                                    </Grid>
-                                    <Grid xs={3} md={1.5}>
+                                    <Grid xs={4} md={1.5}>
                                         {submission}
                                     </Grid>
 
-                                    <Grid xs={0} md={3}></Grid>
+                                    <Grid xs={0} md={3.75}></Grid>
                                 </Grid>
 
                             </Panel>
                         </Grid>
-                        <Grid xs={10} md={4} pb={2} sx={gridStyles}>
-                            <Panel>{board}</Panel>
+                        <Grid xs={12} md={4} pb={2} sx={gridStyles}>
+                            <Panel>
+                                {board}
+                                {midScreenControls}
+                            </Panel>
                         </Grid>
                         <Grid xs={12} md={4} sx={gridStyles}>
                             <Panel sx={{ pr: 2 }}>{stats}</Panel>
                         </Grid>
                     </Grid>
                     {/* <Divider /> */}
-                    {midScreenControls}
+                    {/* {midScreenControls} */}
                     {/* <Divider /> */}
 
-                    <Grid container spacing={1} flex={1.25} overflow="scroll" sx={{marginTop:1}}>
-                        <Grid xs={0} md={0.5}></Grid>
-                        <Grid xs={12} md={11}>
-                            <Box flex={1} flexShrink={0} overflow="scroll" sx={{ border: 1, borderRadius:4 }}>
+                    <Grid container spacing={1} flex={1.25} overflow="scroll">
+                        <Grid xs={12} md={4}  overflow="scroll">
+                            <Formulas />
+                        </Grid>
+                        <Grid xs={12} md={8} overflow="scroll">
+                            <Box
+                                flex={1} flexShrink={0} overflow="scroll"
+                                sx={{border: 1, borderRadius:4, ml:3, mr: 8 }}
+                            >
 
                                 {/* <Panel> */}
                                     <Accordion
