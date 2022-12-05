@@ -39,11 +39,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         symbol: "^",
         name: "Steam",
         color: "#C98474",
-        input_atom_types: [
-            AtomType.HAZELNUT,
-            AtomType.CHOCOLATE,
-            AtomType.CHOCOLATE,
-        ],
+        input_atom_types: [AtomType.HAZELNUT, AtomType.CHOCOLATE, AtomType.CHOCOLATE],
         output_atom_types: [AtomType.TRUFFLE, AtomType.VANILLA],
     },
     SMASH: {
@@ -52,24 +48,14 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         name: "Smash",
         color: "#874C62",
         input_atom_types: [AtomType.TRUFFLE],
-        output_atom_types: [
-            AtomType.VANILLA,
-            AtomType.VANILLA,
-            AtomType.VANILLA,
-            AtomType.VANILLA,
-            AtomType.SAFFRON,
-        ],
+        output_atom_types: [AtomType.VANILLA, AtomType.VANILLA, AtomType.VANILLA, AtomType.VANILLA, AtomType.SAFFRON],
     },
     EVOLVE: {
         description: "vanilla § chocolate § chocolate = turtle",
         symbol: "§",
         name: "Evolve",
         color: "#DB7093",
-        input_atom_types: [
-            AtomType.VANILLA,
-            AtomType.CHOCOLATE,
-            AtomType.CHOCOLATE,
-        ],
+        input_atom_types: [AtomType.VANILLA, AtomType.CHOCOLATE, AtomType.CHOCOLATE],
         output_atom_types: [AtomType.TURTLE],
     },
     SLOW: {
@@ -86,11 +72,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         name: "Wilt",
         color: "#96C8A2",
         input_atom_types: [AtomType.CHOCOLATE, AtomType.SANDGLASS],
-        output_atom_types: [
-            AtomType.WILTED,
-            AtomType.HAZELNUT,
-            AtomType.HAZELNUT,
-        ],
+        output_atom_types: [AtomType.WILTED, AtomType.HAZELNUT, AtomType.HAZELNUT],
     },
     BAKE: {
         description: "vanilla ! wilted = saffron, saffron",
@@ -100,4 +82,9 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         input_atom_types: [AtomType.VANILLA, AtomType.WILTED],
         output_atom_types: [AtomType.SAFFRON, AtomType.SAFFRON],
     },
+};
+
+export interface PlacingFormula {
+    type: keyof typeof OPERATOR_TYPES;
+    grids: Grid[];
 }

@@ -10,7 +10,7 @@ import Frame from "../src/types/Frame";
 import Unit from "./unit";
 import UnitState, { BgStatus, BorderStatus, UnitText } from "../src/types/UnitState";
 import Grid from "../src/types/Grid";
-import Operator, { OPERATOR_TYPES } from "../src/types/Operator";
+import Operator, { OPERATOR_TYPES, PlacingFormula } from "../src/types/Operator";
 import Delivery from "./delivery";
 import Summary from "./summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
@@ -29,6 +29,7 @@ import Layout from "../src/components/Layout";
 import LoadSave from "../src/components/LoadSave";
 import theme from "../styles/theme";
 import { MAX_NUM_MECHS, MIN_NUM_MECHS, MAX_NUM_OPERATORS, MIN_NUM_OPERATORS } from "../src/constants/constants";
+import FormulaBlueprint from "../src/components/FormulaBlueprint";
 
 export default function Home() {
     // Constants
@@ -36,7 +37,7 @@ export default function Home() {
     const INIT_PROGRAM = ".";
     const MECH_INIT_X = 0;
     const MECH_INIT_Y = 0;
-    const INIT_DESCRIPTION = "New Mech"
+    const INIT_DESCRIPTION = "New Mech";
     const ATOM_INIT_XY = []; // [{x:5, y:3}]
     const UNIT_STATE_INIT: UnitState = {
         bg_status: BgStatus.EMPTY,
@@ -70,13 +71,14 @@ export default function Home() {
     );
     const [mechDescriptions, setMechDescriptions] = useState<string[]>(
         DEMO_SOLUTIONS[0].mechs.map((mech) => mech.description)
-    )
+    );
 
     const numMechs = programs.length;
 
     // React states for operators
     const [numOperators, setNumOperators] = useState(DEMO_SOLUTIONS[0].operators.length);
     const [operatorStates, setOperatorStates] = useState<Operator[]>(DEMO_SOLUTIONS[0].operators);
+    const [placingFormula, setPlacingFormula] = useState<PlacingFormula>();
 
     // React useMemo
     const calls = useMemo(() => {
@@ -112,7 +114,14 @@ export default function Home() {
     //
     const runnable = isRunnable();
     const mechInitStates: MechState[] = mechInitPositions.map((pos, mech_i) => {
-        return { status: MechStatus.OPEN, index: pos, id: `mech${mech_i}`, typ: MechType.SINGLETON, description: mechDescriptions[mech_i], pc_next: 0 };
+        return {
+            status: MechStatus.OPEN,
+            index: pos,
+            id: `mech${mech_i}`,
+            typ: MechType.SINGLETON,
+            description: mechDescriptions[mech_i],
+            pc_next: 0,
+        };
     });
     const atomInitStates: AtomState[] = ATOM_INIT_XY.map(function (xy, i) {
         return {
@@ -396,21 +405,20 @@ export default function Home() {
                 prev_copy.push(INIT_PROGRAM);
                 return prev_copy;
             });
-            setMechDescriptions(
-               (prev) => {
-                     let prev_copy = JSON.parse(JSON.stringify(prev));
-                    prev_copy.push(INIT_DESCRIPTION);
-                    return prev_copy;
-               }
-            )
+            setMechDescriptions((prev) => {
+                let prev_copy = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(INIT_DESCRIPTION);
+                return prev_copy;
+            });
         }
     }
 
     // Handle click even for addming/removing Adder (operator)
     function handleOperatorClick(mode: string, typ: string) {
         if (mode === "+" && numOperators < MAX_NUM_OPERATORS) {
-            setNumOperators((prev) => prev + 1);
-            setOperatorStates((prev) => {
+            setPlacingFormula({ type: typ, grids: [] });
+            // setNumOperators((prev) => prev + 1);
+            /*setOperatorStates((prev) => {
                 let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
                 switch (typ) {
                     case "STIR":
@@ -512,7 +520,7 @@ export default function Home() {
                         throw `invalid operator type encountered: ${typ}`;
                 }
                 return prev_copy;
-            });
+            });*/
         } else if (mode === "-" && numOperators > MIN_NUM_OPERATORS) {
             setNumOperators((prev) => prev - 1);
             setOperatorStates((prev) => {
@@ -699,38 +707,36 @@ export default function Home() {
     }
 
     // Lazy style objects
-    const makeshift_button_style = { marginLeft: "0.2rem", marginRight: "0.2rem", height: "1.5rem"};
+    const makeshift_button_style = { marginLeft: "0.2rem", marginRight: "0.2rem", height: "1.5rem" };
     const makeshift_run_button_style = runnable
         ? makeshift_button_style
         : { ...makeshift_button_style, color: "#CCCCCC" };
 
     const loadSave = (
-            <LoadSave
-                onLoadSolutionClick={handleLoadSolutionClick}
-                mechInitStates={mechInitStates}
-                operatorStates={operatorStates}
-                programs={programs}
-            />
-    )
+        <LoadSave
+            onLoadSolutionClick={handleLoadSolutionClick}
+            mechInitStates={mechInitStates}
+            operatorStates={operatorStates}
+            programs={programs}
+        />
+    );
 
-    const leaderboard = (
-        <Leaderboard loadSolution={handleLoadSolutionClick} />
-    )
+    const leaderboard = <Leaderboard loadSolution={handleLoadSolutionClick} />;
 
     const submission = (
         <Tooltip title={t("submission")} arrow>
             <div style={{ marginBottom: "1rem" }}>
-                <button id={"submit-button"} onClick={() => handleClickSubmit()} className={'big-button'}>
-                    <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.12rem' }}>
+                <button id={"submit-button"} onClick={() => handleClickSubmit()} className={"big-button"}>
+                    <i className="material-icons" style={{ fontSize: "1rem", paddingTop: "0.12rem" }}>
                         send
                     </i>
                 </button>
             </div>
         </Tooltip>
-    )
+    );
 
     const board = (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt:'2rem' }}>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: "2rem" }}>
             <div className={styles.grid_parent}>
                 <OperatorGridBg operators={operatorStates} highlighted={operatorInputHighlight} />
                 {Array.from({ length: DIM }).map(
@@ -777,9 +783,9 @@ export default function Home() {
         <Box>
             <div
                 className={styles.midScreenControls}
-                style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}
+                style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}
             >
-            {/* <div
+                {/* <div
                 style={{
                     display: "flex",
                     justifyContent: "center",
@@ -792,7 +798,7 @@ export default function Home() {
                         padding: "0",
                         textAlign: "center",
                         verticalAlign: "middle",
-                        width: '6.5rem',
+                        width: "6.5rem",
                         margin: "0 0.5rem 0 0",
                         // width: "100px" /* Make room for dynamic text */,
                         height: "20px",
@@ -812,10 +818,10 @@ export default function Home() {
                     value={animationFrame}
                     onChange={handleSlideChange}
                     step="1"
-                    style={{width:'6.5rem'}}
+                    style={{ width: "6.5rem" }}
                     // style={{ flex: 1 }}
                 />
-            {/* </div>
+                {/* </div>
             <div
                 style={{
                     display: "flex",
@@ -826,7 +832,10 @@ export default function Home() {
                 }}
             > */}
                 {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}
-                <button style={ {...makeshift_run_button_style, marginLeft:'0.5rem'} } onClick={() => handleClick("ToggleRun")}>
+                <button
+                    style={{ ...makeshift_run_button_style, marginLeft: "0.5rem" }}
+                    onClick={() => handleClick("ToggleRun")}
+                >
                     {" "}
                     {animationState != "Run" ? (
                         <i className="material-icons" style={{ fontSize: "1.2rem" }}>
@@ -854,9 +863,9 @@ export default function Home() {
                         fast_forward
                     </i>
                 </button>
-            {/* </div> */}
-        {/* </div> */}
-        </div>
+                {/* </div> */}
+                {/* </div> */}
+            </div>
         </Box>
     );
 
@@ -887,13 +896,11 @@ export default function Home() {
                 onProgramsChange={setPrograms}
                 programs={programs}
             />
-            <Box sx={{ display: "flex", flexDirection: "row", marginTop: '0.6rem', marginLeft: '0.3rem' }}>
+            <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "0.3rem" }}>
                 {/* <Button color="secondary" variant="outlined" onClick={() => handleMechClick("+")}>
                     {t("newMech")}
                 </Button> */}
-                <button onClick={() => handleMechClick("+")}>
-                    {t("newMech")}
-                </button>
+                <button onClick={() => handleMechClick("+")}>{t("newMech")}</button>
             </Box>
         </div>
     );
@@ -929,6 +936,13 @@ export default function Home() {
                     {t("removeOp")}
                 </button>
             </Box>
+
+            {placingFormula && (
+                <Box>
+                    <FormulaBlueprint placing operatorType={OPERATOR_TYPES[placingFormula.type]} />
+                </Box>
+            )}
+
             <Box>
                 {Array.from({ length: numOperators }).map((_, operator_i) => (
                     <div
@@ -1080,9 +1094,9 @@ export default function Home() {
             </Head>
 
             <Layout
-                loadSave = {loadSave}
-                leaderboard = {leaderboard}
-                submission = {submission}
+                loadSave={loadSave}
+                leaderboard={leaderboard}
+                submission={submission}
                 board={board}
                 stats={stats}
                 mechProgramming={mechProgramming}
