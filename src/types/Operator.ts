@@ -87,4 +87,5 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
 export interface PlacingFormula {
     type: keyof typeof OPERATOR_TYPES;
     grids: Grid[];
+    complete?: boolean;
 }

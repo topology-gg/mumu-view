@@ -30,6 +30,7 @@ import LoadSave from "../src/components/LoadSave";
 import theme from "../styles/theme";
 import { MAX_NUM_MECHS, MIN_NUM_MECHS, MAX_NUM_OPERATORS, MIN_NUM_OPERATORS } from "../src/constants/constants";
 import FormulaBlueprint from "../src/components/FormulaBlueprint";
+import { placingFormulaToOperator } from "../src/helpers/typeMapping";
 
 export default function Home() {
     // Constants
@@ -76,9 +77,9 @@ export default function Home() {
     const numMechs = programs.length;
 
     // React states for operators
-    const [numOperators, setNumOperators] = useState(DEMO_SOLUTIONS[0].operators.length);
     const [operatorStates, setOperatorStates] = useState<Operator[]>(DEMO_SOLUTIONS[0].operators);
     const [placingFormula, setPlacingFormula] = useState<PlacingFormula>();
+    const numOperators = operatorStates.length;
 
     // React useMemo
     const calls = useMemo(() => {
@@ -417,112 +418,7 @@ export default function Home() {
     function handleOperatorClick(mode: string, typ: string) {
         if (mode === "+" && numOperators < MAX_NUM_OPERATORS) {
             setPlacingFormula({ type: typ, grids: [] });
-            // setNumOperators((prev) => prev + 1);
-            /*setOperatorStates((prev) => {
-                let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
-                switch (typ) {
-                    case "STIR":
-                        prev_copy.push({
-                            input: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            output: [{ x: 0, y: 0 }],
-                            typ: OPERATOR_TYPES.STIR,
-                        });
-                        break;
-                    case "SHAKE":
-                        prev_copy.push({
-                            input: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            output: [{ x: 0, y: 0 }],
-                            typ: OPERATOR_TYPES.SHAKE,
-                        });
-                        break;
-                    case "STEAM":
-                        prev_copy.push({
-                            input: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            output: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            typ: OPERATOR_TYPES.STEAM,
-                        });
-                        break;
-                    case "SMASH":
-                        prev_copy.push({
-                            input: [{ x: 0, y: 0 }],
-                            output: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            typ: OPERATOR_TYPES.SMASH,
-                        });
-                        break;
-                    case "EVOLVE":
-                        prev_copy.push({
-                            input: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            output: [{ x: 0, y: 0 }],
-                            typ: OPERATOR_TYPES.EVOLVE,
-                        });
-                        break;
-                    case "SLOW":
-                        prev_copy.push({
-                            input: [{ x: 0, y: 0 }],
-                            output: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            typ: OPERATOR_TYPES.SLOW,
-                        });
-                        break;
-                    case "WILT":
-                        prev_copy.push({
-                            input: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            output: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            typ: OPERATOR_TYPES.WILT,
-                        });
-                        break;
-                    case "BAKE":
-                        prev_copy.push({
-                            input: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            output: [
-                                { x: 0, y: 0 },
-                                { x: 0, y: 0 },
-                            ],
-                            typ: OPERATOR_TYPES.BAKE,
-                        });
-                        break;
-                    default:
-                        throw `invalid operator type encountered: ${typ}`;
-                }
-                return prev_copy;
-            });*/
         } else if (mode === "-" && numOperators > MIN_NUM_OPERATORS) {
-            setNumOperators((prev) => prev - 1);
             setOperatorStates((prev) => {
                 let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
                 prev_copy.pop();
@@ -684,7 +580,6 @@ export default function Home() {
         setPrograms((prev) => viewSolution.programs);
         setMechInitPositions((prev) => viewSolution.mechs.map((mech) => mech.index));
         setMechDescriptions((prev) => viewSolution.mechs.map((mech) => mech.description));
-        setNumOperators((prev) => viewSolution.operators.length);
         setOperatorStates((prev) => viewSolution.operators);
 
         setAnimationFrame((prev) => 0);
@@ -704,6 +599,29 @@ export default function Home() {
             newHighlight.push(false);
         }
         setOperatorInputHighlight((prev) => newHighlight);
+    }
+
+    function handleUnitClick(x: number, y: number) {
+        if (!placingFormula) return;
+
+        setPlacingFormula((prev) => {
+            const newPlacingFormula = { ...prev, grids: [...prev.grids, { x, y }] };
+            const operator = placingFormulaToOperator(newPlacingFormula);
+
+            // Check validity of operator
+            if (operator.output.length > operator.typ.output_atom_types.length) return prev;
+            if (isAnyOperatorPositionInvalid([...operatorStates, operator])) return prev;
+            if (isOperatorPositionInvalid(operator)) return prev;
+
+            const complete = operator.output.length === operator.typ.output_atom_types.length;
+
+            return { ...newPlacingFormula, complete };
+        });
+    }
+
+    function handleConfirmFormula() {
+        setOperatorStates((prev) => [...prev, placingFormulaToOperator(placingFormula)]);
+        setPlacingFormula(null);
     }
 
     // Lazy style objects
@@ -738,7 +656,11 @@ export default function Home() {
     const board = (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: "2rem" }}>
             <div className={styles.grid_parent}>
-                <OperatorGridBg operators={operatorStates} highlighted={operatorInputHighlight} />
+                <OperatorGridBg
+                    operators={operatorStates}
+                    highlighted={operatorInputHighlight}
+                    placingFormula={placingFormula}
+                />
                 {Array.from({ length: DIM }).map(
                     (
                         _,
@@ -757,6 +679,7 @@ export default function Home() {
                                                 state={unitStates[j][i]}
                                                 handleMouseOver={() => handleMouseOver(j, i)}
                                                 handleMouseOut={() => handleMouseOut()}
+                                                onClick={() => handleUnitClick(j, i)}
                                                 mechHighlight={
                                                     mechIndexHighlighted == -1
                                                         ? false
@@ -938,8 +861,20 @@ export default function Home() {
             </Box>
 
             {placingFormula && (
-                <Box>
-                    <FormulaBlueprint placing operatorType={OPERATOR_TYPES[placingFormula.type]} />
+                <Box sx={{ display: "flex", alignItems: "baseline", gap: 2 }}>
+                    <FormulaBlueprint
+                        placing
+                        operatorType={OPERATOR_TYPES[placingFormula.type]}
+                        grids={placingFormula.grids}
+                    />
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={handleConfirmFormula}
+                        disabled={!placingFormula.complete}
+                    >
+                        {t("confirmFormula")}
+                    </Button>
                 </Box>
             )}
 
