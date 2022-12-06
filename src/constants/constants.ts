@@ -6,6 +6,7 @@ export const DIM = 10;
 export const PROGRAM_SIZE_MAX = 40
 export const DESCRIPTION_SIZE_MAX = 31
 export const N_CYCLES = 150
+export const ANIM_FRAME_LATENCY = 400;
 
 export const MAX_NUM_MECHS = 25; // setting this to 25 for Season 2
 export const MIN_NUM_MECHS = 0;

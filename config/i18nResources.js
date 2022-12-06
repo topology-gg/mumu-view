@@ -22,7 +22,7 @@ const resources = {
             incrementFrame: "+1 frame",
             decrementFrame: "-1 frame",
             "Mech programming": "Mech programming",
-            "Formula placement": "Operator placement",
+            "Formula placement": "Formula placement",
             "Stir ": "Stir ",
             Shake: "Shake",
             Steam: "Steam",

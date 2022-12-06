@@ -12,7 +12,7 @@ export default function Unit({ state, handleMouseOver, handleMouseOut, mechHighl
     divStyle = {...divStyle, zIndex:'20'}
 
     let className: string = '';
-    let nuclei: number = 0;
+    // let nuclei: number = 0;
     if (state.bg_status === BgStatus.ATOM_VANILLA_FREE) {
         className += styles.atomVanillaFree + ' ';
         // nuclei = 1;
@@ -88,11 +88,14 @@ export default function Unit({ state, handleMouseOver, handleMouseOut, mechHighl
     //
     // Compute mech styles
     //
+    let grabberClassName: string = '';
     if (state.border_status == BorderStatus.SINGLETON_OPEN) {
         className += styles.mechSingletonOpen + ' ';
+        grabberClassName += styles.grabberOpen + ' ';
     }
     else if (state.border_status == BorderStatus.SINGLETON_CLOSE) {
         className += styles.mechSingletonClose + ' ';
+        grabberClassName += styles.grabberClose + ' ';
     }
 
     const mechId = state.unit_id && state.unit_id.includes('mech') && state.unit_id.replace('mech', '')
@@ -104,9 +107,10 @@ export default function Unit({ state, handleMouseOver, handleMouseOut, mechHighl
             onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}
             style={divStyle}
         >
-            {Array.from({length: nuclei}).map((_, i) =>
+            {/* {Array.from({length: nuclei}).map((_, i) =>
                 <div key={`nucleus${i}`} className={`${styles.nucleus}`} />
-            )}
+            )} */}
+            <div key={`grabber`} className={`${styles.grabber} ${grabberClassName}`} />
             {state.unit_text}
             {mechId && <div className={styles.unitId}>{mechId}</div>}
         </div>
