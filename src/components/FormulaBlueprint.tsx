@@ -42,7 +42,7 @@ const FormulaBlueprint = ({ operatorType, placing, grids = [] }: FormulaBlueprin
             {operatorType.symbol}(
             {operatorType.input_atom_types.map((atomType, i) => (
                 <Unit
-                    atomOpacity={currentInputIndex > i ? 1.0 : 0.5}
+                    atomOpacity={!placing || currentInputIndex > i ? 1.0 : 0.5}
                     state={{
                         bg_status: AtomTypeToBg[atomType],
                         border_status: currentInputIndex === i ? BorderStatus.SINGLETON_OPEN : null,
@@ -58,7 +58,7 @@ const FormulaBlueprint = ({ operatorType, placing, grids = [] }: FormulaBlueprin
             )<p style={{ margin: "0 0.5rem 0 0.5rem" }}> = </p>
             {operatorType.output_atom_types.map((atomType, i) => (
                 <Unit
-                    atomOpacity={inputAtomGridsComplete && outputAtomGrids.length > i ? 1.0 : 0.5}
+                    atomOpacity={!placing || (inputAtomGridsComplete && outputAtomGrids.length > i) ? 1.0 : 0.5}
                     state={{
                         bg_status: AtomTypeToBg[atomType],
                         border_status:
