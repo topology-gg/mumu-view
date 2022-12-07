@@ -28,11 +28,10 @@ import MechProgramming from "../src/components/MechProgramming";
 import Layout from "../src/components/Layout";
 import LoadSave from "../src/components/LoadSave";
 import theme from "../styles/theme";
-import { MAX_NUM_MECHS, MIN_NUM_MECHS, MAX_NUM_OPERATORS, MIN_NUM_OPERATORS } from "../src/constants/constants";
+import { MAX_NUM_MECHS, MIN_NUM_MECHS, MAX_NUM_OPERATORS, MIN_NUM_OPERATORS, ANIM_FRAME_LATENCY } from "../src/constants/constants";
 
 export default function Home() {
     // Constants
-    const ANIM_FRAME_LATENCY = 250;
     const INIT_PROGRAM = ".";
     const MECH_INIT_X = 0;
     const MECH_INIT_Y = 0;
