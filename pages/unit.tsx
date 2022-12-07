@@ -31,8 +31,8 @@ export default function Unit({
     if (isSmall) divStyle = { ...divStyle, width: "1.6rem", height: "1.6rem" };
     divStyle = { ...divStyle, zIndex: "20" };
 
-    let className: string = "";
-    let nuclei: number = 0;
+    let className: string = '';
+    // let nuclei: number = 0;
     if (state.bg_status === BgStatus.ATOM_VANILLA_FREE) {
         className += styles.atomVanillaFree + " ";
         // nuclei = 1;
@@ -86,10 +86,14 @@ export default function Unit({
     //
     // Compute mech styles
     //
+    let grabberClassName: string = '';
     if (state.border_status == BorderStatus.SINGLETON_OPEN) {
-        className += styles.mechSingletonOpen + " ";
-    } else if (state.border_status == BorderStatus.SINGLETON_CLOSE) {
-        className += styles.mechSingletonClose + " ";
+        className += styles.mechSingletonOpen + ' ';
+        grabberClassName += styles.grabberOpen + ' ';
+    }
+    else if (state.border_status == BorderStatus.SINGLETON_CLOSE) {
+        className += styles.mechSingletonClose + ' ';
+        grabberClassName += styles.grabberClose + ' ';
     }
 
     const mechId = state.unit_id && state.unit_id.includes("mech") && state.unit_id.replace("mech", "");
@@ -103,9 +107,7 @@ export default function Unit({
             onClick={onClick}
             style={{ ...divStyle, opacity: atomOpacity || 1.0 }}
         >
-            {Array.from({ length: nuclei }).map((_, i) => (
-                <div key={`nucleus${i}`} className={`${styles.nucleus}`} />
-            ))}
+            <div key={`grabber`} className={`${styles.grabber} ${grabberClassName}`} />
             {state.unit_text}
             {mechId && <div className={styles.unitId}>{mechId}</div>}
         </div>
