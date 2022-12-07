@@ -10,7 +10,7 @@ const C = 65537;
 const HASH_LENGTH = 20;
 
 export default function minHash(inputs: number[]) {
-    let h: number[] = new Array(HASH_LENGTH);
+    let h: number[] = new Array(HASH_LENGTH).fill(0);
     return h.map((_, index) => {
         return hash(inputs, coefficients_a[index], coefficients_b[index]);
     });
