@@ -1,7 +1,7 @@
 import React, { CSSProperties } from "react";
 import Unit from "../../pages/unit";
 import { OperatorType } from "../types/Operator";
-import { AtomTypeToBg, BorderStatus, UnitText } from "../types/UnitState";
+import { AtomTypeToBg, UnitText } from "../types/UnitState";
 import styles from "../../styles/Home.module.css";
 import { useTranslation } from "react-i18next";
 import Grid from "../types/Grid";
@@ -41,19 +41,16 @@ const FormulaBlueprint = ({ operatorType, placing, grids = [] }: FormulaBlueprin
             <p className={styles.input_name}>{t(operatorType.name)}:</p>
             {operatorType.symbol}(
             {operatorType.input_atom_types.map((atomType, i) => (
-                <div style={{
-                    position:'relative'
-                }}>
+                <div style={{ position: "relative" }}>
                     <div
-                        className={'operand_pointer'}
-                        style={{opacity: !placing || currentInputIndex > i ? '1' : '1'}}
+                        className={"operand_pointer"}
+                        style={{ opacity: placing && currentInputIndex === i ? 1.0 : 0 }}
                     />
 
                     <Unit
                         atomOpacity={!placing || currentInputIndex > i ? 1.0 : 0.5}
                         state={{
                             bg_status: AtomTypeToBg[atomType],
-                            // border_status: currentInputIndex === i ? BorderStatus.SINGLETON_OPEN : null,
                             border_status: null,
                             unit_text: UnitText.EMPTY,
                             unit_id: null,
@@ -67,13 +64,12 @@ const FormulaBlueprint = ({ operatorType, placing, grids = [] }: FormulaBlueprin
             ))}
             )<p style={{ margin: "0 0.5rem 0 0.5rem" }}> = </p>
             {operatorType.output_atom_types.map((atomType, i) => (
-                <div>
+                <div style={{ position: "relative" }}>
+                    <div className={"operand_pointer"} style={{ opacity: currentOutputIndex === i ? 1.0 : 0 }} />
                     <Unit
                         atomOpacity={!placing || (inputAtomGridsComplete && outputAtomGrids.length > i) ? 1.0 : 0.5}
                         state={{
                             bg_status: AtomTypeToBg[atomType],
-                            // border_status:
-                            //     inputAtomGridsComplete && outputAtomGrids.length === i ? BorderStatus.SINGLETON_OPEN : null,
                             border_status: null,
                             unit_text: UnitText.EMPTY,
                             unit_id: null,

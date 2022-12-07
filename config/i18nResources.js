@@ -17,6 +17,7 @@ const resources = {
             newOperation: "new {{operation}}",
             removeOp: "remove op",
             confirmFormula: "Confirm Formula",
+            placeFormula: "Click on a valid grid to place",
             run: "Run",
             pause: "Pause",
             stop: "Stop",
@@ -43,7 +44,7 @@ const resources = {
                 thesisLine1:
                     "Layer 1 blockchains assert identity by capital contribution - pay to mint. Layer 2 blockchains, with new affordance in compute capacity, would assert identity by skill verification - solve to mint.",
                 thesisLine2:
-                    'MuMu is a puzzle about visual & parallel assembly programming. Place & program Cloth Spirits on the canvas, and place the formulas, to transport & transmute substances from Faucet to Sink. Solutions are ranked by throughput and cost.',
+                    "MuMu is a puzzle about visual & parallel assembly programming. Place & program Cloth Spirits on the canvas, and place the formulas, to transport & transmute substances from Faucet to Sink. Solutions are ranked by throughput and cost.",
                 Overview: "Overview",
                 overviewLine1:
                     "In the world of alchemy, substances can be transformed into one another via alchemic diagrams. Build diagrams by placing formulas and spirits, and orchestrating the spirits creatively.",
@@ -135,6 +136,7 @@ const resources = {
             newOperation: "添加配方 {{operation}}",
             removeOp: "移除配方",
             confirmFormula: "确认公式",
+            placeFormula: "单击有效的网格以放置",
             formula: "配方",
             run: "启动",
             pause: "暂停",
@@ -252,6 +254,7 @@ const resources = {
             newOperation: "添加配方 {{operation}}",
             removeOp: "移除配方",
             confirmFormula: "確認公式",
+            placeFormula: "單擊有效的網格以放置",
             formula: "配方",
             run: "啟動",
             pause: "暫停",
@@ -366,6 +369,7 @@ const resources = {
             newOperation: "nouvelle {{operation}}",
             removeOp: "supprimer op",
             confirmFormula: "Confirmer la formule",
+            placeFormula: "Cliquez sur une grille valide pour placer",
             run: "Run",
             pause: "Pause",
             stop: "Stop",
@@ -436,6 +440,7 @@ const resources = {
             newOperation: "{{operation}} を追加",
             removeOp: "演算子を削除",
             confirmFormula: "式を確認します",
+            placeFormula: "配置する有効なグリッドをクリックします",
             run: "実行",
             pause: "一時停止",
             stop: "止める",
