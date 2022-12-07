@@ -12,6 +12,8 @@ interface FormulaBlueprintProps {
     grids?: Grid[];
 }
 
+const FORMULA_LI_OPACITY_STR = "66";
+
 function compute_formula_li_style(backgroundColor: string): CSSProperties {
     return {
         display: "flex",
@@ -20,11 +22,9 @@ function compute_formula_li_style(backgroundColor: string): CSSProperties {
         marginTop: "0.5rem",
         height: "2rem",
         borderRadius: "2rem",
-        backgroundColor: backgroundColor,
+        backgroundColor: backgroundColor + FORMULA_LI_OPACITY_STR,
     };
 }
-
-const FORMULA_LI_OPACITY_STR = "66";
 
 const FormulaBlueprint = ({ operatorType, placing, grids = [] }: FormulaBlueprintProps) => {
     const { t } = useTranslation();
@@ -37,40 +37,53 @@ const FormulaBlueprint = ({ operatorType, placing, grids = [] }: FormulaBlueprin
     const currentOutputIndex = placing && inputAtomGridsComplete && outputAtomGrids.length;
 
     return (
-        <li style={compute_formula_li_style(operatorType.color + FORMULA_LI_OPACITY_STR)}>
+        <li style={compute_formula_li_style(operatorType.color)}>
             <p className={styles.input_name}>{t(operatorType.name)}:</p>
             {operatorType.symbol}(
             {operatorType.input_atom_types.map((atomType, i) => (
-                <Unit
-                    atomOpacity={!placing || currentInputIndex > i ? 1.0 : 0.5}
-                    state={{
-                        bg_status: AtomTypeToBg[atomType],
-                        border_status: currentInputIndex === i ? BorderStatus.SINGLETON_OPEN : null,
-                        unit_text: UnitText.EMPTY,
-                        unit_id: null,
-                    }}
-                    handleMouseOut={() => {}}
-                    handleMouseOver={() => {}}
-                    mechHighlight={false}
-                    isSmall={true}
-                />
+                <div style={{
+                    position:'relative'
+                }}>
+                    <div
+                        className={'operand_pointer'}
+                        style={{opacity: !placing || currentInputIndex > i ? '1' : '1'}}
+                    />
+
+                    <Unit
+                        atomOpacity={!placing || currentInputIndex > i ? 1.0 : 0.5}
+                        state={{
+                            bg_status: AtomTypeToBg[atomType],
+                            // border_status: currentInputIndex === i ? BorderStatus.SINGLETON_OPEN : null,
+                            border_status: null,
+                            unit_text: UnitText.EMPTY,
+                            unit_id: null,
+                        }}
+                        handleMouseOut={() => {}}
+                        handleMouseOver={() => {}}
+                        mechHighlight={false}
+                        isSmall={true}
+                    />
+                </div>
             ))}
             )<p style={{ margin: "0 0.5rem 0 0.5rem" }}> = </p>
             {operatorType.output_atom_types.map((atomType, i) => (
-                <Unit
-                    atomOpacity={!placing || (inputAtomGridsComplete && outputAtomGrids.length > i) ? 1.0 : 0.5}
-                    state={{
-                        bg_status: AtomTypeToBg[atomType],
-                        border_status:
-                            inputAtomGridsComplete && outputAtomGrids.length === i ? BorderStatus.SINGLETON_OPEN : null,
-                        unit_text: UnitText.EMPTY,
-                        unit_id: null,
-                    }}
-                    handleMouseOut={() => {}}
-                    handleMouseOver={() => {}}
-                    mechHighlight={false}
-                    isSmall={true}
-                />
+                <div>
+                    <Unit
+                        atomOpacity={!placing || (inputAtomGridsComplete && outputAtomGrids.length > i) ? 1.0 : 0.5}
+                        state={{
+                            bg_status: AtomTypeToBg[atomType],
+                            // border_status:
+                            //     inputAtomGridsComplete && outputAtomGrids.length === i ? BorderStatus.SINGLETON_OPEN : null,
+                            border_status: null,
+                            unit_text: UnitText.EMPTY,
+                            unit_id: null,
+                        }}
+                        handleMouseOut={() => {}}
+                        handleMouseOver={() => {}}
+                        mechHighlight={false}
+                        isSmall={true}
+                    />
+                </div>
             ))}
         </li>
     );
