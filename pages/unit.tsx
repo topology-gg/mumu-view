@@ -107,9 +107,6 @@ export default function Unit({ state, handleMouseOver, handleMouseOut, mechHighl
             onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}
             style={divStyle}
         >
-            {/* {Array.from({length: nuclei}).map((_, i) =>
-                <div key={`nucleus${i}`} className={`${styles.nucleus}`} />
-            )} */}
             <div key={`grabber`} className={`${styles.grabber} ${grabberClassName}`} />
             {state.unit_text}
             {mechId && <div className={styles.unitId}>{mechId}</div>}
