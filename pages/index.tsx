@@ -872,14 +872,15 @@ export default function Home() {
                         operatorType={OPERATOR_TYPES[placingFormula.type]}
                         grids={placingFormula.grids}
                     />
-                    <Button
-                        variant="outlined"
-                        color="secondary"
+                    <button
+                        // variant="outlined"
+                        // color="secondary"
                         onClick={handleConfirmFormula}
                         disabled={!placingFormula.complete}
+                        className={placingFormula.complete ? 'button_glow' : ''}
                     >
                         {placingFormula.complete ? t("confirmFormula") : t("placeFormula")}
-                    </Button>
+                    </button>
                 </Box>
             )}
 
