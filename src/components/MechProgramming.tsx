@@ -49,9 +49,11 @@ const MechProgramming = ({
 
         const newPrograms = reorder(programs, source.index, destination.index);
         const newPositions = reorder(mechInitPositions, source.index, destination.index);
+        const newDescriptions = reorder(mechDescriptions, source.index, destination.index);
 
         onProgramsChange(newPrograms);
         onMechInitPositionsChange(newPositions);
+        onMechDescriptionChange(newDescriptions);
     };
 
     const handleKeyMechInputProgram = (event, typ: string) => {
