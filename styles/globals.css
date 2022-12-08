@@ -35,10 +35,29 @@ button {
     background-color: #FFFFFF;
     outline: none;
 }
+button:disabled {
+    pointer-events: none;
+    border: 1px solid #BBBBBB;
+}
 button:hover {
     background-color: #FFFE71;
     cursor: pointer;
 }
+@keyframes glowing {
+    0% {
+        background-color: #FFFFFF;
+    }
+    30% {
+        background-color: #FFFE71;
+    }
+    100% {
+        background-color: #FFFFFF;
+    }
+}
+.button_glow {
+    animation: glowing 1000ms infinite;
+}
+
 
 .grid {
     display: flex;
@@ -256,4 +275,15 @@ input::placeholder {
     background: url('../src/images/fox.gif') no-repeat;
     background-position: center;
     background-size: 80%;
+}
+
+.operand_pointer {
+    content: " ";
+    position: absolute;
+    top: -1.2rem;
+    width: 100%;
+    height: 100%;
+    background: url("../src/images/backhand-index-pointing-down.gif") no-repeat;
+    background-position: 30% 0%;
+    background-size: 60%;
 }
