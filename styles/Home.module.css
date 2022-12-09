@@ -107,7 +107,6 @@
 .programWrapper {
     position: relative;
     display: flex;
-    overflow-x: scroll;
 }
 
 .program {
