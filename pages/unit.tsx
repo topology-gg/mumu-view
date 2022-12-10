@@ -36,65 +36,67 @@ export default function Unit({
     if (state.bg_status === BgStatus.ATOM_VANILLA_FREE) {
         className += styles.atomVanillaFree + " ";
         // nuclei = 1;
-    } else if (state.bg_status === BgStatus.ATOM_VANILLA_POSSESSED) {
-        className += styles.atomVanillaPossessed + " ";
-        // nuclei = 1;
-    } else if (state.bg_status === BgStatus.ATOM_HAZELNUT_FREE) {
+    }
+    // else if (state.bg_status === BgStatus.ATOM_VANILLA_POSSESSED) {
+    //     className += styles.atomVanillaPossessed + " ";
+    //     // nuclei = 1;
+    // }
+    else if (state.bg_status === BgStatus.ATOM_HAZELNUT_FREE) {
         className += styles.atomHazelnutFree + " " + styles.twoNuclei + " ";
         // nuclei = 2;
-    } else if (state.bg_status === BgStatus.ATOM_HAZELNUT_POSSESSED) {
-        className += styles.atomHazelnutPossessed + " " + styles.twoNuclei + " ";
-        // nuclei = 2;
-    } else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_FREE) {
+    }
+    // else if (state.bg_status === BgStatus.ATOM_HAZELNUT_POSSESSED) {
+    //     className += styles.atomHazelnutPossessed + " " + styles.twoNuclei + " ";
+    //     // nuclei = 2;
+    // }
+    else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_FREE) {
         className += styles.atomChocolateFree + " " + styles.threeNuclei + " ";
         // nuclei = 3;
-    } else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_POSSESSED) {
-        className += styles.atomChocolatePossessed + " " + styles.threeNuclei + " ";
-        // nuclei = 3;
-    } else if (state.bg_status === BgStatus.ATOM_TRUFFLE_FREE) {
+    }
+    // else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_POSSESSED) {
+    //     className += styles.atomChocolatePossessed + " " + styles.threeNuclei + " ";
+    //     // nuclei = 3;
+    // }
+    else if (state.bg_status === BgStatus.ATOM_TRUFFLE_FREE) {
         className += styles.atomTruffleFree + " " + styles.fourNuclei + " ";
         // nuclei = 4;
-    } else if (state.bg_status === BgStatus.ATOM_TRUFFLE_POSSESSED) {
-        className += styles.atomTrufflePossessed + " " + styles.fourNuclei + " ";
-        // nuclei = 4;
-    } else if (state.bg_status === BgStatus.ATOM_SAFFRON_FREE) {
+    }
+    // else if (state.bg_status === BgStatus.ATOM_TRUFFLE_POSSESSED) {
+    //     className += styles.atomTrufflePossessed + " " + styles.fourNuclei + " ";
+    //     // nuclei = 4;
+    // }
+    else if (state.bg_status === BgStatus.ATOM_SAFFRON_FREE) {
         className += styles.atomSaffronFree + " ";
         // nuclei = 1;
-    } else if (state.bg_status === BgStatus.ATOM_SAFFRON_POSSESSED) {
-        className += styles.atomSaffronPossessed + " ";
-        // nuclei = 1;
-    } else if (state.bg_status === BgStatus.ATOM_TURTLE_FREE) {
+    }
+    // else if (state.bg_status === BgStatus.ATOM_SAFFRON_POSSESSED) {
+    //     className += styles.atomSaffronPossessed + " ";
+    //     // nuclei = 1;
+    // }
+    else if (state.bg_status === BgStatus.ATOM_TURTLE_FREE) {
         className += styles.atomTurtleFree + " ";
         // nuclei = 1;
-    } else if (state.bg_status === BgStatus.ATOM_TURTLE_POSSESSED) {
-        className += styles.atomTurtlePossessed + " ";
-        // nuclei = 1;
-    } else if (state.bg_status === BgStatus.ATOM_SANDGLASS_FREE) {
+    }
+    // else if (state.bg_status === BgStatus.ATOM_TURTLE_POSSESSED) {
+    //     className += styles.atomTurtlePossessed + " ";
+    //     // nuclei = 1;
+    // }
+    else if (state.bg_status === BgStatus.ATOM_SANDGLASS_FREE) {
         className += styles.atomSandglassFree + " ";
         // nuclei = 1;
-    } else if (state.bg_status === BgStatus.ATOM_SANDGLASS_POSSESSED) {
-        className += styles.atomSandglassPossessed + " ";
-        // nuclei = 1;
-    } else if (state.bg_status === BgStatus.ATOM_WILTED_FREE) {
+    }
+    // else if (state.bg_status === BgStatus.ATOM_SANDGLASS_POSSESSED) {
+    //     className += styles.atomSandglassPossessed + " ";
+    //     // nuclei = 1;
+    // }
+    else if (state.bg_status === BgStatus.ATOM_WILTED_FREE) {
         className += styles.atomWiltedFree + " ";
         // nuclei = 1;
-    } else if (state.bg_status === BgStatus.ATOM_WILTED_POSSESSED) {
-        className += styles.atomWiltedPossessed + " ";
-        // nuclei = 1;
     }
-
-    //
-    // Compute mech styles
-    //
-    let grabberClassName: string = '';
-    if (state.border_status == BorderStatus.SINGLETON_OPEN) {
-        className += styles.mechSingletonOpen + ' ';
-        grabberClassName += styles.grabberOpen + ' ';
-    }
-    else if (state.border_status == BorderStatus.SINGLETON_CLOSE) {
-        className += styles.mechSingletonClose + ' ';
-        grabberClassName += styles.grabberClose + ' ';
-    }
+    // else if (state.bg_status === BgStatus.ATOM_WILTED_POSSESSED) {
+    //     className += styles.atomWiltedPossessed + " ";
+    //     // nuclei = 1;
+    // }
 
     const mechId = state.unit_id && state.unit_id.includes("mech") && state.unit_id.replace("mech", "");
 
@@ -107,7 +109,6 @@ export default function Unit({
             onClick={onClick}
             style={{ ...divStyle, opacity: atomOpacity || 1.0 }}
         >
-            <div key={`grabber`} className={`${styles.grabber} ${grabberClassName}`} />
             {state.unit_text}
             {mechId && <div className={styles.unitId}>{mechId}</div>}
         </div>
