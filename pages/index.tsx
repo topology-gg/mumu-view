@@ -37,6 +37,7 @@ import {
 } from "../src/constants/constants";
 import FormulaBlueprint from "../src/components/FormulaBlueprint";
 import { placingFormulaToOperator } from "../src/helpers/typeMapping";
+import Board from "./board";
 
 export default function Home() {
     // Constants
@@ -658,53 +659,17 @@ export default function Home() {
         </Tooltip>
     );
 
-    const board = (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: "2rem" }}>
-            <div className={styles.grid_parent}>
-                <OperatorGridBg
-                    operators={operatorStates}
-                    highlighted={operatorInputHighlight}
-                    placingFormula={placingFormula}
-                />
-                {Array.from({ length: DIM }).map(
-                    (
-                        _,
-                        i // i is y
-                    ) => (
-                        <div key={`row-${i}`} className={styles.grid_row}>
-                            {Array.from({ length: DIM }).map(
-                                (
-                                    _,
-                                    j // j is x
-                                ) => (
-                                    <Tooltip title={`${j},${i}`} disableInteractive arrow>
-                                        <div>
-                                            <Unit
-                                                key={`unit-${j}-${i}`}
-                                                state={unitStates[j][i]}
-                                                handleMouseOver={() => handleMouseOver(j, i)}
-                                                handleMouseOut={() => handleMouseOut()}
-                                                onClick={() => handleUnitClick(j, i)}
-                                                mechHighlight={
-                                                    mechIndexHighlighted == -1
-                                                        ? false
-                                                        : j == mechStates[mechIndexHighlighted].index.x &&
-                                                          i == mechStates[mechIndexHighlighted].index.y
-                                                        ? true
-                                                        : false
-                                                }
-                                                isSmall={false}
-                                            />
-                                        </div>
-                                    </Tooltip>
-                                )
-                            )}
-                        </div>
-                    )
-                )}
-            </div>
-        </Box>
-    );
+    const board = <Board
+        operatorStates = {operatorStates}
+        operatorInputHighlight = {operatorInputHighlight}
+        placingFormula = {placingFormula}
+        unitStates = {unitStates}
+        mechStates = {mechStates}
+        mechIndexHighlighted = {mechIndexHighlighted}
+        handleMouseOver = {(x,y) => handleMouseOver(x,y)}
+        handleMouseOut = {() => handleMouseOut()}
+        handleUnitClick = {(x,y) => handleUnitClick(x,y)}
+    />
 
     const midScreenControls = (
         // <div style={{ display: "flex", flexDirection: "row", padding: "1rem 25rem", justifyContent: "center" }}>
