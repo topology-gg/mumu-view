@@ -665,6 +665,7 @@ export default function Home() {
         placingFormula = {placingFormula}
         unitStates = {unitStates}
         mechStates = {mechStates}
+        atomStates = {atomStates}
         mechIndexHighlighted = {mechIndexHighlighted}
         handleMouseOver = {(x,y) => handleMouseOver(x,y)}
         handleMouseOut = {() => handleMouseOut()}

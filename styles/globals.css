@@ -287,3 +287,15 @@ input::placeholder {
     background-position: 30% 0%;
     background-size: 60%;
 }
+
+.grabberOpen {
+    background: url('../src/images/grabber_open.png') no-repeat;
+    background-position: 0% 100%;
+    background-size: 50%;
+}
+
+.grabberClose {
+    background: url('../src/images/grabber_close.png') no-repeat;
+    background-position: 0% 100%;
+    background-size: 50%;
+}
