@@ -22,7 +22,7 @@ import {
 interface BoardProps {
     operatorStates: Operator[]
     operatorInputHighlight: boolean[]
-    placingFormula: PlacingFormula
+    placingFormula?: PlacingFormula
     unitStates: UnitState[][]
     mechStates: MechState[]
     mechIndexHighlighted: number
@@ -35,6 +35,9 @@ export default function Board (
     { operatorStates, operatorInputHighlight, placingFormula,
     unitStates, mechStates, mechIndexHighlighted,
     handleMouseOver, handleMouseOut, handleUnitClick}: BoardProps) {
+
+    if (!unitStates) return <></>
+    if (!mechStates) return <></>
 
     const board = (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: "2rem" }}>
