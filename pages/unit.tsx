@@ -98,19 +98,6 @@ export default function Unit({
     //     // nuclei = 1;
     // }
 
-    //
-    // Compute mech styles
-    //
-    let grabberClassName: string = '';
-    if (state.border_status == BorderStatus.SINGLETON_OPEN) {
-        className += styles.mechSingletonOpen + ' ';
-        grabberClassName += styles.grabberOpen + ' ';
-    }
-    else if (state.border_status == BorderStatus.SINGLETON_CLOSE) {
-        className += styles.mechSingletonClose + ' ';
-        grabberClassName += styles.grabberClose + ' ';
-    }
-
     const mechId = state.unit_id && state.unit_id.includes("mech") && state.unit_id.replace("mech", "");
 
     // Render
@@ -122,7 +109,6 @@ export default function Unit({
             onClick={onClick}
             style={{ ...divStyle, opacity: atomOpacity || 1.0 }}
         >
-            {/* <div key={`grabber`} className={`${styles.grabber} ${grabberClassName}`} /> */}
             {state.unit_text}
             {mechId && <div className={styles.unitId}>{mechId}</div>}
         </div>
