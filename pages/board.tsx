@@ -33,6 +33,8 @@ export default function Board (
     unitStates, mechStates, atomStates, mechIndexHighlighted,
     handleMouseOver, handleMouseOut, handleUnitClick}: BoardProps) {
 
+    if (!mechStates) return <></>
+
     // build mapping from mech_i to possessed atom (if any)
     var possessedAtom = mechStates.map(_ => null)
     for (const atomState of atomStates){
