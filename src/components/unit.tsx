@@ -1,115 +1,104 @@
 import Grid from "../types/Grid";
 import UnitState, { BgStatus, BorderStatus } from "../types/UnitState";
 import styles from "../../styles/Unit.module.css";
+import { useSpring, animated } from "react-spring";
+import { AnimationRounded } from "@mui/icons-material";
+import { useRef } from 'react'
 
 interface UnitProps {
     atomOpacity?: number;
     state: UnitState;
+    statePrevFrame: UnitState;
     handleMouseOver: () => void;
     handleMouseOut: () => void;
     mechHighlight: boolean;
     isSmall: boolean;
     onClick?: () => void;
+    isConsumed: boolean;
+    isProduced: boolean;
 }
 
 export default function Unit({
     atomOpacity,
     state,
+    statePrevFrame,
     handleMouseOver,
     handleMouseOut,
     mechHighlight,
     isSmall,
     onClick,
+    isConsumed,
+    isProduced,
 }: UnitProps) {
+
     // guardrail
-    if (!state) {
+    if (!state || !statePrevFrame) {
         return <></>;
     }
 
+    // animation prop
+    const animationStyle = isSmall ? useSpring({}) :
+    isConsumed ? useSpring({
+        from: {backgroundSize: 28.8}, // 90% of 32px is 28.8px
+        backgroundSize: 0,
+        config: {friction: 50}
+    }) :
+    isProduced ? useSpring({
+        from: {backgroundSize: 0},
+        backgroundSize: 28.8,
+        config: {friction: 40}
+    }) :
+    useSpring({
+        backgroundSize: 28.8
+    })
+
     // Compute atom styles
-    let divStyle: React.CSSProperties = mechHighlight ? { borderWidth: "3px" } : { borderWidth: "1px" };
+    let divStyle: React.CSSProperties = mechHighlight ? { borderWidth: "3px"} : { borderWidth: "1px"};
     if (isSmall) divStyle = { ...divStyle, width: "1.6rem", height: "1.6rem" };
     divStyle = { ...divStyle, zIndex: "20" };
 
     let className: string = '';
-    // let nuclei: number = 0;
-    if (state.bg_status === BgStatus.ATOM_VANILLA_FREE) {
+    if (state.bg_status === BgStatus.ATOM_VANILLA_FREE || statePrevFrame.bg_status === BgStatus.ATOM_VANILLA_FREE) {
         className += styles.atomVanillaFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_VANILLA_POSSESSED) {
-    //     className += styles.atomVanillaPossessed + " ";
-    //     // nuclei = 1;
-    // }
     else if (state.bg_status === BgStatus.ATOM_HAZELNUT_FREE) {
-        className += styles.atomHazelnutFree + " " + styles.twoNuclei + " ";
-        // nuclei = 2;
+        className += styles.atomHazelnutFree + " ";
     }
-    // else if (state.bg_status === BgStatus.ATOM_HAZELNUT_POSSESSED) {
-    //     className += styles.atomHazelnutPossessed + " " + styles.twoNuclei + " ";
-    //     // nuclei = 2;
-    // }
     else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_FREE) {
-        className += styles.atomChocolateFree + " " + styles.threeNuclei + " ";
-        // nuclei = 3;
+        className += styles.atomChocolateFree + " ";
     }
-    // else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_POSSESSED) {
-    //     className += styles.atomChocolatePossessed + " " + styles.threeNuclei + " ";
-    //     // nuclei = 3;
-    // }
     else if (state.bg_status === BgStatus.ATOM_TRUFFLE_FREE) {
-        className += styles.atomTruffleFree + " " + styles.fourNuclei + " ";
-        // nuclei = 4;
+        className += styles.atomTruffleFree + " ";
     }
-    // else if (state.bg_status === BgStatus.ATOM_TRUFFLE_POSSESSED) {
-    //     className += styles.atomTrufflePossessed + " " + styles.fourNuclei + " ";
-    //     // nuclei = 4;
-    // }
     else if (state.bg_status === BgStatus.ATOM_SAFFRON_FREE) {
         className += styles.atomSaffronFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_SAFFRON_POSSESSED) {
-    //     className += styles.atomSaffronPossessed + " ";
-    //     // nuclei = 1;
-    // }
     else if (state.bg_status === BgStatus.ATOM_TURTLE_FREE) {
         className += styles.atomTurtleFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_TURTLE_POSSESSED) {
-    //     className += styles.atomTurtlePossessed + " ";
-    //     // nuclei = 1;
-    // }
     else if (state.bg_status === BgStatus.ATOM_SANDGLASS_FREE) {
         className += styles.atomSandglassFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_SANDGLASS_POSSESSED) {
-    //     className += styles.atomSandglassPossessed + " ";
-    //     // nuclei = 1;
-    // }
     else if (state.bg_status === BgStatus.ATOM_WILTED_FREE) {
         className += styles.atomWiltedFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_WILTED_POSSESSED) {
-    //     className += styles.atomWiltedPossessed + " ";
-    //     // nuclei = 1;
-    // }
 
     const mechId = state.unit_id && state.unit_id.includes("mech") && state.unit_id.replace("mech", "");
 
     // Render
     return (
-        <div
+        <animated.div
             className={`grid ${styles.unit} ${className}`}
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
             onClick={onClick}
-            style={{ ...divStyle, opacity: atomOpacity || 1.0 }}
+            style={{
+                ...divStyle,
+                ...animationStyle,
+                opacity: atomOpacity || 1.0
+            }}
         >
             {state.unit_text}
-        </div>
+        </animated.div>
     );
 }

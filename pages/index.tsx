@@ -141,13 +141,19 @@ export default function Home() {
     });
     const frame = frames?.[animationFrame];
     const atomStates = frame?.atoms || atomInitStates;
-    // const mechStates = frame?.mechs || mechInitStates
-    // const mechStates = frame && animationState != "Stop" ? frame.mechs : mechInitStates;
     const mechStates = !frame ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : frame.mechs;
     const unitStates = setVisualForStates(atomStates, mechStates, unitStatesInit) as UnitState[][];
+
+    const animationFramePrev = animationFrame == 0 ? 0 : animationFrame-1
+    const framePrev = frames?.[animationFramePrev];
+    const atomStatesPrevFrame = framePrev?.atoms || atomInitStates;
+    const mechStatesPrevFrame = !framePrev ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : framePrev.mechs;
+    const unitStatesPrevFrame = setVisualForStates(atomStatesPrevFrame, mechStatesPrevFrame, unitStatesInit) as UnitState[][];
+
     const delivered = frame?.delivered_accumulated;
-    // const cost_accumulated = animationState=='Stop' ? 0 :frame?.cost_accumulated
     const cost_accumulated = frame?.cost_accumulated || 0;
+    const consumedAtomIds = frame?.consumed_atom_ids
+    const producedAtomIds = frame?.produced_atom_ids
 
     let mech_carries: BgStatus[] = Array(mechInitPositions.length).fill(BgStatus.EMPTY);
     atomStates.forEach((atom: AtomState, atom_i: number) => {
@@ -235,7 +241,7 @@ export default function Home() {
             return newStates;
         }
 
-        newStates[mech.index.x][mech.index.y].unit_id = mech.id;
+        // newStates[mech.index.x][mech.index.y].unit_id = mech.id;
         if (mech.status == MechStatus.OPEN) {
             newStates[mech.index.x][mech.index.y].border_status = BorderStatus.SINGLETON_OPEN;
         } else {
@@ -665,12 +671,15 @@ export default function Home() {
         operatorInputHighlight = {operatorInputHighlight}
         placingFormula = {placingFormula}
         unitStates = {unitStates}
+        unitStatesPrevFrame = {unitStatesPrevFrame}
         mechStates = {mechStates}
         atomStates = {atomStates}
         mechIndexHighlighted = {mechIndexHighlighted}
         handleMouseOver = {(x,y) => handleMouseOver(x,y)}
         handleMouseOut = {() => handleMouseOut()}
         handleUnitClick = {(x,y) => handleUnitClick(x,y)}
+        consumedAtomIds = {consumedAtomIds}
+        producedAtomIds = {producedAtomIds}
     />
 
     const midScreenControls = (

@@ -73,6 +73,8 @@ export default function simulator(
         delivered_accumulated: [],
         cost_accumulated: base_cost,
         notes: '',
+        consumed_atom_ids: [],
+        produced_atom_ids: [],
     }
 
     //
@@ -138,6 +140,8 @@ function _simulate_one_cycle (
     var grid_populated_bools_new: { [key: string] : boolean } = JSON.parse(JSON.stringify(grid_populated_bools)) // object cloning
     var cost_accumulated_new = frame_curr.cost_accumulated // a primitive type variable (number) can be cloned by '='
     var notes = ''
+    var consumed_atom_ids: string[] = []
+    var produced_atom_ids: string[] = []
 
     //
     // Iterate through atom faucets
@@ -535,25 +539,28 @@ function _simulate_one_cycle (
             if (match){
                 notes += operator.typ.description + ';'
 
-                // updates for input
+                // updates for input; record the ids of consumed atoms
                 for (const grid of operator.input){
                     grid_populated_bools_new[JSON.stringify(grid)] = false
                 }
                 for (const atom_i of atom_index_for_each_input){
                     atoms_new[atom_i].status = AtomStatus.CONSUMED
+                    consumed_atom_ids.push(atoms_new[atom_i].id)
                 }
 
-                // updates for output
+                // updates for output; record ids of produced atoms
                 operator.output.forEach((output_grid, output_i) => {
                     grid_populated_bools_new[JSON.stringify(output_grid)] = true
+                    const new_id = `atom${atoms_new.length}`
                     const atom_new: AtomState = {
-                        id: `atom${atoms_new.length}`,
+                        id: new_id,
                         typ: operator.typ.output_atom_types[output_i],
                         status: AtomStatus.FREE,
                         index: output_grid,
                         possessed_by: null
                     }
                     atoms_new.push(atom_new)
+                    produced_atom_ids.push(new_id)
                 })
 
             }
@@ -578,6 +585,9 @@ function _simulate_one_cycle (
 
                 // mark the grid not-populated
                 grid_populated_bools_new[JSON.stringify(atom_sink.index)] = false
+
+                // record ids of delivered atoms
+                consumed_atom_ids.push (atom_new.id)
             }
         });
     }
@@ -591,7 +601,9 @@ function _simulate_one_cycle (
         grid_populated_bools: grid_populated_bools_new,
         delivered_accumulated: delivered_accumulated_new,
         cost_accumulated: cost_accumulated_new,
-        notes: notes
+        notes: notes,
+        consumed_atom_ids: consumed_atom_ids,
+        produced_atom_ids: produced_atom_ids,
     }
     return frame_new
 }
