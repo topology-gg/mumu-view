@@ -141,13 +141,32 @@ export default function Home() {
     });
     const frame = frames?.[animationFrame];
     const atomStates = frame?.atoms || atomInitStates;
-    // const mechStates = frame?.mechs || mechInitStates
-    // const mechStates = frame && animationState != "Stop" ? frame.mechs : mechInitStates;
     const mechStates = !frame ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : frame.mechs;
     const unitStates = setVisualForStates(atomStates, mechStates, unitStatesInit) as UnitState[][];
+
+    const animationFramePrev = animationFrame == 0 ? 0 : animationFrame-1
+    const framePrev = frames?.[animationFramePrev];
+    const atomStatesPrevFrame = framePrev?.atoms || atomInitStates;
+    const mechStatesPrevFrame = !framePrev ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : framePrev.mechs;
+    const unitStatesPrevFrame = setVisualForStates(atomStatesPrevFrame, mechStatesPrevFrame, unitStatesInit) as UnitState[][];
+
+    let consumableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
+        _ => Array.from({ length: DIM }).map(_ => null)
+    )
+    for (const operatorState of operatorStates){
+        operatorState.input.forEach((grid, i) => {consumableAtomTypes[grid.x][grid.y] = operatorState.typ.input_atom_types[i]})
+    }
+    let produceableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
+        _ => Array.from({ length: DIM }).map(_ => null)
+    )
+    for (const operatorState of operatorStates){
+        operatorState.output.forEach((grid, i) => {consumableAtomTypes[grid.x][grid.y] = operatorState.typ.output_atom_types[i]})
+    }
+
     const delivered = frame?.delivered_accumulated;
-    // const cost_accumulated = animationState=='Stop' ? 0 :frame?.cost_accumulated
     const cost_accumulated = frame?.cost_accumulated || 0;
+    const consumedAtomIds = frame?.consumed_atom_ids
+    const producedAtomIds = frame?.produced_atom_ids
 
     let mech_carries: BgStatus[] = Array(mechInitPositions.length).fill(BgStatus.EMPTY);
     atomStates.forEach((atom: AtomState, atom_i: number) => {
@@ -235,7 +254,7 @@ export default function Home() {
             return newStates;
         }
 
-        newStates[mech.index.x][mech.index.y].unit_id = mech.id;
+        // newStates[mech.index.x][mech.index.y].unit_id = mech.id;
         if (mech.status == MechStatus.OPEN) {
             newStates[mech.index.x][mech.index.y].border_status = BorderStatus.SINGLETON_OPEN;
         } else {
@@ -271,25 +290,26 @@ export default function Home() {
             } else if (atom.typ == AtomType.WILTED) {
                 newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_FREE;
             }
-        } else if (atom.status == AtomStatus.POSSESSED) {
-            if (atom.typ == AtomType.VANILLA) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_VANILLA_POSSESSED;
-            } else if (atom.typ == AtomType.HAZELNUT) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_HAZELNUT_POSSESSED;
-            } else if (atom.typ == AtomType.CHOCOLATE) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_CHOCOLATE_POSSESSED;
-            } else if (atom.typ == AtomType.TRUFFLE) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TRUFFLE_POSSESSED;
-            } else if (atom.typ == AtomType.SAFFRON) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SAFFRON_POSSESSED;
-            } else if (atom.typ == AtomType.TURTLE) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TURTLE_POSSESSED;
-            } else if (atom.typ == AtomType.SANDGLASS) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SANDGLASS_POSSESSED;
-            } else if (atom.typ == AtomType.WILTED) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_POSSESSED;
-            }
         }
+        // else if (atom.status == AtomStatus.POSSESSED) {
+        //     if (atom.typ == AtomType.VANILLA) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_VANILLA_POSSESSED;
+        //     } else if (atom.typ == AtomType.HAZELNUT) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_HAZELNUT_POSSESSED;
+        //     } else if (atom.typ == AtomType.CHOCOLATE) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_CHOCOLATE_POSSESSED;
+        //     } else if (atom.typ == AtomType.TRUFFLE) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TRUFFLE_POSSESSED;
+        //     } else if (atom.typ == AtomType.SAFFRON) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SAFFRON_POSSESSED;
+        //     } else if (atom.typ == AtomType.TURTLE) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TURTLE_POSSESSED;
+        //     } else if (atom.typ == AtomType.SANDGLASS) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SANDGLASS_POSSESSED;
+        //     } else if (atom.typ == AtomType.WILTED) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_POSSESSED;
+        //     }
+        // }
         return newStates;
     }
 
@@ -665,12 +685,16 @@ export default function Home() {
         operatorInputHighlight = {operatorInputHighlight}
         placingFormula = {placingFormula}
         unitStates = {unitStates}
+        consumableAtomTypes = {consumableAtomTypes}
+        produceableAtomTypes = {produceableAtomTypes}
         mechStates = {mechStates}
         atomStates = {atomStates}
         mechIndexHighlighted = {mechIndexHighlighted}
         handleMouseOver = {(x,y) => handleMouseOver(x,y)}
         handleMouseOut = {() => handleMouseOut()}
         handleUnitClick = {(x,y) => handleUnitClick(x,y)}
+        consumedAtomIds = {consumedAtomIds}
+        producedAtomIds = {producedAtomIds}
     />
 
     const midScreenControls = (

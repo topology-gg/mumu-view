@@ -8,4 +8,6 @@ export default interface Frame {
     delivered_accumulated: AtomType[]
     cost_accumulated: number
     notes: string
+    consumed_atom_ids: string[]
+    produced_atom_ids: string[]
 }

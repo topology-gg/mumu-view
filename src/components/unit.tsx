@@ -1,115 +1,107 @@
 import Grid from "../types/Grid";
 import UnitState, { BgStatus, BorderStatus } from "../types/UnitState";
 import styles from "../../styles/Unit.module.css";
+import { useSpring, animated } from "react-spring";
+import { AnimationRounded } from "@mui/icons-material";
+import { useRef } from 'react'
+import { AtomType } from "../types/AtomState";
 
 interface UnitProps {
     atomOpacity?: number;
     state: UnitState;
+    consumableAtomType?: AtomType;
+    produceableAtomType?: AtomType;
     handleMouseOver: () => void;
     handleMouseOut: () => void;
     mechHighlight: boolean;
     isSmall: boolean;
     onClick?: () => void;
+    isConsumed?: boolean;
+    isProduced?: boolean;
 }
 
 export default function Unit({
     atomOpacity,
     state,
+    consumableAtomType,
+    produceableAtomType,
     handleMouseOver,
     handleMouseOut,
     mechHighlight,
     isSmall,
     onClick,
+    isConsumed,
+    isProduced,
 }: UnitProps) {
+
     // guardrail
     if (!state) {
         return <></>;
     }
 
+    // animation prop
+    const animationStyle = isSmall ? useSpring({}) :
+    isConsumed ? useSpring({
+        from: {backgroundSize: 28.8}, // 90% of 32px is 28.8px
+        backgroundSize: 0,
+        config: {friction: 45}
+    }) :
+    isProduced ? useSpring({
+        from: {backgroundSize: 0},
+        backgroundSize: 28.8,
+        config: {friction: 40}
+    }) :
+    useSpring({
+        backgroundSize: 28.8
+    })
+
     // Compute atom styles
-    let divStyle: React.CSSProperties = mechHighlight ? { borderWidth: "3px" } : { borderWidth: "1px" };
+    let divStyle: React.CSSProperties = {};
     if (isSmall) divStyle = { ...divStyle, width: "1.6rem", height: "1.6rem" };
     divStyle = { ...divStyle, zIndex: "20" };
 
     let className: string = '';
-    // let nuclei: number = 0;
-    if (state.bg_status === BgStatus.ATOM_VANILLA_FREE) {
+    if (state.bg_status === BgStatus.ATOM_VANILLA_FREE || (isConsumed && consumableAtomType === AtomType.VANILLA)) {
         className += styles.atomVanillaFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_VANILLA_POSSESSED) {
-    //     className += styles.atomVanillaPossessed + " ";
-    //     // nuclei = 1;
-    // }
-    else if (state.bg_status === BgStatus.ATOM_HAZELNUT_FREE) {
-        className += styles.atomHazelnutFree + " " + styles.twoNuclei + " ";
-        // nuclei = 2;
+    else if (state.bg_status === BgStatus.ATOM_HAZELNUT_FREE || (isConsumed && consumableAtomType === AtomType.HAZELNUT)) {
+        className += styles.atomHazelnutFree + " ";
     }
-    // else if (state.bg_status === BgStatus.ATOM_HAZELNUT_POSSESSED) {
-    //     className += styles.atomHazelnutPossessed + " " + styles.twoNuclei + " ";
-    //     // nuclei = 2;
-    // }
-    else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_FREE) {
-        className += styles.atomChocolateFree + " " + styles.threeNuclei + " ";
-        // nuclei = 3;
+    else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_FREE || (isConsumed && consumableAtomType === AtomType.CHOCOLATE)) {
+        className += styles.atomChocolateFree + " ";
     }
-    // else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_POSSESSED) {
-    //     className += styles.atomChocolatePossessed + " " + styles.threeNuclei + " ";
-    //     // nuclei = 3;
-    // }
-    else if (state.bg_status === BgStatus.ATOM_TRUFFLE_FREE) {
-        className += styles.atomTruffleFree + " " + styles.fourNuclei + " ";
-        // nuclei = 4;
+    else if (state.bg_status === BgStatus.ATOM_TRUFFLE_FREE || (isConsumed && consumableAtomType === AtomType.TRUFFLE)) {
+        className += styles.atomTruffleFree + " ";
     }
-    // else if (state.bg_status === BgStatus.ATOM_TRUFFLE_POSSESSED) {
-    //     className += styles.atomTrufflePossessed + " " + styles.fourNuclei + " ";
-    //     // nuclei = 4;
-    // }
-    else if (state.bg_status === BgStatus.ATOM_SAFFRON_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_SAFFRON_FREE || (isConsumed && consumableAtomType === AtomType.SAFFRON)) {
         className += styles.atomSaffronFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_SAFFRON_POSSESSED) {
-    //     className += styles.atomSaffronPossessed + " ";
-    //     // nuclei = 1;
-    // }
-    else if (state.bg_status === BgStatus.ATOM_TURTLE_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_TURTLE_FREE || (isConsumed && consumableAtomType === AtomType.TURTLE)) {
         className += styles.atomTurtleFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_TURTLE_POSSESSED) {
-    //     className += styles.atomTurtlePossessed + " ";
-    //     // nuclei = 1;
-    // }
-    else if (state.bg_status === BgStatus.ATOM_SANDGLASS_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_SANDGLASS_FREE || (isConsumed && consumableAtomType === AtomType.SANDGLASS)) {
         className += styles.atomSandglassFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_SANDGLASS_POSSESSED) {
-    //     className += styles.atomSandglassPossessed + " ";
-    //     // nuclei = 1;
-    // }
-    else if (state.bg_status === BgStatus.ATOM_WILTED_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_WILTED_FREE || (isConsumed && consumableAtomType === AtomType.WILTED)) {
         className += styles.atomWiltedFree + " ";
-        // nuclei = 1;
     }
-    // else if (state.bg_status === BgStatus.ATOM_WILTED_POSSESSED) {
-    //     className += styles.atomWiltedPossessed + " ";
-    //     // nuclei = 1;
-    // }
 
     const mechId = state.unit_id && state.unit_id.includes("mech") && state.unit_id.replace("mech", "");
 
     // Render
     return (
-        <div
+        <animated.div
             className={`grid ${styles.unit} ${className}`}
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
             onClick={onClick}
-            style={{ ...divStyle, opacity: atomOpacity || 1.0 }}
+            style={{
+                ...divStyle,
+                ...animationStyle,
+                opacity: atomOpacity || 1.0
+            }}
         >
             {state.unit_text}
-        </div>
+        </animated.div>
     );
 }

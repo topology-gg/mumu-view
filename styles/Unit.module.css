@@ -24,25 +24,25 @@
 .atomVanillaFree, .atomVanillaPossessed {
     background: url('../src/images/wood.gif') no-repeat;
     background-position: center;
-    background-size: 95%;
+    background-size: 90%;
 }
 
 .atomHazelnutFree, .atomHazelnutPossessed {
     background: url('../src/images/clover.gif') no-repeat;
     background-position: center;
-    background-size: 85%
+    background-size: 90%
 }
 
 .atomChocolateFree, .atomChocolatePossessed {
     background: url('../src/images/rose.gif') no-repeat;
     background-position: center;
-    background-size: 85%;
+    background-size: 90%
 }
 
 .atomTruffleFree, .atomTrufflePossessed {
     background: url('../src/images/fox.gif') no-repeat;
     background-position: center;
-    background-size: 80%;
+    background-size: 90%;
 }
 
 .atomSaffronFree, .atomSaffronPossessed {
