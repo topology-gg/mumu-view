@@ -1,18 +1,18 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import React, { useState, useEffect, useMemo } from "react";
-import simulator from "./simulator";
+import simulator from "../src/components/simulator";
 import MechState, { MechStatus, MechType } from "../src/types/MechState";
 import AtomState, { AtomStatus, AtomType } from "../src/types/AtomState";
 import AtomFaucetState from "../src/types/AtomFaucetState";
 import BoardConfig from "../src/types/BoardConfig";
 import Frame from "../src/types/Frame";
-import Unit from "./unit";
+import Unit from "../src/components/unit";
 import UnitState, { BgStatus, BorderStatus, UnitText } from "../src/types/UnitState";
 import Grid from "../src/types/Grid";
 import Operator, { OPERATOR_TYPES, PlacingFormula } from "../src/types/Operator";
-import Delivery from "./delivery";
-import Summary from "./summary";
+import Delivery from "../src/components/delivery";
+import Summary from "../src/components/summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
 import OperatorGridBg from "../src/components/OperatorGridBg";
 import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS, N_CYCLES } from "../src/constants/constants";
@@ -37,7 +37,7 @@ import {
 } from "../src/constants/constants";
 import FormulaBlueprint from "../src/components/FormulaBlueprint";
 import { placingFormulaToOperator } from "../src/helpers/typeMapping";
-import Board from "./board";
+import Board from "../src/components/board";
 
 export default function Home() {
     // Constants

@@ -1,19 +1,19 @@
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import MechState, { MechStatus, MechType } from "../src/types/MechState";
+import MechState, { MechStatus, MechType } from "../types/MechState";
 import Unit from "./unit";
-import UnitState, { BgStatus, BorderStatus, UnitText } from "../src/types/UnitState";
-import Grid from "../src/types/Grid";
-import Operator, { OPERATOR_TYPES, PlacingFormula } from "../src/types/Operator";
-import OperatorGridBg from "../src/components/OperatorGridBg";
-import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS, N_CYCLES } from "../src/constants/constants";
+import UnitState, { BgStatus, BorderStatus, UnitText } from "../types/UnitState";
+import Grid from "../types/Grid";
+import Operator, { OPERATOR_TYPES, PlacingFormula } from "../types/Operator";
+import OperatorGridBg from "./OperatorGridBg";
+import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS, N_CYCLES } from "../constants/constants";
 import { useTranslation } from "react-i18next";
-import "../config/i18n";
+import "../../config/i18n";
 import { Box, Button, Tooltip } from "@mui/material";
-import { ANIM_FRAME_LATENCY } from "../src/constants/constants";
-import AtomState from "../src/types/AtomState";
+import { ANIM_FRAME_LATENCY } from "../constants/constants";
+import AtomState from "../types/AtomState";
 import { useSpring, animated } from "react-spring";
-import MechUnit from "../src/components/MechUnit"
+import MechUnit from "./MechUnit"
 
 interface BoardProps {
     operatorStates: Operator[]

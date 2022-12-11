@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import Unit from "../../pages/unit";
+import Unit from "./unit";
 import { OperatorType } from "../types/Operator";
 import { AtomTypeToBg, UnitText } from "../types/UnitState";
 import styles from "../../styles/Home.module.css";

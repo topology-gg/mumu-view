@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box } from "@mui/material";
-import { OPERATOR_TYPES } from "../src/types/Operator";
+import { OPERATOR_TYPES } from "../types/Operator";
 import { useTranslation } from "react-i18next";
-import FormulaBlueprint from "../src/components/FormulaBlueprint";
+import FormulaBlueprint from "./FormulaBlueprint";
 
 export default function Formulas() {
     const { t } = useTranslation();

@@ -4,7 +4,7 @@ import styles from "../../styles/Home.module.css";
 import { useTranslation } from "react-i18next";
 import { INSTRUCTION_ICON_MAP, PROGRAM_SIZE_MAX, DESCRIPTION_SIZE_MAX } from "../constants/constants";
 import { Draggable } from "react-beautiful-dnd";
-import Unit from "../../pages/unit";
+import Unit from "./unit";
 import { BgStatus, UnitText } from "../types/UnitState";
 import SingleInstruction from "./SingleInstruction";
 import NewInstruction from "./NewInstruction";

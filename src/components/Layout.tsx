@@ -1,6 +1,6 @@
 import styles from "../../styles/Home.module.css";
 import React, { useState } from "react";
-import Tutorial from "../../pages/tutorial";
+import Tutorial from "./tutorial";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "./LanguageSelector";
 import ConnectWalletStardisc from "./ConnectWalletStardisc";
@@ -9,9 +9,9 @@ import SocialMedia from "./SocialMedia";
 import Grid from "@mui/system/Unstable_Grid";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import theme from "../../styles/theme";
-import Setting from "../../pages/setting";
-import Formulas from "../../pages/formulas";
-import Convo from "../../pages/convo";
+import Setting from "./setting";
+import Formulas from "./formulas";
+import Convo from "./convo";
 
 import LoadSave from "./LoadSave";
 import Leaderboard from "./Leaderboard";

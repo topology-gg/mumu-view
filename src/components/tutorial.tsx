@@ -4,16 +4,16 @@ import UnitState, {
     BorderStatus,
     UnitText,
     AtomTypeToBg,
-} from "../src/types/UnitState";
+} from "../types/UnitState";
 import { CSSProperties, useState } from "react";
-import Modal from "../src/components/Modal";
+import Modal from "./Modal";
 import Button from "@mui/material/Button";
 import { Box, Tooltip } from "@mui/material";
-import styles from "../styles/Home.module.css";
-import { OPERATOR_TYPES } from "../src/types/Operator";
+import styles from "../../styles/Home.module.css";
+import { OPERATOR_TYPES } from "../types/Operator";
 import { Trans, useTranslation } from "react-i18next";
-import { INSTRUCTION_ICON_MAP } from "../src/constants/constants";
-import { STATIC_COSTS } from "../src/types/Cost";
+import { INSTRUCTION_ICON_MAP } from "../constants/constants";
+import { STATIC_COSTS } from "../types/Cost";
 
 export default function Tutorial() {
 
