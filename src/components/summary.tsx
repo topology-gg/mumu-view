@@ -1,11 +1,11 @@
-import AtomState, { AtomStatus, AtomType } from '../src/types/AtomState';
+import AtomState, { AtomStatus, AtomType } from '../types/AtomState';
 import Unit from './unit';
-import { UnitText } from '../src/types/UnitState';
-import { BgStatus } from '../src/types/UnitState';
-import Frame from '../src/types/Frame';
-import styles from '../styles/Home.module.css'
+import { UnitText } from '../types/UnitState';
+import { BgStatus } from '../types/UnitState';
+import Frame from '../types/Frame';
+import styles from '../../styles/Home.module.css'
 import { useTranslation } from 'react-i18next';
-import { TO_PRECISION } from '../src/constants/constants'
+import { TO_PRECISION } from '../constants/constants'
 
 export default function Summary ({ frames, n_cycles }) {
 

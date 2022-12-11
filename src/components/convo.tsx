@@ -1,5 +1,5 @@
 import { CSSProperties, useState } from "react";
-import Modal from "../src/components/Modal";
+import Modal from "./Modal";
 import Button from "@mui/material/Button";
 import { Box, Tooltip } from "@mui/material";
 import styles from "../styles/Home.module.css";

@@ -1,14 +1,14 @@
 import { CSSProperties, useState } from "react";
-import Modal from "../src/components/Modal";
+import Modal from "./Modal";
 import Button from "@mui/material/Button";
 import { Box, Tooltip, SxProps } from "@mui/material";
 import Grid from "@mui/system/Unstable_Grid";
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 import { Trans, useTranslation } from "react-i18next";
 import Tutorial from "./tutorial";
-import LanguageSelector from "../src/components/LanguageSelector";
-import SocialMedia from "../src/components/SocialMedia";
-import ConnectWalletStardisc from "../src/components/ConnectWalletStardisc";
+import LanguageSelector from "./LanguageSelector";
+import SocialMedia from "./SocialMedia";
+import ConnectWalletStardisc from "./ConnectWalletStardisc";
 
 
 export default function Setting({ leaderboard }) {

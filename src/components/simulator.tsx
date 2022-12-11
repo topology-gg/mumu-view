@@ -1,10 +1,10 @@
-import MechState, {MechStatus, MechType} from '../src/types/MechState';
-import AtomState, {AtomStatus, AtomType} from '../src/types/AtomState';
-import Grid from '../src/types/Grid'
-import BoardConfig from '../src/types/BoardConfig';
-import Frame from '../src/types/Frame';
-import { OperatorType, OPERATOR_TYPES } from '../src/types/Operator';
-import { STATIC_COSTS, DYNAMIC_COSTS } from '../src/types/Cost';
+import MechState, {MechStatus, MechType} from '../types/MechState';
+import AtomState, {AtomStatus, AtomType} from '../types/AtomState';
+import Grid from '../types/Grid'
+import BoardConfig from '../types/BoardConfig';
+import Frame from '../types/Frame';
+import { OperatorType, OPERATOR_TYPES } from '../types/Operator';
+import { STATIC_COSTS, DYNAMIC_COSTS } from '../types/Cost';
 import { ECDH } from 'crypto';
 
 export function isIdenticalGrid (

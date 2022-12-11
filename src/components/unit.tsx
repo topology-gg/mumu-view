@@ -1,6 +1,6 @@
-import Grid from "../src/types/Grid";
-import UnitState, { BgStatus, BorderStatus } from "../src/types/UnitState";
-import styles from "../styles/Unit.module.css";
+import Grid from "../types/Grid";
+import UnitState, { BgStatus, BorderStatus } from "../types/UnitState";
+import styles from "../../styles/Unit.module.css";
 
 interface UnitProps {
     atomOpacity?: number;

@@ -1,7 +1,7 @@
-import AtomState, { AtomStatus, AtomType } from '../src/types/AtomState';
+import AtomState, { AtomStatus, AtomType } from '../types/AtomState';
 import Unit from './unit';
-import UnitState, {BgStatus, BorderStatus, UnitText} from '../src/types/UnitState';
-import styles from '../styles/Delivery.module.css'
+import UnitState, {BgStatus, BorderStatus, UnitText} from '../types/UnitState';
+import styles from '../../styles/Delivery.module.css'
 import { useTranslation } from 'react-i18next';
 
 export default function Delivery({ delivered, cost_accumulated }) {
