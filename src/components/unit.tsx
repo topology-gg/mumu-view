@@ -9,15 +9,15 @@ import { AtomType } from "../types/AtomState";
 interface UnitProps {
     atomOpacity?: number;
     state: UnitState;
-    consumableAtomType: AtomType;
-    produceableAtomType: AtomType;
+    consumableAtomType?: AtomType;
+    produceableAtomType?: AtomType;
     handleMouseOver: () => void;
     handleMouseOut: () => void;
     mechHighlight: boolean;
     isSmall: boolean;
     onClick?: () => void;
-    isConsumed: boolean;
-    isProduced: boolean;
+    isConsumed?: boolean;
+    isProduced?: boolean;
 }
 
 export default function Unit({
@@ -44,7 +44,7 @@ export default function Unit({
     isConsumed ? useSpring({
         from: {backgroundSize: 28.8}, // 90% of 32px is 28.8px
         backgroundSize: 0,
-        config: {friction: 50}
+        config: {friction: 45}
     }) :
     isProduced ? useSpring({
         from: {backgroundSize: 0},
@@ -56,7 +56,7 @@ export default function Unit({
     })
 
     // Compute atom styles
-    let divStyle: React.CSSProperties = mechHighlight ? { borderWidth: "3px"} : { borderWidth: "1px"};
+    let divStyle: React.CSSProperties = {};
     if (isSmall) divStyle = { ...divStyle, width: "1.6rem", height: "1.6rem" };
     divStyle = { ...divStyle, zIndex: "20" };
 
