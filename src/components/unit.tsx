@@ -110,7 +110,6 @@ export default function Unit({
             style={{ ...divStyle, opacity: atomOpacity || 1.0 }}
         >
             {state.unit_text}
-            {mechId && <div className={styles.unitId}>{mechId}</div>}
         </div>
     );
 }

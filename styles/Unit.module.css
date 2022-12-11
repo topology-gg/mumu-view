@@ -122,7 +122,8 @@
 
 .unitId {
   position: absolute;
-  top: 0.3rem;
-  left: 0.3rem;
-  font-size: 0.6rem;
+  top: 0.65rem;
+  left: 0.35rem;
+  font-size: 0.4rem;
+  color: #EEEEEE
 }

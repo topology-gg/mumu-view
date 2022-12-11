@@ -47,6 +47,8 @@ export default function MechUnit ({ mechState, possessedAtom }: MechUnitProps) {
         else if (possessedAtom.typ == AtomType.WILTED)    AtomClassName = styles.atomWiltedPossessed
     }
 
+    const mech_id = mechState.id.replace('mech','')
+
     // Render
     // ref to making child div having lower z-index than parent div:
     // https://stackoverflow.com/questions/2503705/how-to-get-a-child-element-to-show-behind-lower-z-index-than-its-parent
@@ -73,6 +75,7 @@ export default function MechUnit ({ mechState, possessedAtom }: MechUnitProps) {
                 :
                 <></>
             }
+            <div className={styles.unitId}>{mech_id}</div>
         </animated.div>
     );
 }
