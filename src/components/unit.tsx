@@ -4,11 +4,13 @@ import styles from "../../styles/Unit.module.css";
 import { useSpring, animated } from "react-spring";
 import { AnimationRounded } from "@mui/icons-material";
 import { useRef } from 'react'
+import { AtomType } from "../types/AtomState";
 
 interface UnitProps {
     atomOpacity?: number;
     state: UnitState;
-    statePrevFrame: UnitState;
+    consumableAtomType: AtomType;
+    produceableAtomType: AtomType;
     handleMouseOver: () => void;
     handleMouseOut: () => void;
     mechHighlight: boolean;
@@ -21,7 +23,8 @@ interface UnitProps {
 export default function Unit({
     atomOpacity,
     state,
-    statePrevFrame,
+    consumableAtomType,
+    produceableAtomType,
     handleMouseOver,
     handleMouseOut,
     mechHighlight,
@@ -32,7 +35,7 @@ export default function Unit({
 }: UnitProps) {
 
     // guardrail
-    if (!state || !statePrevFrame) {
+    if (!state) {
         return <></>;
     }
 
@@ -58,28 +61,28 @@ export default function Unit({
     divStyle = { ...divStyle, zIndex: "20" };
 
     let className: string = '';
-    if (state.bg_status === BgStatus.ATOM_VANILLA_FREE || statePrevFrame.bg_status === BgStatus.ATOM_VANILLA_FREE) {
+    if (state.bg_status === BgStatus.ATOM_VANILLA_FREE || (isConsumed && consumableAtomType === AtomType.VANILLA)) {
         className += styles.atomVanillaFree + " ";
     }
-    else if (state.bg_status === BgStatus.ATOM_HAZELNUT_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_HAZELNUT_FREE || (isConsumed && consumableAtomType === AtomType.HAZELNUT)) {
         className += styles.atomHazelnutFree + " ";
     }
-    else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_CHOCOLATE_FREE || (isConsumed && consumableAtomType === AtomType.CHOCOLATE)) {
         className += styles.atomChocolateFree + " ";
     }
-    else if (state.bg_status === BgStatus.ATOM_TRUFFLE_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_TRUFFLE_FREE || (isConsumed && consumableAtomType === AtomType.TRUFFLE)) {
         className += styles.atomTruffleFree + " ";
     }
-    else if (state.bg_status === BgStatus.ATOM_SAFFRON_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_SAFFRON_FREE || (isConsumed && consumableAtomType === AtomType.SAFFRON)) {
         className += styles.atomSaffronFree + " ";
     }
-    else if (state.bg_status === BgStatus.ATOM_TURTLE_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_TURTLE_FREE || (isConsumed && consumableAtomType === AtomType.TURTLE)) {
         className += styles.atomTurtleFree + " ";
     }
-    else if (state.bg_status === BgStatus.ATOM_SANDGLASS_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_SANDGLASS_FREE || (isConsumed && consumableAtomType === AtomType.SANDGLASS)) {
         className += styles.atomSandglassFree + " ";
     }
-    else if (state.bg_status === BgStatus.ATOM_WILTED_FREE) {
+    else if (state.bg_status === BgStatus.ATOM_WILTED_FREE || (isConsumed && consumableAtomType === AtomType.WILTED)) {
         className += styles.atomWiltedFree + " ";
     }
 

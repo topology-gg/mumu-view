@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import "../../config/i18n";
 import { Box, Button, Tooltip } from "@mui/material";
 import { ANIM_FRAME_LATENCY } from "../constants/constants";
-import AtomState from "../types/AtomState";
+import AtomState, { AtomType } from "../types/AtomState";
 import { useSpring, animated } from "react-spring";
 import MechUnit from "./MechUnit"
 
@@ -20,7 +20,8 @@ interface BoardProps {
     operatorInputHighlight: boolean[]
     placingFormula?: PlacingFormula
     unitStates: UnitState[][]
-    unitStatesPrevFrame: UnitState[][]
+    consumableAtomTypes: AtomType[][]
+    produceableAtomTypes: AtomType[][]
     mechStates: MechState[]
     atomStates: AtomState[]
     mechIndexHighlighted: number
@@ -33,7 +34,8 @@ interface BoardProps {
 
 export default function Board (
     { operatorStates, operatorInputHighlight, placingFormula,
-    unitStates, unitStatesPrevFrame, mechStates, atomStates, mechIndexHighlighted,
+    unitStates, consumableAtomTypes, produceableAtomTypes,
+    mechStates, atomStates, mechIndexHighlighted,
     handleMouseOver, handleMouseOut, handleUnitClick,
     consumedAtomIds, producedAtomIds}: BoardProps) {
 
@@ -102,7 +104,8 @@ export default function Board (
                                                 <Unit
                                                     key={`unit-${j}-${i}`}
                                                     state={unitStates[j][i]}
-                                                    statePrevFrame={unitStatesPrevFrame[j][i]}
+                                                    consumableAtomType={consumableAtomTypes[j][i]}
+                                                    produceableAtomType={produceableAtomTypes[j][i]}
                                                     handleMouseOver={() => handleMouseOver(j, i)}
                                                     handleMouseOut={() => handleMouseOut()}
                                                     onClick={() => handleUnitClick(j, i)}

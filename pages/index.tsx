@@ -150,6 +150,19 @@ export default function Home() {
     const mechStatesPrevFrame = !framePrev ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : framePrev.mechs;
     const unitStatesPrevFrame = setVisualForStates(atomStatesPrevFrame, mechStatesPrevFrame, unitStatesInit) as UnitState[][];
 
+    let consumableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
+        _ => Array.from({ length: DIM }).map(_ => null)
+    )
+    for (const operatorState of operatorStates){
+        operatorState.input.forEach((grid, i) => {consumableAtomTypes[grid.x][grid.y] = operatorState.typ.input_atom_types[i]})
+    }
+    let produceableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
+        _ => Array.from({ length: DIM }).map(_ => null)
+    )
+    for (const operatorState of operatorStates){
+        operatorState.output.forEach((grid, i) => {consumableAtomTypes[grid.x][grid.y] = operatorState.typ.output_atom_types[i]})
+    }
+
     const delivered = frame?.delivered_accumulated;
     const cost_accumulated = frame?.cost_accumulated || 0;
     const consumedAtomIds = frame?.consumed_atom_ids
@@ -671,7 +684,8 @@ export default function Home() {
         operatorInputHighlight = {operatorInputHighlight}
         placingFormula = {placingFormula}
         unitStates = {unitStates}
-        unitStatesPrevFrame = {unitStatesPrevFrame}
+        consumableAtomTypes = {consumableAtomTypes}
+        produceableAtomTypes = {produceableAtomTypes}
         mechStates = {mechStates}
         atomStates = {atomStates}
         mechIndexHighlighted = {mechIndexHighlighted}
