@@ -290,25 +290,26 @@ export default function Home() {
             } else if (atom.typ == AtomType.WILTED) {
                 newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_FREE;
             }
-        } else if (atom.status == AtomStatus.POSSESSED) {
-            if (atom.typ == AtomType.VANILLA) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_VANILLA_POSSESSED;
-            } else if (atom.typ == AtomType.HAZELNUT) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_HAZELNUT_POSSESSED;
-            } else if (atom.typ == AtomType.CHOCOLATE) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_CHOCOLATE_POSSESSED;
-            } else if (atom.typ == AtomType.TRUFFLE) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TRUFFLE_POSSESSED;
-            } else if (atom.typ == AtomType.SAFFRON) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SAFFRON_POSSESSED;
-            } else if (atom.typ == AtomType.TURTLE) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TURTLE_POSSESSED;
-            } else if (atom.typ == AtomType.SANDGLASS) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SANDGLASS_POSSESSED;
-            } else if (atom.typ == AtomType.WILTED) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_POSSESSED;
-            }
         }
+        // else if (atom.status == AtomStatus.POSSESSED) {
+        //     if (atom.typ == AtomType.VANILLA) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_VANILLA_POSSESSED;
+        //     } else if (atom.typ == AtomType.HAZELNUT) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_HAZELNUT_POSSESSED;
+        //     } else if (atom.typ == AtomType.CHOCOLATE) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_CHOCOLATE_POSSESSED;
+        //     } else if (atom.typ == AtomType.TRUFFLE) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TRUFFLE_POSSESSED;
+        //     } else if (atom.typ == AtomType.SAFFRON) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SAFFRON_POSSESSED;
+        //     } else if (atom.typ == AtomType.TURTLE) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TURTLE_POSSESSED;
+        //     } else if (atom.typ == AtomType.SANDGLASS) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SANDGLASS_POSSESSED;
+        //     } else if (atom.typ == AtomType.WILTED) {
+        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_POSSESSED;
+        //     }
+        // }
         return newStates;
     }
 
