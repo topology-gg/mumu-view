@@ -160,7 +160,7 @@ export default function Home() {
         _ => Array.from({ length: DIM }).map(_ => null)
     )
     for (const operatorState of operatorStates){
-        operatorState.output.forEach((grid, i) => {consumableAtomTypes[grid.x][grid.y] = operatorState.typ.output_atom_types[i]})
+        operatorState.output.forEach((grid, i) => {produceableAtomTypes[grid.x][grid.y] = operatorState.typ.output_atom_types[i]})
     }
 
     const delivered = frame?.delivered_accumulated;
