@@ -37,6 +37,8 @@ export default function Unit({
     }
 
     // animation prop
+    // note: if this unit is an output of a formula && the unit is not producing nor occupied in the current frame,
+    // .     return the backgroundSize of this unit to 0 to prepare for the animation for next producing frame
     const animationStyle = isSmall ? useSpring({}) :
     isConsumed ? useSpring({
         from: {backgroundSize: 28.8}, // 90% of 32px is 28.8px
@@ -48,7 +50,9 @@ export default function Unit({
         backgroundSize: 28.8,
         config: {friction: 40}
     }) :
-    useSpring({
+    (produceableAtomType !== null && state.bg_status == BgStatus.EMPTY) ? useSpring({
+        backgroundSize: 0
+    }) : useSpring({
         backgroundSize: 28.8
     })
 
