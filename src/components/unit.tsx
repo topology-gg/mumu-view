@@ -1,9 +1,6 @@
-import Grid from "../types/Grid";
 import UnitState, { BgStatus, BorderStatus } from "../types/UnitState";
 import styles from "../../styles/Unit.module.css";
 import { useSpring, animated } from "react-spring";
-import { AnimationRounded } from "@mui/icons-material";
-import { useRef } from 'react'
 import { AtomType } from "../types/AtomState";
 
 interface UnitProps {
@@ -105,3 +102,4 @@ export default function Unit({
         </animated.div>
     );
 }
+

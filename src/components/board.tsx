@@ -100,7 +100,10 @@ export default function Board (
 
                                     return (
                                         <Tooltip title={`${j},${i}`} disableInteractive arrow>
-                                            <div>
+                                            <div key={`${j}-${i}-${isProduced}`}>
+                                            {/* // using this trick https://stackoverflow.com/a/59102311 */}
+                                            {/* // to force creating a new component hence restarting animation */}
+                                            {/* // for isProduced animation always starting from backgroundSize=0 */}
                                                 <Unit
                                                     key={`unit-${j}-${i}`}
                                                     state={unitStates[j][i]}
