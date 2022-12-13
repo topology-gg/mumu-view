@@ -265,10 +265,11 @@ input::placeholder {
 }
 
 .result {
-    font-size: 12px;
-    margin-right: 0.5rem;
+    font-size: 1rem;
+    margin-right: 1rem;
     margin-top: 0;
     margin-bottom: 0;
+    line-height: 1rem;
 }
 
 .mascot {
