@@ -10,16 +10,27 @@ interface ModalProps {
     onClose: () => void;
     maxWidth?: false | Breakpoint;
     padding?: number
+    width?: number
 }
 
-const Modal = ({ children, open, onClose, maxWidth = "sm", padding = 0 }: ModalProps) => {
+const Modal = ({ children, open, onClose, maxWidth = "sm", padding = 0, width = 600}: ModalProps) => {
+
+    const sx = {
+        p: padding,
+        border: 1,
+        borderRadius: 4,
+        width: width,
+    }
+
     return (
         <Dialog open={open} onClose={onClose} maxWidth={maxWidth} fullWidth={true}
-        PaperProps={{ sx:{p:padding} }}>
+        PaperProps={{ sx:sx }}>
             <IconButton
                 aria-label="close"
                 onClick={onClose}
                 sx={{
+                    width: 30,
+                    height: 30,
                     position: "absolute",
                     right: 8,
                     top: 8,
