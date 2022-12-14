@@ -62,6 +62,9 @@ export default function Setting({
                             handleOnClose={connectWalletModalOnClose}
                         />
 
+                        {/* makeshift spacer; will discard in next refactor PR */}
+                        <div style={{height:'1rem'}}></div>
+
                         <LanguageSelector />
 
                         <Grid container spacing={2} height={10}>
