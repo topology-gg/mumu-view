@@ -40,6 +40,12 @@ export default function Menu({
         <Paper sx={{ width: width, maxWidth: '100%' }} elevation={0}>
             <MenuList>
 
+                <MenuItem>
+                    <ListItemText sx={{textAlign:'center'}}>MuMu: Season 2</ListItemText>
+                </MenuItem>
+
+                <Divider />
+
                 <MenuItemStyled>
                     <ListItemIcon>
                         <WalletIcon fontSize="small" />
