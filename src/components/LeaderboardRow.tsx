@@ -174,7 +174,7 @@ export default function LeaderboardRow({ solution, index, loadSolution }) {
             <TableCell align="right" key={`sol-dynamic-cost-${index}`}>
                 {solution.dynamic_cost / SCALE}
             </TableCell>
-            <TableCell align="right" key={`sol-blocknumber-${index}`}>
+            <TableCell align="right" key={`sol-blocknumber-${index}`} sx={{pr:5}}>
                 {solution._chain.valid_from}
             </TableCell>
         </TableRow>

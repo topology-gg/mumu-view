@@ -1,90 +1,89 @@
 import { CSSProperties, useState } from "react";
 import Modal from "./Modal";
-import Button from "@mui/material/Button";
-import { Box, Tooltip, SxProps } from "@mui/material";
-import Grid from "@mui/system/Unstable_Grid";
-import styles from "../../styles/Home.module.css";
 import { Trans, useTranslation } from "react-i18next";
-import Tutorial from "./tutorial";
-import LanguageSelector from "./LanguageSelector";
-import SocialMedia from "./SocialMedia";
-import ConnectWalletStardisc from "./ConnectWalletStardisc";
+import Menu from "./menu";
+import Manual from "./Manual";
 import ConnectWallet from "./ConnectWallet";
+import LanguageSelector from "./LanguageSelector";
+import Leaderboard from "./Leaderboard";
 
-export default function Setting({
-    leaderboard, connectWalletModalOpen,
-    connectWalletModalOnOpen, connectWalletModalOnClose,
-    open, handleOpen, handleClose
-}) {
+import { Box, SxProps } from "@mui/material";
+
+export default function Setting({ loadSolution, renderMode, handleSetRenderMode, open, handleSetOpen }) {
 
     const { t } = useTranslation();
-    // const [open, setOpen] = useState<boolean>(false);
-    // const handleOpen = () => {
-    //     setOpen(true);
-    // };
-    // const handleClose = () => {
-    //     setOpen(false);
-    // };
 
-    const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
-        return <Box sx={{ textAlign: "center", flex: 1, ...sx }}>{children}</Box>;
+    // store current language as state
+    // note: setting modal openness and modal rendering mode are parent's states and current language as states
+    const [currLang, setCurrLang] = useState<string>('en')
+
+    // handle state changes upon request
+    const handleOpen = () => {
+        handleSetRenderMode('menu'); // always open setting modal from menu mode
+        handleSetOpen(true);
     };
+    const handleClose = () => {handleSetOpen(false);};
+    const handleBack = () => { handleSetRenderMode('menu'); };
+    const handleModeChange = (mode: string) => { handleSetRenderMode(mode); };
 
+    // alias menu component
+    const MenuHooked = (
+        <Menu
+            onManualClick={() => handleModeChange('manual')}
+            onLanguageClick={() => handleModeChange('language')}
+            onConnectWalletClick={() => handleModeChange('connect')}
+            onLeaderboardClick={() => handleModeChange('leaderboard')}
+        />
+    )
+
+    // compute props
+    const modalWidth =
+        renderMode == 'menu' ? 300 :
+        renderMode == 'language' ? 300 :
+        renderMode == 'connect' ? 450 :
+        renderMode == 'manual' ? 600 : 1100
+
+    // render
     return (
-        <Tooltip title={t("setting")} arrow>
+        <div>
 
-        <div
-            // style={{
-            //     marginBottom: "2rem",
-            // }}
-        >
-            {/* <Button color="secondary" variant="outlined" onClick={handleOpen}>
-                {t("tutorial.title")}
-            </Button> */}
             <button onClick={handleOpen} className={'big-button'}>
                 <i className="material-icons" style={{ fontSize: "1rem" }}>
                     settings
                 </i>
             </button>
-            <Modal open={open} onClose={handleClose}>
-                <Box sx={{ p: 5, height: '25rem', fontFamily: "var(--font-family-secondary)" }}>
-                    <Panel>
-                        <div className={styles.title}>
-                            <h2>{t("MuMu")}</h2>
-                            <p>{t("Subtitle")}</p>
-                            <SocialMedia />
-                        </div>
 
-                        {/* <ConnectWalletStardisc /> */}
-                        <ConnectWallet
-                            modalOpen={connectWalletModalOpen}
-                            handleOnOpen={connectWalletModalOnOpen}
-                            handleOnClose={connectWalletModalOnClose}
-                        />
+            <Modal
+                isRoot={renderMode == 'menu'} open={open} width={modalWidth}
+                onClose={handleClose} onBack={handleBack} maxWidth={false}
+            >
+                <Box sx={{
+                    pt: 5, pb: 5, pl: 0, pr: 0, fontFamily: "var(--font-family-secondary)",
+                }}>
+                    {
+                        (renderMode == 'menu') ? (
+                            MenuHooked
+                        ) :
+                        (renderMode == 'manual') ? (
+                            <Manual />
+                        ) :
+                        (renderMode == 'connect') ? (
+                            <ConnectWallet />
+                        ) :
+                        (renderMode == 'language') ? (
+                            <LanguageSelector
+                                currLang={currLang}
+                                setCurrLang={(lang) => setCurrLang(_ => lang)}
+                            />
+                        ) :
+                        (renderMode == 'leaderboard') ? (
+                            <Leaderboard loadSolution={loadSolution} />
+                        ) : MenuHooked
+                    }
 
-                        {/* makeshift spacer; will discard in next refactor PR */}
-                        <div style={{height:'1rem'}}></div>
-
-                        <LanguageSelector />
-
-                        <Grid container spacing={2} height={10}>
-                            <Grid xs={0} md={4.5}></Grid>
-
-                            <Grid xs={3} md={1.5}>
-                                <Tutorial />
-                            </Grid>
-                            <Grid xs={3} md={1.5}>
-                                {leaderboard}
-                            </Grid>
-
-                            <Grid xs={0} md={4.5}></Grid>
-                        </Grid>
-
-                    </Panel>
                 </Box>
             </Modal>
-        </div>
 
-        </Tooltip>
+        </div>
     );
 }

@@ -8,7 +8,6 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Typography from '@mui/material/Typography';
 
 import WalletIcon from '@mui/icons-material/Wallet';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -18,11 +17,19 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 
-export default function Menu({ width }) {
+import Manual from './Manual';
+
+export default function Menu({
+    width='100%',
+    onManualClick,
+    onLeaderboardClick,
+    onConnectWalletClick,
+    onLanguageClick
+}) {
 
     const MenuItemStyled = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
         return (
-            <MenuItem sx={{pl:5}}>
+            <MenuItem sx={{pl:5, color:'#333333'}}>
                 {children}
             </MenuItem>
         )
@@ -37,7 +44,7 @@ export default function Menu({ width }) {
                     <ListItemIcon>
                         <WalletIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Connect Wallet</ListItemText>
+                    <ListItemText onClick={onConnectWalletClick}>Connect Wallet</ListItemText>
                     {/* <Typography variant="body2" color="text.secondary">
                         ⌘X
                     </Typography> */}
@@ -47,14 +54,14 @@ export default function Menu({ width }) {
                     <ListItemIcon>
                         <LanguageIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Language</ListItemText>
+                    <ListItemText onClick={onLanguageClick}>Language</ListItemText>
                 </MenuItemStyled>
 
                 <MenuItemStyled>
                     <ListItemIcon>
                         <EmojiEventsIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Leaderboard</ListItemText>
+                    <ListItemText onClick={onLeaderboardClick}>Leaderboard</ListItemText>
                 </MenuItemStyled>
 
                 <MenuItemStyled>
@@ -68,23 +75,35 @@ export default function Menu({ width }) {
                     <ListItemIcon>
                         <LibraryBooksIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Manual</ListItemText>
+                    <ListItemText onClick={onManualClick}>Manual</ListItemText>
                 </MenuItemStyled>
 
                 <Divider />
 
                 <MenuItemStyled>
-                    <ListItemIcon>
-                        <TwitterIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Twitter</ListItemText>
+                    <a
+                        target="_blank" rel="noopener noreferrer"
+                        href="https://discord.gg/HcWysQQVRZ"
+                        style={{display:'flex',flexDirection:'row'}}
+                    >
+                        <ListItemIcon>
+                            <SportsEsportsIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>Discord</ListItemText>
+                    </a>
                 </MenuItemStyled>
 
                 <MenuItemStyled>
-                    <ListItemIcon>
-                        <SportsEsportsIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Discord</ListItemText>
+                    <a
+                        target="_blank" rel="noopener noreferrer"
+                        href="https://twitter.com/topology_gg"
+                        style={{display:'flex',flexDirection:'row'}}
+                    >
+                        <ListItemIcon>
+                            <TwitterIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>Twitter</ListItemText>
+                    </a>
                 </MenuItemStyled>
 
             </MenuList>

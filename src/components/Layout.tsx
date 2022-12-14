@@ -1,13 +1,10 @@
-import styles from "../../styles/Home.module.css";
 import React, { useState } from "react";
-import Tutorial from "./tutorial";
 import { useTranslation } from "react-i18next";
-import LanguageSelector from "./LanguageSelector";
-import ConnectWalletStardisc from "./ConnectWalletStardisc";
+
 import { Accordion, AccordionDetails, AccordionSummary, Box, Divider, SxProps, ThemeProvider, Tooltip } from "@mui/material";
-import SocialMedia from "./SocialMedia";
 import Grid from "@mui/system/Unstable_Grid";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import theme from "../../styles/theme";
 import Setting from "./setting";
 import Formulas from "./formulas";
@@ -28,39 +25,38 @@ const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps 
 };
 
 export default function Layout({
-    loadSave, leaderboard, submission, board, stats,
+    loadSave, board, stats,
     mechProgramming, formulaProgramming, midScreenControls,
-    indexHandleClickSubmit
+    indexHandleClickSubmit, loadSolution
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount()
 
+    // states
     const [openedAccordion, setOpenedAccordion] = useState<string>("accordion1");
+    const [settingOpen, setSettingOpen] = useState<boolean>(false);
+    const [settingRenderMode, setSettingRenderMode] = useState<string>('menu');
 
-    const MASCOT_DIM = '13rem'
-
-    const [connectWalletModalOpen, setConnectWalletModalOpen] = useState<boolean>(false);
-    function handleConnectWalletModalOnOpen(){
-        setConnectWalletModalOpen(_ => true)
+    // handle state changes
+    function handleSetRenderMode(mode){
+        setSettingRenderMode(_ => mode)
     }
-    function handleConnectWalletModalOnClose(){
-        setConnectWalletModalOpen(_ => false)
+    function handleSetOpen(bool){
+        setSettingOpen(_ => bool)
     }
-
-    const [settingModalOpen, setSettingModalOpen] = useState<boolean>(false);
 
     function handleClickSubmit(){
-        console.log('boom')
         if(!account){
-            // open connect wallet modal
             console.log('boom not connected')
-            setSettingModalOpen(_ => true)
-            setConnectWalletModalOpen(_ => true)
+            setSettingOpen(_ => true)
+            setSettingRenderMode(_ => 'connect')
         }
         else {
             indexHandleClickSubmit()
         }
     }
+
+    const MASCOT_DIM = '13rem'
 
     return (
         <>
@@ -73,11 +69,6 @@ export default function Layout({
                                 pt: 9, border: 1, borderRadius:4,
                                 mt:'2rem', ml:'3rem', mb: '1rem',
                             }}>
-                                {/* <div className={styles.title}>
-                                    <h2>{t("MuMu")}</h2>
-                                    <p>{t("Subtitle")}</p>
-                                    <SocialMedia />
-                                </div> */}
 
                                 <Convo />
 
@@ -90,22 +81,20 @@ export default function Layout({
                                     <Grid xs={0} md={3.75}></Grid>
 
                                     <Grid xs={4} md={1.5}>
-                                        {/* <Tutorial /> */}
                                         <Setting
-                                            leaderboard={leaderboard}
-                                            connectWalletModalOpen={connectWalletModalOpen}
-                                            connectWalletModalOnOpen={handleConnectWalletModalOnOpen}
-                                            connectWalletModalOnClose={handleConnectWalletModalOnClose}
-                                            open={settingModalOpen}
-                                            handleOpen={() => setSettingModalOpen(_ => true)}
-                                            handleClose={() => setSettingModalOpen(_ => false)}
+                                            renderMode={settingRenderMode}
+                                            handleSetRenderMode={handleSetRenderMode}
+                                            open={settingOpen}
+                                            handleSetOpen={handleSetOpen}
+                                            loadSolution={loadSolution}
                                         />
                                     </Grid>
+
                                     <Grid xs={4} md={1.5}>
                                         {loadSave}
                                     </Grid>
+
                                     <Grid xs={4} md={1.5}>
-                                        {/* {submission} */}
                                         <Submission handleClickSubmit={handleClickSubmit} />
                                     </Grid>
 

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useStardiscRegistryByAccount } from '../../lib/api'
 import {useAccount, useConnectors} from '@starknet-react/core'
-import LeaderboardRow from "./LeaderboardRow";
 import { useTranslation } from "react-i18next";
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from "@mui/material";
+
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+
 import Modal from "./Modal";
 import { toBN } from 'starknet/dist/utils/number'
 import styles from './ConnectWallet.module.css'
 
-export default function ConnectWallet ({ modalOpen, handleOnOpen, handleOnClose }) {
+// export default function ConnectWallet ({ modalOpen, handleOnOpen, handleOnClose }) {
+export default function ConnectWallet () {
     const { t } = useTranslation();
 
     // const [open, setOpen] = useState<boolean>(false);
@@ -49,77 +52,61 @@ export default function ConnectWallet ({ modalOpen, handleOnOpen, handleOnClose 
         if (stardisc_query.stardisc_query.length > 0) { // query succeeded, render the handle
             const name = toBN(stardisc_query.stardisc_query[0].name).toString(10)
             const name_string = feltLiteralToString (name)
-            rendered_account = <p className='result'>{t("Connected")} <strong>{name_string}</strong></p>
+            rendered_account = <p className='result'>{t("Connected")}<strong>{name_string}</strong></p>
         }
         else { // query failed; render address abbreviation
-            rendered_account = <p  className='result'>{t("Connected")} {String(address).slice(0,6) + '...' + String(address).slice(-4)}</p>
+            rendered_account = <p  className='result'>{t("Connected")}{String(address).slice(0,6) + '...' + String(address).slice(-4)}</p>
         }
 
         modalRender = (
-            <div className={styles.wrapper}>
-                {/* <p className={styles.text}>
-                    Connected:
-                </p> */}
+            <div className={styles.wrapper} style={{paddingTop:'1rem'}}>
+
                 {rendered_account}
-                <button
-                    className='creamy-button'
-                    style={BUTTON_STYLE}
+
+                <MenuItem
+                    // className='creamy-button'
+                    // style={BUTTON_STYLE}
+                    sx={{width:'100%', mt:2, justifyContent: 'center'}}
                     onClick={() => disconnect()}
                 >
                     Disconnect
-                </button>
+                </MenuItem>
             </div>
         )
     }
     else {
-        const buttons_sorted = [].concat(connectors)
+        const menu_items_sorted = [].concat(connectors)
         .sort ((a,b) => {
             if(a.name() < b.name()) { return -1; }
             if(a.name() > b.name()) { return 1; }
             return 0;
         })
         .map ((connector) => (
-            <button
+            <MenuItem
                 key={connector.id()}
                 onClick={() => connect(connector)}
-                style = {BUTTON_STYLE}
-                className = 'creamy-button'
+                sx={{justifyContent: 'center'}}
             >
                 {/* {t("Connect")}{connector.name()} */}
                 {connector.name()}
-            </button>
+            </MenuItem>
         ))
 
         modalRender = (
-            <div>
-                <p style={{textAlign:'center',fontSize:'1rem'}}>
-                    Connect to one of your available wallets:
-                </p>
-                <div className={`${styles.wrapper} ${styles.wrapperConnectButtons}`}>
-                    {connectors.length > 0 ? buttons_sorted : (
-                        <>
-                            <button onClick={() => setWalletNotFound(true)}>Connect</button>
-                            {walletNotFound && <p className='error-text'>Wallet not found. Please install ArgentX or Braavos.</p>}
-                        </>
-                    )}
-                </div>
-            </div>
+            <MenuList>
+
+                {connectors.length > 0 ? menu_items_sorted : (
+                    <>
+                        <button onClick={() => setWalletNotFound(true)}>Connect</button>
+                        {walletNotFound && <p className='error-text'>Wallet not found. Please install ArgentX or Braavos.</p>}
+                    </>
+                )}
+
+            </MenuList>
         )
     }
 
-    return (
-            <div>
-                <button onClick={handleOnOpen}>
-                    Connect Wallet
-                </button>
-
-                <Modal maxWidth="sm" open={modalOpen} onClose={handleOnClose} padding={5}>
-                    <Box sx={{ p: 0, fontFamily: "var(--font-family-secondary)" }}>
-                        {modalRender}
-                    </Box>
-                </Modal>
-            </div>
-    );
+    return modalRender
 };
 
 
