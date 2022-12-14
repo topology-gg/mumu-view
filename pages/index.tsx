@@ -1034,6 +1034,7 @@ export default function Home() {
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}
                 midScreenControls={midScreenControls}
+                indexHandleClickSubmit={handleClickSubmit}
             />
         </>
     );

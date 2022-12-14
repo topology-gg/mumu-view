@@ -12,6 +12,8 @@ import theme from "../../styles/theme";
 import Setting from "./setting";
 import Formulas from "./formulas";
 import Convo from "./convo";
+import Submission from "./Submission";
+import {useAccount, useConnectors} from '@starknet-react/core'
 
 import LoadSave from "./LoadSave";
 import Leaderboard from "./Leaderboard";
@@ -25,18 +27,41 @@ const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps 
     return <Box sx={{ textAlign: "center", flex: 1, ...sx }}>{children}</Box>;
 };
 
-export default function Layout({ loadSave, leaderboard, submission, board, stats, mechProgramming, formulaProgramming, midScreenControls }) {
+export default function Layout({
+    loadSave, leaderboard, submission, board, stats,
+    mechProgramming, formulaProgramming, midScreenControls,
+    indexHandleClickSubmit
+}) {
     const { t } = useTranslation();
+    const { account, address, status } = useAccount()
 
     const [openedAccordion, setOpenedAccordion] = useState<string>("accordion1");
 
     const MASCOT_DIM = '13rem'
 
+    const [connectWalletModalOpen, setConnectWalletModalOpen] = useState<boolean>(false);
+    function handleConnectWalletModalOnOpen(){
+        setConnectWalletModalOpen(_ => true)
+    }
+    function handleConnectWalletModalOnClose(){
+        setConnectWalletModalOpen(_ => false)
+    }
 
-    // sx={{
-    //     border: 1, borderRadius:4, ml:6, mr: 0, textAlign:'center', pt:2, pl:5, pr:5, mb:3,
-    //     height: '15rem',
-    // }}
+    const [settingModalOpen, setSettingModalOpen] = useState<boolean>(false);
+
+    function handleClickSubmit(){
+        console.log('boom')
+        if(!account){
+            // open connect wallet modal
+            console.log('boom not connected')
+            setSettingModalOpen(_ => true)
+            setConnectWalletModalOpen(_ => true)
+        }
+        else {
+            indexHandleClickSubmit()
+        }
+    }
+
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -66,13 +91,22 @@ export default function Layout({ loadSave, leaderboard, submission, board, stats
 
                                     <Grid xs={4} md={1.5}>
                                         {/* <Tutorial /> */}
-                                        <Setting leaderboard={leaderboard}/>
+                                        <Setting
+                                            leaderboard={leaderboard}
+                                            connectWalletModalOpen={connectWalletModalOpen}
+                                            connectWalletModalOnOpen={handleConnectWalletModalOnOpen}
+                                            connectWalletModalOnClose={handleConnectWalletModalOnClose}
+                                            open={settingModalOpen}
+                                            handleOpen={() => setSettingModalOpen(_ => true)}
+                                            handleClose={() => setSettingModalOpen(_ => false)}
+                                        />
                                     </Grid>
                                     <Grid xs={4} md={1.5}>
                                         {loadSave}
                                     </Grid>
                                     <Grid xs={4} md={1.5}>
-                                        {submission}
+                                        {/* {submission} */}
+                                        <Submission handleClickSubmit={handleClickSubmit} />
                                     </Grid>
 
                                     <Grid xs={0} md={3.75}></Grid>

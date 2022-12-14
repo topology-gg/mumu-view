@@ -9,18 +9,22 @@ import Tutorial from "./tutorial";
 import LanguageSelector from "./LanguageSelector";
 import SocialMedia from "./SocialMedia";
 import ConnectWalletStardisc from "./ConnectWalletStardisc";
+import ConnectWallet from "./ConnectWallet";
 
-
-export default function Setting({ leaderboard }) {
+export default function Setting({
+    leaderboard, connectWalletModalOpen,
+    connectWalletModalOnOpen, connectWalletModalOnClose,
+    open, handleOpen, handleClose
+}) {
 
     const { t } = useTranslation();
-    const [open, setOpen] = useState<boolean>(false);
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
+    // const [open, setOpen] = useState<boolean>(false);
+    // const handleOpen = () => {
+    //     setOpen(true);
+    // };
+    // const handleClose = () => {
+    //     setOpen(false);
+    // };
 
     const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
         return <Box sx={{ textAlign: "center", flex: 1, ...sx }}>{children}</Box>;
@@ -51,7 +55,15 @@ export default function Setting({ leaderboard }) {
                             <SocialMedia />
                         </div>
 
-                        <ConnectWalletStardisc />
+                        {/* <ConnectWalletStardisc /> */}
+                        <ConnectWallet
+                            modalOpen={connectWalletModalOpen}
+                            handleOnOpen={connectWalletModalOnOpen}
+                            handleOnClose={connectWalletModalOnClose}
+                        />
+
+                        {/* makeshift spacer; will discard in next refactor PR */}
+                        <div style={{height:'1rem'}}></div>
 
                         <LanguageSelector />
 
