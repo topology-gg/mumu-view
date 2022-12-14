@@ -99,7 +99,9 @@ export default function Board (
                                     if (isProduced) console.log(`isProduced at (i,j)=(${i},${j})`)
 
                                     return (
-                                        <Tooltip title={`${j},${i}`} disableInteractive arrow>
+                                        <Tooltip title={`${j},${i}`} disableInteractive arrow
+                                            enterDelay={0} leaveDelay={0} TransitionProps={{ timeout: 100 }}
+                                        >
                                             <div key={`${j}-${i}`}>
                                                 <Unit
                                                     key={`unit-${j}-${i}`}

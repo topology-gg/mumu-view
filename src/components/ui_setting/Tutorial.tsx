@@ -16,7 +16,7 @@ const Tutorial = ({ }) => {
 
     return (
         <div style={{
-            display: 'flex', flexDirection: 'column', width: '100%'
+            display: 'flex', flexDirection: 'column', width: '100%', paddingTop:'10px', paddingBottom:'10px'
         }}>
 
             <MenuList>
