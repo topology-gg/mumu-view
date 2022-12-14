@@ -58,7 +58,7 @@ export default function Setting({ loadSolution, renderMode, handleSetRenderMode,
                 onClose={handleClose} onBack={handleBack} maxWidth={false}
             >
                 <Box sx={{
-                    pt: 5, pb: 5, pl: 0, pr: 0, fontFamily: "var(--font-family-secondary)",
+                    pt: 3, pb: 0, pl: 0, pr: 0, fontFamily: "var(--font-family-secondary)",
                 }}>
                     {
                         (renderMode == 'menu') ? (

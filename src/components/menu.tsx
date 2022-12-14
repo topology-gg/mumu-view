@@ -37,12 +37,10 @@ export default function Menu({
 
 
     return (
-        <Paper sx={{ width: width, maxWidth: '100%' }} elevation={0}>
+        <Paper sx={{ width: width, maxWidth: '100%'}} elevation={0}>
             <MenuList>
 
-                <MenuItem>
-                    <ListItemText sx={{textAlign:'center'}}>MuMu: Season 2</ListItemText>
-                </MenuItem>
+                <ListItemText sx={{textAlign:'center', pb:2}}>MuMu: Season 2</ListItemText>
 
                 <Divider />
 
