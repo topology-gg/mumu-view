@@ -1,12 +1,12 @@
 import React from "react";
 import { toBN } from "starknet/dist/utils/number";
-import Solution from "../types/Solution";
-import MechState from "../types/MechState";
-import Operator, { OPERATOR_TYPES } from "../types/Operator";
-import { useStardiscRegistryByAccount } from "../../lib/api";
-import { MechStatus, MechType } from "../types/MechState";
+import Solution from "../../types/Solution";
+import MechState from "../../types/MechState";
+import Operator, { OPERATOR_TYPES } from "../../types/Operator";
+import { useStardiscRegistryByAccount } from "../../../lib/api";
+import { MechStatus, MechType } from "../../types/MechState";
 import { TableCell, TableRow } from "@mui/material";
-import { INSTRUCTION_DECODE } from '../helpers/packSolution';
+import { INSTRUCTION_DECODE } from '../../helpers/packSolution';
 
 const SCALE = 10 ** 6;
 

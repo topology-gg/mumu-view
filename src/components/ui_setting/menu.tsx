@@ -24,7 +24,8 @@ export default function Menu({
     onManualClick,
     onLeaderboardClick,
     onConnectWalletClick,
-    onLanguageClick
+    onLanguageClick,
+    onTutorialClick,
 }) {
 
     const MenuItemStyled = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
@@ -72,7 +73,7 @@ export default function Menu({
                     <ListItemIcon>
                         <SchoolIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Tutorial</ListItemText>
+                    <ListItemText onClick={onTutorialClick}>Tutorial</ListItemText>
                 </MenuItemStyled>
 
                 <MenuItemStyled>

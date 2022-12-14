@@ -1,11 +1,12 @@
 import { CSSProperties, useState } from "react";
-import Modal from "./Modal";
+import Modal from "../ui_common/Modal";
 import { Trans, useTranslation } from "react-i18next";
 import Menu from "./menu";
 import Manual from "./Manual";
 import ConnectWallet from "./ConnectWallet";
 import LanguageSelector from "./LanguageSelector";
 import Leaderboard from "./Leaderboard";
+import Tutorial from "./Tutorial";
 
 import { Box, SxProps } from "@mui/material";
 
@@ -33,6 +34,7 @@ export default function Setting({ loadSolution, renderMode, handleSetRenderMode,
             onLanguageClick={() => handleModeChange('language')}
             onConnectWalletClick={() => handleModeChange('connect')}
             onLeaderboardClick={() => handleModeChange('leaderboard')}
+            onTutorialClick={() => handleModeChange('tutorial')}
         />
     )
 
@@ -41,7 +43,9 @@ export default function Setting({ loadSolution, renderMode, handleSetRenderMode,
         renderMode == 'menu' ? 300 :
         renderMode == 'language' ? 300 :
         renderMode == 'connect' ? 450 :
-        renderMode == 'manual' ? 600 : 1100
+        renderMode == 'manual' ? 600 :
+        renderMode == 'tutorial' ? 450 :
+        1100 // leaderboard width
 
     // render
     return (
@@ -78,7 +82,11 @@ export default function Setting({ loadSolution, renderMode, handleSetRenderMode,
                         ) :
                         (renderMode == 'leaderboard') ? (
                             <Leaderboard loadSolution={loadSolution} />
-                        ) : MenuHooked
+                        ) :
+                        (renderMode == 'tutorial') ? (
+                            <Tutorial />
+                        ) :
+                        MenuHooked
                     }
 
                 </Box>

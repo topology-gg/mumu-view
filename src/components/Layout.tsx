@@ -6,14 +6,14 @@ import Grid from "@mui/system/Unstable_Grid";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import theme from "../../styles/theme";
-import Setting from "./setting";
+import Setting from "./ui_setting/setting";
 import Formulas from "./formulas";
 import Convo from "./convo";
 import Submission from "./Submission";
 import {useAccount, useConnectors} from '@starknet-react/core'
 
 import LoadSave from "./LoadSave";
-import Leaderboard from "./Leaderboard";
+import Leaderboard from "./ui_setting/Leaderboard";
 
 const gridStyles: SxProps = {
     display: "flex",

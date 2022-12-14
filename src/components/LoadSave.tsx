@@ -11,7 +11,7 @@ import {
 import MechState from "../types/MechState";
 import Operator from "../types/Operator";
 import Solution from "../types/Solution";
-import Modal from "./Modal";
+import Modal from "./ui_common/Modal";
 import SavedSolutionElement from "./savedSolutionElement";
 
 interface LoadSaveProps {

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useSolutions } from "../../lib/api";
+import { useSolutions } from "../../../lib/api";
 import LeaderboardRow from "./LeaderboardRow";
 import { useTranslation } from "react-i18next";
 
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from "@mui/material";
 import Paper from '@mui/material/Paper';
 
-import Modal from "./Modal";
+import Modal from "../ui_common/Modal";
 
 const Leaderboard = ({ loadSolution }) => {
     const { t } = useTranslation();
