@@ -666,7 +666,7 @@ export default function Home() {
         />
     );
 
-    const leaderboard = <Leaderboard loadSolution={handleLoadSolutionClick} />;
+    // const leaderboard = <Leaderboard loadSolution={handleLoadSolutionClick} />;
 
     const submission = (
         <Tooltip title={t("submission")} arrow>
@@ -1027,14 +1027,13 @@ export default function Home() {
 
             <Layout
                 loadSave={loadSave}
-                leaderboard={leaderboard}
-                submission={submission}
                 board={board}
                 stats={stats}
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}
                 midScreenControls={midScreenControls}
                 indexHandleClickSubmit={handleClickSubmit}
+                loadSolution={handleLoadSolutionClick}
             />
         </>
     );

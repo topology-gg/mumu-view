@@ -108,7 +108,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
     }
 
     return (
-        <Tooltip title={t("load_save")} arrow>
+        // <Tooltip title={t("load_save")} arrow>
 
         <Box sx={{ mb: 2 }}>
             {/* <Button color="secondary" variant="outlined" onClick={handleOpen}>
@@ -119,7 +119,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
                     save
                 </i>
             </button>
-            <Modal open={open} onClose={handleClose}>
+            <Modal open={open} onClose={handleClose} isRoot={true}>
                 <Box
                     sx={{
                         p: 2,
@@ -230,7 +230,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
             </Modal>
         </Box>
 
-        </Tooltip>
+        // </Tooltip>
     );
 };
 

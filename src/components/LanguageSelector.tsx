@@ -1,32 +1,52 @@
 import i18next from "i18next";
 import React, {useState} from "react";
-import styles from "../../styles/LanguageSelector.module.css";
 
-const LanguageSelector = () => {
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
 
-    const [currLang, setCurrLang] = useState<string>('en')
+const LanguageSelector = ({ currLang, setCurrLang }) => {
 
-    function buttonStyle (lang) {
-        // impurity by dependency: currLang
+    // const [currLang, setCurrLang] = useState<string>('en')
+    const languages = ['en', 'scn', 'tcn', 'fr', 'jp']
+    const currLangToName = {
+        'en': 'English',
+        'scn' : '简中',
+        'tcn' : '繁中',
+        'fr'  : 'Français',
+        'jp'  : '日本語'
+    }
 
-        let button_style = {
-            height:'1.5rem',
-            border: '1px solid #333333',
-            borderRadius: '3px'
-        }
-
-        if (lang == currLang) {
-            return {...button_style, backgroundColor:'#FFFE71'}
-        }
-        else {
-            return button_style
-        }
+    const handleLangSelected = (lang) => {
+        i18next.changeLanguage(lang);
+        setCurrLang (lang);
     }
 
     return (
-        <div className={styles.wrapper}>
+        <div style={{
+            display: 'flex', flexDirection: 'column', width: '100%'
+        }}>
 
-            <button style={buttonStyle('en')} onClick={() => {
+            <MenuList>
+
+                {
+                    languages.map( lang => (
+                        <MenuItem
+                            onClick={() => handleLangSelected(lang)}
+                            sx={{justifyContent: 'center'}}
+                            selected={currLang == lang}
+                        >
+                            { currLangToName[lang] }
+                        </MenuItem>
+                    ))
+                }
+
+            </MenuList>
+
+        </div>
+    );
+};
+
+        {/* <button style={buttonStyle('en')} onClick={() => {
                 i18next.changeLanguage("en");
                 setCurrLang ('en');
             }}>English</button>
@@ -49,10 +69,24 @@ const LanguageSelector = () => {
             <button style={buttonStyle('jp')} onClick={() => {
                 i18next.changeLanguage("jp");
                 setCurrLang ('jp');
-            }}>日本語</button>
+            }}>日本語</button> */}
 
-        </div>
-    );
-};
+// function buttonStyle (lang) {
+//     // impurity by dependency: currLang
+
+//     let button_style = {
+//         height:'1.5rem',
+//         border: '1px solid #333333',
+//         borderRadius: '3px',
+//         marginBottom: '2px',
+//     }
+
+//     if (lang == currLang) {
+//         return {...button_style, backgroundColor:'#FFFE71'}
+//     }
+//     else {
+//         return button_style
+//     }
+// }
 
 export default LanguageSelector;

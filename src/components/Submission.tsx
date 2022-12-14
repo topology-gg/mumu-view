@@ -15,7 +15,7 @@ export default function Submission({ handleClickSubmit }) {
     const { t } = useTranslation();
 
     return (
-        <Tooltip title={t("submission")} arrow>
+        // <Tooltip title={t("submission")} arrow>
             <div style={{ marginBottom: "1rem" }}>
                 <button id={"submit-button"} onClick={() => handleClickSubmit()} className={"big-button"}>
                     <i className="material-icons" style={{ fontSize: "1rem", paddingTop: "0.12rem" }}>
@@ -23,6 +23,6 @@ export default function Submission({ handleClickSubmit }) {
                     </i>
                 </button>
             </div>
-        </Tooltip>
+        // </Tooltip>
     );
 }
