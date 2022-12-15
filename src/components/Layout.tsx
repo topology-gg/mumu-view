@@ -10,10 +10,11 @@ import Setting from "./ui_setting/setting";
 import Formulas from "./formulas";
 import Convo from "./convo";
 import Submission from "./Submission";
+import MidScreenControl from "./ui_setting/MidScreenControl";
+import LoadSave from "./LoadSave";
+
 import {useAccount, useConnectors} from '@starknet-react/core'
 
-import LoadSave from "./LoadSave";
-import Leaderboard from "./ui_setting/Leaderboard";
 
 const gridStyles: SxProps = {
     display: "flex",
@@ -26,7 +27,8 @@ const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps 
 
 export default function Layout({
     loadSave, board, stats,
-    mechProgramming, formulaProgramming, midScreenControls,
+    mechProgramming, formulaProgramming,
+    midScreenControlProps, midScreenControlHandleClick, midScreenControlHandleSlideChange,
     indexHandleClickSubmit, loadSolution, loadMode
 }) {
     const { t } = useTranslation();
@@ -107,7 +109,14 @@ export default function Layout({
                         <Grid xs={12} md={4} pb={2} sx={gridStyles}>
                             <Panel>
                                 {board}
-                                {midScreenControls}
+                                <MidScreenControl
+                                    runnable = {midScreenControlProps.runnable}
+                                    animationFrame = {midScreenControlProps.animationFrame}
+                                    n_cycles = {midScreenControlProps.n_cycles}
+                                    animationState = {midScreenControlProps.animationState}
+                                    handleClick = {midScreenControlHandleClick}
+                                    handleSlideChange = {midScreenControlHandleSlideChange}
+                                />
                             </Panel>
                         </Grid>
                         <Grid xs={12} md={4} sx={gridStyles}>

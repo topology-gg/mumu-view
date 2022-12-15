@@ -669,97 +669,6 @@ export default function Home() {
         producedAtomIds = {producedAtomIds}
     />
 
-    const midScreenControls = (
-        // <div style={{ display: "flex", flexDirection: "row", padding: "1rem 25rem", justifyContent: "center" }}>
-        <Box>
-            <div
-                className={styles.midScreenControls}
-                style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}
-            >
-                {/* <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    // flex: 1,
-                }}
-            > */}
-                <p
-                    style={{
-                        padding: "0",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        width: "6.5rem",
-                        margin: "0 0.5rem 0 0",
-                        // width: "100px" /* Make room for dynamic text */,
-                        height: "20px",
-                        lineHeight: "20px",
-                        fontSize: "0.8rem",
-                    }}
-                >
-                    {" "}
-                    {t("frame")}# {animationFrame} / {N_CYCLES}
-                </p>
-
-                <input
-                    id="typeinp"
-                    type="range"
-                    min="0"
-                    max={N_CYCLES}
-                    value={animationFrame}
-                    onChange={handleSlideChange}
-                    step="1"
-                    style={{ width: "6.5rem" }}
-                    // style={{ flex: 1 }}
-                />
-                {/* </div>
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: "0 1rem",
-                }}
-            > */}
-                {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}
-                <button
-                    style={{ ...makeshift_run_button_style, marginLeft: "0.5rem" }}
-                    onClick={() => handleClick("ToggleRun")}
-                >
-                    {" "}
-                    {animationState != "Run" ? (
-                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                            play_arrow
-                        </i>
-                    ) : (
-                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                            pause
-                        </i>
-                    )}{" "}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleClick("Stop")}>
-                    <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                        stop
-                    </i>
-                </button>
-
-                <button style={makeshift_button_style} onClick={() => handleClick("PrevFrame")}>
-                    <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                        fast_rewind
-                    </i>
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleClick("NextFrame")}>
-                    <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                        fast_forward
-                    </i>
-                </button>
-                {/* </div> */}
-                {/* </div> */}
-            </div>
-        </Box>
-    );
-
     const stats = (
         <div>
             {" "}
@@ -1003,7 +912,14 @@ export default function Home() {
                 stats={stats}
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}
-                midScreenControls={midScreenControls}
+                midScreenControlProps = {{
+                    runnable: runnable,
+                    animationFrame: animationFrame,
+                    n_cycles: N_CYCLES,
+                    animationState: animationState,
+                }}
+                midScreenControlHandleClick={handleClick}
+                midScreenControlHandleSlideChange={handleSlideChange}
                 indexHandleClickSubmit={handleClickSubmit}
                 loadSolution={handleLoadSolutionClick}
                 loadMode={handleLoadModeClick}
