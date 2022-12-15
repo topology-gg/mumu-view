@@ -27,7 +27,7 @@ const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps 
 export default function Layout({
     loadSave, board, stats,
     mechProgramming, formulaProgramming, midScreenControls,
-    indexHandleClickSubmit, loadSolution
+    indexHandleClickSubmit, loadSolution, loadMode
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount()
@@ -87,6 +87,7 @@ export default function Layout({
                                             open={settingOpen}
                                             handleSetOpen={handleSetOpen}
                                             loadSolution={loadSolution}
+                                            loadMode={loadMode}
                                         />
                                     </Grid>
 

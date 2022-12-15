@@ -2,6 +2,77 @@ import { MechStatus, MechType } from "../types/MechState";
 import { OPERATOR_TYPES } from "../types/Operator";
 import Solution from "../types/Solution";
 
+export const Lesson_names = {
+    lesson_1: 'Lesson 1 / delivery boy',
+    lesson_2: 'Lesson 2 / first alchemy',
+    lesson_3: 'Lesson 3 / faucet',
+    lesson_4: 'Lesson 4 / second alchemy',
+    lesson_5: 'Lesson 5 / production line'
+}
+
+export const Constraints = {
+    arena: {
+        DIM: 10,
+        PROGRAM_SIZE_MAX: 40,
+        N_CYCLES: 150,
+        MAX_NUM_MECHS: 25,
+        MIN_NUM_MECHS: 0,
+        MAX_NUM_OPERATORS: 20,
+        MIN_NUM_OPERATORS: 0,
+    },
+
+    lesson_1: { // delivery boy
+        DIM: 3,
+        PROGRAM_SIZE_MAX: 10,
+        N_CYCLES: 10,
+        MAX_NUM_MECHS: 1,
+        MIN_NUM_MECHS: 1,
+        MAX_NUM_OPERATORS: 0,
+        MIN_NUM_OPERATORS: 0,
+    },
+
+    lesson_2: { // first alchemy
+        DIM: 4,
+        PROGRAM_SIZE_MAX: 15,
+        N_CYCLES: 15,
+        MAX_NUM_MECHS: 1,
+        MIN_NUM_MECHS: 1,
+        MAX_NUM_OPERATORS: 1,
+        MIN_NUM_OPERATORS: 1,
+    },
+
+    lesson_3: { // faucet
+        DIM: 3,
+        PROGRAM_SIZE_MAX: 15,
+        N_CYCLES: 15,
+        MAX_NUM_MECHS: 1,
+        MIN_NUM_MECHS: 1,
+        MAX_NUM_OPERATORS: 1,
+        MIN_NUM_OPERATORS: 1,
+    },
+
+    lesson_4: { // second alchemy
+        DIM: 4,
+        PROGRAM_SIZE_MAX: 15,
+        N_CYCLES: 50,
+        MAX_NUM_MECHS: 2,
+        MIN_NUM_MECHS: 2,
+        MAX_NUM_OPERATORS: 2,
+        MIN_NUM_OPERATORS: 2,
+    },
+
+    lesson_5: { // production line
+        DIM: 5,
+        PROGRAM_SIZE_MAX: 15,
+        N_CYCLES: 100,
+        MAX_NUM_MECHS: 4,
+        MIN_NUM_MECHS: 4,
+        MAX_NUM_OPERATORS: 3,
+        MIN_NUM_OPERATORS: 3,
+    },
+
+}
+
 export const DIM = 10;
 export const PROGRAM_SIZE_MAX = 40
 export const DESCRIPTION_SIZE_MAX = 31

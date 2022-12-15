@@ -10,7 +10,10 @@ import Tutorial from "./Tutorial";
 
 import { Box, SxProps } from "@mui/material";
 
-export default function Setting({ loadSolution, renderMode, handleSetRenderMode, open, handleSetOpen }) {
+export default function Setting({
+    loadSolution, loadMode,
+    renderMode, handleSetRenderMode, open, handleSetOpen
+}) {
 
     const { t } = useTranslation();
 
@@ -84,7 +87,7 @@ export default function Setting({ loadSolution, renderMode, handleSetRenderMode,
                             <Leaderboard loadSolution={loadSolution} />
                         ) :
                         (renderMode == 'tutorial') ? (
-                            <Tutorial />
+                            <Tutorial loadMode={loadMode} />
                         ) :
                         MenuHooked
                     }

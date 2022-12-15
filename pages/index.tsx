@@ -291,25 +291,6 @@ export default function Home() {
                 newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_FREE;
             }
         }
-        // else if (atom.status == AtomStatus.POSSESSED) {
-        //     if (atom.typ == AtomType.VANILLA) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_VANILLA_POSSESSED;
-        //     } else if (atom.typ == AtomType.HAZELNUT) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_HAZELNUT_POSSESSED;
-        //     } else if (atom.typ == AtomType.CHOCOLATE) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_CHOCOLATE_POSSESSED;
-        //     } else if (atom.typ == AtomType.TRUFFLE) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TRUFFLE_POSSESSED;
-        //     } else if (atom.typ == AtomType.SAFFRON) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SAFFRON_POSSESSED;
-        //     } else if (atom.typ == AtomType.TURTLE) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TURTLE_POSSESSED;
-        //     } else if (atom.typ == AtomType.SANDGLASS) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SANDGLASS_POSSESSED;
-        //     } else if (atom.typ == AtomType.WILTED) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_POSSESSED;
-        //     }
-        // }
         return newStates;
     }
 
@@ -651,6 +632,11 @@ export default function Home() {
         setPlacingFormula(null);
     }
 
+    function handleLoadModeClick(mode) {
+        // mode can be 'arena' or any of ['lesson_1', 'lesson_2', ...]
+        console.log('handleLoadModeClick:', mode)
+    }
+
     // Lazy style objects
     const makeshift_button_style = { marginLeft: "0.2rem", marginRight: "0.2rem", height: "1.5rem" };
     const makeshift_run_button_style = runnable
@@ -664,20 +650,6 @@ export default function Home() {
             operatorStates={operatorStates}
             programs={programs}
         />
-    );
-
-    // const leaderboard = <Leaderboard loadSolution={handleLoadSolutionClick} />;
-
-    const submission = (
-        <Tooltip title={t("submission")} arrow>
-            <div style={{ marginBottom: "1rem" }}>
-                <button id={"submit-button"} onClick={() => handleClickSubmit()} className={"big-button"}>
-                    <i className="material-icons" style={{ fontSize: "1rem", paddingTop: "0.12rem" }}>
-                        send
-                    </i>
-                </button>
-            </div>
-        </Tooltip>
     );
 
     const board = <Board
@@ -1034,6 +1006,7 @@ export default function Home() {
                 midScreenControls={midScreenControls}
                 indexHandleClickSubmit={handleClickSubmit}
                 loadSolution={handleLoadSolutionClick}
+                loadMode={handleLoadModeClick}
             />
         </>
     );

@@ -4,15 +4,12 @@ import React, {useState} from "react";
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 
-const Tutorial = ({ }) => {
+import { Lesson_names } from "../../constants/constants";
+
+const Tutorial = ({ loadMode }) => {
 
     const [currLesson, setCurrLesson] = useState<string | null>(null)
-    const lessons = [
-        'Lesson 1 / delivery boy',
-        'Lesson 2 / first alchemy',
-        'Lesson 3 / second alchemy',
-        'Lesson 4 / production line'
-    ]
+
 
     return (
         <div style={{
@@ -22,15 +19,19 @@ const Tutorial = ({ }) => {
             <MenuList>
 
                 {
-                    lessons.map( (lesson,_) => (
-                        <MenuItem
-                            onClick={() => {}}
-                            sx={{justifyContent: 'left', pl:10}}
-                            selected={currLesson == lesson}
-                        >
-                            { lesson }
-                        </MenuItem>
-                    ))
+                    Object.entries(Lesson_names).map( (entry, _) => {
+                        const lesson = entry[0]
+                        const lesson_name = entry[1]
+                        return (
+                            <MenuItem
+                                onClick={() => loadMode(lesson)}
+                                sx={{justifyContent: 'left', pl:10}}
+                                selected={currLesson == lesson}
+                            >
+                                { lesson_name }
+                            </MenuItem>
+                        )
+                    })
                 }
 
             </MenuList>
