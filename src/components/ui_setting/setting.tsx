@@ -12,7 +12,7 @@ import { Box, SxProps } from "@mui/material";
 
 export default function Setting({
     loadSolution, loadMode,
-    renderMode, handleSetRenderMode, open, handleSetOpen
+    renderMode, handleSetRenderMode, open, handleSetOpen, handleArenaModeClick
 }) {
 
     const { t } = useTranslation();
@@ -38,6 +38,7 @@ export default function Setting({
             onConnectWalletClick={() => handleModeChange('connect')}
             onLeaderboardClick={() => handleModeChange('leaderboard')}
             onTutorialClick={() => handleModeChange('tutorial')}
+            onArenaModeClick={() => handleArenaModeClick()}
         />
     )
 

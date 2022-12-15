@@ -6,7 +6,7 @@ import UnitState, { BgStatus, BorderStatus, UnitText } from "../types/UnitState"
 import Grid from "../types/Grid";
 import Operator, { OPERATOR_TYPES, PlacingFormula } from "../types/Operator";
 import OperatorGridBg from "./OperatorGridBg";
-import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS, N_CYCLES } from "../constants/constants";
+import { Constraints, DEMO_SOLUTIONS, Modes } from "../constants/constants";
 import { useTranslation } from "react-i18next";
 import "../../config/i18n";
 import { Box, Button, Tooltip } from "@mui/material";
@@ -16,6 +16,7 @@ import { useSpring, animated } from "react-spring";
 import MechUnit from "./MechUnit"
 
 interface BoardProps {
+    mode: Modes
     operatorStates: Operator[]
     operatorInputHighlight: boolean[]
     placingFormula?: PlacingFormula
@@ -33,7 +34,7 @@ interface BoardProps {
 }
 
 export default function Board (
-    { operatorStates, operatorInputHighlight, placingFormula,
+    { mode, operatorStates, operatorInputHighlight, placingFormula,
     unitStates, consumableAtomTypes, produceableAtomTypes,
     mechStates, atomStates, mechIndexHighlighted,
     handleMouseOver, handleMouseOut, handleUnitClick,
@@ -41,6 +42,11 @@ export default function Board (
 
     // console.log('consumedAtomIds:',consumedAtomIds)
     // console.log('producedAtomIds',producedAtomIds)
+
+    // Unpack constants given mode
+    const DIM = Constraints[mode].DIM
+    const PROGRAM_SIZE_MAX = Constraints[mode].PROGRAM_SIZE_MAX
+    const N_CYCLES = Constraints[mode].N_CYCLES
 
     if (!mechStates) return <></>
 

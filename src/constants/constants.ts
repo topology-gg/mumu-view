@@ -2,6 +2,15 @@ import { MechStatus, MechType } from "../types/MechState";
 import { OPERATOR_TYPES } from "../types/Operator";
 import Solution from "../types/Solution";
 
+export enum Modes {
+    lesson_1 = 'lesson_1',
+    lesson_2 = 'lesson_2',
+    lesson_3 = 'lesson_3',
+    lesson_4 = 'lesson_4',
+    lesson_5 = 'lesson_5',
+    arena    = 'arena',
+}
+
 export const Lesson_names = {
     lesson_1: 'Lesson 1 / delivery boy',
     lesson_2: 'Lesson 2 / first alchemy',
@@ -10,15 +19,13 @@ export const Lesson_names = {
     lesson_5: 'Lesson 5 / production line'
 }
 
-export const Constraints = {
+export const Constraints: { [key in Modes]: any } = {
     arena: {
         DIM: 10,
         PROGRAM_SIZE_MAX: 40,
         N_CYCLES: 150,
         MAX_NUM_MECHS: 25,
-        MIN_NUM_MECHS: 0,
         MAX_NUM_OPERATORS: 20,
-        MIN_NUM_OPERATORS: 0,
     },
 
     lesson_1: { // delivery boy
@@ -26,9 +33,7 @@ export const Constraints = {
         PROGRAM_SIZE_MAX: 10,
         N_CYCLES: 10,
         MAX_NUM_MECHS: 1,
-        MIN_NUM_MECHS: 1,
         MAX_NUM_OPERATORS: 0,
-        MIN_NUM_OPERATORS: 0,
     },
 
     lesson_2: { // first alchemy
@@ -36,9 +41,7 @@ export const Constraints = {
         PROGRAM_SIZE_MAX: 15,
         N_CYCLES: 15,
         MAX_NUM_MECHS: 1,
-        MIN_NUM_MECHS: 1,
         MAX_NUM_OPERATORS: 1,
-        MIN_NUM_OPERATORS: 1,
     },
 
     lesson_3: { // faucet
@@ -46,9 +49,7 @@ export const Constraints = {
         PROGRAM_SIZE_MAX: 15,
         N_CYCLES: 15,
         MAX_NUM_MECHS: 1,
-        MIN_NUM_MECHS: 1,
         MAX_NUM_OPERATORS: 1,
-        MIN_NUM_OPERATORS: 1,
     },
 
     lesson_4: { // second alchemy
@@ -56,9 +57,7 @@ export const Constraints = {
         PROGRAM_SIZE_MAX: 15,
         N_CYCLES: 50,
         MAX_NUM_MECHS: 2,
-        MIN_NUM_MECHS: 2,
         MAX_NUM_OPERATORS: 2,
-        MIN_NUM_OPERATORS: 2,
     },
 
     lesson_5: { // production line
@@ -66,23 +65,21 @@ export const Constraints = {
         PROGRAM_SIZE_MAX: 15,
         N_CYCLES: 100,
         MAX_NUM_MECHS: 4,
-        MIN_NUM_MECHS: 4,
         MAX_NUM_OPERATORS: 3,
-        MIN_NUM_OPERATORS: 3,
     },
 
 }
 
-export const DIM = 10;
-export const PROGRAM_SIZE_MAX = 40
-export const DESCRIPTION_SIZE_MAX = 31
-export const N_CYCLES = 150
+// export const DIM = 10;
+// export const PROGRAM_SIZE_MAX = 40
+// export const DESCRIPTION_SIZE_MAX = 31
+// export const N_CYCLES = 150
 export const ANIM_FRAME_LATENCY = 400;
 
-export const MAX_NUM_MECHS = 25; // setting this to 25 for Season 2
-export const MIN_NUM_MECHS = 0;
-export const MAX_NUM_OPERATORS = 20;
-export const MIN_NUM_OPERATORS = 0;
+// export const MAX_NUM_MECHS = 25; // setting this to 25 for Season 2
+// export const MIN_NUM_MECHS = 0;
+// export const MAX_NUM_OPERATORS = 20;
+// export const MIN_NUM_OPERATORS = 0;
 
 export const PRECISION = 6
 export const TO_PRECISION = (x) => {

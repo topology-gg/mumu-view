@@ -15,7 +15,7 @@ import Delivery from "../src/components/delivery";
 import Summary from "../src/components/summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
 
-import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS, N_CYCLES } from "../src/constants/constants";
+import { Modes, Constraints, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY } from "../src/constants/constants";
 import { useTranslation } from "react-i18next";
 import "../config/i18n";
 import { useAccount, useStarknetExecute } from "@starknet-react/core";
@@ -28,24 +28,30 @@ import MechProgramming from "../src/components/MechProgramming";
 import Layout from "../src/components/Layout";
 import LoadSave from "../src/components/LoadSave";
 import theme from "../styles/theme";
-import {
-    MAX_NUM_MECHS,
-    MIN_NUM_MECHS,
-    MAX_NUM_OPERATORS,
-    MIN_NUM_OPERATORS,
-    ANIM_FRAME_LATENCY,
-} from "../src/constants/constants";
+
 import FormulaBlueprint from "../src/components/FormulaBlueprint";
 import { placingFormulaToOperator } from "../src/helpers/typeMapping";
 import Board from "../src/components/board";
 
 export default function Home() {
-    // Constants
+
+    // React state for current mode (which lessons of tutorial, or arena mode)
+    // note: this impacts many components - board, mid screen control, programming components etc
+    const [currMode, setCurrMode] = useState<Modes>(Modes.arena)
+
+    // Constants unpack from current mode
+    const DIM = Constraints[currMode].DIM
+    const PROGRAM_SIZE_MAX = Constraints[currMode].PROGRAM_SIZE_MAX
+    const MAX_NUM_MECHS = Constraints[currMode].MAX_NUM_MECHS
+    const MAX_NUM_OPERATORS = Constraints[currMode].MAX_NUM_OPERATORS
+    const N_CYCLES = Constraints[currMode].N_CYCLES
+
+    // Other constants
     const INIT_PROGRAM = ".";
     const MECH_INIT_X = 0;
     const MECH_INIT_Y = 0;
-    const INIT_DESCRIPTION = "New Mech";
-    const ATOM_INIT_XY = []; // [{x:5, y:3}]
+    const INIT_DESCRIPTION = "New Spirit";
+    const ATOM_INIT_XY: Grid[] = [];
     const UNIT_STATE_INIT: UnitState = {
         bg_status: BgStatus.EMPTY,
         border_status: BorderStatus.EMPTY,
@@ -143,12 +149,6 @@ export default function Home() {
     const atomStates = frame?.atoms || atomInitStates;
     const mechStates = !frame ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : frame.mechs;
     const unitStates = setVisualForStates(atomStates, mechStates, unitStatesInit) as UnitState[][];
-
-    const animationFramePrev = animationFrame == 0 ? 0 : animationFrame-1
-    const framePrev = frames?.[animationFramePrev];
-    const atomStatesPrevFrame = framePrev?.atoms || atomInitStates;
-    const mechStatesPrevFrame = !framePrev ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : framePrev.mechs;
-    const unitStatesPrevFrame = setVisualForStates(atomStatesPrevFrame, mechStatesPrevFrame, unitStatesInit) as UnitState[][];
 
     let consumableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
         _ => Array.from({ length: DIM }).map(_ => null)
@@ -426,7 +426,7 @@ export default function Home() {
     function handleOperatorClick(mode: string, typ: string) {
         if (mode === "+" && numOperators < MAX_NUM_OPERATORS) {
             setPlacingFormula({ type: typ, grids: [] });
-        } else if (mode === "-" && numOperators > MIN_NUM_OPERATORS) {
+        } else if (mode === "-" && numOperators > 0) {
             setOperatorStates((prev) => {
                 let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
                 prev_copy.pop();
@@ -632,9 +632,10 @@ export default function Home() {
         setPlacingFormula(null);
     }
 
-    function handleLoadModeClick(mode) {
+    function handleLoadModeClick(mode: Modes) {
         // mode can be 'arena' or any of ['lesson_1', 'lesson_2', ...]
         console.log('handleLoadModeClick:', mode)
+        setCurrMode(_ => mode)
     }
 
     // Lazy style objects
@@ -653,6 +654,7 @@ export default function Home() {
     );
 
     const board = <Board
+        mode={currMode}
         operatorStates = {operatorStates}
         operatorInputHighlight = {operatorInputHighlight}
         placingFormula = {placingFormula}
@@ -923,6 +925,7 @@ export default function Home() {
                 indexHandleClickSubmit={handleClickSubmit}
                 loadSolution={handleLoadSolutionClick}
                 loadMode={handleLoadModeClick}
+                handleArenaModeClick={() => setCurrMode(_ => Modes.arena)}
             />
         </>
     );

@@ -29,7 +29,7 @@ export default function Layout({
     loadSave, board, stats,
     mechProgramming, formulaProgramming,
     midScreenControlProps, midScreenControlHandleClick, midScreenControlHandleSlideChange,
-    indexHandleClickSubmit, loadSolution, loadMode
+    indexHandleClickSubmit, loadSolution, loadMode, handleArenaModeClick
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount()
@@ -90,6 +90,7 @@ export default function Layout({
                                             handleSetOpen={handleSetOpen}
                                             loadSolution={loadSolution}
                                             loadMode={loadMode}
+                                            handleArenaModeClick={handleArenaModeClick}
                                         />
                                     </Grid>
 
