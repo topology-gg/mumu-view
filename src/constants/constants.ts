@@ -1,6 +1,7 @@
 import { MechStatus, MechType } from "../types/MechState";
 import { OPERATOR_TYPES } from "../types/Operator";
 import Solution from "../types/Solution";
+import { AtomType } from "../types/AtomState";
 
 export enum Modes {
     lesson_1 = 'lesson_1',
@@ -19,6 +20,14 @@ export const Lesson_names = {
     lesson_5: 'Lesson 5 / production line'
 }
 
+export const Lesson_descriptions = {
+    lesson_1: 'be a good delivery boy',
+    lesson_2: 'perform alchemy the first time',
+    lesson_3: 'work with a faucet the first time',
+    lesson_4: 'more alchemy!',
+    lesson_5: 'make a proud production line'
+}
+
 export const Constraints: { [key in Modes]: any } = {
     arena: {
         DIM: 10,
@@ -26,6 +35,13 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 150,
         MAX_NUM_MECHS: 25,
         MAX_NUM_OPERATORS: 20,
+        FAUCETS: [{ x: 0, y: 0 }],
+        SINKS: [
+            { x: 0, y: 10 - 1 },
+            { x: 10 - 1, y: 0 },
+            { x: 10 - 1, y: 10 - 1 },
+        ],
+        ATOMS: [],
     },
 
     lesson_1: { // delivery boy
@@ -34,14 +50,25 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 10,
         MAX_NUM_MECHS: 1,
         MAX_NUM_OPERATORS: 0,
+        FAUCETS: [],
+        SINKS: [{ x: 3 - 1, y: 3 - 1 }],
+        ATOMS: [
+            {index:{x:0,y:0}, typ:AtomType.VANILLA},
+        ],
     },
 
     lesson_2: { // first alchemy
-        DIM: 4,
+        DIM: 3,
         PROGRAM_SIZE_MAX: 15,
         N_CYCLES: 15,
         MAX_NUM_MECHS: 1,
         MAX_NUM_OPERATORS: 1,
+        FAUCETS: [],
+        SINKS: [{ x: 3 - 1, y: 3 - 1 }],
+        ATOMS: [
+            {index:{x:0,y:0}, typ:AtomType.VANILLA},
+            {index:{x:0,y:1}, typ:AtomType.VANILLA},
+        ],
     },
 
     lesson_3: { // faucet
@@ -50,6 +77,9 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 15,
         MAX_NUM_MECHS: 1,
         MAX_NUM_OPERATORS: 1,
+        FAUCETS: [{ x: 0, y: 0 }],
+        SINKS: [{ x: 3 - 1, y: 3 - 1 }],
+        ATOMS: [],
     },
 
     lesson_4: { // second alchemy
@@ -58,6 +88,9 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 50,
         MAX_NUM_MECHS: 2,
         MAX_NUM_OPERATORS: 2,
+        FAUCETS: [{ x: 0, y: 0 }],
+        SINKS: [{ x: 4 - 1, y: 4 - 1 }],
+        ATOMS: [],
     },
 
     lesson_5: { // production line
@@ -66,6 +99,9 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 100,
         MAX_NUM_MECHS: 4,
         MAX_NUM_OPERATORS: 3,
+        FAUCETS: [{ x: 0, y: 0 }],
+        SINKS: [{ x: 5 - 1, y: 5 - 1 }],
+        ATOMS: [],
     },
 
 }

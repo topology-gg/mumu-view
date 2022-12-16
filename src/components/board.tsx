@@ -45,8 +45,6 @@ export default function Board (
 
     // Unpack constants given mode
     const DIM = Constraints[mode].DIM
-    const PROGRAM_SIZE_MAX = Constraints[mode].PROGRAM_SIZE_MAX
-    const N_CYCLES = Constraints[mode].N_CYCLES
 
     if (!mechStates) return <></>
 
@@ -59,9 +57,13 @@ export default function Board (
         }
     }
 
-    const BOARD_DIM: number = DIM*2 + (DIM+1)*0.2 + 4 // unit is rem; reflect the dimensions, padding and margin set in CSS
+    const BOX_DIM: number = 10*2 + 10*2*0.2 + 2
+    const BOARD_DIM: number = DIM*2 + DIM*2*0.2 + 2 // unit is rem; reflect the dimensions, padding and margin set in CSS
     const board = (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: "2rem" }}>
+        <Box sx={{
+            display: "flex", flexDirection: "column", justifyContent:'center', alignItems: "center",
+            width: `${BOX_DIM}rem`, height: `${BOX_DIM}rem`, mt: "2rem", ml: '1.7rem'
+        }}>
             <div
                 className={styles.grid_parent}
                 style={{
