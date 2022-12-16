@@ -124,7 +124,7 @@ export const TO_PRECISION = (x) => {
     return x.toString().match(re)[0];
 }
 
-const BLANK_SOLUTION: Solution = {
+export const BLANK_SOLUTION: Solution = {
     mechs: [],
     programs: [],
     operators: []
@@ -189,7 +189,6 @@ const DEMO_SOLUTION_2: Solution = {
 }
 
 export const DEMO_SOLUTIONS = [
-    BLANK_SOLUTION,
     DEMO_SOLUTION_0,
     DEMO_SOLUTION_1,
     DEMO_SOLUTION_2

@@ -15,7 +15,7 @@ import Delivery from "../src/components/delivery";
 import Summary from "../src/components/summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
 
-import { Modes, Constraints, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY } from "../src/constants/constants";
+import { Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY } from "../src/constants/constants";
 import { useTranslation } from "react-i18next";
 import "../config/i18n";
 import { useAccount, useStarknetExecute } from "@starknet-react/core";
@@ -45,29 +45,24 @@ export default function Home() {
     const MAX_NUM_MECHS = Constraints[currMode].MAX_NUM_MECHS
     const MAX_NUM_OPERATORS = Constraints[currMode].MAX_NUM_OPERATORS
     const N_CYCLES = Constraints[currMode].N_CYCLES
+    const FAUCET_POS_S = Constraints[currMode].FAUCETS
+    const SINK_POS_S = Constraints[currMode].SINKS
+    const ATOMS = Constraints[currMode].ATOMS
 
     // Other constants
     const INIT_PROGRAM = ".";
     const MECH_INIT_X = 0;
     const MECH_INIT_Y = 0;
     const INIT_DESCRIPTION = "New Spirit";
-    const ATOM_INIT_XY: Grid[] = [];
-    const UNIT_STATE_INIT: UnitState = {
-        bg_status: BgStatus.EMPTY,
-        border_status: BorderStatus.EMPTY,
-        unit_text: UnitText.GRID,
-        unit_id: null,
-    };
     var unitStatesInit = [];
-    for (var i = 0; i < DIM; i++) {
-        unitStatesInit.push(Array(DIM).fill(UNIT_STATE_INIT));
+    for (var x = 0; x < DIM; x++) {
+        unitStatesInit.push(Array(DIM).fill({
+            bg_status: BgStatus.EMPTY,
+            border_status: BorderStatus.EMPTY,
+            unit_text: UnitText.GRID,
+            unit_id: null,
+        }));
     }
-    const FAUCET_POS: Grid = { x: 0, y: 0 };
-    const SINK_POS_S: Grid[] = [
-        { x: 0, y: DIM - 1 },
-        { x: DIM - 1, y: 0 },
-        { x: DIM - 1, y: DIM - 1 },
-    ];
 
     const { t } = useTranslation();
 
@@ -78,18 +73,18 @@ export default function Home() {
     }, []);
 
     // React states for mechs, programs and descriptions
-    const [programs, setPrograms] = useState<string[]>(DEMO_SOLUTIONS[0].programs);
+    const [programs, setPrograms] = useState<string[]>(BLANK_SOLUTION.programs);
     const [mechInitPositions, setMechInitPositions] = useState<Grid[]>(
-        DEMO_SOLUTIONS[0].mechs.map((mech) => mech.index)
+        BLANK_SOLUTION.mechs.map((mech) => mech.index)
     );
     const [mechDescriptions, setMechDescriptions] = useState<string[]>(
-        DEMO_SOLUTIONS[0].mechs.map((mech) => mech.description)
+        BLANK_SOLUTION.mechs.map((mech) => mech.description)
     );
 
     const numMechs = programs.length;
 
     // React states for operators
-    const [operatorStates, setOperatorStates] = useState<Operator[]>(DEMO_SOLUTIONS[0].operators);
+    const [operatorStates, setOperatorStates] = useState<Operator[]>(BLANK_SOLUTION.operators);
     const [placingFormula, setPlacingFormula] = useState<PlacingFormula>();
     const numOperators = operatorStates.length;
 
@@ -112,7 +107,7 @@ export default function Home() {
     const [animationFrame, setAnimationFrame] = useState<number>(0);
     const [frames, setFrames] = useState<Frame[]>();
     const [loop, setLoop] = useState<NodeJS.Timer>();
-    const [viewSolution, setViewSolution] = useState<Solution>(DEMO_SOLUTIONS[0]);
+    const [viewSolution, setViewSolution] = useState<Solution>(BLANK_SOLUTION);
 
     // React states for UI
     const [gridHovering, setGridHovering] = useState<[string, string]>(["-", "-"]);
@@ -136,12 +131,12 @@ export default function Home() {
             pc_next: 0,
         };
     });
-    const atomInitStates: AtomState[] = ATOM_INIT_XY.map(function (xy, i) {
+    const atomInitStates: AtomState[] = ATOMS.map(function (atom, i) {
         return {
             status: AtomStatus.FREE,
-            index: { x: xy.x, y: xy.y },
+            index: atom.index,
             id: `atom${i}`,
-            typ: AtomType.VANILLA,
+            typ: atom.typ,
             possessed_by: null,
         };
     });
@@ -328,7 +323,9 @@ export default function Home() {
         let newStates = JSON.parse(JSON.stringify(states)); // duplicate
 
         // Faucet & Sink
-        newStates[FAUCET_POS.x][FAUCET_POS.y].unit_text = UnitText.FAUCET;
+        for (const faucet_pos of FAUCET_POS_S) {
+            newStates[faucet_pos.x][faucet_pos.y].unit_text = UnitText.FAUCET;
+        }
 
         for (const sink_pos of SINK_POS_S) {
             newStates[sink_pos.x][sink_pos.y].unit_text = UnitText.SINK;
@@ -368,7 +365,7 @@ export default function Home() {
         });
 
         let faucet_sink_indices_in_str = SINK_POS_S.map((sink_pos) => JSON.stringify(sink_pos));
-        faucet_sink_indices_in_str.push(JSON.stringify(FAUCET_POS)); // there's only one faucet
+        faucet_sink_indices_in_str.concat( FAUCET_POS_S.map((faucet_pos) => JSON.stringify(faucet_pos)) );
 
         const all_indices = adder_indices_in_str.concat(faucet_sink_indices_in_str);
         const unique_indices = all_indices.filter(onlyUnique);
@@ -492,14 +489,13 @@ export default function Home() {
                 // Prepare input
                 const boardConfig: BoardConfig = {
                     dimension: DIM,
-                    atom_faucets: [
-                        {
-                            id: "atom_faucet0",
+                    atom_faucets: FAUCET_POS_S.map((faucet_pos, index) => {
+                        return {
+                            id: `atom_faucet${index}`,
                             typ: AtomType.VANILLA,
-                            index: { x: FAUCET_POS.x, y: FAUCET_POS.y },
-                        } as AtomFaucetState,
-                    ],
-                    // atom_sinks: [{id:'atom_sink0', index:{x:SINK_POS.x, y:SINK_POS.y}} as AtomSinkState],
+                            index: { x: faucet_pos.x, y: faucet_pos.y }
+                        }
+                    }),
                     atom_sinks: SINK_POS_S.map((sink_pos, index) => {
                         return {
                             id: `atom_sink${index}`,
@@ -634,8 +630,18 @@ export default function Home() {
 
     function handleLoadModeClick(mode: Modes) {
         // mode can be 'arena' or any of ['lesson_1', 'lesson_2', ...]
-        console.log('handleLoadModeClick:', mode)
         setCurrMode(_ => mode)
+
+        // reset frames
+        setFrames(_ => null)
+
+        // reset various states
+        setPrograms(_ => BLANK_SOLUTION.programs);
+        setMechInitPositions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.index));
+        setMechDescriptions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.description));
+        setOperatorStates(_ => viewSolution.operators);
+        setAnimationFrame(_ => 0);
+        setOperatorStates(_ => BLANK_SOLUTION.operators);
     }
 
     // Lazy style objects

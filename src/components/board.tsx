@@ -75,6 +75,7 @@ export default function Board (
                     operators={operatorStates}
                     highlighted={operatorInputHighlight}
                     placingFormula={placingFormula}
+                    dim={DIM}
                 />
 
                 {
