@@ -23,7 +23,7 @@ const resources = {
             stop: "Stop",
             incrementFrame: "+1 frame",
             decrementFrame: "-1 frame",
-            "Mech programming": "Cloth Spirit programs",
+            "Mech programming": "Spirit programs",
             "Formula placement": "Formula placements",
             "Stir ": "Stir ",
             Shake: "Shake",
@@ -44,15 +44,15 @@ const resources = {
                 thesisLine1:
                     "Layer 1 blockchains assert identity by capital contribution - pay to mint. Layer 2 blockchains, with new affordance in compute capacity, would assert identity by skill verification - solve to mint.",
                 thesisLine2:
-                    "MuMu is a puzzle about visual & parallel assembly programming. Place & program Cloth Spirits on the canvas, and place the formulas, to transport & transmute substances from Faucet to Sink. Solutions are ranked by throughput and cost.",
+                    "MuMu is a puzzle about visual & parallel assembly programming. Place & program Spirits on the canvas, and place the formulas, to transport & transmute substances from Faucet to Sink. Solutions are ranked by throughput and cost.",
                 Overview: "Overview",
                 overviewLine1:
                     "In the world of alchemy, substances can be transformed into one another via alchemic diagrams. Build diagrams by placing formulas and spirits, and orchestrating the spirits creatively.",
                 instructions: "Laws of the Alchemic Diagram",
 
                 explain_program: "A program is a sequence of instructions.",
-                explain_mech: "Each Cloth Spirit has its own program.",
-                explain_simulation: "During simulation, each Cloth Spirit runs its own program on repeat.",
+                explain_mech: "Each Spirit has its own program.",
+                explain_simulation: "During simulation, each Spirit runs its own program on repeat.",
                 available_instructions: "Available instructions:",
                 instruction_wasd: ": move up/left/down/right by one grid on the canvas.",
                 instruction_z: ": pick up an object, if available.",
@@ -78,7 +78,7 @@ const resources = {
                 goalLine3_2: " to show who you are on the leaderboard.",
                 costTitle: "Cost",
                 staticCostTitle: "Static Cost",
-                staticCostLine1: "Cloth Spirit: 150 / entity",
+                staticCostLine1: "Spirit: 150 / entity",
                 staticCostLine2: "Stir: 250 / formula",
                 staticCostLine3: "Shake: 500 / formula",
                 staticCostLine4: "Steam: 750 / formula",
