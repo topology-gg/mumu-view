@@ -51,12 +51,13 @@ export default function Summary ({ frames, n_cycles }) {
         textDecoration: 'underline',
         marginLeft: '0.2rem'
     }
+    const div_style: React.CSSProperties = {display:'flex',flexDirection:'row',paddingLeft:'2rem'}
 
     return (
-        <>
+        <div style={{}}>
             <p style={{fontSize:'0.9rem'}}>{t('summary.title')}</p>
 
-            <div style={{display:'flex',flexDirection:'row'}}>
+            <div style={div_style}>
                 <p>{t('summary.totalPre', { frames: n_cycles })}</p>
                 <Unit
                     state={{
@@ -75,7 +76,7 @@ export default function Summary ({ frames, n_cycles }) {
                 <p style={{marginLeft:'0.3rem'}}>{t('summary.totalPost')}</p>
             </div>
 
-            <div style={{display:'flex',flexDirection:'row'}}>
+            <div style={div_style}>
                 <p>{t('summary.averageLatencyPre')}</p>
                 <Unit
                     state={{
@@ -93,7 +94,7 @@ export default function Summary ({ frames, n_cycles }) {
                 <p style={makeshift_number_style}>{average_latency_str}</p>
             </div>
 
-            <div style={{display:'flex',flexDirection:'row'}}>
+            <div style={div_style}>
                 <p>{t('summary.averageDynamicCostPre')}</p>
                 <Unit
                     state={{
@@ -111,10 +112,10 @@ export default function Summary ({ frames, n_cycles }) {
                 <p style={makeshift_number_style}>{average_dynamic_cost_str}</p>
             </div>
 
-            <div style={{display:'flex',flexDirection:'row'}}>
+            <div style={div_style}>
                 <p>{t('summary.staticCost')}:</p>
                 <p style={makeshift_number_style}>{static_cost}</p>
             </div>
-        </>
+        </div>
     )
 }

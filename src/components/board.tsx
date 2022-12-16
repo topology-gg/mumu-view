@@ -9,7 +9,7 @@ import OperatorGridBg from "./OperatorGridBg";
 import { Constraints, DEMO_SOLUTIONS, Modes } from "../constants/constants";
 import { useTranslation } from "react-i18next";
 import "../../config/i18n";
-import { Box, Button, Tooltip } from "@mui/material";
+import { Box, Button, Container, Tooltip } from "@mui/material";
 import { ANIM_FRAME_LATENCY } from "../constants/constants";
 import AtomState, { AtomType } from "../types/AtomState";
 import { useSpring, animated } from "react-spring";
@@ -60,16 +60,21 @@ export default function Board (
     const BOX_DIM: number = 10*2 + 10*2*0.2 + 2
     const BOARD_DIM: number = DIM*2 + DIM*2*0.2 + 2 // unit is rem; reflect the dimensions, padding and margin set in CSS
     const board = (
+        <div style={{
+            width: `${BOX_DIM}rem`, height: `${BOX_DIM}rem`, marginLeft: '1.7rem', marginTop: "2rem",
+            display:'flex',alignItems:'center',justifyContent:'center'
+        }}>
+
         <Box sx={{
             display: "flex", flexDirection: "column", justifyContent:'center', alignItems: "center",
-            width: `${BOX_DIM}rem`, height: `${BOX_DIM}rem`, mt: "2rem", ml: '1.7rem'
+            width: BOARD_DIM.toString()+'rem',
+            height: BOARD_DIM.toString()+'rem',
+            border: 1, borderRadius:4, boxShadow:3,
+            backgroundColor:'#FDF5E677',
         }}>
             <div
                 className={styles.grid_parent}
-                style={{
-                    width: BOARD_DIM.toString()+'rem',
-                    height: BOARD_DIM.toString()+'rem'
-                }}
+                style={{}}
             >
                 <OperatorGridBg
                     operators={operatorStates}
@@ -142,6 +147,8 @@ export default function Board (
                 )}
             </div>
         </Box>
+
+        </div>
     );
 
     // Render

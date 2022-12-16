@@ -17,11 +17,16 @@ const MidScreenControl = ({
         : { ...makeshift_button_style, color: "#CCCCCC" };
 
     return (
-        <Box sx={{}}>
-            <div
+        <Box sx={{
+            display:'flex',flexDirection:'row',justifyContent:'center', alignItems:'center',
+            width:'26rem',backgroundColor:'#ffffff', ml:'1.7rem', p:'1rem', mt:'1rem',
+            border: 1, borderRadius:4, boxShadow:3,
+
+        }}>
+            {/* <div
                 className={styles.midScreenControls}
                 style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}
-            >
+            > */}
                 <p
                     style={{
                         padding: "0",
@@ -32,7 +37,7 @@ const MidScreenControl = ({
                         // width: "100px" /* Make room for dynamic text */,
                         height: "20px",
                         lineHeight: "20px",
-                        fontSize: "0.8rem",
+                        fontSize: "0.75rem",
                     }}
                 >
                     {" "}
@@ -83,7 +88,7 @@ const MidScreenControl = ({
                     </i>
                 </button>
 
-            </div>
+            {/* </div> */}
         </Box>
     )
 }

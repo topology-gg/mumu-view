@@ -623,17 +623,16 @@ export default function Home() {
     }
 
     function handleLoadModeClick(mode: Modes) {
-        // mode can be 'arena' or any of ['lesson_1', 'lesson_2', ...]
-        setCurrMode(_ => mode)
-
-        // reset frames
-        setFrames(_ => null)
+        // set current mode
+        setCurrMode(_ => mode);
 
         // reset various states
+        setFrames(_ => null);
         setPrograms(_ => BLANK_SOLUTION.programs);
         setMechInitPositions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.index));
         setMechDescriptions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.description));
         setOperatorStates(_ => viewSolution.operators);
+        setAnimationState(_ => "Stop");
         setAnimationFrame(_ => 0);
         setOperatorStates(_ => BLANK_SOLUTION.operators);
         setPlacingFormula(_ => null);
@@ -672,15 +671,24 @@ export default function Home() {
         producedAtomIds = {producedAtomIds}
     />
 
+    const stats_box_sx = {
+        p:'1rem',backgroundColor:'#ffffff',fontSize:'0.75rem',alignItems:'center',
+        border: 1, borderRadius:4, boxShadow:3,
+    }
     const stats = (
         <div>
             {" "}
-            <div className={styles.delivered_atoms}>
+            <Box sx={stats_box_sx}>
                 <Delivery delivered={delivered} cost_accumulated={cost_accumulated} />
-            </div>
-            <div className={styles.summary}>
+            </Box>
+            <Box sx={{...stats_box_sx,mt:'1rem'}}>
                 <Summary frames={frames} n_cycles={N_CYCLES} />
-            </div>
+            </Box>
+
+            {/* <div className={styles.delivered_atoms}>
+            </div> */}
+            {/* <div className={styles.summary}> */}
+            {/* </div> */}
         </div>
     );
 
