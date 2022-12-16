@@ -66,10 +66,11 @@ export default function Layout({
                 <Box sx={{ height: { md: "100vh" } }} display="flex" flexDirection="column">
                     <Grid container spacing={0} flex={1} disableEqualOverflow>
                         <Grid xs={12} md={4} sx={gridStyles}>
-                            {/* <Panel sx={{ pl: 2 }}> */}
+
                             <Panel sx={{
                                 pt: 9, border: 1, borderRadius:4,
                                 mt:'2rem', ml:'3rem', mb: '1rem',
+                                backgroundColor:'#ffffff', boxShadow:3,
                             }}>
 
                                 <Convo />

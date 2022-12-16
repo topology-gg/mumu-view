@@ -17,7 +17,7 @@ const MidScreenControl = ({
         : { ...makeshift_button_style, color: "#CCCCCC" };
 
     return (
-        <Box>
+        <Box sx={{}}>
             <div
                 className={styles.midScreenControls}
                 style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}

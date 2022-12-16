@@ -35,6 +35,8 @@ import Board from "../src/components/board";
 
 export default function Home() {
 
+    const { t } = useTranslation();
+
     // React state for current mode (which lessons of tutorial, or arena mode)
     // note: this impacts many components - board, mid screen control, programming components etc
     const [currMode, setCurrMode] = useState<Modes>(Modes.arena)
@@ -51,8 +53,6 @@ export default function Home() {
 
     // Other constants
     const INIT_PROGRAM = ".";
-    const MECH_INIT_X = 0;
-    const MECH_INIT_Y = 0;
     const INIT_DESCRIPTION = "New Spirit";
     var unitStatesInit = [];
     for (var x = 0; x < DIM; x++) {
@@ -63,14 +63,6 @@ export default function Home() {
             unit_id: null,
         }));
     }
-
-    const { t } = useTranslation();
-
-    // React states for lifecycle
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     // React states for mechs, programs and descriptions
     const [programs, setPrograms] = useState<string[]>(BLANK_SOLUTION.programs);
@@ -399,10 +391,9 @@ export default function Home() {
         if (animationState != "Stop") return; // only when in Stop mode can player add/remove mechs
         if (mode === "+" && numMechs < MAX_NUM_MECHS) {
             setMechInitPositions(
-                // Array.from({length:numMechs+1}).fill({ x: MECH_INIT_X, y: MECH_INIT_Y }) as Grid[]
                 (prev) => {
                     let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
-                    prev_copy.push({ x: MECH_INIT_X, y: MECH_INIT_Y });
+                    prev_copy.push({ x: 0, y: 0 });
                     return prev_copy;
                 }
             );
@@ -642,6 +633,7 @@ export default function Home() {
         setOperatorStates(_ => viewSolution.operators);
         setAnimationFrame(_ => 0);
         setOperatorStates(_ => BLANK_SOLUTION.operators);
+        setPlacingFormula(_ => null);
     }
 
     // Lazy style objects
