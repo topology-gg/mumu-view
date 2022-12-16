@@ -48,7 +48,7 @@ export default function Setting({
         renderMode == 'language' ? 300 :
         renderMode == 'connect' ? 450 :
         renderMode == 'manual' ? 600 :
-        renderMode == 'tutorial' ? 450 :
+        renderMode == 'tutorial' ? 700 :
         1100 // leaderboard width
 
     // render

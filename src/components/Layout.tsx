@@ -125,9 +125,6 @@ export default function Layout({
                             <Panel sx={{ mt: '2rem', mr: 8 }}>{stats}</Panel>
                         </Grid>
                     </Grid>
-                    {/* <Divider /> */}
-                    {/* {midScreenControls} */}
-                    {/* <Divider /> */}
 
                     <Grid container spacing={0} flex={1.25}>
                         <Grid xs={12} md={4}>
@@ -136,7 +133,10 @@ export default function Layout({
                         <Grid xs={12} md={8}>
                             <Box
                                 flex={1} flexShrink={0} overflow="scroll"
-                                sx={{border: 1, borderRadius:4, ml:3, mr: 8, height:'15rem' }}
+                                sx={{
+                                    border: 1, borderRadius:4, ml:3, mr: 8, height:'15rem',
+                                    backgroundColor:'#ffffff', boxShadow:3,
+                                }}
                             >
 
                                 {/* <Panel> */}

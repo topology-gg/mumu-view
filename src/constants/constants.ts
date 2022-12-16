@@ -21,11 +21,11 @@ export const Lesson_names = {
 }
 
 export const Lesson_descriptions = {
-    lesson_1: 'be a good delivery boy',
-    lesson_2: 'perform alchemy the first time',
-    lesson_3: 'work with a faucet the first time',
-    lesson_4: 'more alchemy!',
-    lesson_5: 'make a proud production line'
+    lesson_1: ['Make the first delivery!', 'Understand how spirit works.'],
+    lesson_2: ['Perform alchemy the first time!', 'Understand how formula works.'],
+    lesson_3: ['Work with a faucet!'],
+    lesson_4: ['More alchemy!', 'Get familiar with handling multiple formulas.'],
+    lesson_5: ['Make a proud production line!', 'Get familiar with handling multiple spirits working in concert.']
 }
 
 export const Constraints: { [key in Modes]: any } = {
