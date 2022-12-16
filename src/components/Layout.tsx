@@ -135,7 +135,7 @@ export default function Layout({
                                 flex={1} flexShrink={0} overflow="scroll"
                                 sx={{
                                     border: 1, borderRadius:4, ml:3, mr: 8, height:'15rem',
-                                    backgroundColor:'#ffffff', boxShadow:3,
+                                    backgroundColor:'#ffffff', boxShadow:3
                                 }}
                             >
 

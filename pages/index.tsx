@@ -567,17 +567,20 @@ export default function Home() {
     }
 
     function handleLoadSolutionClick(viewSolution: Solution) {
-        if (animationState != "Stop") return;
 
-        console.log("load solution:", viewSolution);
+        if (animationState != "Stop") setAnimationState(_ => "Stop")
         setViewSolution((prev) => viewSolution);
 
+        // set mode to arena
+        setCurrMode(_ => Modes.arena);
+
+        // set react states to render the solution on the board
         setPrograms((prev) => viewSolution.programs);
         setMechInitPositions((prev) => viewSolution.mechs.map((mech) => mech.index));
         setMechDescriptions((prev) => viewSolution.mechs.map((mech) => mech.description));
         setOperatorStates((prev) => viewSolution.operators);
-
         setAnimationFrame((prev) => 0);
+        setFrames(_ => null);
     }
 
     function handleMouseOverOperatorInput(operator_i: number) {
