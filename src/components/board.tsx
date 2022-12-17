@@ -16,6 +16,12 @@ import { useSpring, animated } from "react-spring";
 import MechUnit from "./MechUnit"
 import LessonInstruction from "./lessonInstruction";
 
+import SchoolIcon from '@mui/icons-material/School';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
+
+
 interface BoardProps {
     mode: Modes
     objective: string
@@ -75,8 +81,18 @@ export default function Board (
                         border: 1, borderRadius:4, boxShadow:3,
                         height: 150, overflow:'hidden'
                     }}>
-                        <p style={{textAlign:'left',fontSize:'1rem',marginTop:'0',marginBottom:'1.3rem'}}>{Lesson_names[mode]}</p>
-                        <p style={{textAlign:'left',fontSize:'0.8rem',marginTop:'0',marginBottom:'1.3rem'}}>Objective: {objective}</p>
+
+                        <ListItem sx={{pl:0,pt:0}}>
+                            <ListItemIcon sx={{minWidth:'30px'}}>
+                                <SchoolIcon fontSize="small"/>
+                            </ListItemIcon>
+                            <ListItemText>{Lesson_names[mode]}</ListItemText>
+                        </ListItem>
+
+                        <p style={{
+                            textAlign:'left',fontSize:'0.85rem',marginTop:'0',marginBottom:'1.3rem'
+                        }}>Objective: {objective}</p>
+
                         <LessonInstruction lesson={mode}/>
                     </Box>
                 ) : null

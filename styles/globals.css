@@ -21,8 +21,10 @@ body {
     background-color: rgba(0, 0, 0, .2);
     border: 4px solid rgba(0, 0, 0, 0);
     box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-    animation: blink 1s infinite;
 }
+::-webkit-scrollbar-corner {
+    background: rgba(0,0,0,0);
+  }
 
 a {
   color: inherit;
@@ -309,4 +311,10 @@ input::placeholder {
     background: url('../src/images/grabber_close.png') no-repeat;
     background-position: 0% 100%;
     background-size: 50%;
+}
+
+.celebrate {
+    background: url('../src/images/celebrate.gif') no-repeat;
+    background-position: center;
+    background-size: 100%;
 }

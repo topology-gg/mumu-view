@@ -19,7 +19,7 @@ export default function Convo() {
 
     return (
         <Box
-            flex={1} flexShrink={0} overflow="scroll"
+            flex={1} flexShrink={0} overflow="hidden"
             sx={{ textAlign:'left', mb:'1rem', pl:'3.5rem', pr:'3.5rem', height:'4rem' }}
         >
             <Typewriter

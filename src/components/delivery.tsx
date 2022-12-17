@@ -12,7 +12,7 @@ export default function Delivery({ delivered, cost_accumulated }) {
         return (
             <div  style={{alignItems:'center', margin:'0 auto'}}>
                 <p>{t('delivery.accumulatedCost')}: n/a</p>
-                <p>{t('delivery.delivered')}: n/a</p>
+                <p style={{height:'38px',lineHeight:'38px'}}>{t('delivery.delivered')}: n/a</p>
             </div>
         )
     }
@@ -20,7 +20,7 @@ export default function Delivery({ delivered, cost_accumulated }) {
         return (
             <div  style={{alignItems:'center', margin:'0 auto'}}>
                 <p>{t('delivery.accumulatedCost')}: {cost_accumulated}</p>
-                <p>{t('delivery.delivered')}: 0</p>
+                <p style={{height:'38px',lineHeight:'38px'}}>{t('delivery.delivered')}: 0</p>
             </div>
         )
     }
@@ -37,8 +37,11 @@ export default function Delivery({ delivered, cost_accumulated }) {
     return (
         <div style={{alignItems:'center', margin:'0 auto'}}>
             <p>{t('delivery.accumulatedCost')}: {cost_accumulated}</p>
-            <p>
-                {t('delivery.delivered')}:
+
+            <div style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'center',height:'38px'}}>
+
+                <p>{t('delivery.delivered')}:</p>
+
                 {
                     Object.keys(counts).map(function(key: string,i: number){
                         // const bg_status = key == AtomType.HAZELNUT ? BgStatus.ATOM_HAZELNUT_FREE : BgStatus.ATOM_VANILLA_FREE
@@ -84,7 +87,7 @@ export default function Delivery({ delivered, cost_accumulated }) {
                         )
                     })
                 }
-            </p>
+            </div>
         </div>
     )
 }

@@ -65,6 +65,7 @@ export const Constraints: { [key in Modes]: any } = {
             { x: 10 - 1, y: 10 - 1 },
         ],
         ATOMS: [],
+        TARGET_TYPE: AtomType.SAFFRON
     },
 
     lesson_1: { // delivery boy
@@ -78,6 +79,8 @@ export const Constraints: { [key in Modes]: any } = {
         ATOMS: [
             {index:{x:0,y:0}, typ:AtomType.VANILLA},
         ],
+        TARGET_TYPE: AtomType.VANILLA,
+        OBJECTIVE_DELIVERY: 1,
     },
 
     lesson_2: { // first alchemy
@@ -92,6 +95,8 @@ export const Constraints: { [key in Modes]: any } = {
             {index:{x:0,y:0}, typ:AtomType.VANILLA},
             {index:{x:0,y:1}, typ:AtomType.VANILLA},
         ],
+        TARGET_TYPE: AtomType.HAZELNUT,
+        OBJECTIVE_DELIVERY: 1,
     },
 
     lesson_3: { // faucet
@@ -103,6 +108,8 @@ export const Constraints: { [key in Modes]: any } = {
         FAUCETS: [{ x: 0, y: 0 }],
         SINKS: [{ x: 3 - 1, y: 3 - 1 }],
         ATOMS: [],
+        TARGET_TYPE: AtomType.HAZELNUT,
+        OBJECTIVE_DELIVERY: 1,
     },
 
     lesson_4: { // second alchemy
@@ -114,17 +121,21 @@ export const Constraints: { [key in Modes]: any } = {
         FAUCETS: [{ x: 0, y: 0 }],
         SINKS: [{ x: 4 - 1, y: 4 - 1 }],
         ATOMS: [],
+        TARGET_TYPE: AtomType.CHOCOLATE,
+        OBJECTIVE_DELIVERY: 1,
     },
 
     lesson_5: { // production line
         DIM: 5,
         PROGRAM_SIZE_MAX: 15,
-        N_CYCLES: 100,
+        N_CYCLES: 50,
         MAX_NUM_MECHS: 4,
         MAX_NUM_OPERATORS: 3,
         FAUCETS: [{ x: 0, y: 0 }],
         SINKS: [{ x: 5 - 1, y: 5 - 1 }],
         ATOMS: [],
+        TARGET_TYPE: AtomType.CHOCOLATE,
+        OBJECTIVE_DELIVERY: 5,
     },
 
 }

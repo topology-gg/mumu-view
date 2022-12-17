@@ -686,7 +686,7 @@ export default function Home() {
                 <Delivery delivered={delivered} cost_accumulated={cost_accumulated} />
             </Box>
             <Box sx={{...stats_box_sx,mt:'1rem'}}>
-                <Summary frames={frames} n_cycles={N_CYCLES} />
+                <Summary mode={currMode} frames={frames} n_cycles={N_CYCLES} />
             </Box>
         </div>
     );

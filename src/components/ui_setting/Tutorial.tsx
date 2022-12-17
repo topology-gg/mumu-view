@@ -35,6 +35,7 @@ const Tutorial = ({ loadMode }) => {
                                 onMouseLeave={() => setCurrHoveredLesson(_ => null)}
                                 sx={{justifyContent: 'left', pl:10}}
                                 selected={currLesson == lesson}
+                                disabled={(lesson=='lesson_1' || lesson=='lesson_2') ? false : true} // disable the lessons that are not implemented yet
                             >
                                 { lesson_name }
                             </MenuItem>
