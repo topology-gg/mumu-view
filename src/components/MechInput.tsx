@@ -2,7 +2,7 @@ import React, { KeyboardEventHandler, useState } from "react";
 import Grid from "../types/Grid";
 import styles from "../../styles/Home.module.css";
 import { useTranslation } from "react-i18next";
-import { INSTRUCTION_ICON_MAP, PROGRAM_SIZE_MAX, DESCRIPTION_SIZE_MAX } from "../constants/constants";
+import { INSTRUCTION_ICON_MAP, DESCRIPTION_SIZE_MAX, Modes, Constraints } from "../constants/constants";
 import { Draggable } from "react-beautiful-dnd";
 import Unit from "./unit";
 import { BgStatus, UnitText } from "../types/UnitState";
@@ -14,6 +14,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, IconButton } f
 import { NumericType } from "mongodb";
 
 interface MechInputProps {
+    mode: Modes
     mechIndex: number;
     position: Grid;
     description: string;
@@ -32,6 +33,7 @@ interface MechInputProps {
 }
 
 const MechInput = ({
+    mode,
     mechIndex,
     position,
     description,
@@ -49,6 +51,9 @@ const MechInput = ({
     unitBgStatus,
 }: MechInputProps) => {
     const { t } = useTranslation();
+
+    // decode from mode
+    const PROGRAM_SIZE_MAX = Constraints[mode].PROGRAM_SIZE_MAX
 
     const instructions: string[] = program ? program.split(",") : [];
     const programLength = instructions.length;

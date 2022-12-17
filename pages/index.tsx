@@ -694,6 +694,7 @@ export default function Home() {
     const mechProgramming = (
         <div>
             <MechProgramming
+                mode={currMode}
                 animationState={animationState}
                 mechCarries={mech_carries}
                 mechIndexHighlighted={mechIndexHighlighted}
