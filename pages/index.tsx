@@ -50,7 +50,7 @@ export default function Home() {
     const FAUCET_POS_S = Constraints[currMode].FAUCETS
     const SINK_POS_S = Constraints[currMode].SINKS
     const ATOMS = Constraints[currMode].ATOMS
-    const MODE_OBJECTIVE = currMode==Modes.arena ? [] : Lesson_objective[currMode]
+    const MODE_OBJECTIVE = currMode==Modes.arena ? '' : Lesson_objective[currMode]
     const MODE_INSTRUCTION = currMode==Modes.arena ? [] : Lesson_instruction[currMode]
 
     // Other constants

@@ -18,7 +18,7 @@ import LessonInstruction from "./lessonInstruction";
 
 interface BoardProps {
     mode: Modes
-    objective: string[]
+    objective: string
     instruction: string[]
     operatorStates: Operator[]
     operatorInputHighlight: boolean[]
@@ -37,7 +37,7 @@ interface BoardProps {
 }
 
 export default function Board (
-    { mode, objective=[], instruction=[], operatorStates, operatorInputHighlight, placingFormula,
+    { mode, objective='', instruction=[], operatorStates, operatorInputHighlight, placingFormula,
     unitStates, consumableAtomTypes, produceableAtomTypes,
     mechStates, atomStates, mechIndexHighlighted,
     handleMouseOver, handleMouseOut, handleUnitClick,
