@@ -9,6 +9,21 @@ body {
     color: #222222;
 }
 
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 15px;
+  }
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    margin-right: 5px;
+    background-clip: padding-box;
+    background-color: rgba(0, 0, 0, .2);
+    border: 4px solid rgba(0, 0, 0, 0);
+    box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+    animation: blink 1s infinite;
+}
+
 a {
   color: inherit;
   text-decoration: none;

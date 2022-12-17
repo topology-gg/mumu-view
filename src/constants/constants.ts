@@ -13,11 +13,11 @@ export enum Modes {
 }
 
 export const Lesson_names = {
-    lesson_1: 'Lesson 1 / delivery boy',
-    lesson_2: 'Lesson 2 / first alchemy',
-    lesson_3: 'Lesson 3 / faucet',
-    lesson_4: 'Lesson 4 / second alchemy',
-    lesson_5: 'Lesson 5 / production line'
+    lesson_1: 'Lesson 1: Delivery Boy',
+    lesson_2: 'Lesson 2: First Alchemy',
+    lesson_3: 'Lesson 3: Faucet',
+    lesson_4: 'Lesson 4: Second Alchemy',
+    lesson_5: 'Lesson 5: Production Line'
 }
 
 export const Lesson_descriptions = {
@@ -26,6 +26,29 @@ export const Lesson_descriptions = {
     lesson_3: ['Work with a faucet!'],
     lesson_4: ['More alchemy!', 'Get familiar with handling multiple formulas.'],
     lesson_5: ['Make a proud production line!', 'Get familiar with handling multiple Spirits working in concert.']
+}
+
+export const Lesson_objective = {
+    lesson_1: 'Program 1 spirit to deliver 1 wood from (0,0) to the Sink at (2,2).',
+    lesson_2: 'Program 1 spirit and place 1 formula to transform the 2 given woods and deliver 1 clover to the Sink at (2,2).',
+    lesson_3: '',
+    lesson_4: '',
+    lesson_5: '',
+}
+
+export const Lesson_instruction = {
+    lesson_1: [
+        `Welcome to ${Lesson_names.lesson_1}! You will learn the basics of Spirit programming.`,
+        'Spirit is the mysterious life form that you, the alchemist, can command to move substances on the alchemical diagram.',
+        'Spirit follows the movement instructions - W,A,S,D - to move up, left, down, right by one unit on the diagram.',
+        'Spirit also follows the Z instruction to pick up the substance underneath it, and the X instruction to put down the substance in its possession.',
+        'Finally, a Sink (marked by S on the diagram) absorbs anything deposited onto itself and serves as the output portal for a diagram.',
+        'To complete this lesson, expand "Spirit programs" panel below, click "new spirit" to add 1 spirit, place the spirit on the canvas, and program it with instructions so that it picks up the wood at (0,0) and deposit it at the Sink at (2,2).'
+    ],
+    lesson_2: [],
+    lesson_3: [],
+    lesson_4: [],
+    lesson_5: [],
 }
 
 export const Constraints: { [key in Modes]: any } = {

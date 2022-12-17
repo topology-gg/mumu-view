@@ -15,7 +15,7 @@ import Delivery from "../src/components/delivery";
 import Summary from "../src/components/summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
 
-import { Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY } from "../src/constants/constants";
+import { Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY, Lesson_instruction, Lesson_objective } from "../src/constants/constants";
 import { useTranslation } from "react-i18next";
 import "../config/i18n";
 import { useAccount, useStarknetExecute } from "@starknet-react/core";
@@ -50,6 +50,8 @@ export default function Home() {
     const FAUCET_POS_S = Constraints[currMode].FAUCETS
     const SINK_POS_S = Constraints[currMode].SINKS
     const ATOMS = Constraints[currMode].ATOMS
+    const MODE_OBJECTIVE = currMode==Modes.arena ? [] : Lesson_objective[currMode]
+    const MODE_INSTRUCTION = currMode==Modes.arena ? [] : Lesson_instruction[currMode]
 
     // Other constants
     const INIT_PROGRAM = ".";
@@ -655,6 +657,8 @@ export default function Home() {
 
     const board = <Board
         mode={currMode}
+        objective={MODE_OBJECTIVE}
+        instruction={MODE_INSTRUCTION}
         operatorStates = {operatorStates}
         operatorInputHighlight = {operatorInputHighlight}
         placingFormula = {placingFormula}
@@ -684,11 +688,6 @@ export default function Home() {
             <Box sx={{...stats_box_sx,mt:'1rem'}}>
                 <Summary frames={frames} n_cycles={N_CYCLES} />
             </Box>
-
-            {/* <div className={styles.delivered_atoms}>
-            </div> */}
-            {/* <div className={styles.summary}> */}
-            {/* </div> */}
         </div>
     );
 

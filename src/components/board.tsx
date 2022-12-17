@@ -6,7 +6,7 @@ import UnitState, { BgStatus, BorderStatus, UnitText } from "../types/UnitState"
 import Grid from "../types/Grid";
 import Operator, { OPERATOR_TYPES, PlacingFormula } from "../types/Operator";
 import OperatorGridBg from "./OperatorGridBg";
-import { Constraints, DEMO_SOLUTIONS, Modes } from "../constants/constants";
+import { Constraints, DEMO_SOLUTIONS, Modes, Lesson_names } from "../constants/constants";
 import { useTranslation } from "react-i18next";
 import "../../config/i18n";
 import { Box, Button, Container, Tooltip } from "@mui/material";
@@ -14,9 +14,12 @@ import { ANIM_FRAME_LATENCY } from "../constants/constants";
 import AtomState, { AtomType } from "../types/AtomState";
 import { useSpring, animated } from "react-spring";
 import MechUnit from "./MechUnit"
+import LessonInstruction from "./lessonInstruction";
 
 interface BoardProps {
     mode: Modes
+    objective: string[]
+    instruction: string[]
     operatorStates: Operator[]
     operatorInputHighlight: boolean[]
     placingFormula?: PlacingFormula
@@ -34,7 +37,7 @@ interface BoardProps {
 }
 
 export default function Board (
-    { mode, operatorStates, operatorInputHighlight, placingFormula,
+    { mode, objective=[], instruction=[], operatorStates, operatorInputHighlight, placingFormula,
     unitStates, consumableAtomTypes, produceableAtomTypes,
     mechStates, atomStates, mechIndexHighlighted,
     handleMouseOver, handleMouseOut, handleUnitClick,
@@ -62,91 +65,105 @@ export default function Board (
     const board = (
         <div style={{
             width: `${BOX_DIM}rem`, height: `${BOX_DIM}rem`, marginLeft: '1.7rem', marginTop: "2rem",
-            display:'flex',alignItems:'center',justifyContent:'center'
+            display:'flex', flexDirection:'column', alignItems:'center',justifyContent:'flex-start'
         }}>
+            {
+                (mode !== Modes.arena) ? (
+                    <Box sx={{
+                        display: "flex", flexDirection: "column", alignItems: "left",
+                        p:2, backgroundColor:'#ffffff', mb:3,
+                        border: 1, borderRadius:4, boxShadow:3,
+                        height: 150, overflow:'hidden'
+                    }}>
+                        <p style={{textAlign:'left',fontSize:'1rem',marginTop:'0',marginBottom:'1.3rem'}}>{Lesson_names[mode]}</p>
+                        <p style={{textAlign:'left',fontSize:'0.8rem',marginTop:'0',marginBottom:'1.3rem'}}>Objective: {objective}</p>
+                        <LessonInstruction lesson={mode}/>
+                    </Box>
+                ) : null
+            }
 
-        <Box sx={{
-            display: "flex", flexDirection: "column", justifyContent:'center', alignItems: "center",
-            width: BOARD_DIM.toString()+'rem',
-            height: BOARD_DIM.toString()+'rem',
-            border: 1, borderRadius:4, boxShadow:3,
-            backgroundColor:'#FDF5E677',
-        }}>
-            <div
-                className={styles.grid_parent}
-                style={{}}
-            >
-                <OperatorGridBg
-                    operators={operatorStates}
-                    highlighted={operatorInputHighlight}
-                    placingFormula={placingFormula}
-                    dim={DIM}
-                />
+            <Box sx={{
+                display: "flex", flexDirection: "column", justifyContent:'center', alignItems: "center",
+                width: BOARD_DIM.toString()+'rem',
+                height: BOARD_DIM.toString()+'rem',
+                border: 1, borderRadius:4, boxShadow:3,
+                backgroundColor:'#FDF5E677',
+            }}>
+                <div
+                    className={styles.grid_parent}
+                    style={{}}
+                >
+                    <OperatorGridBg
+                        operators={operatorStates}
+                        highlighted={operatorInputHighlight}
+                        placingFormula={placingFormula}
+                        dim={DIM}
+                    />
 
-                {
-                    mechStates.map((mechState, mech_i) => (
-                        <MechUnit mechState={mechState} possessedAtom={possessedAtom[mech_i]}/>
-                    ))
-                }
+                    {
+                        mechStates.map((mechState, mech_i) => (
+                            <MechUnit mechState={mechState} possessedAtom={possessedAtom[mech_i]}/>
+                        ))
+                    }
 
 
-                {Array.from({ length: DIM }).map(
-                    (
-                        _,
-                        i // i is y
-                    ) => (
-                        <div key={`row-${i}`} className={styles.grid_row}>
-                            {Array.from({ length: DIM }).map(
-                                (
-                                    _,
-                                    j // j is x
-                                ) => {
-                                    // if (unitStates[j][i].unit_id !== null) console.log(unitStates[j][i].unit_id)
-                                    const isConsumed = unitStates[j][i].unit_id == null ? false :
-                                        !consumedAtomIds ? false :
-                                        consumedAtomIds.includes(unitStates[j][i].unit_id)
-                                    const isProduced = unitStates[j][i].unit_id == null ? false :
-                                        !producedAtomIds ? false :
-                                        producedAtomIds.includes(unitStates[j][i].unit_id)
+                    {Array.from({ length: DIM }).map(
+                        (
+                            _,
+                            i // i is y
+                        ) => (
+                            <div key={`row-${i}`} className={styles.grid_row}>
+                                {Array.from({ length: DIM }).map(
+                                    (
+                                        _,
+                                        j // j is x
+                                    ) => {
+                                        // if (unitStates[j][i].unit_id !== null) console.log(unitStates[j][i].unit_id)
+                                        const isConsumed = unitStates[j][i].unit_id == null ? false :
+                                            !consumedAtomIds ? false :
+                                            consumedAtomIds.includes(unitStates[j][i].unit_id)
+                                        const isProduced = unitStates[j][i].unit_id == null ? false :
+                                            !producedAtomIds ? false :
+                                            producedAtomIds.includes(unitStates[j][i].unit_id)
 
-                                    if (isConsumed) console.log(`isConsumed at (i,j)=(${i},${j})`)
-                                    if (isProduced) console.log(`isProduced at (i,j)=(${i},${j})`)
+                                        if (isConsumed) console.log(`isConsumed at (i,j)=(${i},${j})`)
+                                        if (isProduced) console.log(`isProduced at (i,j)=(${i},${j})`)
 
-                                    return (
-                                        <Tooltip title={`${j},${i}`} disableInteractive arrow
-                                            enterDelay={0} leaveDelay={0} TransitionProps={{ timeout: 100 }}
-                                        >
-                                            <div key={`${j}-${i}`}>
-                                                <Unit
-                                                    key={`unit-${j}-${i}`}
-                                                    state={unitStates[j][i]}
-                                                    consumableAtomType={consumableAtomTypes[j][i]}
-                                                    produceableAtomType={produceableAtomTypes[j][i]}
-                                                    handleMouseOver={() => handleMouseOver(j, i)}
-                                                    handleMouseOut={() => handleMouseOut()}
-                                                    onClick={() => handleUnitClick(j, i)}
-                                                    mechHighlight={
-                                                        mechIndexHighlighted == -1
-                                                            ? false
-                                                            : j == mechStates[mechIndexHighlighted].index.x &&
-                                                            i == mechStates[mechIndexHighlighted].index.y
-                                                            ? true
-                                                            : false
-                                                    }
-                                                    isSmall={false}
-                                                    isConsumed={isConsumed}
-                                                    isProduced={isProduced}
-                                                />
-                                            </div>
-                                        </Tooltip>
-                                    )
-                                }
-                            )}
-                        </div>
-                    )
-                )}
-            </div>
-        </Box>
+                                        return (
+                                            <Tooltip title={`${j},${i}`} disableInteractive arrow
+                                                enterDelay={0} leaveDelay={0} TransitionProps={{ timeout: 100 }}
+                                            >
+                                                <div key={`${j}-${i}`}>
+                                                    <Unit
+                                                        key={`unit-${j}-${i}`}
+                                                        state={unitStates[j][i]}
+                                                        consumableAtomType={consumableAtomTypes[j][i]}
+                                                        produceableAtomType={produceableAtomTypes[j][i]}
+                                                        handleMouseOver={() => handleMouseOver(j, i)}
+                                                        handleMouseOut={() => handleMouseOut()}
+                                                        onClick={() => handleUnitClick(j, i)}
+                                                        mechHighlight={
+                                                            mechIndexHighlighted == -1
+                                                                ? false
+                                                                : j == mechStates[mechIndexHighlighted].index.x &&
+                                                                i == mechStates[mechIndexHighlighted].index.y
+                                                                ? true
+                                                                : false
+                                                        }
+                                                        isSmall={false}
+                                                        isConsumed={isConsumed}
+                                                        isProduced={isProduced}
+                                                    />
+                                                </div>
+                                            </Tooltip>
+                                        )
+                                    }
+                                )}
+                            </div>
+                        )
+                    )}
+                </div>
+            </Box>
 
         </div>
     );
