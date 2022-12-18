@@ -538,9 +538,7 @@ export default function Home() {
             // Stop
             clearInterval(loop); // kill the timer
             setAnimationState("Stop");
-            setAnimationFrame(() => {
-                return 0;
-            });
+            setAnimationFrame(_ => 0);
         }
     }
 
@@ -580,7 +578,10 @@ export default function Home() {
 
     function handleLoadSolutionClick(viewSolution: Solution) {
 
-        if (animationState != "Stop") setAnimationState(_ => "Stop")
+        if (animationState != "Stop") {
+            setAnimationState(_ => "Stop");
+            clearInterval(loop); // kill the timer
+        }
         setViewSolution((prev) => viewSolution);
 
         // set mode to arena
@@ -639,19 +640,19 @@ export default function Home() {
     }
 
     function handleLoadModeClick(mode: Modes) {
-        // set current mode
-        setCurrMode(_ => mode);
-
         // reset various states
+        setAnimationState(_ => "Stop");
+        clearInterval(loop); // kill the timer
+        setAnimationFrame(_ => 0);
         setFrames(_ => null);
+        setPlacingFormula(_ => null);
         setPrograms(_ => BLANK_SOLUTION.programs);
         setMechInitPositions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.index));
         setMechDescriptions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.description));
-        setOperatorStates(_ => viewSolution.operators);
-        setAnimationState(_ => "Stop");
-        setAnimationFrame(_ => 0);
         setOperatorStates(_ => BLANK_SOLUTION.operators);
-        setPlacingFormula(_ => null);
+
+        // set current mode
+        setCurrMode(_ => mode);
     }
 
     // Lazy style objects
@@ -928,7 +929,7 @@ export default function Home() {
                 midScreenControlHandleSlideChange={handleSlideChange}
                 indexHandleClickSubmit={handleClickSubmit}
                 loadSolution={handleLoadSolutionClick}
-                loadMode={handleLoadModeClick}
+                loadMode={(mode: Modes) => handleLoadModeClick(mode)}
                 handleArenaModeClick={() => setCurrMode(_ => Modes.arena)}
                 handleFormulaOnclick={(formula_key) => {handleOperatorClick("+", formula_key)}}
             />
