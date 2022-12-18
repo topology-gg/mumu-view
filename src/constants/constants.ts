@@ -45,7 +45,15 @@ export const Lesson_instruction = {
         'Finally, a Sink (marked by S on the diagram) absorbs anything deposited onto itself and serves as the output portal for a diagram.',
         'To complete this lesson, expand "Spirit programs" panel below, click "new spirit" to add 1 spirit, place the spirit on the canvas, and program it with instructions so that it picks up the wood at (0,0) and deposit it at the Sink at (2,2).'
     ],
-    lesson_2: [],
+    lesson_2: [
+        `Welcome to ${Lesson_names.lesson_2}! You will learn to work with a formula to transform substances.`,
+        'Formula represents the fundamental laws of alchemy, the conditions where substances can be transformed into one another.',
+        'Each formula has input and output, and can be placed on the diagram.',
+        'When supplied with the correct substances at the correct order as input, the formula is activated - the formula would consume them and produce the output substances.',
+        'Formula can only be placed on the diagram in consecutive grids.',
+        'To supply a substance to a formula on the diagram, instruct Spirit to deposit the substance at a specific input grid of the formula.',
+        'To pass this lesson, notice the Stir formula transforms wood into clover, and notice that 2 woods are already given on the diagram. Place the Stir formula on the diagram, and program 1 Spirit to move the woods to activate the formula, and move the produced clover to the Sink at (2,2).'
+    ],
     lesson_3: [],
     lesson_4: [],
     lesson_5: [],

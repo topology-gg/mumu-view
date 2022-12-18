@@ -708,10 +708,10 @@ export default function Home() {
                 programs={programs}
             />
             <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "0.3rem" }}>
-                {/* <Button color="secondary" variant="outlined" onClick={() => handleMechClick("+")}>
-                    {t("newMech")}
-                </Button> */}
-                <button onClick={() => handleMechClick("+")}>{t("newMech")}</button>
+                <button
+                    onClick={() => handleMechClick("+")}
+                    disabled={animationState!=='Stop' ? true : false}
+                >{t("newMech")}</button>
             </Box>
         </div>
     );
