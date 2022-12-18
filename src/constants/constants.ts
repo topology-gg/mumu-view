@@ -52,7 +52,8 @@ export const Lesson_instruction = {
         'When supplied with the correct substances at the correct order as input, the formula is activated - the formula would consume them and produce the output substances.',
         'Formula can only be placed on the diagram in consecutive grids.',
         'To supply a substance to a formula on the diagram, instruct Spirit to deposit the substance at a specific input grid of the formula.',
-        'To pass this lesson, notice the Stir formula transforms wood into clover, and notice that 2 woods are already given on the diagram. Place the Stir formula on the diagram, and program 1 Spirit to move the woods to activate the formula, and move the produced clover to the Sink at (2,2).'
+        'To pass this lesson, notice the Stir formula transforms wood into clover, and notice that 2 woods are already given on the diagram.',
+        'Under Formula List on the bottom left, click on Stir to place it on the diagram, and program 1 Spirit to move the woods to activate the formula, and move the produced clover to the Sink at (2,2).'
     ],
     lesson_3: [],
     lesson_4: [],

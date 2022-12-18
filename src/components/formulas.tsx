@@ -4,19 +4,12 @@ import { OPERATOR_TYPES } from "../types/Operator";
 import { useTranslation } from "react-i18next";
 import FormulaBlueprint from "./FormulaBlueprint";
 
-export default function Formulas() {
+export default function Formulas({ handleFormulaOnclick }) {
     const { t } = useTranslation();
-    const [open, setOpen] = useState<boolean>(false);
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     var formulaList = [];
     Object.entries(OPERATOR_TYPES).forEach(([key, value]) =>
-        formulaList.push(<FormulaBlueprint operatorType={value} />)
+        formulaList.push(<FormulaBlueprint operatorType={value} clickable={true} onclick={() => handleFormulaOnclick(key)} />)
     );
 
     return (

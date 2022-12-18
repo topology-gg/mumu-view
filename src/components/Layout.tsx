@@ -29,7 +29,7 @@ export default function Layout({
     loadSave, board, stats,
     mechProgramming, formulaProgramming,
     midScreenControlProps, midScreenControlHandleClick, midScreenControlHandleSlideChange,
-    indexHandleClickSubmit, loadSolution, loadMode, handleArenaModeClick
+    indexHandleClickSubmit, loadSolution, loadMode, handleArenaModeClick, handleFormulaOnclick
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount()
@@ -128,7 +128,10 @@ export default function Layout({
 
                     <Grid container spacing={0} flex={1.25}>
                         <Grid xs={12} md={4}>
-                            <Formulas />
+                            <Formulas handleFormulaOnclick={(k) => {
+                                setOpenedAccordion(_ => 'accordion1');
+                                handleFormulaOnclick(k);
+                            }}/>
                         </Grid>
                         <Grid xs={12} md={8}>
                             <Box
