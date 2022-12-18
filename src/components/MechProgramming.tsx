@@ -114,6 +114,9 @@ const MechProgramming = ({
                 <Droppable droppableId="mech-input-list" isDropDisabled={animationState !== "Stop"}>
                     {(provided) => (
                         <div ref={provided.innerRef} {...provided.droppableProps}>
+
+                            {numMechs == 0 ? <p style={{marginBottom:'2rem'}}>No spirit programmed yet.</p> : <></>}
+
                             {animationState == "Stop"
                                 ? Array.from({ length: numMechs }).map((_, mech_i) => (
                                       <MechInput

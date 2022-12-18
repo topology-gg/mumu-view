@@ -5,11 +5,15 @@ import { AtomTypeToBg, UnitText } from "../types/UnitState";
 import styles from "../../styles/Home.module.css";
 import { useTranslation } from "react-i18next";
 import Grid from "../types/Grid";
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 
 interface FormulaBlueprintProps {
     operatorType: OperatorType;
     placing?: boolean;
     grids?: Grid[];
+    clickable?: boolean;
+    onclick?: () => void;
 }
 
 const FORMULA_LI_OPACITY_STR = "66";
@@ -26,7 +30,7 @@ function compute_formula_li_style(backgroundColor: string): CSSProperties {
     };
 }
 
-const FormulaBlueprint = ({ operatorType, placing, grids = [] }: FormulaBlueprintProps) => {
+const FormulaBlueprint = ({ operatorType, placing, grids = [], clickable = false, onclick}: FormulaBlueprintProps) => {
     const { t } = useTranslation();
 
     const inputAtomGrids = grids.slice(0, operatorType.input_atom_types.length);
@@ -36,8 +40,28 @@ const FormulaBlueprint = ({ operatorType, placing, grids = [] }: FormulaBlueprin
     const outputAtomGrids = grids.slice(operatorType.input_atom_types.length);
     const currentOutputIndex = placing && inputAtomGridsComplete && outputAtomGrids.length;
 
-    return (
-        <li style={compute_formula_li_style(operatorType.color)}>
+    function handleClick() {
+        if (!clickable) return;
+        onclick()
+    }
+
+    const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+        <Tooltip {...props} classes={{ popper: className }} />
+      ))(({ theme }) => ({
+        [`& .${tooltipClasses.tooltip}`]: {
+          backgroundColor: theme.palette.common.white,
+          color: 'rgba(0, 0, 0, 0.87)',
+          boxShadow: theme.shadows[3],
+          fontSize: 12,
+        },
+      }));
+
+    let li = (
+        <li
+            style={compute_formula_li_style(operatorType.color)}
+            onClick={() => handleClick()}
+            className={clickable ? styles.clickable_li : ''}
+        >
             <p className={styles.input_name}>{t(operatorType.name)}:</p>
             {operatorType.symbol}(
             {operatorType.input_atom_types.map((atomType, i) => (
@@ -83,6 +107,17 @@ const FormulaBlueprint = ({ operatorType, placing, grids = [] }: FormulaBlueprin
             ))}
         </li>
     );
+
+    if (clickable) {
+        return (
+            <LightTooltip title="Add to diagram" arrow placement="right">
+                {li}
+            </LightTooltip>
+        )
+    }
+    else {
+        return (<>{li}</>)
+    }
 };
 
 export default FormulaBlueprint;

@@ -23,7 +23,7 @@ import packSolution, { programsToInstructionSets } from "../src/helpers/packSolu
 import { SIMULATOR_ADDR } from "../src/components/SimulatorContract";
 import Solution from "../src/types/Solution";
 
-import { Box, Button, Tooltip } from "@mui/material";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import MechProgramming from "../src/components/MechProgramming";
 import Layout from "../src/components/Layout";
 import LoadSave from "../src/components/LoadSave";
@@ -32,6 +32,7 @@ import theme from "../styles/theme";
 import FormulaBlueprint from "../src/components/FormulaBlueprint";
 import { placingFormulaToOperator } from "../src/helpers/typeMapping";
 import Board from "../src/components/board";
+import { Delete } from "@mui/icons-material";
 
 export default function Home() {
 
@@ -424,6 +425,13 @@ export default function Home() {
             });
         }
     }
+    function handleFormulaDelete(operator_i) {
+        setOperatorStates((prev) => {``
+            let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
+            prev_copy.splice(operator_i, 1);
+            return prev_copy;
+        });
+    }
 
     //
     // Handle click event for submitting solution to StarkNet
@@ -583,6 +591,7 @@ export default function Home() {
         setOperatorStates((prev) => viewSolution.operators);
         setAnimationFrame((prev) => 0);
         setFrames(_ => null);
+        setPlacingFormula(_ => null)
     }
 
     function handleMouseOverOperatorInput(operator_i: number) {
@@ -621,6 +630,9 @@ export default function Home() {
 
     function handleConfirmFormula() {
         setOperatorStates((prev) => [...prev, placingFormulaToOperator(placingFormula)]);
+        setPlacingFormula(null);
+    }
+    function handleCancelFormula() {
         setPlacingFormula(null);
     }
 
@@ -718,35 +730,6 @@ export default function Home() {
 
     const formulaProgramming = (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "STIR")}>
-                    {t("newOperation", { operation: "&" })}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "SHAKE")}>
-                    {t("newOperation", { operation: "%" })}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "STEAM")}>
-                    {t("newOperation", { operation: "^" })}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "SMASH")}>
-                    {t("newOperation", { operation: "#" })}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "EVOLVE")}>
-                    {t("newOperation", { operation: "§" })}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "SLOW")}>
-                    {t("newOperation", { operation: "|" })}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "WILT")}>
-                    {t("newOperation", { operation: "~" })}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("+", "BAKE")}>
-                    {t("newOperation", { operation: "!" })}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleOperatorClick("-", "")}>
-                    {t("removeOp")}
-                </button>
-            </Box>
 
             {placingFormula && (
                 <Box sx={{ display: "flex", alignItems: "baseline", gap: 2 }}>
@@ -756,16 +739,21 @@ export default function Home() {
                         grids={placingFormula.grids}
                     />
                     <button
-                        // variant="outlined"
-                        // color="secondary"
                         onClick={handleConfirmFormula}
                         disabled={!placingFormula.complete}
                         className={placingFormula.complete ? 'button_glow' : ''}
                     >
                         {placingFormula.complete ? t("confirmFormula") : t("placeFormula")}
                     </button>
+                    <button
+                        onClick={handleCancelFormula}
+                    >
+                        Cancel
+                    </button>
                 </Box>
             )}
+
+            {numOperators == 0 ? <p>No formula placed yet.</p> : <></>}
 
             <Box>
                 {Array.from({ length: numOperators }).map((_, operator_i) => (
@@ -780,6 +768,10 @@ export default function Home() {
                                 : operatorStates[operator_i].typ.color + "55",
                         }}
                     >
+                        <IconButton size="small" color="secondary" onClick={() => handleFormulaDelete(operator_i)}>
+                            <Delete fontSize="small" />
+                        </IconButton>
+
                         <p className={styles.input_name}>{t(operatorStates[operator_i].typ.name)}</p>
 
                         {Array.from({ length: operatorStates[operator_i].input.length }).map((_, input_i) => (
@@ -935,6 +927,7 @@ export default function Home() {
                 loadSolution={handleLoadSolutionClick}
                 loadMode={handleLoadModeClick}
                 handleArenaModeClick={() => setCurrMode(_ => Modes.arena)}
+                handleFormulaOnclick={(formula_key) => {handleOperatorClick("+", formula_key)}}
             />
         </>
     );
