@@ -4,12 +4,17 @@ import { OPERATOR_TYPES } from "../types/Operator";
 import { useTranslation } from "react-i18next";
 import FormulaBlueprint from "./FormulaBlueprint";
 
-export default function Formulas({ handleFormulaOnclick }) {
+export default function Formulas({ handleFormulaOnclick, clickDisabled }) {
     const { t } = useTranslation();
 
     var formulaList = [];
     Object.entries(OPERATOR_TYPES).forEach(([key, value]) =>
-        formulaList.push(<FormulaBlueprint operatorType={value} clickable={true} onclick={() => handleFormulaOnclick(key)} />)
+        formulaList.push(
+            <FormulaBlueprint
+                operatorType={value} clickable={!clickDisabled}
+                onclick={() => handleFormulaOnclick(key)}
+            />
+        )
     );
 
     return (
@@ -28,7 +33,8 @@ export default function Formulas({ handleFormulaOnclick }) {
                 pr: 5,
                 mb: 3,
                 height: "15rem",
-                backgroundColor:'#ffffff', boxShadow:3,
+                backgroundColor: clickDisabled ? '#eeeeee' : '#ffffff',
+                boxShadow:3,
             }}
         >
             {/* <div

@@ -26,7 +26,7 @@ const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps 
 };
 
 export default function Layout({
-    loadSave, board, stats,
+    loadSave, board, stats, animationState,
     mechProgramming, formulaProgramming,
     midScreenControlProps, midScreenControlHandleClick, midScreenControlHandleSlideChange,
     indexHandleClickSubmit, loadSolution, loadMode, handleArenaModeClick, handleFormulaOnclick
@@ -128,17 +128,21 @@ export default function Layout({
 
                     <Grid container spacing={0} flex={1.25}>
                         <Grid xs={12} md={4}>
-                            <Formulas handleFormulaOnclick={(k) => {
+                            <Formulas
+                                handleFormulaOnclick={(k) => {
                                 setOpenedAccordion(_ => 'accordion1');
                                 handleFormulaOnclick(k);
-                            }}/>
+                                }}
+                                clickDisabled={animationState !== "Stop" ? true : false}
+                            />
                         </Grid>
                         <Grid xs={12} md={8}>
                             <Box
                                 flex={1} flexShrink={0} overflow="scroll"
                                 sx={{
                                     border: 1, borderRadius:4, ml:3, mr: 8, height:'15rem',
-                                    backgroundColor:'#ffffff', boxShadow:3
+                                    backgroundColor:animationState!=="Stop" ? '#eeeeee' : '#ffffff',
+                                    boxShadow:3
                                 }}
                             >
 
@@ -147,7 +151,7 @@ export default function Layout({
                                         key="accordion-1"
                                         expanded={openedAccordion == "accordion1"}
                                         onChange={(_, expanded) => setOpenedAccordion(expanded ? "accordion1" : null)}
-                                        style={{boxShadow: "none"}}
+                                        style={{boxShadow: "none", backgroundColor:'#ffffff00'}}
                                     >
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
@@ -163,7 +167,7 @@ export default function Layout({
                                         key="accordion-2"
                                         expanded={openedAccordion == "accordion2"}
                                         onChange={(_, expanded) => setOpenedAccordion(expanded ? "accordion2" : null)}
-                                        style={{boxShadow: "none"}}
+                                        style={{boxShadow: "none", backgroundColor:'#ffffff00'}}
                                     >
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
