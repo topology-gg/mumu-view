@@ -36,7 +36,7 @@ export default function Layout({
 
     // states
     const [openedAccordion, setOpenedAccordion] = useState<string>("accordion1");
-    const [settingOpen, setSettingOpen] = useState<boolean>(false);
+    const [settingOpen, setSettingOpen] = useState<boolean>(true);
     const [settingRenderMode, setSettingRenderMode] = useState<string>('menu');
 
     // handle state changes

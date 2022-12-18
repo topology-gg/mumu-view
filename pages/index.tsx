@@ -591,6 +591,7 @@ export default function Home() {
         setOperatorStates((prev) => viewSolution.operators);
         setAnimationFrame((prev) => 0);
         setFrames(_ => null);
+        setPlacingFormula(_ => null)
     }
 
     function handleMouseOverOperatorInput(operator_i: number) {
