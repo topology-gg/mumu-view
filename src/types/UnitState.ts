@@ -49,8 +49,8 @@ export enum UnitText {
 }
 
 export default interface UnitState {
-    unit_id: string | null,
     bg_status: BgStatus,
-    border_status: BorderStatus,
-    unit_text: UnitText
+    unit_id?: string | null,
+    border_status?: BorderStatus,
+    unit_text?: UnitText
 }

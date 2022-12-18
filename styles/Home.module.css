@@ -139,14 +139,13 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid #7e7e7e;
-  border-radius: 10px;
+  border: 1px solid #ffffff00;
+  /* border-radius: 10px; */
   padding: 1rem;
   /* align-items: center; */
   /* justify-content: center; */
   /* flex-wrap: wrap; */
   max-width: 800px;
-  background-color: #FDF5E677;
 }
 
 .grid_row {
@@ -167,6 +166,7 @@
   /* flex-direction: row; */
   align-items: center;
   font-size: 0.75rem;
+  background-color: #ffffff;
 }
 
 .summary {
@@ -178,13 +178,17 @@
     flex-direction: column;
     align-items: center;
     font-size: 0.75rem;
+    background-color: #ffffff;
   }
 
 .midScreenControls {
-    margin: 1rem 1.7rem 0 1.7rem;
+    margin-top: 1rem;
+    margin-left: 1.7rem;
     border: 1px solid #7e7e7e;
     border-radius: 10px;
     padding: 1rem;
+    background-color: #ffffff;
+    width: 26rem;
 }
 
 .formulas {

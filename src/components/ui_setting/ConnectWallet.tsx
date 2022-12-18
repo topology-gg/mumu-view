@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useStardiscRegistryByAccount } from '../../lib/api'
+import { useStardiscRegistryByAccount } from '../../../lib/api'
 import {useAccount, useConnectors} from '@starknet-react/core'
 import { useTranslation } from "react-i18next";
 
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 
-import Modal from "./Modal";
+import Modal from "../ui_common/Modal";
 import { toBN } from 'starknet/dist/utils/number'
 import styles from './ConnectWallet.module.css'
 

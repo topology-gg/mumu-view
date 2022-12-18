@@ -2,7 +2,6 @@ import React from "react";
 import Operator, { OPERATOR_TYPES, PlacingFormula } from "../types/Operator";
 
 import styles from "../../styles/OperatorGridBg.module.css";
-import { DIM } from "../constants/constants";
 import { placingFormulaToOperator } from "../helpers/typeMapping";
 
 // An arbitrary value - the svg is scaled to fit 100% its parent
@@ -28,10 +27,12 @@ const OperatorGridBg = ({
     operators,
     highlighted,
     placingFormula,
+    dim,
 }: {
     operators: Operator[];
     highlighted: boolean[];
     placingFormula?: PlacingFormula;
+    dim: number;
 }) => {
     let operatorsVisible: OperatorExtended[] = operators.map((op, i) => ({
         ...op,
@@ -45,7 +46,7 @@ const OperatorGridBg = ({
 
     return (
         <div className={styles.gridWrapper} style={{ zIndex: 10 }}>
-            <svg className={styles.grid} viewBox={`0 0 ${DIM * GRID_SIZE} ${DIM * GRID_SIZE}`}>
+            <svg className={styles.grid} viewBox={`0 0 ${dim * GRID_SIZE} ${dim * GRID_SIZE}`}>
                 {operatorsVisible.map((operator, i) => (
                     <polyline
                         key={i}

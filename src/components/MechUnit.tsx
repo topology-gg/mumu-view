@@ -1,9 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import MechState, { MechStatus, MechType } from "../types/MechState";
 import Grid from "../types/Grid";
-import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS, N_CYCLES } from "../constants/constants";
-import { Box, Button, Tooltip } from "@mui/material";
-import { ANIM_FRAME_LATENCY } from "../constants/constants";
 import AtomState, { AtomType } from "../types/AtomState";
 import { useSpring, animated } from "react-spring";
 import styles from "../../styles/Unit.module.css";

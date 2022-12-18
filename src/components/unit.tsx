@@ -8,9 +8,9 @@ interface UnitProps {
     state: UnitState;
     consumableAtomType?: AtomType;
     produceableAtomType?: AtomType;
-    handleMouseOver: () => void;
-    handleMouseOut: () => void;
-    mechHighlight: boolean;
+    handleMouseOver?: () => void;
+    handleMouseOut?: () => void;
+    mechHighlight?: boolean;
     isSmall: boolean;
     onClick?: () => void;
     isConsumed?: boolean;

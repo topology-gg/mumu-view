@@ -1,7 +1,7 @@
 import { Box, Button, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { DEMO_SOLUTIONS } from "../constants/constants";
+import { BLANK_SOLUTION, DEMO_SOLUTIONS } from "../constants/constants";
 import {
     getNamespaceFromLocal,
     getSolutionFromLocal,
@@ -11,7 +11,7 @@ import {
 import MechState from "../types/MechState";
 import Operator from "../types/Operator";
 import Solution from "../types/Solution";
-import Modal from "./Modal";
+import Modal from "./ui_common/Modal";
 import SavedSolutionElement from "./savedSolutionElement";
 
 interface LoadSaveProps {
@@ -107,6 +107,8 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
         setNamespace((prev) => newNamespace); // trigger rerender
     }
 
+    const SOLUTIONS = [BLANK_SOLUTION].concat(DEMO_SOLUTIONS)
+
     return (
         // <Tooltip title={t("load_save")} arrow>
 
@@ -130,12 +132,12 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
                     }}
                 >
                     <Box>
-                        {Array.from({ length: DEMO_SOLUTIONS.length }).map((_, i) =>
+                        {Array.from({ length: SOLUTIONS.length }).map((_, i) =>
                             i == 0 ? (
                                 <button
                                     key={`load-demo-${i}`}
                                     onClick={() => {
-                                        onLoadSolutionClick(DEMO_SOLUTIONS[0]);
+                                        onLoadSolutionClick(SOLUTIONS[0]);
                                         handleClose();
                                     }}
                                 >
@@ -145,7 +147,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
                                 <button
                                     key={`load-demo-${i}`}
                                     onClick={() => {
-                                        onLoadSolutionClick(DEMO_SOLUTIONS[i]);
+                                        onLoadSolutionClick(SOLUTIONS[i]);
                                         handleClose();
                                     }}
                                 >

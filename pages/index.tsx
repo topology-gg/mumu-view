@@ -7,83 +7,78 @@ import AtomState, { AtomStatus, AtomType } from "../src/types/AtomState";
 import AtomFaucetState from "../src/types/AtomFaucetState";
 import BoardConfig from "../src/types/BoardConfig";
 import Frame from "../src/types/Frame";
-import Unit from "../src/components/unit";
+
 import UnitState, { BgStatus, BorderStatus, UnitText } from "../src/types/UnitState";
 import Grid from "../src/types/Grid";
 import Operator, { OPERATOR_TYPES, PlacingFormula } from "../src/types/Operator";
 import Delivery from "../src/components/delivery";
 import Summary from "../src/components/summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
-import OperatorGridBg from "../src/components/OperatorGridBg";
-import { DIM, PROGRAM_SIZE_MAX, DEMO_SOLUTIONS, N_CYCLES } from "../src/constants/constants";
+
+import { Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY, Lesson_instruction, Lesson_objective } from "../src/constants/constants";
 import { useTranslation } from "react-i18next";
 import "../config/i18n";
 import { useAccount, useStarknetExecute } from "@starknet-react/core";
 import packSolution, { programsToInstructionSets } from "../src/helpers/packSolution";
 import { SIMULATOR_ADDR } from "../src/components/SimulatorContract";
 import Solution from "../src/types/Solution";
-import Leaderboard from "../src/components/Leaderboard";
+
 import { Box, Button, Tooltip } from "@mui/material";
 import MechProgramming from "../src/components/MechProgramming";
 import Layout from "../src/components/Layout";
 import LoadSave from "../src/components/LoadSave";
 import theme from "../styles/theme";
-import {
-    MAX_NUM_MECHS,
-    MIN_NUM_MECHS,
-    MAX_NUM_OPERATORS,
-    MIN_NUM_OPERATORS,
-    ANIM_FRAME_LATENCY,
-} from "../src/constants/constants";
+
 import FormulaBlueprint from "../src/components/FormulaBlueprint";
 import { placingFormulaToOperator } from "../src/helpers/typeMapping";
 import Board from "../src/components/board";
 
 export default function Home() {
-    // Constants
-    const INIT_PROGRAM = ".";
-    const MECH_INIT_X = 0;
-    const MECH_INIT_Y = 0;
-    const INIT_DESCRIPTION = "New Mech";
-    const ATOM_INIT_XY = []; // [{x:5, y:3}]
-    const UNIT_STATE_INIT: UnitState = {
-        bg_status: BgStatus.EMPTY,
-        border_status: BorderStatus.EMPTY,
-        unit_text: UnitText.GRID,
-        unit_id: null,
-    };
-    var unitStatesInit = [];
-    for (var i = 0; i < DIM; i++) {
-        unitStatesInit.push(Array(DIM).fill(UNIT_STATE_INIT));
-    }
-    const FAUCET_POS: Grid = { x: 0, y: 0 };
-    const SINK_POS_S: Grid[] = [
-        { x: 0, y: DIM - 1 },
-        { x: DIM - 1, y: 0 },
-        { x: DIM - 1, y: DIM - 1 },
-    ];
 
     const { t } = useTranslation();
 
-    // React states for lifecycle
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    // React state for current mode (which lessons of tutorial, or arena mode)
+    // note: this impacts many components - board, mid screen control, programming components etc
+    const [currMode, setCurrMode] = useState<Modes>(Modes.arena)
+
+    // Constants unpack from current mode
+    const DIM = Constraints[currMode].DIM
+    const PROGRAM_SIZE_MAX = Constraints[currMode].PROGRAM_SIZE_MAX
+    const MAX_NUM_MECHS = Constraints[currMode].MAX_NUM_MECHS
+    const MAX_NUM_OPERATORS = Constraints[currMode].MAX_NUM_OPERATORS
+    const N_CYCLES = Constraints[currMode].N_CYCLES
+    const FAUCET_POS_S = Constraints[currMode].FAUCETS
+    const SINK_POS_S = Constraints[currMode].SINKS
+    const ATOMS = Constraints[currMode].ATOMS
+    const MODE_OBJECTIVE = currMode==Modes.arena ? '' : Lesson_objective[currMode]
+    const MODE_INSTRUCTION = currMode==Modes.arena ? [] : Lesson_instruction[currMode]
+
+    // Other constants
+    const INIT_PROGRAM = ".";
+    const INIT_DESCRIPTION = "New Spirit";
+    var unitStatesInit = [];
+    for (var x = 0; x < DIM; x++) {
+        unitStatesInit.push(Array(DIM).fill({
+            bg_status: BgStatus.EMPTY,
+            border_status: BorderStatus.EMPTY,
+            unit_text: UnitText.GRID,
+            unit_id: null,
+        }));
+    }
 
     // React states for mechs, programs and descriptions
-    const [programs, setPrograms] = useState<string[]>(DEMO_SOLUTIONS[0].programs);
+    const [programs, setPrograms] = useState<string[]>(BLANK_SOLUTION.programs);
     const [mechInitPositions, setMechInitPositions] = useState<Grid[]>(
-        DEMO_SOLUTIONS[0].mechs.map((mech) => mech.index)
+        BLANK_SOLUTION.mechs.map((mech) => mech.index)
     );
     const [mechDescriptions, setMechDescriptions] = useState<string[]>(
-        DEMO_SOLUTIONS[0].mechs.map((mech) => mech.description)
+        BLANK_SOLUTION.mechs.map((mech) => mech.description)
     );
 
     const numMechs = programs.length;
 
     // React states for operators
-    const [operatorStates, setOperatorStates] = useState<Operator[]>(DEMO_SOLUTIONS[0].operators);
+    const [operatorStates, setOperatorStates] = useState<Operator[]>(BLANK_SOLUTION.operators);
     const [placingFormula, setPlacingFormula] = useState<PlacingFormula>();
     const numOperators = operatorStates.length;
 
@@ -106,7 +101,7 @@ export default function Home() {
     const [animationFrame, setAnimationFrame] = useState<number>(0);
     const [frames, setFrames] = useState<Frame[]>();
     const [loop, setLoop] = useState<NodeJS.Timer>();
-    const [viewSolution, setViewSolution] = useState<Solution>(DEMO_SOLUTIONS[0]);
+    const [viewSolution, setViewSolution] = useState<Solution>(BLANK_SOLUTION);
 
     // React states for UI
     const [gridHovering, setGridHovering] = useState<[string, string]>(["-", "-"]);
@@ -130,12 +125,12 @@ export default function Home() {
             pc_next: 0,
         };
     });
-    const atomInitStates: AtomState[] = ATOM_INIT_XY.map(function (xy, i) {
+    const atomInitStates: AtomState[] = ATOMS.map(function (atom, i) {
         return {
             status: AtomStatus.FREE,
-            index: { x: xy.x, y: xy.y },
+            index: atom.index,
             id: `atom${i}`,
-            typ: AtomType.VANILLA,
+            typ: atom.typ,
             possessed_by: null,
         };
     });
@@ -143,12 +138,6 @@ export default function Home() {
     const atomStates = frame?.atoms || atomInitStates;
     const mechStates = !frame ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : frame.mechs;
     const unitStates = setVisualForStates(atomStates, mechStates, unitStatesInit) as UnitState[][];
-
-    const animationFramePrev = animationFrame == 0 ? 0 : animationFrame-1
-    const framePrev = frames?.[animationFramePrev];
-    const atomStatesPrevFrame = framePrev?.atoms || atomInitStates;
-    const mechStatesPrevFrame = !framePrev ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : framePrev.mechs;
-    const unitStatesPrevFrame = setVisualForStates(atomStatesPrevFrame, mechStatesPrevFrame, unitStatesInit) as UnitState[][];
 
     let consumableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
         _ => Array.from({ length: DIM }).map(_ => null)
@@ -291,25 +280,6 @@ export default function Home() {
                 newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_FREE;
             }
         }
-        // else if (atom.status == AtomStatus.POSSESSED) {
-        //     if (atom.typ == AtomType.VANILLA) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_VANILLA_POSSESSED;
-        //     } else if (atom.typ == AtomType.HAZELNUT) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_HAZELNUT_POSSESSED;
-        //     } else if (atom.typ == AtomType.CHOCOLATE) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_CHOCOLATE_POSSESSED;
-        //     } else if (atom.typ == AtomType.TRUFFLE) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TRUFFLE_POSSESSED;
-        //     } else if (atom.typ == AtomType.SAFFRON) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SAFFRON_POSSESSED;
-        //     } else if (atom.typ == AtomType.TURTLE) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TURTLE_POSSESSED;
-        //     } else if (atom.typ == AtomType.SANDGLASS) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SANDGLASS_POSSESSED;
-        //     } else if (atom.typ == AtomType.WILTED) {
-        //         newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_POSSESSED;
-        //     }
-        // }
         return newStates;
     }
 
@@ -347,7 +317,9 @@ export default function Home() {
         let newStates = JSON.parse(JSON.stringify(states)); // duplicate
 
         // Faucet & Sink
-        newStates[FAUCET_POS.x][FAUCET_POS.y].unit_text = UnitText.FAUCET;
+        for (const faucet_pos of FAUCET_POS_S) {
+            newStates[faucet_pos.x][faucet_pos.y].unit_text = UnitText.FAUCET;
+        }
 
         for (const sink_pos of SINK_POS_S) {
             newStates[sink_pos.x][sink_pos.y].unit_text = UnitText.SINK;
@@ -387,7 +359,7 @@ export default function Home() {
         });
 
         let faucet_sink_indices_in_str = SINK_POS_S.map((sink_pos) => JSON.stringify(sink_pos));
-        faucet_sink_indices_in_str.push(JSON.stringify(FAUCET_POS)); // there's only one faucet
+        faucet_sink_indices_in_str.concat( FAUCET_POS_S.map((faucet_pos) => JSON.stringify(faucet_pos)) );
 
         const all_indices = adder_indices_in_str.concat(faucet_sink_indices_in_str);
         const unique_indices = all_indices.filter(onlyUnique);
@@ -421,10 +393,9 @@ export default function Home() {
         if (animationState != "Stop") return; // only when in Stop mode can player add/remove mechs
         if (mode === "+" && numMechs < MAX_NUM_MECHS) {
             setMechInitPositions(
-                // Array.from({length:numMechs+1}).fill({ x: MECH_INIT_X, y: MECH_INIT_Y }) as Grid[]
                 (prev) => {
                     let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
-                    prev_copy.push({ x: MECH_INIT_X, y: MECH_INIT_Y });
+                    prev_copy.push({ x: 0, y: 0 });
                     return prev_copy;
                 }
             );
@@ -445,7 +416,7 @@ export default function Home() {
     function handleOperatorClick(mode: string, typ: string) {
         if (mode === "+" && numOperators < MAX_NUM_OPERATORS) {
             setPlacingFormula({ type: typ, grids: [] });
-        } else if (mode === "-" && numOperators > MIN_NUM_OPERATORS) {
+        } else if (mode === "-" && numOperators > 0) {
             setOperatorStates((prev) => {
                 let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
                 prev_copy.pop();
@@ -511,14 +482,13 @@ export default function Home() {
                 // Prepare input
                 const boardConfig: BoardConfig = {
                     dimension: DIM,
-                    atom_faucets: [
-                        {
-                            id: "atom_faucet0",
+                    atom_faucets: FAUCET_POS_S.map((faucet_pos, index) => {
+                        return {
+                            id: `atom_faucet${index}`,
                             typ: AtomType.VANILLA,
-                            index: { x: FAUCET_POS.x, y: FAUCET_POS.y },
-                        } as AtomFaucetState,
-                    ],
-                    // atom_sinks: [{id:'atom_sink0', index:{x:SINK_POS.x, y:SINK_POS.y}} as AtomSinkState],
+                            index: { x: faucet_pos.x, y: faucet_pos.y }
+                        }
+                    }),
                     atom_sinks: SINK_POS_S.map((sink_pos, index) => {
                         return {
                             id: `atom_sink${index}`,
@@ -599,17 +569,20 @@ export default function Home() {
     }
 
     function handleLoadSolutionClick(viewSolution: Solution) {
-        if (animationState != "Stop") return;
 
-        console.log("load solution:", viewSolution);
+        if (animationState != "Stop") setAnimationState(_ => "Stop")
         setViewSolution((prev) => viewSolution);
 
+        // set mode to arena
+        setCurrMode(_ => Modes.arena);
+
+        // set react states to render the solution on the board
         setPrograms((prev) => viewSolution.programs);
         setMechInitPositions((prev) => viewSolution.mechs.map((mech) => mech.index));
         setMechDescriptions((prev) => viewSolution.mechs.map((mech) => mech.description));
         setOperatorStates((prev) => viewSolution.operators);
-
         setAnimationFrame((prev) => 0);
+        setFrames(_ => null);
     }
 
     function handleMouseOverOperatorInput(operator_i: number) {
@@ -651,6 +624,22 @@ export default function Home() {
         setPlacingFormula(null);
     }
 
+    function handleLoadModeClick(mode: Modes) {
+        // set current mode
+        setCurrMode(_ => mode);
+
+        // reset various states
+        setFrames(_ => null);
+        setPrograms(_ => BLANK_SOLUTION.programs);
+        setMechInitPositions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.index));
+        setMechDescriptions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.description));
+        setOperatorStates(_ => viewSolution.operators);
+        setAnimationState(_ => "Stop");
+        setAnimationFrame(_ => 0);
+        setOperatorStates(_ => BLANK_SOLUTION.operators);
+        setPlacingFormula(_ => null);
+    }
+
     // Lazy style objects
     const makeshift_button_style = { marginLeft: "0.2rem", marginRight: "0.2rem", height: "1.5rem" };
     const makeshift_run_button_style = runnable
@@ -666,21 +655,10 @@ export default function Home() {
         />
     );
 
-    // const leaderboard = <Leaderboard loadSolution={handleLoadSolutionClick} />;
-
-    const submission = (
-        <Tooltip title={t("submission")} arrow>
-            <div style={{ marginBottom: "1rem" }}>
-                <button id={"submit-button"} onClick={() => handleClickSubmit()} className={"big-button"}>
-                    <i className="material-icons" style={{ fontSize: "1rem", paddingTop: "0.12rem" }}>
-                        send
-                    </i>
-                </button>
-            </div>
-        </Tooltip>
-    );
-
     const board = <Board
+        mode={currMode}
+        objective={MODE_OBJECTIVE}
+        instruction={MODE_INSTRUCTION}
         operatorStates = {operatorStates}
         operatorInputHighlight = {operatorInputHighlight}
         placingFormula = {placingFormula}
@@ -697,112 +675,26 @@ export default function Home() {
         producedAtomIds = {producedAtomIds}
     />
 
-    const midScreenControls = (
-        // <div style={{ display: "flex", flexDirection: "row", padding: "1rem 25rem", justifyContent: "center" }}>
-        <Box>
-            <div
-                className={styles.midScreenControls}
-                style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}
-            >
-                {/* <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    // flex: 1,
-                }}
-            > */}
-                <p
-                    style={{
-                        padding: "0",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        width: "6.5rem",
-                        margin: "0 0.5rem 0 0",
-                        // width: "100px" /* Make room for dynamic text */,
-                        height: "20px",
-                        lineHeight: "20px",
-                        fontSize: "0.8rem",
-                    }}
-                >
-                    {" "}
-                    {t("frame")}# {animationFrame} / {N_CYCLES}
-                </p>
-
-                <input
-                    id="typeinp"
-                    type="range"
-                    min="0"
-                    max={N_CYCLES}
-                    value={animationFrame}
-                    onChange={handleSlideChange}
-                    step="1"
-                    style={{ width: "6.5rem" }}
-                    // style={{ flex: 1 }}
-                />
-                {/* </div>
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: "0 1rem",
-                }}
-            > */}
-                {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}
-                <button
-                    style={{ ...makeshift_run_button_style, marginLeft: "0.5rem" }}
-                    onClick={() => handleClick("ToggleRun")}
-                >
-                    {" "}
-                    {animationState != "Run" ? (
-                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                            play_arrow
-                        </i>
-                    ) : (
-                        <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                            pause
-                        </i>
-                    )}{" "}
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleClick("Stop")}>
-                    <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                        stop
-                    </i>
-                </button>
-
-                <button style={makeshift_button_style} onClick={() => handleClick("PrevFrame")}>
-                    <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                        fast_rewind
-                    </i>
-                </button>
-                <button style={makeshift_button_style} onClick={() => handleClick("NextFrame")}>
-                    <i className="material-icons" style={{ fontSize: "1.2rem" }}>
-                        fast_forward
-                    </i>
-                </button>
-                {/* </div> */}
-                {/* </div> */}
-            </div>
-        </Box>
-    );
-
+    const stats_box_sx = {
+        p:'1rem',backgroundColor:'#ffffff',fontSize:'0.75rem',alignItems:'center',
+        border: 1, borderRadius:4, boxShadow:3,
+    }
     const stats = (
         <div>
             {" "}
-            <div className={styles.delivered_atoms}>
+            <Box sx={stats_box_sx}>
                 <Delivery delivered={delivered} cost_accumulated={cost_accumulated} />
-            </div>
-            <div className={styles.summary}>
-                <Summary frames={frames} n_cycles={N_CYCLES} />
-            </div>
+            </Box>
+            <Box sx={{...stats_box_sx,mt:'1rem'}}>
+                <Summary mode={currMode} frames={frames} n_cycles={N_CYCLES} />
+            </Box>
         </div>
     );
 
     const mechProgramming = (
         <div>
             <MechProgramming
+                mode={currMode}
                 animationState={animationState}
                 mechCarries={mech_carries}
                 mechIndexHighlighted={mechIndexHighlighted}
@@ -816,10 +708,10 @@ export default function Home() {
                 programs={programs}
             />
             <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "0.3rem" }}>
-                {/* <Button color="secondary" variant="outlined" onClick={() => handleMechClick("+")}>
-                    {t("newMech")}
-                </Button> */}
-                <button onClick={() => handleMechClick("+")}>{t("newMech")}</button>
+                <button
+                    onClick={() => handleMechClick("+")}
+                    disabled={animationState!=='Stop' ? true : false}
+                >{t("newMech")}</button>
             </Box>
         </div>
     );
@@ -1031,9 +923,18 @@ export default function Home() {
                 stats={stats}
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}
-                midScreenControls={midScreenControls}
+                midScreenControlProps = {{
+                    runnable: runnable,
+                    animationFrame: animationFrame,
+                    n_cycles: N_CYCLES,
+                    animationState: animationState,
+                }}
+                midScreenControlHandleClick={handleClick}
+                midScreenControlHandleSlideChange={handleSlideChange}
                 indexHandleClickSubmit={handleClickSubmit}
                 loadSolution={handleLoadSolutionClick}
+                loadMode={handleLoadModeClick}
+                handleArenaModeClick={() => setCurrMode(_ => Modes.arena)}
             />
         </>
     );

@@ -16,15 +16,16 @@ import SchoolIcon from '@mui/icons-material/School';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
-
-import Manual from './Manual';
+import StadiumIcon from '@mui/icons-material/Stadium';
 
 export default function Menu({
     width='100%',
     onManualClick,
+    onArenaModeClick,
     onLeaderboardClick,
     onConnectWalletClick,
-    onLanguageClick
+    onLanguageClick,
+    onTutorialClick,
 }) {
 
     const MenuItemStyled = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
@@ -63,16 +64,23 @@ export default function Menu({
 
                 <MenuItemStyled>
                     <ListItemIcon>
-                        <EmojiEventsIcon fontSize="small" />
+                        <SchoolIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText onClick={onLeaderboardClick}>Leaderboard</ListItemText>
+                    <ListItemText onClick={onTutorialClick}>Tutorial Mode</ListItemText>
                 </MenuItemStyled>
 
                 <MenuItemStyled>
                     <ListItemIcon>
-                        <SchoolIcon fontSize="small" />
+                        <StadiumIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Tutorial</ListItemText>
+                    <ListItemText onClick={onArenaModeClick}>Arena Mode</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <EmojiEventsIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onLeaderboardClick}>Arena Leaderboard</ListItemText>
                 </MenuItemStyled>
 
                 <MenuItemStyled>

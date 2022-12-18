@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { InstructionKey, INSTRUCTION_KEYS } from "../constants/constants";
+import { InstructionKey, INSTRUCTION_KEYS, Modes } from "../constants/constants";
 import { reorder } from "../helpers/reorder";
 import Grid from "../types/Grid";
 import MechState from "../types/MechState";
@@ -9,6 +9,7 @@ import IconizedInstructionPanel from "./IconizedInstructionPanel";
 import MechInput from "./MechInput";
 
 interface MechProgrammingProps {
+    mode: Modes
     animationState: string;
     mechCarries: BgStatus[];
     mechIndexHighlighted: number;
@@ -23,6 +24,7 @@ interface MechProgrammingProps {
 }
 
 const MechProgramming = ({
+    mode,
     animationState,
     mechCarries,
     mechIndexHighlighted,
@@ -116,6 +118,7 @@ const MechProgramming = ({
                                 ? Array.from({ length: numMechs }).map((_, mech_i) => (
                                       <MechInput
                                           key={`mech-input-${mech_i}`}
+                                          mode={mode}
                                           mechIndex={mech_i}
                                           position={mechInitPositions[mech_i]}
                                           description={mechDescriptions[mech_i]}
@@ -150,6 +153,7 @@ const MechProgramming = ({
                                 : Array.from({ length: numMechs }).map((_, mech_i) => (
                                       <MechInput
                                           key={`mech-input-${mech_i}`}
+                                          mode={mode}
                                           mechIndex={mech_i}
                                           position={mechInitPositions[mech_i]}
                                           description={mechDescriptions[mech_i]}

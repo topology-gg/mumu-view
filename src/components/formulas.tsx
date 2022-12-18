@@ -35,6 +35,7 @@ export default function Formulas() {
                 pr: 5,
                 mb: 3,
                 height: "15rem",
+                backgroundColor:'#ffffff', boxShadow:3,
             }}
         >
             {/* <div

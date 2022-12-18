@@ -1,5 +1,3 @@
-import { N_CYCLES } from "../src/constants/constants";
-
 const resources = {
     en: {
         translation: {
@@ -23,7 +21,7 @@ const resources = {
             stop: "Stop",
             incrementFrame: "+1 frame",
             decrementFrame: "-1 frame",
-            "Mech programming": "Cloth Spirit programs",
+            "Mech programming": "Spirit programs",
             "Formula placement": "Formula placements",
             "Stir ": "Stir ",
             Shake: "Shake",
@@ -44,15 +42,15 @@ const resources = {
                 thesisLine1:
                     "Layer 1 blockchains assert identity by capital contribution - pay to mint. Layer 2 blockchains, with new affordance in compute capacity, would assert identity by skill verification - solve to mint.",
                 thesisLine2:
-                    "MuMu is a puzzle about visual & parallel assembly programming. Place & program Cloth Spirits on the canvas, and place the formulas, to transport & transmute substances from Faucet to Sink. Solutions are ranked by throughput and cost.",
+                    "MuMu is a puzzle about visual & parallel assembly programming. Place & program Spirits on the canvas, and place the formulas, to transport & transmute substances from Faucet to Sink. Solutions are ranked by throughput and cost.",
                 Overview: "Overview",
                 overviewLine1:
                     "In the world of alchemy, substances can be transformed into one another via alchemic diagrams. Build diagrams by placing formulas and spirits, and orchestrating the spirits creatively.",
                 instructions: "Laws of the Alchemic Diagram",
 
                 explain_program: "A program is a sequence of instructions.",
-                explain_mech: "Each Cloth Spirit has its own program.",
-                explain_simulation: "During simulation, each Cloth Spirit runs its own program on repeat.",
+                explain_mech: "Each Spirit has its own program.",
+                explain_simulation: "During simulation, each Spirit runs its own program on repeat.",
                 available_instructions: "Available instructions:",
                 instruction_wasd: ": move up/left/down/right by one grid on the canvas.",
                 instruction_z: ": pick up an object, if available.",
@@ -78,7 +76,7 @@ const resources = {
                 goalLine3_2: " to show who you are on the leaderboard.",
                 costTitle: "Cost",
                 staticCostTitle: "Static Cost",
-                staticCostLine1: "Cloth Spirit: 150 / entity",
+                staticCostLine1: "Spirit: 150 / entity",
                 staticCostLine2: "Stir: 250 / formula",
                 staticCostLine3: "Shake: 500 / formula",
                 staticCostLine4: "Steam: 750 / formula",
@@ -112,7 +110,7 @@ const resources = {
                 title: "Top 20 Diagrams",
                 rank: "Rank",
                 account: "Who",
-                delivered: `Delivered in ${N_CYCLES} frames`,
+                delivered: `Delivered amount`,
                 static_cost: "Static cost",
                 latency: "Average latency per delivery",
                 dynamic_cost: "Average dynamic cost per delivery",
@@ -230,7 +228,7 @@ const resources = {
                 title: "天下前 20 炼成阵",
                 rank: "排名",
                 account: "谁",
-                delivered: `${N_CYCLES} 帧内总运送`,
+                delivered: `总运送`,
                 static_cost: "静态成本",
                 latency: "运送平均延迟",
                 dynamic_cost: "运送平均动态成本",
@@ -348,7 +346,7 @@ const resources = {
                 title: "天下前 20 炼成阵",
                 rank: "排行",
                 account: "誰",
-                delivered: `${N_CYCLES} 幀內總遞送`,
+                delivered: `總遞送`,
                 static_cost: "靜態成本",
                 latency: "平均遞送延遲",
                 dynamic_cost: "平均遞送動態成本",
@@ -528,7 +526,7 @@ const resources = {
                 title: "Top 20",
                 rank: "ランキング",
                 account: "名前",
-                delivered: `${N_CYCLES} フレームで運んだ数`,
+                delivered: `運んだ数`,
                 static_cost: "静的コスト",
                 latency: "１運搬あたりの平均フレーム数",
                 dynamic_cost: "１運搬あたりの平均動的コスト",

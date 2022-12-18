@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useSolutions } from "../../lib/api";
+import { useSolutions } from "../../../lib/api";
 import LeaderboardRow from "./LeaderboardRow";
 import { useTranslation } from "react-i18next";
 
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from "@mui/material";
 import Paper from '@mui/material/Paper';
 
-import Modal from "./Modal";
+import Modal from "../ui_common/Modal";
 
 const Leaderboard = ({ loadSolution }) => {
     const { t } = useTranslation();
@@ -20,7 +20,7 @@ const Leaderboard = ({ loadSolution }) => {
 
     // render
     return (
-        <Paper sx={{ width: '100%' }} elevation={0}>
+        <Paper sx={{ width: '100%', pb:5 }} elevation={0}>
             <p
                 style={{
                     fontSize: "1.2rem",
@@ -84,7 +84,7 @@ const Leaderboard = ({ loadSolution }) => {
                     </Table>
                 </TableContainer>
             ) : (
-                <>loading ...</>
+                <p style={{paddingLeft:'35px'}}>loading ...</p>
             )}
         </Paper>
     );

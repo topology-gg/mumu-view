@@ -1,30 +1,23 @@
-import Unit from "./unit";
+import Unit from "../unit";
 import UnitState, {
     BgStatus,
     BorderStatus,
     UnitText,
     AtomTypeToBg,
-} from "../types/UnitState";
+} from "../../types/UnitState";
 import { CSSProperties, useState } from "react";
-import Modal from "./Modal";
+import Modal from "../ui_common/Modal";
 import Button from "@mui/material/Button";
 import { Box, ListItemText, Tooltip } from "@mui/material";
-import styles from "../../styles/Home.module.css";
-import { OPERATOR_TYPES } from "../types/Operator";
+import styles from "../../../styles/Home.module.css";
+import { OPERATOR_TYPES } from "../../types/Operator";
 import { Trans, useTranslation } from "react-i18next";
-import { INSTRUCTION_ICON_MAP } from "../constants/constants";
-import { STATIC_COSTS } from "../types/Cost";
+import { INSTRUCTION_ICON_MAP } from "../../constants/constants";
+import { STATIC_COSTS } from "../../types/Cost";
 
 export default function Manual() {
 
     const { t } = useTranslation();
-    // const [open, setOpen] = useState<boolean>(false);
-    // const handleOpen = () => {
-    //     setOpen(true);
-    // };
-    // const handleClose = () => {
-    //     setOpen(false);
-    // };
 
     function compute_formula_li_style(backgroundColor: string): CSSProperties {
         return {

@@ -1,13 +1,4 @@
-import {useAccount, useConnectors} from '@starknet-react/core'
-import { useEffect, useState } from 'react'
-// import Button from './Button'
-import { toBN } from 'starknet/dist/utils/number'
-import styles from './ConnectWallet.module.css'
 import { Trans, useTranslation } from "react-i18next";
-
-import {
-    useStardiscRegistryByAccount
-} from '../../lib/api'
 import { Tooltip } from '@mui/material';
 
 export default function Submission({ handleClickSubmit }) {
