@@ -415,6 +415,8 @@ export default function Home() {
 
     // Handle click even for addming/removing Adder (operator)
     function handleOperatorClick(mode: string, typ: string) {
+        if (animationState !== "Stop") return;
+
         if (mode === "+" && numOperators < MAX_NUM_OPERATORS) {
             setPlacingFormula({ type: typ, grids: [] });
         } else if (mode === "-" && numOperators > 0) {
@@ -913,6 +915,7 @@ export default function Home() {
                 loadSave={loadSave}
                 board={board}
                 stats={stats}
+                animationState={animationState}
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}
                 midScreenControlProps = {{

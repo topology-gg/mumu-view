@@ -59,6 +59,7 @@ const MidScreenControl = ({
                 <button
                     style={{ ...makeshift_run_button_style, marginLeft: "0.5rem" }}
                     onClick={() => handleClick("ToggleRun")}
+                    className={animationState == 'Pause' ? 'paused' : ''}
                 >
                     {" "}
                     {animationState != "Run" ? (

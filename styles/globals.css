@@ -75,9 +75,23 @@ button:hover {
     }
 }
 .button_glow {
-    animation: glowing 1000ms infinite;
+    animation: glowing 700ms infinite;
 }
 
+@keyframes blinking {
+    0% {
+        background-color: #FFFFFF;
+    }
+    30% {
+        background-color: #EEEEEE;
+    }
+    100% {
+        background-color: #FFFFFF;
+    }
+}
+.paused {
+    animation: blinking 700ms infinite;
+}
 
 .grid {
     display: flex;
