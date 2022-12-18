@@ -4,9 +4,13 @@ import Solution from "../types/Solution";
 // credit: https://stackoverflow.com/questions/70436175/how-to-save-json-in-localstorage-using-reactjs
 
 export const saveSolutionToLocal = (name: string, data: Solution) => {
-    // rejecting amount
+    // rejecting certain names
     if (name == 'namespace') {
         alert ("'namespace' is not a good name (shh)")
+        return;
+    }
+    if (name == '') {
+        alert("empty string is not a good name")
         return;
     }
 
