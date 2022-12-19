@@ -90,7 +90,7 @@ export default function Board({
                 justifyContent: "flex-start",
             }}
         >
-            {mode !== Modes.arena ? (
+            {(mode !== Modes.arena) && (mode !== Modes.daw) ? (
                 <Box
                     sx={{
                         display: "flex",

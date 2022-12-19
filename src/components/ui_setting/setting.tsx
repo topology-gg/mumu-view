@@ -9,10 +9,11 @@ import Leaderboard from "./Leaderboard";
 import Tutorial from "./Tutorial";
 
 import { Box, SxProps } from "@mui/material";
+import { Modes } from "../../constants/constants";
 
 export default function Setting({
     loadSolution, loadMode,
-    renderMode, handleSetRenderMode, open, handleSetOpen, handleArenaModeClick
+    renderMode, handleSetRenderMode, open, handleSetOpen
 }) {
 
     const { t } = useTranslation();
@@ -38,13 +39,14 @@ export default function Setting({
             onConnectWalletClick={() => handleModeChange('connect')}
             onLeaderboardClick={() => handleModeChange('leaderboard')}
             onTutorialClick={() => handleModeChange('tutorial')}
-            onArenaModeClick={() => handleArenaModeClick()}
+            onArenaModeClick={() => loadMode(Modes.arena)}
+            onDAWModeClick={() => loadMode(Modes.daw)}
         />
     )
 
     // compute props
     const modalWidth =
-        renderMode == 'menu' ? 300 :
+        renderMode == 'menu' ? 350 :
         renderMode == 'language' ? 300 :
         renderMode == 'connect' ? 450 :
         renderMode == 'manual' ? 600 :

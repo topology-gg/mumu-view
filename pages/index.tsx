@@ -913,6 +913,7 @@ export default function Home() {
             </Head>
 
             <Layout
+                currMode={currMode}
                 loadSave={loadSave}
                 board={board}
                 stats={stats}
@@ -930,7 +931,6 @@ export default function Home() {
                 indexHandleClickSubmit={handleClickSubmit}
                 loadSolution={handleLoadSolutionClick}
                 loadMode={(mode: Modes) => handleLoadModeClick(mode)}
-                handleArenaModeClick={() => setCurrMode(_ => Modes.arena)}
                 handleFormulaOnclick={(formula_key) => {handleOperatorClick("+", formula_key)}}
             />
         </>

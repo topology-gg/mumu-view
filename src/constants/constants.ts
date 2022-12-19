@@ -10,6 +10,7 @@ export enum Modes {
     lesson_4 = 'lesson_4',
     lesson_5 = 'lesson_5',
     arena    = 'arena',
+    daw      = 'daw',
 }
 
 export const Lesson_names = {
@@ -66,6 +67,22 @@ export const Constraints: { [key in Modes]: any } = {
         PROGRAM_SIZE_MAX: 40,
         N_CYCLES: 150,
         MAX_NUM_MECHS: 25,
+        MAX_NUM_OPERATORS: 20,
+        FAUCETS: [{ x: 0, y: 0 }],
+        SINKS: [
+            { x: 0, y: 10 - 1 },
+            { x: 10 - 1, y: 0 },
+            { x: 10 - 1, y: 10 - 1 },
+        ],
+        ATOMS: [],
+        TARGET_TYPE: AtomType.SAFFRON
+    },
+
+    daw: {
+        DIM: 10,
+        PROGRAM_SIZE_MAX: 40,
+        N_CYCLES: 200,
+        MAX_NUM_MECHS: 20,
         MAX_NUM_OPERATORS: 20,
         FAUCETS: [{ x: 0, y: 0 }],
         SINKS: [

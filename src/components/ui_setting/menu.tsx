@@ -17,12 +17,14 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import StadiumIcon from '@mui/icons-material/Stadium';
+import MusicVideoIcon from '@mui/icons-material/MusicVideo';
 
 export default function Menu({
     width='100%',
     onManualClick,
     onArenaModeClick,
     onLeaderboardClick,
+    onDAWModeClick,
     onConnectWalletClick,
     onLanguageClick,
     onTutorialClick,
@@ -81,6 +83,13 @@ export default function Menu({
                         <EmojiEventsIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText onClick={onLeaderboardClick}>Arena Leaderboard</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <MusicVideoIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onDAWModeClick}>Audio Workstation Mode</ListItemText>
                 </MenuItemStyled>
 
                 <MenuItemStyled>

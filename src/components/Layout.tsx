@@ -25,6 +25,7 @@ const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps 
 };
 
 export default function Layout({
+    currMode,
     loadSave,
     board,
     stats,
@@ -37,7 +38,6 @@ export default function Layout({
     indexHandleClickSubmit,
     loadSolution,
     loadMode,
-    handleArenaModeClick,
     handleFormulaOnclick,
 }) {
     const { t } = useTranslation();
@@ -99,7 +99,6 @@ export default function Layout({
                                             handleSetOpen={handleSetOpen}
                                             loadSolution={loadSolution}
                                             loadMode={loadMode}
-                                            handleArenaModeClick={handleArenaModeClick}
                                         />
                                     </Grid>
 
@@ -126,9 +125,13 @@ export default function Layout({
                                 />
                             </Panel>
                         </Grid>
-                        <Grid xs={12} md={4} sx={gridStyles}>
-                            <Panel>{stats}</Panel>
-                        </Grid>
+                        {
+                            currMode !== 'daw' ? (
+                                <Grid xs={12} md={4} sx={gridStyles}>
+                                    <Panel>{stats}</Panel>
+                                </Grid>
+                            ) : <div/>
+                        }
                     </Grid>
 
                     <Grid container spacing={2} flex={1.25} justifyContent={"stretch"}>
