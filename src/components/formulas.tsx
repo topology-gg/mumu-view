@@ -11,7 +11,8 @@ export default function Formulas({ handleFormulaOnclick, clickDisabled }) {
     Object.entries(OPERATOR_TYPES).forEach(([key, value]) =>
         formulaList.push(
             <FormulaBlueprint
-                operatorType={value} clickable={!clickDisabled}
+                operatorType={value}
+                clickable={!clickDisabled}
                 onclick={() => handleFormulaOnclick(key)}
             />
         )
@@ -19,22 +20,11 @@ export default function Formulas({ handleFormulaOnclick, clickDisabled }) {
 
     return (
         <Box
-            flex={1}
-            flexShrink={0}
-            overflow="scroll"
             sx={{
-                border: 1,
-                borderRadius: 4,
-                ml: 6,
-                mr: 0,
                 textAlign: "center",
                 pt: 2,
                 pl: 5,
                 pr: 5,
-                mb: 3,
-                height: "15rem",
-                backgroundColor: clickDisabled ? '#eeeeee' : '#ffffff',
-                boxShadow:3,
             }}
         >
             {/* <div
