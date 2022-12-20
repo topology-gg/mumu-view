@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import { Box, Tooltip } from "@mui/material";
 import styles from "../styles/Home.module.css";
 import { Trans, useTranslation } from "react-i18next";
-import Typewriter from 'typewriter-effect';
 
 export default function Convo() {
 
