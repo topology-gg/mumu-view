@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Accordion, AccordionDetails, AccordionSummary, Box, SxProps, ThemeProvider } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Link, SxProps, ThemeProvider, Tooltip } from "@mui/material";
 import Grid from "@mui/system/Unstable_Grid";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import theme from "../../styles/theme";
 import Setting from "./ui_setting/setting";
@@ -12,7 +13,7 @@ import Convo from "./convo";
 import Submission from "./Submission";
 import MidScreenControl from "./ui_setting/MidScreenControl";
 
-import { useAccount, useConnectors } from "@starknet-react/core";
+import { useAccount, useStarknetExecute, useTransactionReceipt } from "@starknet-react/core";
 import LayoutBox from "./LayoutBox";
 
 const gridStyles: SxProps = {
@@ -34,11 +35,11 @@ export default function Layout({
     midScreenControlProps,
     midScreenControlHandleClick,
     midScreenControlHandleSlideChange,
-    indexHandleClickSubmit,
     loadSolution,
     loadMode,
     handleArenaModeClick,
     handleFormulaOnclick,
+    callData,
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
@@ -47,6 +48,28 @@ export default function Layout({
     const [openedAccordion, setOpenedAccordion] = useState<string>("accordion1");
     const [settingOpen, setSettingOpen] = useState<boolean>(true);
     const [settingRenderMode, setSettingRenderMode] = useState<string>("menu");
+    const [txnPending, setTxnPending] = useState<boolean>(false);
+    const [submitText, setSubmitText] = useState<string>();
+    const [hash, setHash] = useState<string>();
+
+    const { execute } = useStarknetExecute({calls: callData});
+    const { data } = useTransactionReceipt({ hash, watch: true });
+
+    useEffect(()=>{
+        if(data) {
+            switch(data.status) {
+                case "ACCEPTED_ON_L1":
+                case "ACCEPTED_ON_L2":
+                    setSubmitText("Success!");
+                    setTxnPending(false);
+                    break;
+                case "REJECTED":
+                    setSubmitText("Rejected!");
+                    setTxnPending(false);
+                    break;
+            }
+        }
+    }, [data])
 
     // handle state changes
     function handleSetRenderMode(mode) {
@@ -56,14 +79,33 @@ export default function Layout({
         setSettingOpen((_) => bool);
     }
 
-    function handleClickSubmit() {
+    //
+    // Handle click event for submitting solution to StarkNet
+    //
+    async function handleClickSubmit() {
         if (!account) {
-            console.log("boom not connected");
+            console.log("> wallet not connected yet");
             setSettingOpen((_) => true);
             setSettingRenderMode((_) => "connect");
-        } else {
-            indexHandleClickSubmit();
+            return;
         }
+
+        console.log("> connected address:", String(address));
+
+        // submit tx
+        console.log("> submitting args to simulator() on StarkNet:", callData);
+        try {
+            setSubmitText("Submission pending...");
+            setTxnPending(true);
+            setHash("");
+            
+            const res = await execute();
+            setHash(res.transaction_hash);
+        } catch (err) {
+            setTxnPending(false);
+            console.error(err);
+        }
+        return;
     }
 
     const MASCOT_DIM = "13rem";
@@ -108,9 +150,34 @@ export default function Layout({
                                     </Grid>
 
                                     <Grid xs={3} lg={2}>
-                                        <Submission handleClickSubmit={handleClickSubmit} />
+                                        <Submission handleClickSubmit={handleClickSubmit} isPending={txnPending}/>
                                     </Grid>
                                 </Grid>
+                                
+                                {hash && 
+                                    <Box 
+                                        fontSize="0.75em" 
+                                        display="flex" 
+                                        justifyContent="center" 
+                                        alignItems="center"
+                                    >
+                                        <Tooltip title="View on Starkscan" arrow>
+                                            <Link 
+                                                color="info"
+                                                underline="none"
+                                                target="_blank"
+                                                display="flex"
+                                                justifyContent="center" 
+                                                alignItems="center"
+                                                gap="0.25rem"
+                                                href={`https://testnet.starkscan.co/tx/${hash}`}
+                                            >
+                                                    {submitText} 
+                                                    <OpenInNewIcon fontSize="inherit"/>
+                                            </Link>
+                                        </Tooltip>
+                                    </Box>
+                                }
                             </Panel>
                         </Grid>
                         <Grid xs={12} md={4} sx={gridStyles}>

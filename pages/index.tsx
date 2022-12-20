@@ -18,7 +18,7 @@ import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
 import { Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY, Lesson_instruction, Lesson_objective } from "../src/constants/constants";
 import { useTranslation } from "react-i18next";
 import "../config/i18n";
-import { useAccount, useStarknetExecute } from "@starknet-react/core";
+import { useAccount, useStarknetExecute, useTransactionReceipt } from "@starknet-react/core";
 import packSolution, { programsToInstructionSets } from "../src/helpers/packSolution";
 import { SIMULATOR_ADDR } from "../src/components/SimulatorContract";
 import Solution from "../src/types/Solution";
@@ -33,6 +33,7 @@ import FormulaBlueprint from "../src/components/FormulaBlueprint";
 import { placingFormulaToOperator } from "../src/helpers/typeMapping";
 import Board from "../src/components/board";
 import { Delete } from "@mui/icons-material";
+import { Status } from "starknet";
 
 export default function Home() {
 
@@ -185,10 +186,6 @@ export default function Home() {
             mech_carries[mech_index] = bgStatus;
         }
     });
-
-    // Starknet
-    const { account, address, status } = useAccount();
-    const { execute } = useStarknetExecute({ calls });
 
     ////////////////////
 
@@ -433,23 +430,6 @@ export default function Home() {
             prev_copy.splice(operator_i, 1);
             return prev_copy;
         });
-    }
-
-    //
-    // Handle click event for submitting solution to StarkNet
-    //
-    function handleClickSubmit() {
-        if (!account) {
-            console.log("> wallet not connected yet");
-        }
-
-        console.log("> connected address:", String(address));
-
-        // submit tx
-        console.log("> submitting args to simulator() on StarkNet:", calls);
-        execute();
-
-        return;
     }
 
     //
@@ -927,11 +907,11 @@ export default function Home() {
                 }}
                 midScreenControlHandleClick={handleClick}
                 midScreenControlHandleSlideChange={handleSlideChange}
-                indexHandleClickSubmit={handleClickSubmit}
                 loadSolution={handleLoadSolutionClick}
                 loadMode={(mode: Modes) => handleLoadModeClick(mode)}
                 handleArenaModeClick={() => setCurrMode(_ => Modes.arena)}
                 handleFormulaOnclick={(formula_key) => {handleOperatorClick("+", formula_key)}}
+                callData={calls}
             />
         </>
     );
