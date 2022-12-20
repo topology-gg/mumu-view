@@ -76,7 +76,7 @@ export default function Layout({
                         <Grid xs={12} md={4} sx={gridStyles}>
                             <Panel
                                 sx={{
-                                    pt: 9,
+                                    p: 0,
                                     border: 1,
                                     borderRadius: 4,
                                     backgroundColor: "#ffffff",

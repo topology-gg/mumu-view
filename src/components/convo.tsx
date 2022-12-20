@@ -20,17 +20,16 @@ export default function Convo() {
     return (
         <Box
             flex={1} flexShrink={0} overflow="hidden"
-            sx={{ textAlign:'left', mb:'1rem', pl:'3.5rem', pr:'3.5rem', height:'4rem' }}
+            sx={{ textAlign:'left', mt: '2rem', mb:'1rem', pl:'3.5rem', pr:'3.5rem', height:'110px' }}
         >
-            <Typewriter
-                options={{
-                    strings: sentences,
-                    autoStart: true,
-                    loop: true,
-                    delay: 50,
-                    deleteSpeed: 10,
-                }}
-            />
+            <p style={{
+                fontFamily:'RockSalt', textAlign:'center',
+                fontSize:'40px', padding:'0', margin:'0'
+            }}>MuMu</p>
+            <p style={{
+                textAlign:'center',
+                fontSize:'12px', padding:'0', margin:'0'
+            }}>A Topology Experiment</p>
 
         </Box>
     );

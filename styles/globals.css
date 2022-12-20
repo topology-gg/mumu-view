@@ -1,3 +1,9 @@
+
+@font-face{
+    font-family: "RockSalt";
+    src: url("./fonts/RockSalt/RockSalt-Regular.ttf") format("truetype");
+}
+
 html,
 body {
     padding: 0;
