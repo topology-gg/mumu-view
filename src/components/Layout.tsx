@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Accordion, AccordionDetails, AccordionSummary, Box, Link, SxProps, ThemeProvider, Tooltip } from "@mui/material";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    Link,
+    SxProps,
+    ThemeProvider,
+    Tooltip,
+} from "@mui/material";
 import Grid from "@mui/system/Unstable_Grid";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -52,12 +61,12 @@ export default function Layout({
     const [submitText, setSubmitText] = useState<string>();
     const [hash, setHash] = useState<string>();
 
-    const { execute } = useStarknetExecute({calls: callData});
+    const { execute } = useStarknetExecute({ calls: callData });
     const { data } = useTransactionReceipt({ hash, watch: true });
 
-    useEffect(()=>{
-        if(data) {
-            switch(data.status) {
+    useEffect(() => {
+        if (data) {
+            switch (data.status) {
                 case "ACCEPTED_ON_L1":
                 case "ACCEPTED_ON_L2":
                     setSubmitText("Success!");
@@ -69,7 +78,7 @@ export default function Layout({
                     break;
             }
         }
-    }, [data])
+    }, [data]);
 
     // handle state changes
     function handleSetRenderMode(mode) {
@@ -98,7 +107,7 @@ export default function Layout({
             setSubmitText("Submission pending...");
             setTxnPending(true);
             setHash("");
-            
+
             const res = await execute();
             setHash(res.transaction_hash);
         } catch (err) {
@@ -150,34 +159,29 @@ export default function Layout({
                                     </Grid>
 
                                     <Grid xs={3} lg={2}>
-                                        <Submission handleClickSubmit={handleClickSubmit} isPending={txnPending}/>
+                                        <Submission handleClickSubmit={handleClickSubmit} isPending={txnPending} />
                                     </Grid>
                                 </Grid>
-                                
-                                {hash && 
-                                    <Box 
-                                        fontSize="0.75em" 
-                                        display="flex" 
-                                        justifyContent="center" 
-                                        alignItems="center"
-                                    >
+
+                                {hash && (
+                                    <Box fontSize="0.75em" display="flex" justifyContent="center" alignItems="center">
                                         <Tooltip title="View on Starkscan" arrow>
-                                            <Link 
+                                            <Link
                                                 color="info"
                                                 underline="none"
                                                 target="_blank"
                                                 display="flex"
-                                                justifyContent="center" 
+                                                justifyContent="center"
                                                 alignItems="center"
                                                 gap="0.25rem"
                                                 href={`https://testnet.starkscan.co/tx/${hash}`}
                                             >
-                                                    {submitText} 
-                                                    <OpenInNewIcon fontSize="inherit"/>
+                                                {submitText}
+                                                <OpenInNewIcon fontSize="inherit" />
                                             </Link>
                                         </Tooltip>
                                     </Box>
-                                }
+                                )}
                             </Panel>
                         </Grid>
                         <Grid xs={12} md={4} sx={gridStyles}>
