@@ -14,6 +14,7 @@ import MidScreenControl from "./ui_setting/MidScreenControl";
 
 import { useAccount, useConnectors } from "@starknet-react/core";
 import LayoutBox from "./LayoutBox";
+import DAWPanel from "./dawPanel";
 
 const gridStyles: SxProps = {
     display: "flex",
@@ -67,6 +68,10 @@ export default function Layout({
     }
 
     const MASCOT_DIM = "13rem";
+    const stats_box_sx = {
+        p:'1rem',backgroundColor:'#ffffff',fontSize:'0.75rem',alignItems:'center',
+        border: 1, borderRadius:4, boxShadow:3,
+    }
 
     return (
         <>
@@ -130,7 +135,18 @@ export default function Layout({
                                 <Grid xs={12} md={4} sx={gridStyles}>
                                     <Panel>{stats}</Panel>
                                 </Grid>
-                            ) : <div/>
+                            ) :
+                            <Grid xs={12} md={4} sx={gridStyles}>
+                                <Panel>
+                                    <Box sx={stats_box_sx}>
+                                        <DAWPanel
+                                            sf={null}
+                                            handleSetSfFile={(file) => {console.log('hey')}}
+                                        />
+                                    </Box>
+                                </Panel>
+                            </Grid>
+
                         }
                     </Grid>
 

@@ -21,6 +21,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
 
+import SoundFont from '../modules/sf2-player/src';
+
 interface BoardProps {
     mode: Modes;
     objective: string;
@@ -75,6 +77,11 @@ export default function Board({
             const mech_i: number = +atomState.possessed_by.replace("mech", "");
             possessedAtom[mech_i] = atomState;
         }
+    }
+
+    const [sf, setSF] = useState(new SoundFont());
+    const playMidiNum = (midiNum: number) => {
+        sf.noteOn(midiNum, 100, 0);
     }
 
     const BOX_DIM: number = 10 * 2 + 10 * 2 * 0.2 + 2;
@@ -199,7 +206,10 @@ export default function Board({
                                                         produceableAtomType={produceableAtomTypes[j][i]}
                                                         handleMouseOver={() => handleMouseOver(j, i)}
                                                         handleMouseOut={() => handleMouseOut()}
-                                                        onClick={() => handleUnitClick(j, i)}
+                                                        onClick={() => {
+                                                            if (mode == Modes.daw) {playMidiNum(30);}
+                                                            handleUnitClick(j, i);
+                                                        }}
                                                         mechHighlight={
                                                             mechIndexHighlighted == -1
                                                                 ? false
