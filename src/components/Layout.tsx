@@ -62,23 +62,19 @@ export default function Layout({
     const [hash, setHash] = useState<string>();
 
     const { execute } = useStarknetExecute({ calls: callData });
-    const { data } = useTransactionReceipt({ hash, watch: true });
 
     useEffect(() => {
-        if (data) {
-            switch (data.status) {
-                case "ACCEPTED_ON_L1":
-                case "ACCEPTED_ON_L2":
-                    setSubmitText("Success!");
-                    setTxnPending(false);
-                    break;
-                case "REJECTED":
-                    setSubmitText("Rejected!");
-                    setTxnPending(false);
-                    break;
-            }
+        if (hash) {
+            account
+                .waitForTransaction(hash)
+                .then(() => setSubmitText("Success!"))
+                .catch((err) => {
+                    setSubmitText("Error! Please try again.");
+                    console.error(err);
+                })
+                .finally(() => setTxnPending(false));
         }
-    }, [data]);
+    }, [hash]);
 
     // handle state changes
     function handleSetRenderMode(mode) {
@@ -108,8 +104,8 @@ export default function Layout({
             setTxnPending(true);
             setHash("");
 
-            const res = await execute();
-            setHash(res.transaction_hash);
+            const response = await execute();
+            setHash(response.transaction_hash);
         } catch (err) {
             setTxnPending(false);
             console.error(err);
