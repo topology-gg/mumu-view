@@ -3,6 +3,9 @@ import { OPERATOR_TYPES } from "../types/Operator";
 import Solution from "../types/Solution";
 import { AtomType } from "../types/AtomState";
 
+const IS_CHRISTMAS = true
+export const BLANK_COLOR = IS_CHRISTMAS ? '#e9e5e1' : '#ffffff'
+
 export enum Modes {
     lesson_1 = 'lesson_1',
     lesson_2 = 'lesson_2',

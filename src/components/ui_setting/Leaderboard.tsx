@@ -20,7 +20,7 @@ const Leaderboard = ({ loadSolution }) => {
 
     // render
     return (
-        <Paper sx={{ width: '100%', pb:5 }} elevation={0}>
+        <Paper sx={{ width: '100%', pb:5, backgroundColor:'#ffffff00'}} elevation={0}>
             <p
                 style={{
                     fontSize: "1.2rem",

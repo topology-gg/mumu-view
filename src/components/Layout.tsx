@@ -16,6 +16,8 @@ import { useAccount, useConnectors } from "@starknet-react/core";
 import LayoutBox from "./LayoutBox";
 import DAWPanel from "./DAWPanel";
 
+import { BLANK_COLOR } from "../constants/constants";
+
 const gridStyles: SxProps = {
     display: "flex",
     flexDirection: "row",
@@ -70,7 +72,7 @@ export default function Layout({
 
     const MASCOT_DIM = "13rem";
     const stats_box_sx = {
-        p:'1rem',backgroundColor:'#ffffff',fontSize:'0.75rem',alignItems:'center',
+        p:'1rem',backgroundColor:BLANK_COLOR,fontSize:'0.75rem',alignItems:'center',
         border: 1, borderRadius:4, boxShadow:3,
     }
 
@@ -85,7 +87,7 @@ export default function Layout({
                                     p: 0,
                                     border: 1,
                                     borderRadius: 4,
-                                    backgroundColor: "#ffffff",
+                                    backgroundColor: BLANK_COLOR,
                                     boxShadow: 3,
                                 }}
                             >
@@ -155,7 +157,7 @@ export default function Layout({
                         <Grid xs={12} md={4} sx={gridStyles}>
                             <LayoutBox
                                 scrollable
-                                sx={{ bgcolor: animationState !== "Stop" ? "grey.300" : "common.white" }}
+                                sx={{ bgcolor: animationState !== "Stop" ? "grey.500" : BLANK_COLOR }}
                             >
                                 <Formulas
                                     handleFormulaOnclick={(k) => {
@@ -169,7 +171,7 @@ export default function Layout({
                         <Grid xs={12} md={8} sx={gridStyles}>
                             <LayoutBox
                                 scrollable
-                                sx={{ bgcolor: animationState !== "Stop" ? "grey.300" : "common.white" }}
+                                sx={{ bgcolor: animationState !== "Stop" ? "grey.500" : BLANK_COLOR }}
                             >
                                 <Accordion
                                     key="accordion-1"

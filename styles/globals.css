@@ -10,7 +10,8 @@ body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    background-color: #f2f3f5;
+    /* background-color: #f2f3f5; */
+    background-color: #303a43;
     color-scheme: light;
     color: #222222;
 }
@@ -66,7 +67,8 @@ button:disabled {
     border: 1px solid #BBBBBB;
 }
 button:hover {
-    background-color: #FFFE71;
+    /* background-color: #FFFE71; */
+    background-color: #fedfb0;
     cursor: pointer;
 }
 @keyframes glowing {
@@ -74,7 +76,8 @@ button:hover {
         background-color: #FFFFFF;
     }
     30% {
-        background-color: #FFFE71;
+        /* background-color: #FFFE71; */
+        background-color: #fedfb0;
     }
     100% {
         background-color: #FFFFFF;
@@ -144,7 +147,8 @@ button:hover {
 }
 
 .solution_row:hover {
-    background-color: #FFFE71;
+    /* background-color: #FFFE71; */
+    background-color: #fedfb0;
     cursor: pointer;
 }
 
@@ -153,7 +157,8 @@ button:hover {
     margin-right: 0.5rem;
 }
 .stardisc:hover {
-    background-color: #FFFE71;
+    /* background-color: #FFFE71; */
+    background-color: #fedfb0;
     cursor: pointer;
 }
 
@@ -182,7 +187,8 @@ table {
     border-radius: 3px;
 }
 #submit-button:hover{
-    background-color: #FFFE71;
+    /* background-color: #FFFE71; */
+    background-color: #fedfb0;
     cursor: pointer;
 }
 
@@ -209,14 +215,15 @@ https://stackoverflow.com/questions/18389224/how-to-style-html5-range-input-to-h
       overflow: hidden;
       width: 40px;
       -webkit-appearance: none;
-      background-color: #EEEEEE;
+      background-color: #cccccc;
+      border-radius: 3px;
     }
 
     input[type='range']::-webkit-slider-runnable-track {
       height: 10px;
       -webkit-appearance: none;
       color: #98c0bb;
-      margin-top: -1px;
+      /* margin-top: -1px; */
     }
 
     input[type='range']::-webkit-slider-thumb {
@@ -225,6 +232,7 @@ https://stackoverflow.com/questions/18389224/how-to-style-html5-range-input-to-h
       height: 10px;
       cursor: ew-resize;
       background: #2d4249;
+      border-radius: 3px;
       /* box-shadow: -2000px 0 0 2000px #937882; */
     }
 
@@ -280,7 +288,8 @@ strong {
 }
 strong::before {
     /* Highlight color */
-    background-color: #FFFE71;
+    /* background-color: #FFFE71; */
+    background-color: #fedfb0;
 
     content: "";
     position: absolute;
@@ -306,6 +315,12 @@ input::placeholder {
 
 .mascot {
     background: url('../src/images/fox.gif') no-repeat;
+    background-position: center;
+    background-size: 80%;
+}
+
+.christmas {
+    background: url('../src/images/christmas.png') no-repeat;
     background-position: center;
     background-size: 80%;
 }

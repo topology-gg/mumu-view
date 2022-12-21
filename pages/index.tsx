@@ -15,7 +15,7 @@ import Delivery from "../src/components/delivery";
 import Summary from "../src/components/summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
 
-import { Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY, Lesson_instruction, Lesson_objective } from "../src/constants/constants";
+import { BLANK_COLOR, Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY, Lesson_instruction, Lesson_objective } from "../src/constants/constants";
 import { useTranslation } from "react-i18next";
 import "../config/i18n";
 import { useAccount, useStarknetExecute } from "@starknet-react/core";
@@ -705,7 +705,7 @@ export default function Home() {
     />
 
     const stats_box_sx = {
-        p:'1rem',backgroundColor:'#ffffff',fontSize:'0.75rem',alignItems:'center',
+        p:'1rem',backgroundColor:BLANK_COLOR,fontSize:'0.75rem',alignItems:'center',
         border: 1, borderRadius:4, boxShadow:3,
     }
     const stats = (

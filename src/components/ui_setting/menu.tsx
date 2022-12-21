@@ -18,6 +18,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import StadiumIcon from '@mui/icons-material/Stadium';
 import MusicVideoIcon from '@mui/icons-material/MusicVideo';
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 
 export default function Menu({
     width='100%',
@@ -30,9 +31,9 @@ export default function Menu({
     onTutorialClick,
 }) {
 
-    const MenuItemStyled = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
+    const MenuItemStyled = ({ children, sx = {}, disabled=false }: { children: React.ReactNode; sx?: SxProps; disabled?: boolean }) => {
         return (
-            <MenuItem sx={{pl:5, color:'#333333'}}>
+            <MenuItem sx={{pl:5, color:'#333333'}} disabled={disabled}>
                 {children}
             </MenuItem>
         )
@@ -40,7 +41,7 @@ export default function Menu({
 
 
     return (
-        <Paper sx={{ width: width, maxWidth: '100%'}} elevation={0}>
+        <Paper sx={{ width: width, maxWidth: '100%', backgroundColor:'#ffffff00'}} elevation={0}>
             <MenuList>
 
                 <ListItemText sx={{textAlign:'center', pb:2}}>MuMu: Season 2</ListItemText>
@@ -90,6 +91,13 @@ export default function Menu({
                         <MusicVideoIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText onClick={onDAWModeClick}>Audio Workstation Mode</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled disabled={true}>
+                    <ListItemIcon>
+                        <LibraryMusicIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Music Library</ListItemText>
                 </MenuItemStyled>
 
                 <MenuItemStyled>

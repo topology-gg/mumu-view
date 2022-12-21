@@ -18,15 +18,22 @@ export default function DAWPanel ({ sf, handleSetSfFile }) {
         }
     }
 
+    const CHRISTMAS_TREE_DIM = '150px'
+
     // render
     return (
         <div style={{}}>
+
+            <div
+                className={"christmas"}
+                style={{ width: CHRISTMAS_TREE_DIM, height: CHRISTMAS_TREE_DIM, margin: "0 auto 0.5rem auto" }}
+            ></div>
 
             <fieldset style={{border:'1px groove #77777755'}}>
                 <legend>Open SF2 file</legend>
                 <input
                     className='button' type="file"
-                    style={{border:'none', marginTop:'5px'}}
+                    style={{border:'none', marginTop:'5px', backgroundColor:'#ffffff00'}}
                     onChange={(e) => onChangeSf(e)}
                 />
             </fieldset>

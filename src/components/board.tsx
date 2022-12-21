@@ -165,7 +165,7 @@ export default function Board({
                     border: 1,
                     borderRadius: 4,
                     boxShadow: 3,
-                    backgroundColor: "#FDF5E677",
+                    backgroundColor: "#FDF5E6",
                 }}
             >
                 <div className={styles.grid_parent} style={{}}>

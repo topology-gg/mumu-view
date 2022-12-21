@@ -9,7 +9,7 @@ import Leaderboard from "./Leaderboard";
 import Tutorial from "./Tutorial";
 
 import { Box, SxProps } from "@mui/material";
-import { Modes } from "../../constants/constants";
+import { BLANK_COLOR, Modes } from "../../constants/constants";
 
 export default function Setting({
     loadSolution, loadMode,
@@ -69,6 +69,7 @@ export default function Setting({
             >
                 <Box sx={{
                     pt: 3, pb: 0, pl: 0, pr: 0, fontFamily: "var(--font-family-secondary)",
+                    backgroundColor: BLANK_COLOR
                 }}>
                     {
                         (renderMode == 'menu') ? (
