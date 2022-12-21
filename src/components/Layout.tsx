@@ -98,7 +98,7 @@ export default function Layout({
                                 <Convo />
 
                                 <div
-                                    className={"mascot"}
+                                    className={"christmas"}
                                     style={{ width: MASCOT_DIM, height: MASCOT_DIM, margin: "0 auto 0.5rem auto" }}
                                 ></div>
 
