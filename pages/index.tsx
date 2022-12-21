@@ -703,9 +703,14 @@ export default function Home() {
         sf.noteOn(midi_num, velocity, 0);
     }
 
+    const stopMidiNum = (midi_num: number) => {
+        sf.noteOff(midi_num, 0, 0);
+    }
+
     const board = <Board
         mode={currMode}
         animationState={animationState}
+        animationFrame={animationFrame}
         objective={MODE_OBJECTIVE}
         instruction={MODE_INSTRUCTION}
         operatorStates = {operatorStates}
@@ -723,6 +728,7 @@ export default function Home() {
         consumedAtomIds = {consumedAtomIds}
         producedAtomIds = {producedAtomIds}
         playMidiNum = {playMidiNum}
+        stopMidiNum = {stopMidiNum}
     />
 
     const stats_box_sx = {

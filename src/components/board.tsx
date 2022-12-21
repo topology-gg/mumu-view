@@ -26,6 +26,7 @@ import SoundFont from '../modules/sf2-player/src';
 interface BoardProps {
     mode: Modes;
     animationState: string;
+    animationFrame: number;
     objective: string;
     instruction: string[];
     operatorStates: Operator[];
@@ -41,6 +42,7 @@ interface BoardProps {
     handleMouseOut: () => void;
     handleUnitClick: (x: number, y: number) => void;
     playMidiNum: (mech_i: number, midi_num: number) => void,
+    stopMidiNum: (midi_num: number) => void,
     consumedAtomIds: string[];
     producedAtomIds: string[];
 }
@@ -48,6 +50,7 @@ interface BoardProps {
 export default function Board({
     mode,
     animationState,
+    animationFrame,
     objective = "",
     instruction = [],
     operatorStates,
@@ -63,14 +66,21 @@ export default function Board({
     handleMouseOut,
     handleUnitClick,
     playMidiNum,
+    stopMidiNum,
     consumedAtomIds,
     producedAtomIds,
 }: BoardProps) {
 
+    // render nothing if mechStates is not ready yet
+    if (!mechStates) return <></>;
+
     // Unpack constants given mode
     const DIM = Constraints[mode].DIM;
 
-    if (!mechStates) return <></>;
+    // notes played in previous frame
+    const [lastSimulationNotes, setLastSimulationNotes] = useState<number[]>([]);
+    // notes played by onMouseDown Grid cells
+    const [lastPreviewNote, setLastPreviewNote] = useState<number>(null);
 
     // build mapping from mech_i to possessed atom (if any)
     var possessedAtom = mechStates.map((_) => null);
@@ -92,14 +102,24 @@ export default function Board({
         [65, 67, 69, 72, 74, 77, 79, 81, 84, 86],
         [67, 69, 72, 74, 77, 79, 81, 84, 86, 89],
         [69, 72, 74, 77, 79, 81, 84, 86, 89, 91],
-      ];
+    ];
 
-    // test looping and firing note.play in parent
-    if (mode == Modes.daw && animationState=='Run'){
-        mechStates.forEach((mechState, mech_i) => {
-            playMidiNum(mech_i, frets[mechState.index.x][mechState.index.y]);
-        });
-    }
+    // firing note.play in parent
+    useEffect(() => {
+        if (mode == Modes.daw && animationState=='Run'){
+
+            var notes = []
+            mechStates.forEach((mechState, mech_i) => {
+                lastSimulationNotes.forEach(lastSimulationNote => {
+                    stopMidiNum(lastSimulationNote);
+                });
+
+                playMidiNum(mech_i, frets[mechState.index.x][mechState.index.y]);
+                notes.push(frets[mechState.index.x][mechState.index.y])
+            });
+            setLastSimulationNotes(_ => notes);
+        }
+    }, [animationFrame]);
 
     const BOX_DIM: number = 10 * 2 + 10 * 2 * 0.2 + 2;
     const BOARD_DIM: number = DIM * 2 + DIM * 2 * 0.2 + 2; // unit is rem; reflect the dimensions, padding and margin set in CSS
@@ -206,6 +226,40 @@ export default function Board({
                                         if (isConsumed) console.log(`isConsumed at (i,j)=(${i},${j})`);
                                         if (isProduced) console.log(`isProduced at (i,j)=(${i},${j})`);
 
+                                        const rawUnit = (
+                                            <div key={`${j}-${i}`}>
+                                                <Unit
+                                                    key={`unit-${j}-${i}`}
+                                                    state={unitStates[j][i]}
+                                                    consumableAtomType={consumableAtomTypes[j][i]}
+                                                    produceableAtomType={produceableAtomTypes[j][i]}
+                                                    handleMouseOver={() => handleMouseOver(j, i)}
+                                                    handleMouseOut={() => {handleMouseOut()}}
+                                                    onMouseDown={() => {
+                                                        if (mode == Modes.daw) {
+                                                            stopMidiNum(lastPreviewNote);
+
+                                                            const note = frets[j][i]
+                                                            playMidiNum(-1, note);
+                                                            setLastPreviewNote(_ => note);
+                                                        }
+                                                    }}
+                                                    onClick={() => {handleUnitClick(j, i)}}
+                                                    mechHighlight={
+                                                        mechIndexHighlighted == -1
+                                                            ? false
+                                                            : j == mechStates[mechIndexHighlighted].index.x &&
+                                                                i == mechStates[mechIndexHighlighted].index.y
+                                                            ? true
+                                                            : false
+                                                    }
+                                                    isSmall={false}
+                                                    isConsumed={isConsumed}
+                                                    isProduced={isProduced}
+                                                />
+                                            </div>
+                                        )
+
                                         return (
                                             <Tooltip
                                                 title={`${j},${i}`}
@@ -215,33 +269,10 @@ export default function Board({
                                                 leaveDelay={0}
                                                 TransitionProps={{ timeout: 100 }}
                                             >
-                                                <div key={`${j}-${i}`}>
-                                                    <Unit
-                                                        key={`unit-${j}-${i}`}
-                                                        state={unitStates[j][i]}
-                                                        consumableAtomType={consumableAtomTypes[j][i]}
-                                                        produceableAtomType={produceableAtomTypes[j][i]}
-                                                        handleMouseOver={() => handleMouseOver(j, i)}
-                                                        handleMouseOut={() => handleMouseOut()}
-                                                        onClick={() => {
-                                                            if (mode == Modes.daw) {playMidiNum(-1, frets[j][i]);}
-                                                            handleUnitClick(j, i);
-                                                        }}
-                                                        mechHighlight={
-                                                            mechIndexHighlighted == -1
-                                                                ? false
-                                                                : j == mechStates[mechIndexHighlighted].index.x &&
-                                                                  i == mechStates[mechIndexHighlighted].index.y
-                                                                ? true
-                                                                : false
-                                                        }
-                                                        isSmall={false}
-                                                        isConsumed={isConsumed}
-                                                        isProduced={isProduced}
-                                                    />
-                                                </div>
+                                                {rawUnit}
                                             </Tooltip>
                                         );
+
                                     }
                                 )}
                             </div>
