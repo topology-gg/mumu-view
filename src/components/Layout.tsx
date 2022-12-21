@@ -40,6 +40,7 @@ export default function Layout({
     loadSolution,
     loadMode,
     handleFormulaOnclick,
+    handleSetSfFile
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
@@ -141,7 +142,7 @@ export default function Layout({
                                     <Box sx={stats_box_sx}>
                                         <DAWPanel
                                             sf={null}
-                                            handleSetSfFile={(file) => {console.log('hey')}}
+                                            handleSetSfFile={(file) => handleSetSfFile(file)}
                                         />
                                     </Box>
                                 </Panel>

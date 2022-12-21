@@ -33,6 +33,7 @@ import FormulaBlueprint from "../src/components/FormulaBlueprint";
 import { placingFormulaToOperator } from "../src/helpers/typeMapping";
 import Board from "../src/components/board";
 import { Delete } from "@mui/icons-material";
+import SoundFont from '../src/modules/sf2-player/src';
 
 export default function Home() {
 
@@ -670,6 +671,17 @@ export default function Home() {
         />
     );
 
+    const [sf, setSF] = useState(new SoundFont());
+    const handleSetSfFile = async (file) => {
+        await sf.loadSoundFontFromFile(file);
+        sf.bank = sf.banks[0]['id'];
+        sf.program = sf.programs[0]['id'];
+    }
+
+    const playMidiNum = (num: number) => {        
+        sf.noteOn(num);
+    }
+
     const board = <Board
         mode={currMode}
         objective={MODE_OBJECTIVE}
@@ -688,6 +700,7 @@ export default function Home() {
         handleUnitClick = {(x,y) => handleUnitClick(x,y)}
         consumedAtomIds = {consumedAtomIds}
         producedAtomIds = {producedAtomIds}
+        playMidiNum = {playMidiNum}
     />
 
     const stats_box_sx = {
@@ -932,6 +945,7 @@ export default function Home() {
                 loadSolution={handleLoadSolutionClick}
                 loadMode={(mode: Modes) => handleLoadModeClick(mode)}
                 handleFormulaOnclick={(formula_key) => {handleOperatorClick("+", formula_key)}}
+                handleSetSfFile={handleSetSfFile}
             />
         </>
     );

@@ -39,6 +39,7 @@ interface BoardProps {
     handleMouseOver: (x: number, y: number) => void;
     handleMouseOut: () => void;
     handleUnitClick: (x: number, y: number) => void;
+    playMidiNum: (x: number) => void,
     consumedAtomIds: string[];
     producedAtomIds: string[];
 }
@@ -59,6 +60,7 @@ export default function Board({
     handleMouseOver,
     handleMouseOut,
     handleUnitClick,
+    playMidiNum,
     consumedAtomIds,
     producedAtomIds,
 }: BoardProps) {
@@ -79,10 +81,18 @@ export default function Board({
         }
     }
 
-    const [sf, setSF] = useState(new SoundFont());
-    const playMidiNum = (midiNum: number) => {
-        sf.noteOn(midiNum, 100, 0);
-    }
+    const frets = [
+        [48, 50, 53, 55, 57, 60, 62, 65, 67, 69],
+        [50, 53, 55, 57, 60, 62, 65, 67, 69, 72],
+        [53, 55, 57, 60, 62, 65, 67, 69, 72, 74],
+        [55, 57, 60, 62, 65, 67, 69, 72, 74, 77],
+        [57, 60, 62, 65, 67, 69, 72, 74, 77, 79],
+        [60, 62, 65, 67, 69, 72, 74, 77, 79, 81],
+        [62, 65, 67, 69, 72, 74, 77, 79, 81, 84],
+        [65, 67, 69, 72, 74, 77, 79, 81, 84, 86],
+        [67, 69, 72, 74, 77, 79, 81, 84, 86, 89],
+        [69, 72, 74, 77, 79, 81, 84, 86, 89, 91],
+      ];
 
     const BOX_DIM: number = 10 * 2 + 10 * 2 * 0.2 + 2;
     const BOARD_DIM: number = DIM * 2 + DIM * 2 * 0.2 + 2; // unit is rem; reflect the dimensions, padding and margin set in CSS
@@ -207,7 +217,7 @@ export default function Board({
                                                         handleMouseOver={() => handleMouseOver(j, i)}
                                                         handleMouseOut={() => handleMouseOut()}
                                                         onClick={() => {
-                                                            if (mode == Modes.daw) {playMidiNum(30);}
+                                                            if (mode == Modes.daw) {playMidiNum(frets[j][i]);}
                                                             handleUnitClick(j, i);
                                                         }}
                                                         mechHighlight={
