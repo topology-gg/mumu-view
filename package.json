@@ -27,8 +27,7 @@
     "react-spring": "^9.5.5",
     "sf2-player": "file:src/modules/sf2-player",
     "starknet": "^4.4.2",
-    "swr": "^1.3.0",
-    "typewriter-effect": "^2.19.0"
+    "swr": "^1.3.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
