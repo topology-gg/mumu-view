@@ -14,7 +14,7 @@ import MidScreenControl from "./ui_setting/MidScreenControl";
 
 import { useAccount, useConnectors } from "@starknet-react/core";
 import LayoutBox from "./LayoutBox";
-import DAWPanel from "./dawPanel";
+import DAWPanel from "./DAWPanel";
 
 const gridStyles: SxProps = {
     display: "flex",

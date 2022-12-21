@@ -51,7 +51,7 @@ input {
     font-family: menlo;
 }
 
-button {
+button, .button {
     font-family: menlo;
     font-size: 0.75rem;
     margin-right: 3px;

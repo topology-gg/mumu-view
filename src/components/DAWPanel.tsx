@@ -22,9 +22,13 @@ export default function DAWPanel ({ sf, handleSetSfFile }) {
     return (
         <div style={{}}>
 
-            <fieldset>
+            <fieldset style={{border:'1px groove #77777755'}}>
                 <legend>Open SF2 file</legend>
-                <input type="file" onChange={(e) => onChangeSf(e)} />
+                <input
+                    className='button' type="file"
+                    style={{border:'none', marginTop:'5px'}}
+                    onChange={(e) => onChangeSf(e)}
+                />
             </fieldset>
 
         </div>

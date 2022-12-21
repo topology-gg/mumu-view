@@ -678,8 +678,8 @@ export default function Home() {
         sf.program = sf.programs[0]['id'];
     }
 
-    const playMidiNum = (num: number) => {        
-        sf.noteOn(num);
+    const playMidiNum = (num: number) => {
+        sf.noteOn(num, 50, 0);
     }
 
     const board = <Board
