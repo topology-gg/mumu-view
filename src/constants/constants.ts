@@ -82,14 +82,10 @@ export const Constraints: { [key in Modes]: any } = {
         DIM: 10,
         PROGRAM_SIZE_MAX: 40,
         N_CYCLES: 200,
-        MAX_NUM_MECHS: 20,
-        MAX_NUM_OPERATORS: 20,
-        FAUCETS: [{ x: 0, y: 0 }],
-        SINKS: [
-            { x: 0, y: 10 - 1 },
-            { x: 10 - 1, y: 0 },
-            { x: 10 - 1, y: 10 - 1 },
-        ],
+        MAX_NUM_MECHS: 8,
+        MAX_NUM_OPERATORS: 0,
+        FAUCETS: [],
+        SINKS: [],
         ATOMS: [],
         TARGET_TYPE: AtomType.SAFFRON
     },

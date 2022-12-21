@@ -684,6 +684,7 @@ export default function Home() {
 
     const board = <Board
         mode={currMode}
+        animationState={animationState}
         objective={MODE_OBJECTIVE}
         instruction={MODE_INSTRUCTION}
         operatorStates = {operatorStates}

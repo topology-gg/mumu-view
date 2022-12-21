@@ -25,6 +25,7 @@ import SoundFont from '../modules/sf2-player/src';
 
 interface BoardProps {
     mode: Modes;
+    animationState: string;
     objective: string;
     instruction: string[];
     operatorStates: Operator[];
@@ -46,6 +47,7 @@ interface BoardProps {
 
 export default function Board({
     mode,
+    animationState,
     objective = "",
     instruction = [],
     operatorStates,
@@ -93,6 +95,13 @@ export default function Board({
         [67, 69, 72, 74, 77, 79, 81, 84, 86, 89],
         [69, 72, 74, 77, 79, 81, 84, 86, 89, 91],
       ];
+
+    // test looping and firing note.play in parent
+    if (mode == Modes.daw && animationState=='Run'){
+        mechStates.forEach(mechState => {
+            playMidiNum(frets[mechState.index.x][mechState.index.y]);
+        });
+    }
 
     const BOX_DIM: number = 10 * 2 + 10 * 2 * 0.2 + 2;
     const BOARD_DIM: number = DIM * 2 + DIM * 2 * 0.2 + 2; // unit is rem; reflect the dimensions, padding and margin set in CSS
