@@ -33,6 +33,8 @@ export default function Layout({
     board,
     stats,
     animationState,
+    mech_n,
+    mechVelocities,
     mechProgramming,
     formulaProgramming,
     midScreenControlProps,
@@ -42,7 +44,8 @@ export default function Layout({
     loadSolution,
     loadMode,
     handleFormulaOnclick,
-    handleSetSfFile
+    handleSetSfFile,
+    handleMechNoteVelocityChange,
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
@@ -145,6 +148,10 @@ export default function Layout({
                                         <DAWPanel
                                             sf={null}
                                             handleSetSfFile={(file) => handleSetSfFile(file)}
+                                            mech_n={mech_n}
+                                            mechVelocities={mechVelocities}
+                                            animationState={animationState}
+                                            handleMechNoteVelocityChange={handleMechNoteVelocityChange}
                                         />
                                     </Box>
                                 </Panel>

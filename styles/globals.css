@@ -233,8 +233,11 @@ https://stackoverflow.com/questions/18389224/how-to-style-html5-range-input-to-h
       cursor: ew-resize;
       background: #2d4249;
       border-radius: 3px;
-      /* box-shadow: -2000px 0 0 2000px #937882; */
     }
+    input[type='range']:disabled::-webkit-slider-thumb {
+        cursor: default;
+        background: #999999;
+      }
 
 }
 /** FF*/
@@ -320,7 +323,13 @@ input::placeholder {
 }
 
 .christmas {
-    background: url('../src/images/christmas.png') no-repeat;
+    background: url('../src/images/christmas.gif') no-repeat;
+    background-position: center;
+    background-size: 80%;
+}
+
+.notes {
+    background: url('../src/images/notes.gif') no-repeat;
     background-position: center;
     background-size: 80%;
 }

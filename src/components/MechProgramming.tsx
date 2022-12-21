@@ -17,10 +17,12 @@ interface MechProgrammingProps {
     mechInitPositions: Grid[];
     mechDescriptions: string[];
     programs: string[];
+    mechVelocities: number[];
     onProgramsChange: (programs: string[]) => void;
     onMechDescriptionChange: (descriptions: string[]) => void;
     onMechInitPositionsChange: (mechInitPositions: Grid[]) => void;
     onMechIndexHighlight: (index: number) => void;
+    onMechVelocitiesChange: (velocities: number[]) => void;
 }
 
 const MechProgramming = ({
@@ -32,10 +34,12 @@ const MechProgramming = ({
     mechDescriptions,
     mechStates,
     programs,
+    mechVelocities,
     onProgramsChange,
     onMechInitPositionsChange,
     onMechDescriptionChange,
     onMechIndexHighlight,
+    onMechVelocitiesChange,
 }: MechProgrammingProps) => {
     let programKeyDownInit = {};
     for (const key of INSTRUCTION_KEYS) {
@@ -104,6 +108,7 @@ const MechProgramming = ({
         onMechInitPositionsChange(mechInitPositions.filter((_v, i) => i !== index));
         onMechDescriptionChange(mechDescriptions.filter((_v, i) => i !== index));
         onMechIndexHighlight(-1);
+        onMechVelocitiesChange(mechVelocities.filter((_v, i) => i !== index));
     }
 
     return (

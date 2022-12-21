@@ -1,32 +1,23 @@
 import { useState } from "react";
 import SoundFont from '../modules/sf2-player/src';
 
-export default function DAWPanel ({ sf, handleSetSfFile }) {
+export default function DAWPanel ({ sf, handleSetSfFile, mech_n, mechVelocities, handleMechNoteVelocityChange, animationState }) {
 
     const onChangeSf = (event: any) => {
-        console.log('value:',event.target.value)
         if (/.sf2$/.exec(event.target.value)) {
-
             handleSetSfFile (event.target.files[0]);
-            console.log('wow')
-
-            // await sf.loadSoundFontFromFile(event.target.files[0]);
-            // setBanks(sf.banks);
-            // sf.bank = sf.banks[0]['id'];
-            // setPrograms(sf.programs);
-            // sf.program = sf.programs[0]['id'];
         }
     }
 
-    const CHRISTMAS_TREE_DIM = '150px'
+    const DIM = '150px'
 
     // render
     return (
         <div style={{}}>
 
             <div
-                className={"christmas"}
-                style={{ width: CHRISTMAS_TREE_DIM, height: CHRISTMAS_TREE_DIM, margin: "0 auto 0.5rem auto" }}
+                className={"notes"}
+                style={{ width: DIM, height: DIM, margin: "0 auto 0.5rem auto" }}
             ></div>
 
             <fieldset style={{border:'1px groove #77777755'}}>
@@ -37,6 +28,33 @@ export default function DAWPanel ({ sf, handleSetSfFile }) {
                     onChange={(e) => onChangeSf(e)}
                 />
             </fieldset>
+
+            <p style={{fontSize:'1rem'}}>Volume Control</p>
+            <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                {
+                    mech_n != 0? Array.from({length:mech_n}).map((_,mech_i) => (
+                        <div style={{display:'flex', flexDirection:'row', marginBottom:'0.5rem'}}>
+                            <p style={{padding:'0',margin:'0 1rem 0 0'}}>Spirit {mech_i}</p>
+                            <input
+                                id="typeinp"
+                                type="range"
+                                min="0"
+                                max="127"
+                                value={mechVelocities[mech_i]}
+                                onChange={evt => {
+                                    if (animationState !== 'Run'){
+                                        handleMechNoteVelocityChange(mech_i, evt)
+                                    }
+                                }}
+                                step="1"
+                                style={{ width: "10rem",}}
+                                disabled={animationState == 'Run'}
+                            />
+                        </div>
+                    )) : <></>
+                }
+            </div>
+
 
         </div>
     );

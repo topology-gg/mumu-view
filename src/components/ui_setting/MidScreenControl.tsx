@@ -54,6 +54,7 @@ const MidScreenControl = ({ runnable, animationFrame, n_cycles, animationState, 
                 onChange={handleSlideChange}
                 step="1"
                 style={{ width: "6.5rem" }}
+                disabled={animationState == 'Run'}
             />
 
             {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}

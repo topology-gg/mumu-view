@@ -113,6 +113,9 @@ export default function Home() {
 
     const [mechIndexHighlighted, setMechIndexHighlighted] = useState<number>(-1);
 
+    // React states for DAW mode
+    const [mechVelocities, setMechVelocities] = useState<number[]>([]);
+
     //
     // States derived from React states
     //
@@ -411,6 +414,11 @@ export default function Home() {
                 prev_copy.push(INIT_DESCRIPTION);
                 return prev_copy;
             });
+            setMechVelocities((prev) => {
+                let prev_copy = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(60);
+                return prev_copy;
+            })
         }
     }
 
@@ -577,6 +585,14 @@ export default function Home() {
         setGridHovering(["-", "-"]);
     }
 
+    function handleMechNoteVelocityChange(mech_i, evt) {
+        setMechVelocities (prev => {
+            let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
+            prev_copy[mech_i] = evt.target.value
+            return prev_copy;
+        })
+    }
+
     function handleLoadSolutionClick(viewSolution: Solution) {
 
         if (animationState != "Stop") {
@@ -678,8 +694,13 @@ export default function Home() {
         sf.program = sf.programs[0]['id'];
     }
 
-    const playMidiNum = (num: number) => {
-        sf.noteOn(num, 50, 0);
+    const playMidiNum = (mech_i: number, midi_num: number) => {
+
+        var velocity
+        if (mech_i == -1) velocity = 96 // note: midi velocity range is 0-127
+        else velocity = mechVelocities[mech_i]
+
+        sf.noteOn(midi_num, velocity, 0);
     }
 
     const board = <Board
@@ -730,9 +751,11 @@ export default function Home() {
                 mechInitPositions={mechInitPositions}
                 mechDescriptions={mechDescriptions}
                 mechStates={mechStates}
+                mechVelocities={mechVelocities}
                 onMechInitPositionsChange={setMechInitPositions}
                 onMechDescriptionChange={setMechDescriptions}
                 onMechIndexHighlight={setMechIndexHighlighted}
+                onMechVelocitiesChange={setMechVelocities}
                 onProgramsChange={setPrograms}
                 programs={programs}
             />
@@ -932,6 +955,8 @@ export default function Home() {
                 board={board}
                 stats={stats}
                 animationState={animationState}
+                mech_n={numMechs}
+                mechVelocities={mechVelocities}
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}
                 midScreenControlProps = {{
@@ -947,6 +972,7 @@ export default function Home() {
                 loadMode={(mode: Modes) => handleLoadModeClick(mode)}
                 handleFormulaOnclick={(formula_key) => {handleOperatorClick("+", formula_key)}}
                 handleSetSfFile={handleSetSfFile}
+                handleMechNoteVelocityChange={handleMechNoteVelocityChange}
             />
         </>
     );

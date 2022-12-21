@@ -40,7 +40,7 @@ interface BoardProps {
     handleMouseOver: (x: number, y: number) => void;
     handleMouseOut: () => void;
     handleUnitClick: (x: number, y: number) => void;
-    playMidiNum: (x: number) => void,
+    playMidiNum: (mech_i: number, midi_num: number) => void,
     consumedAtomIds: string[];
     producedAtomIds: string[];
 }
@@ -66,8 +66,6 @@ export default function Board({
     consumedAtomIds,
     producedAtomIds,
 }: BoardProps) {
-    // console.log('consumedAtomIds:',consumedAtomIds)
-    // console.log('producedAtomIds',producedAtomIds)
 
     // Unpack constants given mode
     const DIM = Constraints[mode].DIM;
@@ -98,8 +96,8 @@ export default function Board({
 
     // test looping and firing note.play in parent
     if (mode == Modes.daw && animationState=='Run'){
-        mechStates.forEach(mechState => {
-            playMidiNum(frets[mechState.index.x][mechState.index.y]);
+        mechStates.forEach((mechState, mech_i) => {
+            playMidiNum(mech_i, frets[mechState.index.x][mechState.index.y]);
         });
     }
 
@@ -226,7 +224,7 @@ export default function Board({
                                                         handleMouseOver={() => handleMouseOver(j, i)}
                                                         handleMouseOut={() => handleMouseOut()}
                                                         onClick={() => {
-                                                            if (mode == Modes.daw) {playMidiNum(frets[j][i]);}
+                                                            if (mode == Modes.daw) {playMidiNum(-1, frets[j][i]);}
                                                             handleUnitClick(j, i);
                                                         }}
                                                         mechHighlight={
