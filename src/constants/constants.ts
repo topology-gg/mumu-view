@@ -4,7 +4,7 @@ import Solution from "../types/Solution";
 import { AtomType } from "../types/AtomState";
 
 const IS_CHRISTMAS = true
-export const BLANK_COLOR = IS_CHRISTMAS ? '#e9e5e1' : '#ffffff'
+export const BLANK_COLOR = IS_CHRISTMAS ? '#f2f1ed' : '#ffffff'
 
 export enum Modes {
     lesson_1 = 'lesson_1',
