@@ -35,6 +35,7 @@ export default function Layout({
     animationState,
     mech_n,
     mechVelocities,
+    sfLoaded,
     mechProgramming,
     formulaProgramming,
     midScreenControlProps,
@@ -148,6 +149,7 @@ export default function Layout({
                                         <DAWPanel
                                             sf={null}
                                             handleSetSfFile={(file) => handleSetSfFile(file)}
+                                            sfLoaded={sfLoaded}
                                             mech_n={mech_n}
                                             mechVelocities={mechVelocities}
                                             animationState={animationState}

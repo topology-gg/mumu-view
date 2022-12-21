@@ -216,7 +216,7 @@ https://stackoverflow.com/questions/18389224/how-to-style-html5-range-input-to-h
       width: 40px;
       -webkit-appearance: none;
       background-color: #cccccc;
-      border-radius: 3px;
+      border-radius: 5px;
     }
 
     input[type='range']::-webkit-slider-runnable-track {
@@ -232,7 +232,7 @@ https://stackoverflow.com/questions/18389224/how-to-style-html5-range-input-to-h
       height: 10px;
       cursor: ew-resize;
       background: #2d4249;
-      border-radius: 3px;
+      border-radius: 5px;
     }
     input[type='range']:disabled::-webkit-slider-thumb {
         cursor: default;

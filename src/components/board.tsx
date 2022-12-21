@@ -245,14 +245,7 @@ export default function Board({
                                                         }
                                                     }}
                                                     onClick={() => {handleUnitClick(j, i)}}
-                                                    mechHighlight={
-                                                        mechIndexHighlighted == -1
-                                                            ? false
-                                                            : j == mechStates[mechIndexHighlighted].index.x &&
-                                                                i == mechStates[mechIndexHighlighted].index.y
-                                                            ? true
-                                                            : false
-                                                    }
+                                                    mechHighlight={false}
                                                     isSmall={false}
                                                     isConsumed={isConsumed}
                                                     isProduced={isProduced}

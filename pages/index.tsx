@@ -687,14 +687,22 @@ export default function Home() {
         />
     );
 
+    const [sfLoaded, setSfLoaded] = useState<boolean>(false);
     const [sf, setSF] = useState(new SoundFont());
     const handleSetSfFile = async (file) => {
         await sf.loadSoundFontFromFile(file);
         sf.bank = sf.banks[0]['id'];
         sf.program = sf.programs[0]['id'];
+        setSfLoaded((_) => true);
     }
 
     const playMidiNum = (mech_i: number, midi_num: number) => {
+
+        if (!sfLoaded) {
+            setAnimationState((_) => 'Stop');
+            alert('Please load a soundfont first!');
+            return;
+        }
 
         var velocity
         if (mech_i == -1) velocity = 96 // note: midi velocity range is 0-127
@@ -704,6 +712,9 @@ export default function Home() {
     }
 
     const stopMidiNum = (midi_num: number) => {
+
+        if (!sfLoaded) return;
+
         sf.noteOff(midi_num, 0, 0);
     }
 
@@ -962,6 +973,7 @@ export default function Home() {
                 stats={stats}
                 animationState={animationState}
                 mech_n={numMechs}
+                sfLoaded={sfLoaded}
                 mechVelocities={mechVelocities}
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}

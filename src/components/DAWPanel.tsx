@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SoundFont from '../modules/sf2-player/src';
 
-export default function DAWPanel ({ sf, handleSetSfFile, mech_n, mechVelocities, handleMechNoteVelocityChange, animationState }) {
+export default function DAWPanel ({ sf, handleSetSfFile, sfLoaded, mech_n, mechVelocities, handleMechNoteVelocityChange, animationState }) {
 
     const onChangeSf = (event: any) => {
         if (/.sf2$/.exec(event.target.value)) {
@@ -9,11 +9,11 @@ export default function DAWPanel ({ sf, handleSetSfFile, mech_n, mechVelocities,
         }
     }
 
-    const DIM = '150px'
+    const DIM = '130px'
 
     // render
     return (
-        <div style={{}}>
+        <div style={{paddingBottom:'0.5rem'}}>
 
             <div
                 className={"notes"}
@@ -29,31 +29,38 @@ export default function DAWPanel ({ sf, handleSetSfFile, mech_n, mechVelocities,
                 />
             </fieldset>
 
-            <p style={{fontSize:'1rem'}}>Volume Control</p>
-            <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                {
-                    mech_n != 0? Array.from({length:mech_n}).map((_,mech_i) => (
-                        <div style={{display:'flex', flexDirection:'row', marginBottom:'0.5rem'}}>
-                            <p style={{padding:'0',margin:'0 1rem 0 0'}}>Spirit {mech_i}</p>
-                            <input
-                                id="typeinp"
-                                type="range"
-                                min="0"
-                                max="127"
-                                value={mechVelocities[mech_i]}
-                                onChange={evt => {
-                                    if (animationState !== 'Run'){
-                                        handleMechNoteVelocityChange(mech_i, evt)
-                                    }
-                                }}
-                                step="1"
-                                style={{ width: "10rem",}}
-                                disabled={animationState == 'Run'}
-                            />
+            {
+                sfLoaded ? (
+                    <>
+                        <p style={{fontSize:'1rem'}}>Volume Control</p>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                            {
+                                mech_n != 0? Array.from({length:mech_n}).map((_,mech_i) => (
+                                    <div style={{display:'flex', flexDirection:'row', marginBottom:'0.5rem'}}>
+                                        <p style={{padding:'0',margin:'0 1rem 0 0',width:'3rem'}}>Spirit {mech_i}</p>
+                                        <input
+                                            id="typeinp"
+                                            type="range"
+                                            min="0"
+                                            max="127"
+                                            value={mechVelocities[mech_i]}
+                                            onChange={evt => {
+                                                if (animationState !== 'Run'){
+                                                    handleMechNoteVelocityChange(mech_i, evt)
+                                                }
+                                            }}
+                                            step="1"
+                                            style={{ width: "10rem",}}
+                                            disabled={animationState == 'Run'}
+                                        />
+                                        <p style={{padding:'0',margin:'0 0 0 0.2rem',width:'4rem'}}>{mechVelocities[mech_i]} / 127</p>
+                                    </div>
+                                )) : <p style={{padding:'0',margin:'0'}}>(No spirit yet)</p>
+                            }
                         </div>
-                    )) : <></>
-                }
-            </div>
+                    </>
+                ) : <></>
+            }
 
 
         </div>

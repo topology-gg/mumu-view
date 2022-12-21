@@ -164,7 +164,7 @@ const MechInput = ({
                             </p>
                         </div>
 
-                        <IconButton disabled={!onProgramDelete} size="small" color="secondary" onClick={handleDelete}>
+                        <IconButton disabled={!onProgramDelete} size="small" color="secondary" onClick={handleDeleteConfirm}>
                             <Delete fontSize="small" />
                         </IconButton>
 
