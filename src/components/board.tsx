@@ -23,6 +23,11 @@ import ListItem from "@mui/material/ListItem";
 
 import SoundFont from '../modules/sf2-player/src';
 
+// notes played in previous frame
+var prev_notes: number[] = [];
+// notes played by onClicking Grid cells
+var preview_notes: number[] = [];
+
 interface BoardProps {
     mode: Modes;
     animationState: string;
@@ -41,6 +46,7 @@ interface BoardProps {
     handleMouseOut: () => void;
     handleUnitClick: (x: number, y: number) => void;
     playMidiNum: (x: number) => void,
+    stopMidiNum: (x: number) => void,
     consumedAtomIds: string[];
     producedAtomIds: string[];
 }
@@ -63,6 +69,7 @@ export default function Board({
     handleMouseOut,
     handleUnitClick,
     playMidiNum,
+    stopMidiNum,
     consumedAtomIds,
     producedAtomIds,
 }: BoardProps) {
@@ -96,10 +103,18 @@ export default function Board({
         [69, 72, 74, 77, 79, 81, 84, 86, 89, 91],
       ];
 
+
     // test looping and firing note.play in parent
     if (mode == Modes.daw && animationState=='Run'){
+        
         mechStates.forEach(mechState => {
+            prev_notes.forEach(prev_note => {
+                stopMidiNum(prev_note);
+            });
+            prev_notes = [];
             playMidiNum(frets[mechState.index.x][mechState.index.y]);
+            prev_notes.push(frets[mechState.index.x][mechState.index.y])
+            console.log(prev_notes)
         });
     }
 
@@ -224,9 +239,23 @@ export default function Board({
                                                         consumableAtomType={consumableAtomTypes[j][i]}
                                                         produceableAtomType={produceableAtomTypes[j][i]}
                                                         handleMouseOver={() => handleMouseOver(j, i)}
-                                                        handleMouseOut={() => handleMouseOut()}
+                                                        handleMouseOut={() => {
+                                                            if (mode == Modes.daw) {
+                                                                preview_notes.forEach(preview_note => {
+                                                                    stopMidiNum(preview_note);
+                                                                });
+                                                            }
+                                                            handleMouseOut()}
+                                                        }
                                                         onClick={() => {
-                                                            if (mode == Modes.daw) {playMidiNum(frets[j][i]);}
+                                                            if (mode == Modes.daw) {
+                                                                preview_notes.forEach(preview_note => {
+                                                                    stopMidiNum(preview_note);
+                                                                });
+                                                                playMidiNum(frets[j][i]);
+                                                                preview_notes.push(frets[j][i])
+                                                                console.log(preview_notes)
+                                                            }
                                                             handleUnitClick(j, i);
                                                         }}
                                                         mechHighlight={
