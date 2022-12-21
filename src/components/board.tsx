@@ -244,6 +244,7 @@ export default function Board({
                                                                 preview_notes.forEach(preview_note => {
                                                                     stopMidiNum(preview_note);
                                                                 });
+                                                                preview_notes = [];
                                                             }
                                                             handleMouseOut()}
                                                         }
@@ -252,6 +253,7 @@ export default function Board({
                                                                 preview_notes.forEach(preview_note => {
                                                                     stopMidiNum(preview_note);
                                                                 });
+                                                                preview_notes = [];
                                                                 playMidiNum(frets[j][i]);
                                                                 preview_notes.push(frets[j][i])
                                                                 console.log(preview_notes)
