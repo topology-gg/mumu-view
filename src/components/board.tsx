@@ -98,12 +98,12 @@ export default function Board({
     // compute Grid MidiKeynums
     let tonic = new PitchClass(5, 0) // Traditionally tuned to F
     var fretboard = new FretBoard(
-        "guqin_10_string",
-        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        10,
-        3,
-        tonic,
-        modes.pentatonic
+        "guqin_10_string", // name
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1], // string_steps
+        10, // num_frets
+        3, // scale_degree
+        tonic, // tonic
+        modes.pentatonic, // mode
       )
       //compute keynums
       fretboard.calculateFrets(3)
