@@ -1,3 +1,4 @@
+import { mumu_modes } from "./Modes"
 import { keynumToPitchClass, num_steps_from_scale_degree, PitchClass } from "./PitchClass"
 
 /* 
@@ -24,6 +25,21 @@ EG: Standard Guqin Tuning:
     C - D - F - G - A - C - D (Seventh String Added to match grid dimensions)
 */
 
+/* 
+ CHORDS - C-Map
+ To create chord progressions that sound good, select from any 6 adjacent cells of the chord_map below. 
+ 
+ To modulate keys safely, rotate 6 adjacent cells along the cells columns. 
+
+ Increasing the distance between cell sets (max-distance = 6) increased the harmonic distance.
+
+ Applying this to formulas, chord changes could occur when a clover is made, while possible modulations to different 
+ keys could occur when a smash or steam events occur. This follows the sequential nature of the formulas as each provides the harmonic context for the next. 
+ Put another way - The ear needs to traverse a harmonic space to build contexts for modulations to other spaces to occur. 		
+ more info at: https://ledgernote.com/columns/music-theory/circle-of-fifths-explained/
+*/
+
+
 // double check that PC to Keynum and Keynum to PC functions return the correct octave
 
 export class FretBoard {
@@ -34,8 +50,10 @@ export class FretBoard {
   tonic: PitchClass
   mode: number[]
   frets: number[][]
+  c_map: number[][]
+  quality: number
 
-  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[]) {
+  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[], c_map: number[][], quality: number) {
     this.name = name
     this.string_steps = string_steps
     this.num_frets = num_frets
@@ -43,12 +61,105 @@ export class FretBoard {
     this.tonic = tonic
     this.mode = mode  
     this.frets = []    
+    this.c_map = [
+      [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5], //major modes/chords
+      [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2], //minor modes/chords
+    ]
+    this.quality = quality
+  }
+
+  // Returns the 6 chords that sound good in relation to the current tonic/mode
+
+  getChordsAtNote(): any {
+
+    var qualmod = this.quality % 2;
+    var chord_xy = this.c_map[qualmod].indexOf(this.tonic.note % 12);
+    
+    if(chord_xy == 0){
+      var initial_idx = 11
+    }else{
+      var initial_idx = chord_xy-1
+    }
+
+    var chords = [
+      [
+        this.c_map[0][initial_idx],
+        this.c_map[0][(chord_xy)],
+        this.c_map[0][(chord_xy + 1) % 12],
+      ],
+      [
+        this.c_map[1][initial_idx],
+        this.c_map[1][chord_xy],
+        this.c_map[1][(chord_xy + 1) % 12],
+      ],
+    ]
+    return chords
+  }
+
+  //changes the chord in a pleasing way based on x,y coordinate
+
+  setNewChord(x: number, y: number): any {
+
+    var chord_options = this.getChordsAtNote();
+
+    var new_note = chord_options[y % 2][x % 3];
+
+    //console.log('new_note'); 
+    //console.log(new_note); 
+
+    var new_tonic = new PitchClass(new_note, 0);
+    this.tonic = new_tonic;
+
+    // cycle through mode options and select a mode
+
+    var new_mode = mumu_modes[y % 2][y % mumu_modes.length];
+    this.mode = new_mode;
+
+    this.quality = y % 2;
+
+    console.log('new_mode'); 
+    console.log(new_mode); 
+    
+    return this.calculateFrets3(3, this.tonic, this.mode, this.scale_degree);
+    //return [new_tonic, new_mode]
   }
   
-  calculateFrets(octave_offset: number): number[][] {
-      
+  //subtle change, Sound like a harmonization of the original trajectory - Same harmonic space usually will s
+
+  changeScaleDegree(x: number, y: number): any {
+    this.scale_degree = y % this.mode.length;
+    return this.calculateFrets3(3, this.tonic, this.mode, this.scale_degree);
+  }
+
+  changeFrets(x: number, y: number): any {
+    var fret_choices = [
+      [0,2,2,2,2,2,2,2,2,2],
+      [0,3,3,3,3,3,3,3,3,3],
+      [0,1,2,1,2,1,2,1,2,1],
+      [0,2,3,2,3,2,3,2,3,2],
+      [0,3,2,3,2,3,2,3,2,3],
+      [0,2,2,3,2,2,2,3,2,2],
+      [0,2,3,3,2,2,3,3,2,3],
+      [0,2,3,3,2,2,3,3,2,3],
+      [0,3,2,3,3,2,2,3,2,2],
+      [0,3,3,3,3,3,2,2,3,2]
+    ];
+
+    this.string_steps = fret_choices[x];
+    return this.calculateFrets3(3, this.tonic, this.mode, this.scale_degree);
+  }
+
+  calculateFrets3(octave_offset: number, newtonic: PitchClass, newmode: number[], newscaledegree: number): number[][] {
+    
+    this.tonic = newtonic;
+    this.mode = newmode;
+    this.scale_degree = newscaledegree;
+
     var notearr =  Array()   
+  
     var step_offset =  octave_offset * 12;
+    var top_note_threshold = 120;
+
     for (var j = 0; j < this.num_frets; j++) {
       var step_sum: number = 0
       var notes: number[] = [] 
@@ -58,10 +169,10 @@ export class FretBoard {
     for (var i = 0; i < this.string_steps.length; i++) {
       step_sum = step_sum + this.string_steps[i] 
   
-      var current_note = this.tonic.modalTransposition(this.scale_degree + j, this.tonic, this.mode)
+      var current_note = this.tonic.modalTransposition((this.scale_degree % this.mode.length) + j, this.tonic, this.mode)
 
       var total_steps: number = num_steps_from_scale_degree(
-        this.scale_degree+j, //increment scale degree for the jth fret
+        (this.scale_degree % this.mode.length)+j, //increment scale degree for the jth fret
         step_sum,
         this.tonic, //add scale degree designation here
         this.mode
@@ -70,10 +181,22 @@ export class FretBoard {
     }
     notearr.push(notes);
   }
-  
-  this.frets = notearr
 
-  return  notearr  
+  //check and transpose down n octaves if the upper range is too high
+  var topnote = notearr[this.string_steps.length-1][this.num_frets-1];
+
+  if(topnote > top_note_threshold){
+
+    // calculate number of steps to tranpose
+    var decrement = ((Math.trunc(topnote - top_note_threshold) + 1) * 12);
+
+    // transpose down decrement-steps
+    this.frets = notearr.map(function(entry) { return entry.map(function(entry2) { return entry2-decrement;})})
+  }else{
+    this.frets = notearr
+  }
+
+  return  this.frets  
   }
 
   getNoteAtXY(x: number, y: number): any {
