@@ -7,10 +7,11 @@ import { useStardiscRegistryByAccount } from "../../../lib/api";
 import { MechStatus, MechType } from "../../types/MechState";
 import { TableCell, TableRow } from "@mui/material";
 import { INSTRUCTION_DECODE } from '../../helpers/packSolution';
+import { Modes } from "../../constants/constants";
 
 const SCALE = 10 ** 6;
 
-export default function LeaderboardRow({ solution, index, loadSolution }) {
+export default function SolutionRow({ solution, index, loadSolution, showMeasurement=true }) {
     const address = solution.solver;
     const account_str_decimal = toBN(address).toString(10);
     const { data: stardisc_query } = useStardiscRegistryByAccount(account_str_decimal); // must be a better way than fetching the entire registry
@@ -152,31 +153,43 @@ export default function LeaderboardRow({ solution, index, loadSolution }) {
     };
 
     function handleOnClick() {
-        loadSolution(extractedSolution);
+        const mode = showMeasurement ? 'arena' : 'daw'
+        console.log('extractedSolution:', extractedSolution)
+        loadSolution(mode, extractedSolution);
     }
 
     // render table row
     return (
         <TableRow key={`sol-row-${index}`} className="solution_row" onClick={() => handleOnClick()}>
-            <TableCell align="right" key={`sol-rowidx-${index}`}>
-                {index + 1}
-            </TableCell>
-            <TableCell key={`sol-account-${index}`}>{solver_name}</TableCell>
-            <TableCell align="right" key={`sol-delivered-${index}`}>
-                {solution.delivered}
-            </TableCell>
-            <TableCell align="right" key={`sol-static-cost-${index}`}>
-                {solution.static_cost}
-            </TableCell>
-            <TableCell align="right" key={`sol-latency-${index}`}>
-                {solution.latency / SCALE}
-            </TableCell>
-            <TableCell align="right" key={`sol-dynamic-cost-${index}`}>
-                {solution.dynamic_cost / SCALE}
-            </TableCell>
-            <TableCell align="right" key={`sol-blocknumber-${index}`} sx={{pr:5}}>
-                {solution._chain.valid_from}
-            </TableCell>
+            {
+                showMeasurement ? <>
+                    <TableCell align="right" key={`sol-rowidx-${index}`}>
+                        {index + 1}
+                    </TableCell>
+                    <TableCell key={`sol-account-${index}`}>{solver_name}</TableCell>
+                    <TableCell align="right" key={`sol-delivered-${index}`}>
+                        {solution.delivered}
+                    </TableCell>
+                    <TableCell align="right" key={`sol-static-cost-${index}`}>
+                        {solution.static_cost}
+                    </TableCell>
+                    <TableCell align="right" key={`sol-latency-${index}`}>
+                        {solution.latency / SCALE}
+                    </TableCell>
+                    <TableCell align="right" key={`sol-dynamic-cost-${index}`}>
+                        {solution.dynamic_cost / SCALE}
+                    </TableCell>
+                    <TableCell align="right" key={`sol-blocknumber-${index}`} sx={{pr:5}}>
+                        {solution._chain.valid_from}
+                    </TableCell>
+                </> : <>
+                    <TableCell key={`sol-account-${index}`}>{solver_name}</TableCell>
+                    <TableCell align="right" key={`sol-blocknumber-${index}`} sx={{pr:5}}>
+                        {solution._chain.valid_from}
+                    </TableCell>
+                </>
+            }
+
         </TableRow>
     );
 }

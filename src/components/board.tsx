@@ -97,16 +97,32 @@ export default function Board({
 
     // compute Grid MidiKeynums
     let tonic = new PitchClass(5, 0) // Traditionally tuned to F
-    var fretboard = new FretBoard(
-        "guqin_10_string", // name
-        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1], // string_steps
-        10, // num_frets
-        3, // scale_degree
-        tonic, // tonic
-        modes.pentatonic, // mode
-      )
-      //compute keynums
-      fretboard.calculateFrets(3)
+    // var fretboard = new FretBoard(
+    //     "guqin_10_string", // name
+    //     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1], // string_steps
+    //     10, // num_frets
+    //     3, // scale_degree
+    //     tonic, // tonic
+    //     modes.pentatonic, // mode
+    //     null,
+    //     0
+    //   )
+    // compute keynums
+    // fretboard.calculateFrets3()
+
+    // hardcoded frets for debug
+    const frets = [
+        [48, 50, 53, 55, 57, 60, 62, 65, 67, 69],
+        [50, 53, 55, 57, 60, 62, 65, 67, 69, 72],
+        [53, 55, 57, 60, 62, 65, 67, 69, 72, 74],
+        [55, 57, 60, 62, 65, 67, 69, 72, 74, 77],
+        [57, 60, 62, 65, 67, 69, 72, 74, 77, 79],
+        [60, 62, 65, 67, 69, 72, 74, 77, 79, 81],
+        [62, 65, 67, 69, 72, 74, 77, 79, 81, 84],
+        [65, 67, 69, 72, 74, 77, 79, 81, 84, 86],
+        [67, 69, 72, 74, 77, 79, 81, 84, 86, 89],
+        [69, 72, 74, 77, 79, 81, 84, 86, 89, 91],
+      ];
 
     // firing note.play in parent
     useEffect(() => {
@@ -120,8 +136,10 @@ export default function Board({
 
                 // only open mech makes sound based on its location on the board
                 if (mechState.status == MechStatus.OPEN){
-                    playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
-                    notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
+                    // playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
+                    // notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
+                    playMidiNum(mech_i, frets[mechState.index.x][mechState.index.y]);
+                    notes.push(frets[mechState.index.x][mechState.index.y])
                 }
             });
             setLastSimulationNotes(_ => notes);
@@ -245,7 +263,8 @@ export default function Board({
                                                     onMouseDown={() => {
                                                         if (mode == Modes.daw) {
                                                             stopMidiNum(lastPreviewNote);
-                                                            const note = fretboard.frets[j][i]
+                                                            // const note = fretboard.frets[j][i]
+                                                            const note = frets[j][i]
                                                             playMidiNum(-1, note);
                                                             setLastPreviewNote(_ => note);
                                                         }

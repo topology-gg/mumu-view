@@ -5,7 +5,7 @@ import Menu from "./menu";
 import Manual from "./Manual";
 import ConnectWallet from "./ConnectWallet";
 import LanguageSelector from "./LanguageSelector";
-import Leaderboard from "./Leaderboard";
+import SolutionBoard from "./Solutionboard";
 import Tutorial from "./Tutorial";
 
 import { Box, SxProps } from "@mui/material";
@@ -41,6 +41,7 @@ export default function Setting({
             onTutorialClick={() => handleModeChange('tutorial')}
             onArenaModeClick={() => loadMode(Modes.arena)}
             onDAWModeClick={() => loadMode(Modes.daw)}
+            onMusicLibraryClick={() => handleModeChange('musiclib')}
         />
     )
 
@@ -51,6 +52,7 @@ export default function Setting({
         renderMode == 'connect' ? 450 :
         renderMode == 'manual' ? 600 :
         renderMode == 'tutorial' ? 700 :
+        renderMode == 'musiclib' ? 600 :
         1100 // leaderboard width
 
     // render
@@ -88,7 +90,10 @@ export default function Setting({
                             />
                         ) :
                         (renderMode == 'leaderboard') ? (
-                            <Leaderboard loadSolution={loadSolution} />
+                            <SolutionBoard loadSolution={loadSolution} showMeasurement={true}/>
+                        ) :
+                        (renderMode == 'musiclib') ? (
+                            <SolutionBoard loadSolution={loadSolution} showMeasurement={false}/>
                         ) :
                         (renderMode == 'tutorial') ? (
                             <Tutorial loadMode={loadMode} />

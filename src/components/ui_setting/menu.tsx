@@ -26,6 +26,7 @@ export default function Menu({
     onArenaModeClick,
     onLeaderboardClick,
     onDAWModeClick,
+    onMusicLibraryClick,
     onConnectWalletClick,
     onLanguageClick,
     onTutorialClick,
@@ -93,11 +94,11 @@ export default function Menu({
                     <ListItemText onClick={onDAWModeClick}>Audio Workstation Mode</ListItemText>
                 </MenuItemStyled>
 
-                <MenuItemStyled disabled={true}>
+                <MenuItemStyled>
                     <ListItemIcon>
                         <LibraryMusicIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Music Library</ListItemText>
+                    <ListItemText onClick={onMusicLibraryClick}>Music Library</ListItemText>
                 </MenuItemStyled>
 
                 <MenuItemStyled>

@@ -595,10 +595,13 @@ export default function Home() {
         })
     }
 
-    function handleLoadSolutionClick(solutionMode: string, viewSolution: Solution) {
-
+    async function handleLoadSolutionClick(solutionMode: string, viewSolution: Solution) {
+        console.log('viewSolution:', viewSolution)
         // Switch to solutionMode first
         setCurrMode((_) => (solutionMode as Modes));
+
+        // If daw mode => load default soundfont
+        await loadSfFileFromURL('/Bamblong_Optimized.sf2');
 
         if (animationState != "Stop") {
             setAnimationState(_ => "Stop");

@@ -4,7 +4,6 @@ import clientPromise from "../../lib/mongodb"
 export default async function handler(req, res) {
 
     const client = await clientPromise
-    const { account } = req.query
 
     const db = client.db('mumu_indexer_s2_1')
     const solutions = await db
@@ -14,17 +13,13 @@ export default async function handler(req, res) {
                 $not: { $size: 0 }
             },
             delivered: {
-                $ne: 0
+                $gte: 0
             }
         })
         .sort({
-            'delivered': -1, // prefer large
-            'static_cost': +1, // prefer small
-            'latency': +1, // prefer small
-            'dynamic_cost': +1, // prefer small
-            '_chain.valid_from': +1 // prefer small
+            '_chain.valid_from': -1 // prefer latest
         })
-        .limit (20) // get top 20 solutions; TODO: reject same solution on contract side
+        .limit (100) // get 100 most recent solutions
         .toArray()
 
     res.status(200).json({ 'solutions': solutions })
