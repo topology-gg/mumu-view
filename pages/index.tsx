@@ -15,7 +15,7 @@ import Delivery from "../src/components/delivery";
 import Summary from "../src/components/summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
 
-import { BLANK_COLOR, Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY, Lesson_instruction, Lesson_objective } from "../src/constants/constants";
+import { BLANK_COLOR, Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY_NON_DAW, ANIM_FRAME_LATENCY_DAW, Lesson_instruction, Lesson_objective } from "../src/constants/constants";
 import { useTranslation } from "react-i18next";
 import "../config/i18n";
 import { useAccount, useStarknetExecute } from "@starknet-react/core";
@@ -485,10 +485,11 @@ export default function Home() {
             else if (animationState == "Pause") {
                 // Begin animation
                 setAnimationState("Run");
+                const latency = currMode == Modes.daw ? ANIM_FRAME_LATENCY_DAW : ANIM_FRAME_LATENCY_NON_DAW
                 setLoop(
                     setInterval(() => {
                         simulationLoop(frames);
-                    }, ANIM_FRAME_LATENCY)
+                    }, latency)
                 );
             }
 
@@ -536,10 +537,11 @@ export default function Home() {
 
                 // Begin animation
                 setAnimationState("Run");
+                const latency = currMode == Modes.daw ? ANIM_FRAME_LATENCY_DAW : ANIM_FRAME_LATENCY_NON_DAW
                 setLoop(
                     setInterval(() => {
                         simulationLoop(simulatedFrames);
-                    }, ANIM_FRAME_LATENCY)
+                    }, latency)
                 );
                 // console.log('Running with instruction:', instructions)
             }

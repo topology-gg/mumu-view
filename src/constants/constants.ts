@@ -86,9 +86,9 @@ export const Constraints: { [key in Modes]: any } = {
         PROGRAM_SIZE_MAX: 40,
         N_CYCLES: 200,
         MAX_NUM_MECHS: 8,
-        MAX_NUM_OPERATORS: 0,
-        FAUCETS: [],
-        SINKS: [],
+        MAX_NUM_OPERATORS: 16,
+        FAUCETS: [{x:0, y:0}, {x:3, y:3}, {x:3, y:6}, {x:6, y:3}, {x:6, y:6}, {x:9, y:9}],
+        SINKS: [{x:0, y:9}, {x:9, y:0}],
         ATOMS: [],
         TARGET_TYPE: AtomType.SAFFRON
     },
@@ -169,7 +169,8 @@ export const Constraints: { [key in Modes]: any } = {
 // export const PROGRAM_SIZE_MAX = 40
 // export const N_CYCLES = 150
 export const DESCRIPTION_SIZE_MAX = 31
-export const ANIM_FRAME_LATENCY = 400;
+export const ANIM_FRAME_LATENCY_NON_DAW = 400;
+export const ANIM_FRAME_LATENCY_DAW = 250;
 
 // export const MAX_NUM_MECHS = 25; // setting this to 25 for Season 2
 // export const MIN_NUM_MECHS = 0;
