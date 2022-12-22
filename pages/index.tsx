@@ -595,16 +595,16 @@ export default function Home() {
         })
     }
 
-    function handleLoadSolutionClick(viewSolution: Solution) {
+    function handleLoadSolutionClick(solutionMode: string, viewSolution: Solution) {
+
+        // Switch to solutionMode first
+        setCurrMode((_) => (solutionMode as Modes));
 
         if (animationState != "Stop") {
             setAnimationState(_ => "Stop");
             clearInterval(loop); // kill the timer
         }
         setViewSolution((prev) => viewSolution);
-
-        // set mode to arena
-        setCurrMode(_ => Modes.arena);
 
         // set react states to render the solution on the board
         setPrograms((prev) => viewSolution.programs);
@@ -687,6 +687,7 @@ export default function Home() {
 
     const loadSave = (
         <LoadSave
+            mode={currMode}
             onLoadSolutionClick={handleLoadSolutionClick}
             mechInitStates={mechInitStates}
             operatorStates={operatorStates}

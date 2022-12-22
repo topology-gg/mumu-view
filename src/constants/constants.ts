@@ -170,7 +170,7 @@ export const Constraints: { [key in Modes]: any } = {
 // export const N_CYCLES = 150
 export const DESCRIPTION_SIZE_MAX = 31
 export const ANIM_FRAME_LATENCY_NON_DAW = 400;
-export const ANIM_FRAME_LATENCY_DAW = 250;
+export const ANIM_FRAME_LATENCY_DAW = 300;
 
 // export const MAX_NUM_MECHS = 25; // setting this to 25 for Season 2
 // export const MIN_NUM_MECHS = 0;

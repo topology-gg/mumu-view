@@ -1,7 +1,7 @@
 import { Box, Button, IconButton, List, ListItem, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BLANK_SOLUTION, DEMO_SOLUTIONS } from "../constants/constants";
+import { BLANK_SOLUTION, DEMO_SOLUTIONS, Modes } from "../constants/constants";
 import {
     getNamespaceFromLocal,
     getSolutionFromLocal,
@@ -29,13 +29,14 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DownloadIcon from '@mui/icons-material/Download';
 
 interface LoadSaveProps {
-    onLoadSolutionClick: (viewSolution: Solution) => void;
+    onLoadSolutionClick: (solutionMode: string, viewSolution: Solution) => void;
     mechInitStates: MechState[];
     programs: string[];
     operatorStates: Operator[];
+    mode: Modes;
 }
 
-const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorStates }: LoadSaveProps) => {
+const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorStates, mode }: LoadSaveProps) => {
     const { t } = useTranslation();
 
     const [open, setOpen] = useState<boolean>(false);
@@ -100,7 +101,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
             programs: programs,
             operators: operatorStates,
         };
-        saveSolutionToLocal(saveToName, solution);
+        saveSolutionToLocal(`${mode}.${saveToName}`, solution);
         console.log("> saved solution:", solution);
         const newNamespace: string[] = getNamespaceFromLocal();
         setNamespace((prev) => newNamespace); // trigger rerender
@@ -151,7 +152,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
                         {Array.from({ length: SOLUTIONS.length }).map((_, i) =>
                             i == 0 ? (
                                 <MenuItem sx={{pl:5, color:'#333333', mt:1}} onClick={() => {
-                                    onLoadSolutionClick(SOLUTIONS[0]);
+                                    onLoadSolutionClick('arena', SOLUTIONS[0]);
                                 }}>
                                     <ListItemIcon>
                                         <InsertDriveFileIcon fontSize="small" />
@@ -160,7 +161,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
                                 </MenuItem>
                             ) : (
                                 <MenuItem sx={{pl:5, color:'#333333'}} onClick={() => {
-                                    onLoadSolutionClick(SOLUTIONS[i]);
+                                    onLoadSolutionClick('arena',SOLUTIONS[i]);
                                 }}>
                                     <ListItemIcon>
                                         <InsertDriveFileIcon fontSize="small" />
@@ -178,7 +179,8 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
                                     return (
                                         <MenuItem sx={{pl:5, color:'#333333'}} onClick={() => {
                                             const solution = getSolutionFromLocal(name);
-                                            onLoadSolutionClick(solution);
+                                            const solutionMode: string = name.split('.')[0]
+                                            onLoadSolutionClick(solutionMode, solution);
                                         }}>
                                             <ListItemIcon>
                                                 <AttachFileIcon fontSize="small" />

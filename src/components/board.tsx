@@ -10,7 +10,6 @@ import { Constraints, DEMO_SOLUTIONS, Modes, Lesson_names } from "../constants/c
 import { useTranslation } from "react-i18next";
 import "../../config/i18n";
 import { Box, Button, Container, Tooltip } from "@mui/material";
-import { ANIM_FRAME_LATENCY } from "../constants/constants";
 import AtomState, { AtomType } from "../types/AtomState";
 import { useSpring, animated } from "react-spring";
 import MechUnit from "./MechUnit";
@@ -118,9 +117,12 @@ export default function Board({
                 lastSimulationNotes.forEach(lastSimulationNote => {
                     stopMidiNum(lastSimulationNote);
                 });
-                
-                playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
-                notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
+
+                // only open mech makes sound based on its location on the board
+                if (mechState.status == MechStatus.OPEN){
+                    playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
+                    notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
+                }
             });
             setLastSimulationNotes(_ => notes);
         }
