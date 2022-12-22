@@ -52,7 +52,7 @@ export default function Layout({
     const { account, address, status } = useAccount();
 
     // states
-    const [openedAccordion, setOpenedAccordion] = useState<string>("accordion1");
+    const [openedAccordion, setOpenedAccordion] = useState<string>(null);
     const [settingOpen, setSettingOpen] = useState<boolean>(true);
     const [settingRenderMode, setSettingRenderMode] = useState<string>("menu");
 

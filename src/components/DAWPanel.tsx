@@ -20,14 +20,14 @@ export default function DAWPanel ({ sf, handleSetSfFile, sfLoaded, mech_n, mechV
                 style={{ width: DIM, height: DIM, margin: "0 auto 0.5rem auto" }}
             ></div>
 
-            <fieldset style={{border:'1px groove #77777755'}}>
+            {/* <fieldset style={{border:'1px groove #77777755'}}>
                 <legend>Open SF2 file</legend>
                 <input
                     className='button' type="file"
                     style={{border:'none', marginTop:'5px', backgroundColor:'#ffffff00'}}
                     onChange={(e) => onChangeSf(e)}
                 />
-            </fieldset>
+            </fieldset> */}
 
             {
                 sfLoaded ? (
@@ -59,7 +59,7 @@ export default function DAWPanel ({ sf, handleSetSfFile, sfLoaded, mech_n, mechV
                             }
                         </div>
                     </>
-                ) : <></>
+                ) : <p style={{fontSize:'1rem'}}>Loading festive soundfonts ...</p>
             }
 
 

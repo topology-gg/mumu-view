@@ -656,7 +656,7 @@ export default function Home() {
         setPlacingFormula(null);
     }
 
-    function handleLoadModeClick(mode: Modes) {
+    async function handleLoadModeClick(mode: Modes) {
         // reset various states
         setAnimationState(_ => "Stop");
         clearInterval(loop); // kill the timer
@@ -670,6 +670,11 @@ export default function Home() {
 
         // set current mode
         setCurrMode(_ => mode);
+
+        // load default soundfont if in daw mode
+        if (mode == Modes.daw) {
+            await loadSfFileFromURL('/Bamblong_Optimized.sf2');
+        }
     }
 
     // Lazy style objects
@@ -691,6 +696,13 @@ export default function Home() {
     const [sf, setSF] = useState(new SoundFont());
     const handleSetSfFile = async (file) => {
         await sf.loadSoundFontFromFile(file);
+        sf.bank = sf.banks[0]['id'];
+        sf.program = sf.programs[0]['id'];
+        setSfLoaded((_) => true);
+    }
+
+    const loadSfFileFromURL = async (file) => {
+        await sf.loadSoundFontFromURL(file);
         sf.bank = sf.banks[0]['id'];
         sf.program = sf.programs[0]['id'];
         setSfLoaded((_) => true);
