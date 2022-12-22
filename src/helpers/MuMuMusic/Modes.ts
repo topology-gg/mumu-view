@@ -39,6 +39,17 @@ modes.harmonicminor = [2, 1, 2, 2, 1, 3, 1]
 modes.naturalminor = [2, 1, 2, 2, 2, 2, 2]
 modes.chromatic = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 modes.pentatonic = [2, 2, 3, 2, 3] // No avoid notes
+modes.hexatonic = [2, 2, 3, 2, 2, 1] // No avoid notes
+
+modes.minor_pentatonic = [3, 2, 2, 3, 2]
+modes.minor_hexatonic = [2, 1, 2, 2, 3, 2]
+
+
+//export const major_modes = [modes.pentatonic, modes.lydian]
+//export const minor_modes = [modes.minor_pentatonic, modes.dorian]
+export const major_modes = [modes.pentatonic, modes.hexatonic]
+export const minor_modes = [modes.minor_pentatonic, modes.minor_hexatonic]
+export const mumu_modes = [major_modes, minor_modes]
 
 export let cycle_of_fifths_modes: { [name: string]: number[] } = {}
 
