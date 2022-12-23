@@ -52,7 +52,7 @@ export default function Setting({
         renderMode == 'connect' ? 450 :
         renderMode == 'manual' ? 600 :
         renderMode == 'tutorial' ? 700 :
-        renderMode == 'musiclib' ? 600 :
+        renderMode == 'musiclib' ? 700 :
         1100 // leaderboard width
 
     // render
@@ -90,10 +90,10 @@ export default function Setting({
                             />
                         ) :
                         (renderMode == 'leaderboard') ? (
-                            <SolutionBoard loadSolution={loadSolution} showMeasurement={true}/>
+                            <SolutionBoard loadSolution={loadSolution} isArenaMode={true}/>
                         ) :
                         (renderMode == 'musiclib') ? (
-                            <SolutionBoard loadSolution={loadSolution} showMeasurement={false}/>
+                            <SolutionBoard loadSolution={loadSolution} isArenaMode={false}/>
                         ) :
                         (renderMode == 'tutorial') ? (
                             <Tutorial loadMode={loadMode} />

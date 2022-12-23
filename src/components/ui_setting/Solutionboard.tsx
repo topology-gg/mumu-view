@@ -9,11 +9,11 @@ import Paper from '@mui/material/Paper';
 
 import Modal from "../ui_common/Modal";
 
-const SolutionBoard = ({ loadSolution, showMeasurement=true}) => {
+const SolutionBoard = ({ loadSolution, isArenaMode=true}) => {
     const { t } = useTranslation();
 
-    const minimumDelivery = showMeasurement ? 1 : 0;
-    const { data: data } = showMeasurement ? useSolutions(minimumDelivery) : useAllSolutions();
+    const minimumDelivery = isArenaMode ? 1 : 0;
+    const { data: data } = isArenaMode ? useSolutions(minimumDelivery) : useAllSolutions();
     // const { data: dataAll } = useAllSolutions();
     const solutions: any[] = data?.solutions;
     // const solutionsAll: any[] = dataAll?.solutions;
@@ -32,39 +32,44 @@ const SolutionBoard = ({ loadSolution, showMeasurement=true}) => {
                     paddingLeft:'2rem',
                 }}
             >
-                {t("leaderboard.title")}
+                {isArenaMode ? t("leaderboard.title") : 'Music Library'}
             </p>
 
-            <div
-                style={{
-                    marginBottom: "1.5rem",
-                    paddingLeft: '2rem',
-                }}
-            >
-                {t("tutorial.goalLine3_1")}
-                <a
-                    href="https://stardisc.netlify.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="stardisc"
+            {
+                isArenaMode ? (
+                <div
                     style={{
-                        margin: "0",
+                        marginBottom: "1.5rem",
+                        paddingLeft: '2rem',
                     }}
                 >
-                    <strong>StarDisc</strong>
-                </a>
-                {t("tutorial.goalLine3_2")}
-            </div>
+                    {t("tutorial.goalLine3_1")}
+                    <a
+                        href="https://stardisc.netlify.app/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="stardisc"
+                        style={{
+                            margin: "0",
+                        }}
+                    >
+                        <strong>StarDisc</strong>
+                    </a>
+                    {t("tutorial.goalLine3_2")}
+                </div>
+                ) : <></>
+            }
+
 
             {solutions ? (
-                <TableContainer>
+                <TableContainer sx={{pl:2}}>
                     <Table size="small">
                         <TableHead>
                             <TableRow>
                                 {
-                                    showMeasurement ? <>
-                                        <TableCell align="right" sx={{width:2}}>{t("leaderboard.rank")}</TableCell>
-                                        <TableCell sx={{width:4}}>{t("leaderboard.account")}</TableCell>
+                                    isArenaMode ? <>
+                                        <TableCell align="left" sx={{width:2}}>{t("leaderboard.rank")}</TableCell>
+                                        <TableCell sx={{width:3}}>{t("leaderboard.account")}</TableCell>
                                         <TableCell align="right" sx={{width:4}}>{t("leaderboard.delivered")}</TableCell>
 
                                         <TableCell align="right" sx={{width:4}}>{t("leaderboard.static_cost")}</TableCell>
@@ -72,8 +77,9 @@ const SolutionBoard = ({ loadSolution, showMeasurement=true}) => {
                                         <TableCell align="right" sx={{width:4}}>{t("leaderboard.dynamic_cost")}</TableCell>
                                         <TableCell align="right" sx={{width:4, pr:5}}>{t("leaderboard.block_number")}</TableCell>
                                     </> : <>
-                                        <TableCell sx={{width:4}}>{t("leaderboard.account")}</TableCell>
-                                        <TableCell align="right" sx={{width:4, pr:5}}>{t("leaderboard.block_number")}</TableCell>
+                                        <TableCell sx={{width:3}}>{t("leaderboard.account")}</TableCell>
+                                        <TableCell sx={{width:4}}>{'Title'}</TableCell>
+                                        <TableCell align="left" sx={{width:4, pr:5}}>{t("leaderboard.block_number")}</TableCell>
                                     </>
                                 }
 
@@ -82,14 +88,14 @@ const SolutionBoard = ({ loadSolution, showMeasurement=true}) => {
                         </TableHead>
                         <TableBody>
                             {
-                                showMeasurement ? solutions.map((solution, index) => {
+                                isArenaMode ? solutions.map((solution, index) => {
                                     return (
                                         <SolutionRow
                                             key={`leaderboard-row-${index}`}
                                             solution={solution}
                                             index={index}
                                             loadSolution={handleLoadSolution}
-                                            showMeasurement={true}
+                                            isArenaMode={true}
                                         />
                                     );
                                 }) : solutions.map((solution, index) => {
@@ -99,7 +105,7 @@ const SolutionBoard = ({ loadSolution, showMeasurement=true}) => {
                                             solution={solution}
                                             index={index}
                                             loadSolution={handleLoadSolution}
-                                            showMeasurement={false}
+                                            isArenaMode={false}
                                         />
                                     );
                                 })
