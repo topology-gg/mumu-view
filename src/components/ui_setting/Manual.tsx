@@ -95,6 +95,7 @@ export default function Manual() {
                     fontSize: "0.9rem",
                     marginTop: "0",
                     marginBottom: "0",
+                    backgroundColor: "#ffffff00",
                 }}
             >
                 {t("tutorial.Overview")}
@@ -107,7 +108,7 @@ export default function Manual() {
                     marginRight:'1rem',
                 }}
             >
-                <li style={compute_formula_li_style("#FFFFFFFF")}>
+                <li style={compute_formula_li_style("#FFFFFF00")}>
                     {t("tutorial.overviewLine1")}
                 </li>
             </ol>
@@ -128,7 +129,7 @@ export default function Manual() {
                     marginBottom: "2rem",
                 }}
             >
-                <li style={compute_formula_li_style("#FFFFFFFF")}>
+                <li style={compute_formula_li_style("#FFFFFF00")}>
                     <Trans t={t} i18nKey="tutorial.goalAffordance">
                         With Faucet replenishing
                         <Unit
@@ -146,7 +147,7 @@ export default function Manual() {
                         at 1 unit per frame,
                     </Trans>
                 </li>
-                <li style={compute_formula_li_style("#FFFFFFFF")}>
+                <li style={compute_formula_li_style("#FFFFFF00")}>
                     <Trans t={t} i18nKey="tutorial.goalDeliver">
                         Produce and deliver
                         <Unit
@@ -164,10 +165,10 @@ export default function Manual() {
                         to Sink.
                     </Trans>
                 </li>
-                <li style={compute_formula_li_style("#FFFFFFFF")}>
+                <li style={compute_formula_li_style("#FFFFFF00")}>
                     {t("tutorial.goalLine2")}
                 </li>
-                <li style={compute_formula_li_style("#FFFFFFFF")}>
+                <li style={compute_formula_li_style("#FFFFFF00")}>
                     {t("tutorial.goalLine3_1")}
                     <a
                         href="https://stardisc.netlify.app/"
