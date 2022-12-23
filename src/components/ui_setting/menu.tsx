@@ -115,7 +115,7 @@ export default function Menu({
                     <ListItemIcon>
                         <OndemandVideoIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText onClick={onVideoTutorialsClick}>Video tutorials</ListItemText>
+                    <ListItemText onClick={onVideoTutorialsClick}>Video Tutorials</ListItemText>
                 </MenuItemStyled>
 
                 <Divider />
