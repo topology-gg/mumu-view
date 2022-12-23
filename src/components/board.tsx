@@ -4,7 +4,7 @@ import MechState, { MechStatus, MechType } from "../types/MechState";
 import Unit from "./unit";
 import UnitState, { BgStatus, BorderStatus, UnitText } from "../types/UnitState";
 import Grid from "../types/Grid";
-import Operator, { OPERATOR_TYPES, PlacingFormula } from "../types/Operator";
+import Operator, { OperatorState, OPERATOR_TYPES, PlacingFormula } from "../types/Operator";
 import OperatorGridBg from "./OperatorGridBg";
 import { Constraints, DEMO_SOLUTIONS, Modes, Lesson_names } from "../constants/constants";
 import { useTranslation } from "react-i18next";
@@ -33,7 +33,7 @@ interface BoardProps {
     animationFrame: number;
     objective: string;
     instruction: string[];
-    operatorStates: Operator[];
+    operatorStates: OperatorState[];
     operatorInputHighlight: boolean[];
     placingFormula?: PlacingFormula;
     unitStates: UnitState[][];
@@ -110,8 +110,8 @@ export default function Board({
        )
     // compute keynums
     fretboard.calculateFrets()
-    
-    // hardcoded frets for debug    
+
+    // hardcoded frets for debug
     /*
     const frets = [
         [48, 50, 53, 55, 57, 60, 62, 65, 67, 69],
@@ -220,7 +220,7 @@ export default function Board({
             >
                 <div className={styles.grid_parent} style={{}}>
                     <OperatorGridBg
-                        operators={operatorStates}
+                        operators={operatorStates.map(oS => oS.operator)}
                         highlighted={operatorInputHighlight}
                         placingFormula={placingFormula}
                         dim={DIM}

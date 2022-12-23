@@ -32,11 +32,11 @@ interface LoadSaveProps {
     onLoadSolutionClick: (solutionMode: string, viewSolution: Solution) => void;
     mechInitStates: MechState[];
     programs: string[];
-    operatorStates: Operator[];
+    operators: Operator[];
     mode: Modes;
 }
 
-const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorStates, mode }: LoadSaveProps) => {
+const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operators, mode }: LoadSaveProps) => {
     const { t } = useTranslation();
 
     const [open, setOpen] = useState<boolean>(false);
@@ -99,7 +99,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
         const solution: Solution = {
             mechs: mechInitStates,
             programs: programs,
-            operators: operatorStates,
+            operators: operators,
         };
         saveSolutionToLocal(`${mode}.${saveToName}`, solution);
         console.log("> saved solution:", solution);
@@ -236,7 +236,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
                             const solution: Solution = {
                                 mechs: mechInitStates,
                                 programs: programs,
-                                operators: operatorStates,
+                                operators: operators,
                             };
                             const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
                                 JSON.stringify(solution)
@@ -258,131 +258,6 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operatorState
         </Box>
     );
 
-    // return (
-    //     // <Tooltip title={t("load_save")} arrow>
-
-    //     <Box sx={{ mb: 2 }}>
-    //         {/* <Button color="secondary" variant="outlined" onClick={handleOpen}>
-    //             {t("load_save")}
-    //         </Button> */}
-    //         <button onClick={handleOpen} className={'big-button'}>
-    //             <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.1rem' }}>
-    //                 save
-    //             </i>
-    //         </button>
-    //         <Modal open={open} onClose={handleClose} isRoot={true}>
-    //             <Box
-    //                 sx={{
-    //                     p: 2,
-    //                     fontFamily: "var(--font-family-secondary)",
-    //                     display: "flex",
-    //                     flexDirection: "column",
-    //                     gap: 2,
-    //                 }}
-    //             >
-    //                 <Box>
-    //                     {Array.from({ length: SOLUTIONS.length }).map((_, i) =>
-    //                         i == 0 ? (
-    //                             <button
-    //                                 key={`load-demo-${i}`}
-    //                                 onClick={() => {
-    //                                     onLoadSolutionClick(SOLUTIONS[0]);
-    //                                     handleClose();
-    //                                 }}
-    //                             >
-    //                                 {t("demo-blank")}
-    //                             </button>
-    //                         ) : (
-    //                             <button
-    //                                 key={`load-demo-${i}`}
-    //                                 onClick={() => {
-    //                                     onLoadSolutionClick(SOLUTIONS[i]);
-    //                                     handleClose();
-    //                                 }}
-    //                             >
-    //                                 {t(`demo`)}
-    //                                 {i - 1}
-    //                             </button>
-    //                         )
-    //                     )}
-    //                 </Box>
-
-    //                 <Box sx={{ display: "flex", gap: 1 }}>
-    //                     {mounted ? (
-    //                         namespace.map((name: string, name_i: number) => {
-    //                             return (
-    //                                 <SavedSolutionElement
-    //                                     key={`saved-solution-element-${name_i}`}
-    //                                     name={name}
-    //                                     onLoadClick={() => {
-    //                                         const solution = getSolutionFromLocal(name);
-    //                                         onLoadSolutionClick(solution);
-    //                                         handleClose();
-    //                                     }}
-    //                                     onClearClick={() => {
-    //                                         handleClearSpecificClick(name);
-    //                                     }}
-    //                                 />
-    //                             );
-    //                         })
-    //                     ) : (
-    //                         <div />
-    //                     )}
-    //                 </Box>
-
-    //                 <Box>
-    //                     <input
-    //                         onChange={(event) => {
-    //                             setSaveToName((prev) => event.target.value);
-    //                         }}
-    //                         defaultValue={DEFAULT_SAVE_TO_NAME}
-    //                         style={{ width: "7rem", margin: "0 3px 0 3px", height: "24px" }}
-    //                         placeholder={t("save to name")}
-    //                     ></input>
-    //                     <button
-    //                         onClick={() => {
-    //                             handleSaveClick();
-    //                         }}
-    //                         style={saveButtonStyle}
-    //                     >
-    //                         {" "}
-    //                         {t("Save")}{" "}
-    //                     </button>
-    //                     <button
-    //                         onClick={() => {
-    //                             handleClearClick();
-    //                         }}
-    //                     >
-    //                         {" "}
-    //                         {t("Clear")}{" "}
-    //                     </button>
-    //                     <button
-    //                         onClick={() => {
-    //                             const solution: Solution = {
-    //                                 mechs: mechInitStates,
-    //                                 programs: programs,
-    //                                 operators: operatorStates,
-    //                             };
-    //                             const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-    //                                 JSON.stringify(solution)
-    //                             )}`;
-    //                             const link = document.createElement("a");
-    //                             link.href = jsonString;
-    //                             link.download = "mumu_export.json";
-
-    //                             link.click();
-    //                         }}
-    //                     >
-    //                         {" "}
-    //                         {t("Export")}{" "}
-    //                     </button>
-    //                 </Box>
-    //             </Box>
-    //         </Modal>
-    //     </Box>
-
-    //     // </Tooltip>
-    // );
 };
 
 export default LoadSave;

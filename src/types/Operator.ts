@@ -16,6 +16,11 @@ export default interface Operator {
     typ: OperatorType;
 }
 
+export interface OperatorState {
+    operator: Operator;
+    firing: boolean;
+}
+
 // ref to color palette: https://colorhunt.co/
 export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
     STIR: {
