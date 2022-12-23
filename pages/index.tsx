@@ -587,10 +587,10 @@ export default function Home() {
         setGridHovering(["-", "-"]);
     }
 
-    function handleMechNoteVelocityChange(mech_i, evt) {
+    function handleMechNoteVelocityChange(mech_i, value) {
         setMechVelocities (prev => {
             let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
-            prev_copy[mech_i] = evt.target.value
+            prev_copy[mech_i] = value
             return prev_copy;
         })
     }

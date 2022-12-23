@@ -35,7 +35,7 @@ export default function DAWPanel ({ sf, handleSetSfFile, sfLoaded, mech_n, mechV
                         <p style={{fontSize:'1rem'}}>Volume Control</p>
                         <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                             {
-                                mech_n != 0? Array.from({length:mech_n}).map((_,mech_i) => (
+                                mech_n != 0 ? Array.from({length:mech_n}).map((_,mech_i) => (
                                     <div style={{display:'flex', flexDirection:'row', marginBottom:'0.5rem'}}>
                                         <p style={{padding:'0',margin:'0 1rem 0 0',width:'3rem'}}>Spirit {mech_i}</p>
                                         <input
@@ -46,7 +46,7 @@ export default function DAWPanel ({ sf, handleSetSfFile, sfLoaded, mech_n, mechV
                                             value={mechVelocities[mech_i]}
                                             onChange={evt => {
                                                 if (animationState !== 'Run'){
-                                                    handleMechNoteVelocityChange(mech_i, evt)
+                                                    handleMechNoteVelocityChange(mech_i, evt.target.value)
                                                 }
                                             }}
                                             step="1"
@@ -58,6 +58,20 @@ export default function DAWPanel ({ sf, handleSetSfFile, sfLoaded, mech_n, mechV
                                 )) : <p style={{padding:'0',margin:'0'}}>(No spirit yet)</p>
                             }
                         </div>
+                        {
+                            mech_n != 0 ? (
+                                <button onClick={() => {
+                                    Array.from({length:mech_n}).map((_,mech_i) => {
+                                        if (animationState !== 'Run'){
+                                            handleMechNoteVelocityChange(mech_i, 60)
+                                        }
+                                    })
+                                }}
+                                    style={{marginTop:'0.3rem'}}
+                                    disabled={animationState == 'Run'}
+                                >Reset Volume</button>
+                            ) : <></>
+                        }
                     </>
                 ) : <p style={{fontSize:'1rem'}}>Loading festive soundfonts ...</p>
             }
