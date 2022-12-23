@@ -51,6 +51,22 @@ interface BoardProps {
     producedAtomIds: string[];
 }
 
+// compute Grid MidiKeynums ---
+var tonic = new PitchClass(5, 0) // Traditionally tuned to F
+var fretboard = new FretBoard(
+    "guqin_10_string", // name
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1], // string_steps
+    10, // num_frets
+    3, // scale_degree
+    tonic, // tonic
+    modes.pentatonic, // mode
+    null,
+    0,
+    3, null
+  )
+// compute keynums
+fretboard.calculateFrets()
+
 export default function Board({
     mode,
     animationState,
@@ -100,26 +116,14 @@ export default function Board({
         operatorStates.forEach((operatorState, i) => {
             if (operatorState.firing) {
                 console.log(`At frame ${animationFrame}, Formula ${i} of type ${operatorState.operator.typ} is firing.`);
+                if(i == 0){
+                   // fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
+                   // console.log(fretboard.msg);
+                }
             }
         })
     }, [animationFrame])
 
-
-    // compute Grid MidiKeynums ---
-    var tonic = new PitchClass(5, 0) // Traditionally tuned to F
-     var fretboard = new FretBoard(
-         "guqin_10_string", // name
-         [0, 1, 1, 1, 1, 1, 1, 1, 1, 1], // string_steps
-         10, // num_frets
-         3, // scale_degree
-         tonic, // tonic
-         modes.pentatonic, // mode
-         null,
-         0,
-         3, null
-       )
-    // compute keynums
-    fretboard.calculateFrets()
 
     // hardcoded frets for debug
     /*
@@ -152,8 +156,8 @@ export default function Board({
                     // notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
 
                     //fretboard.setNewChord(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                    fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                    console.log(fretboard.msg);
+                    //fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
+                    //console.log(fretboard.msg);
                     //fretboard.changeFrets(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
 
                     playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
@@ -268,6 +272,10 @@ export default function Board({
 
                                         if (isConsumed) console.log(`isConsumed at (i,j)=(${i},${j})`);
                                         if (isProduced) console.log(`isProduced at (i,j)=(${i},${j})`);
+                                        if (isProduced) {
+                                            fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
+                                            console.log(fretboard.msg);
+                                        };
 
                                         const rawUnit = (
                                             <div key={`${j}-${i}`}>

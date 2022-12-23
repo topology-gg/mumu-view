@@ -76,6 +76,8 @@ export class FretBoard {
     return note_keys[this.tonic.note]+ " " + getmodeNameBySteps(this.mode);
   }
 
+  // Using note and quality as argument, output the index to collect the good chords
+
   // Returns the 6 chords that sound good in relation to the current tonic/mode
 
   getChordsAtNote(): any {
@@ -196,7 +198,6 @@ export class FretBoard {
     return rotatedMatrix;
   }
   
-
   changeFrets(x: number, y: number): any {
     var fret_choices = [
       [0,2,2,2,2,2,2,2,2,2],
