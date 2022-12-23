@@ -19,6 +19,7 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import StadiumIcon from '@mui/icons-material/Stadium';
 import MusicVideoIcon from '@mui/icons-material/MusicVideo';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 
 export default function Menu({
     width='100%',
@@ -30,11 +31,12 @@ export default function Menu({
     onConnectWalletClick,
     onLanguageClick,
     onTutorialClick,
+    onVideoTutorialsClick,
 }) {
 
     const MenuItemStyled = ({ children, sx = {}, disabled=false }: { children: React.ReactNode; sx?: SxProps; disabled?: boolean }) => {
         return (
-            <MenuItem sx={{pl:5, color:'#333333'}} disabled={disabled}>
+            <MenuItem sx={{pl:5, color:'#222222'}} disabled={disabled}>
                 {children}
             </MenuItem>
         )
@@ -46,39 +48,6 @@ export default function Menu({
             <MenuList>
 
                 <ListItemText sx={{textAlign:'center', pb:2}}>MuMu: Season 2</ListItemText>
-
-                <Divider />
-
-                <MenuItemStyled>
-                    <ListItemIcon>
-                        <WalletIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onConnectWalletClick}>Connect Wallet</ListItemText>
-                    {/* <Typography variant="body2" color="text.secondary">
-                        ⌘X
-                    </Typography> */}
-                </MenuItemStyled>
-
-                <MenuItemStyled>
-                    <ListItemIcon>
-                        <LanguageIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onLanguageClick}>Language</ListItemText>
-                </MenuItemStyled>
-
-                <MenuItemStyled>
-                    <ListItemIcon>
-                        <LibraryBooksIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onManualClick}>Manual</ListItemText>
-                </MenuItemStyled>
-
-                <MenuItemStyled>
-                    <ListItemIcon>
-                        <SchoolIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onTutorialClick}>Tutorial Mode</ListItemText>
-                </MenuItemStyled>
 
                 <Divider />
 
@@ -110,6 +79,43 @@ export default function Menu({
                         <LibraryMusicIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText onClick={onMusicLibraryClick}>Music Library</ListItemText>
+                </MenuItemStyled>
+
+                <Divider />
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <WalletIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onConnectWalletClick}>Connect Wallet</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <LanguageIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onLanguageClick}>Language</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <LibraryBooksIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onManualClick}>Manual</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <SchoolIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onTutorialClick}>Tutorial Mode</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <OndemandVideoIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onVideoTutorialsClick}>Video tutorials</ListItemText>
                 </MenuItemStyled>
 
                 <Divider />

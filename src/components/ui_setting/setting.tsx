@@ -10,6 +10,7 @@ import Tutorial from "./Tutorial";
 
 import { Box, SxProps } from "@mui/material";
 import { BLANK_COLOR, Modes } from "../../constants/constants";
+import VideoTutorials from "./VideoTutorials";
 
 export default function Setting({
     loadSolution, loadMode,
@@ -42,6 +43,7 @@ export default function Setting({
             onArenaModeClick={() => loadMode(Modes.arena)}
             onDAWModeClick={() => loadMode(Modes.daw)}
             onMusicLibraryClick={() => handleModeChange('musiclib')}
+            onVideoTutorialsClick={() => handleModeChange('videotutorials')}
         />
     )
 
@@ -53,6 +55,7 @@ export default function Setting({
         renderMode == 'manual' ? 600 :
         renderMode == 'tutorial' ? 700 :
         renderMode == 'musiclib' ? 700 :
+        renderMode == 'videotutorials' ? 1030 :
         1100 // leaderboard width
 
     // render
@@ -97,6 +100,9 @@ export default function Setting({
                         ) :
                         (renderMode == 'tutorial') ? (
                             <Tutorial loadMode={loadMode} />
+                        ) :
+                        (renderMode == 'videotutorials') ? (
+                            <VideoTutorials />
                         ) :
                         MenuHooked
                     }
