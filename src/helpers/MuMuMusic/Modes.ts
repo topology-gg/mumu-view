@@ -21,7 +21,7 @@
 Mode Definition Map
 */
 
-export var note_keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'G', 'G#', 'A', 'A#', 'B']
+export const note_keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 export const modes: { [name: string]: number[] } = {}
 

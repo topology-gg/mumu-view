@@ -1,4 +1,4 @@
-import { mumu_modes } from "./Modes"
+import { getmodeNameBySteps, mumu_modes, note_keys } from "./Modes"
 import { keynumToPitchClass, num_steps_from_scale_degree, PitchClass } from "./PitchClass"
 
 /* 
@@ -53,8 +53,9 @@ export class FretBoard {
   c_map: number[][]
   quality: number
   offset: number
+  msg: string
 
-  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[], c_map: number[][], quality: number, offset: number) {
+  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[], c_map: number[][], quality: number, offset: number, msg: string) {
     this.name = name
     this.string_steps = string_steps
     this.num_frets = num_frets
@@ -68,6 +69,11 @@ export class FretBoard {
     ]
     this.quality = quality
     this.offset = offset
+    this.fretDataToString()
+  }
+
+  fretDataToString(): string {
+    return note_keys[this.tonic.note]+ " " + getmodeNameBySteps(this.mode);
   }
 
   // Returns the 6 chords that sound good in relation to the current tonic/mode
@@ -207,6 +213,8 @@ export class FretBoard {
   }else{
     this.frets = notearr
   }
+  
+  this.msg = this.fretDataToString();
 
   return  this.frets  
   }

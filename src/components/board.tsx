@@ -116,7 +116,7 @@ export default function Board({
          modes.pentatonic, // mode
          null,
          0,
-         3
+         3, null
        )
     // compute keynums
     fretboard.calculateFrets()
