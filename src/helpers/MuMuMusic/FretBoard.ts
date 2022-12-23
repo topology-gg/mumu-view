@@ -52,8 +52,9 @@ export class FretBoard {
   frets: number[][]
   c_map: number[][]
   quality: number
+  offset: number
 
-  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[], c_map: number[][], quality: number) {
+  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[], c_map: number[][], quality: number, offset: number) {
     this.name = name
     this.string_steps = string_steps
     this.num_frets = num_frets
@@ -66,6 +67,7 @@ export class FretBoard {
       [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2], //minor modes/chords
     ]
     this.quality = quality
+    this.offset = offset
   }
 
   // Returns the 6 chords that sound good in relation to the current tonic/mode
@@ -120,7 +122,7 @@ export class FretBoard {
     console.log('new_mode'); 
     console.log(new_mode); 
     
-    return this.calculateFrets3(3, this.tonic, this.mode, this.scale_degree);
+    return this.calculateFrets();
     //return [new_tonic, new_mode]
   }
   
@@ -128,13 +130,26 @@ export class FretBoard {
 
   changeScaleDegree(x: number, y: number): any {
     this.scale_degree = y % this.mode.length;
-    return this.calculateFrets3(3, this.tonic, this.mode, this.scale_degree);
+    return this.calculateFrets();
+  }
+
+  // dramatic shifting modal chord change, especially distinct from the diatonic operations in setNewChord and changeScaleDegree
+
+  changeTransposeDownTwoSteps(x: number, y: number): any {
+
+    if(this.tonic.note-2 < 0){
+     this.tonic = new PitchClass(11 + (this.tonic.note-2), 0) 
+    }else{
+     this.tonic = new PitchClass(this.tonic.note-2, 0) 
+    }
+    
+    return this.calculateFrets();
   }
 
   changeFrets(x: number, y: number): any {
     var fret_choices = [
       [0,2,2,2,2,2,2,2,2,2],
-      [0,3,3,3,3,3,3,3,3,3],
+      [0,2,3,2,2,2,3,2,2,3],
       [0,1,2,1,2,1,2,1,2,1],
       [0,2,3,2,3,2,3,2,3,2],
       [0,3,2,3,2,3,2,3,2,3],
@@ -142,22 +157,19 @@ export class FretBoard {
       [0,2,3,3,2,2,3,3,2,3],
       [0,2,3,3,2,2,3,3,2,3],
       [0,3,2,3,3,2,2,3,2,2],
-      [0,3,3,3,3,3,2,2,3,2]
+      [0,3,3,3,2,3,2,2,3,2]
     ];
 
     this.string_steps = fret_choices[x];
-    return this.calculateFrets3(3, this.tonic, this.mode, this.scale_degree);
+
+    return this.calculateFrets();
   }
 
-  calculateFrets3(octave_offset: number, newtonic: PitchClass, newmode: number[], newscaledegree: number): number[][] {
+  calculateFrets(): number[][] {
     
-    this.tonic = newtonic;
-    this.mode = newmode;
-    this.scale_degree = newscaledegree;
-
     var notearr =  Array()   
   
-    var step_offset =  octave_offset * 12;
+    var step_offset =  this.offset * 12;
     var top_note_threshold = 120;
 
     for (var j = 0; j < this.num_frets; j++) {
