@@ -136,6 +136,17 @@ export class FretBoard {
 
   changeScaleDegree(x: number, y: number): any {
     this.scale_degree = y % this.mode.length;
+    var outfrets = this.calculateFrets();
+    this.msg = this.msg+' Change Degree: '+this.scale_degree
+    return outfrets;
+  }
+
+  // Changes chord to from Major -> Minor, Minor -> Major
+
+  changeQuality(x: number, y: number): any {
+    var mu_idx = (this.quality + 1) % 2;
+    this.quality = mu_idx;
+    this.mode = mumu_modes[mu_idx][(x * y) % mumu_modes[mu_idx].length]
     return this.calculateFrets();
   }
 
@@ -152,6 +163,40 @@ export class FretBoard {
     return this.calculateFrets();
   }
 
+  changeTransposeDownNSteps(x: number, y: number): any {
+    var modprod = (x * y) % 12;
+    if(this.tonic.note-modprod < 0){
+     this.tonic = new PitchClass(11 + (this.tonic.note - modprod), 0) 
+    }else{
+     this.tonic = new PitchClass(this.tonic.note - modprod, 0) 
+    }
+    
+    return this.calculateFrets();
+  }
+
+  flipFrets(): any {
+    var flippedMatrix: number[][] = this.frets.map( (row) =>  row.reverse());
+      flippedMatrix.reverse(); 
+      this.frets = flippedMatrix;
+      this.msg = this.msg+' Frets Flipped'
+      return flippedMatrix;
+  }
+
+  rotateFrets(n_rotations: number): any {
+    let rotatedMatrix: number[][] = this.frets.map( (row) =>  row.slice());
+  
+    for (let i = 0; i < n_rotations; i++) {
+        rotatedMatrix = rotatedMatrix[0].map((_, colIndex) => 
+            rotatedMatrix.map((row) =>   row[colIndex])
+        );
+        rotatedMatrix.reverse(); 
+    }
+    this.frets = rotatedMatrix;
+    this.msg = this.msg+' Frets Rotated'
+    return rotatedMatrix;
+  }
+  
+
   changeFrets(x: number, y: number): any {
     var fret_choices = [
       [0,2,2,2,2,2,2,2,2,2],
@@ -167,8 +212,9 @@ export class FretBoard {
     ];
 
     this.string_steps = fret_choices[x];
-
-    return this.calculateFrets();
+    var outfrets = this.calculateFrets();
+    this.msg = this.msg+' Frets Warped'
+    return outfrets;
   }
 
   calculateFrets(): number[][] {

@@ -151,8 +151,9 @@ export default function Board({
                     // playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
                     // notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
 
-                    fretboard.setNewChord(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                    //fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
+                    //fretboard.setNewChord(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
+                    fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
+                    console.log(fretboard.msg);
                     //fretboard.changeFrets(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
 
                     playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
