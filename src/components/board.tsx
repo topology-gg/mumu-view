@@ -62,7 +62,7 @@ var fretboard = new FretBoard(
     modes.pentatonic, // mode
     null,
     0,
-    3, null
+    3, null, null
   )
 // compute keynums
 fretboard.calculateFrets()

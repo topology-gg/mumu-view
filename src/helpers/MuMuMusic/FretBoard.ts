@@ -54,8 +54,9 @@ export class FretBoard {
   quality: number
   offset: number
   msg: string
+  c_map_idx: number
 
-  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[], c_map: number[][], quality: number, offset: number, msg: string) {
+  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[], c_map: number[][], quality: number, offset: number, msg: string, c_map_idx: number) {
     this.name = name
     this.string_steps = string_steps
     this.num_frets = num_frets
@@ -69,7 +70,8 @@ export class FretBoard {
     ]
     this.quality = quality
     this.offset = offset
-    this.fretDataToString()
+    this.msg = this.fretDataToString()
+    this.c_map_idx = 0
   }
 
   fretDataToString(): string {
