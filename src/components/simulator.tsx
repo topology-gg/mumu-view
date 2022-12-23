@@ -69,7 +69,7 @@ export default function simulator(
     const frame_init : Frame= {
         mechs: mechs,
         atoms: atoms,
-        operators: boardConfig.operators.map((operator, operator_i) => {
+        operatorStates: boardConfig.operators.map((operator, operator_i) => {
             return {
                 operator: operator,
                 firing: false,
@@ -136,7 +136,7 @@ function _simulate_one_cycle (
     //
     const mechs_curr = frame_curr.mechs // array of {'id':'mech..', 'index':{x:..,y:..}, 'status':'..', 'typ':'..'}
     const atoms_curr = frame_curr.atoms // array of {'id':'atom..', 'index':{x:..,y:..}, 'status':'..', 'typ':'..'}
-    const operators_curr = frame_curr.operators
+    const operator_states_curr = frame_curr.operatorStates
     const grid_populated_bools = frame_curr.grid_populated_bools // mapping 'x..y..' => true/false
 
     //
@@ -144,7 +144,7 @@ function _simulate_one_cycle (
     //
     var mechs_new: MechState[] = []
     var atoms_new: AtomState[] = JSON.parse(JSON.stringify(atoms_curr)) // object cloning
-    var operators_new: OperatorState[] = operators_curr.map((operatorState, _) => {
+    var operator_states_new: OperatorState[] = operator_states_curr.map((operatorState, _) => {
         return {
             operator: operatorState.operator,
             firing: false,
@@ -578,7 +578,7 @@ function _simulate_one_cycle (
                 })
 
                 // mark firing as true for this operator in operatorState
-                operators_new[operator_i].firing = true;
+                operator_states_new[operator_i].firing = true;
 
             }
 
@@ -615,7 +615,7 @@ function _simulate_one_cycle (
     const frame_new: Frame = {
         mechs: mechs_new,
         atoms: atoms_new,
-        operators: operators_new,
+        operatorStates: operator_states_new,
         grid_populated_bools: grid_populated_bools_new,
         delivered_accumulated: delivered_accumulated_new,
         cost_accumulated: cost_accumulated_new,

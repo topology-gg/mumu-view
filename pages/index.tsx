@@ -80,16 +80,14 @@ export default function Home() {
     const numMechs = programs.length;
 
     // React states for operators
-    const [operatorStates, setOperatorStates] = useState<OperatorState[]>(BLANK_SOLUTION.operators.map(operator => {
-        return {operator: operator, firing: false} as OperatorState
-    }));
+    const [operators, setOperators] = useState<Operator[]>(BLANK_SOLUTION.operators);
     const [placingFormula, setPlacingFormula] = useState<PlacingFormula>();
-    const numOperators = operatorStates.length;
+    const numOperators = operators.length;
 
     // React useMemo
     const calls = useMemo(() => {
         let instructionSets = programsToInstructionSets(programs);
-        const args = packSolution(instructionSets, mechInitPositions, mechDescriptions, operatorStates.map(oS => oS.operator));
+        const args = packSolution(instructionSets, mechInitPositions, mechDescriptions, operators);
         // console.log ('> useMemo: args =', args)
 
         const tx = {
@@ -98,7 +96,7 @@ export default function Home() {
             calldata: args,
         };
         return [tx];
-    }, [programs, mechInitPositions, mechDescriptions, operatorStates]);
+    }, [programs, mechInitPositions, mechDescriptions, operators]);
 
     // React states for animation control
     const [animationState, setAnimationState] = useState("Stop");
@@ -144,19 +142,22 @@ export default function Home() {
     const frame = frames?.[animationFrame];
     const atomStates = frame?.atoms || atomInitStates;
     const mechStates = !frame ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : frame.mechs;
+    const operatorStates: OperatorState[] = !frame ? operators.map(o => {
+        return {operator:o, firing:false} as OperatorState
+    }) : frame.operatorStates
     const unitStates = setVisualForStates(atomStates, mechStates, unitStatesInit) as UnitState[][];
 
     let consumableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
         _ => Array.from({ length: DIM }).map(_ => null)
     )
-    for (const operatorState of operatorStates){
-        operatorState.operator.input.forEach((grid, i) => {consumableAtomTypes[grid.x][grid.y] = operatorState.operator.typ.input_atom_types[i]})
+    for (const operator of operators){
+        operator.input.forEach((grid, i) => {consumableAtomTypes[grid.x][grid.y] = operator.typ.input_atom_types[i]})
     }
     let produceableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
         _ => Array.from({ length: DIM }).map(_ => null)
     )
-    for (const operatorState of operatorStates){
-        operatorState.operator.output.forEach((grid, i) => {produceableAtomTypes[grid.x][grid.y] = operatorState.operator.typ.output_atom_types[i]})
+    for (const operator of operators){
+        operator.output.forEach((grid, i) => {produceableAtomTypes[grid.x][grid.y] = operator.typ.output_atom_types[i]})
     }
 
     const delivered = frame?.delivered_accumulated;
@@ -297,11 +298,11 @@ export default function Home() {
     function isOperatorPlacementLegal() {
         // impurity by dependencies: operatorStates, constants such as faucet and sink positions
 
-        if (!operatorStates) return false;
-        if (isAnyOperatorPositionInvalid(operatorStates.map(operatorState => operatorState.operator))) return false;
+        if (!operators) return false;
+        if (isAnyOperatorPositionInvalid(operators)) return false;
 
-        for (const operatorState of operatorStates) {
-            if (isOperatorPositionInvalid(operatorState.operator)) return false;
+        for (const operator of operators) {
+            if (isOperatorPositionInvalid(operator)) return false;
         }
 
         return true;
@@ -333,10 +334,8 @@ export default function Home() {
         }
 
         // Operators
-        if (operatorStates && !isAnyOperatorPositionInvalid(operatorStates.map(operatorState => operatorState.operator))) {
-            for (const operatorState of operatorStates) {
-                const operator = operatorState.operator
-
+        if (operators && !isAnyOperatorPositionInvalid(operators)) {
+            for (const operator of operators) {
                 if (isOperatorPositionInvalid(operator)) continue;
 
                 for (const grid of operator.input) {
@@ -433,16 +432,16 @@ export default function Home() {
         if (mode === "+" && numOperators < MAX_NUM_OPERATORS) {
             setPlacingFormula({ type: typ, grids: [] });
         } else if (mode === "-" && numOperators > 0) {
-            setOperatorStates((prev) => {
-                let prev_copy: OperatorState[] = JSON.parse(JSON.stringify(prev));
+            setOperators((prev) => {
+                let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
                 prev_copy.pop();
                 return prev_copy;
             });
         }
     }
     function handleFormulaDelete(operator_i) {
-        setOperatorStates((prev) => {``
-            let prev_copy: OperatorState[] = JSON.parse(JSON.stringify(prev));
+        setOperators((prev) => {
+            let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
             prev_copy.splice(operator_i, 1);
             return prev_copy;
         });
@@ -519,7 +518,7 @@ export default function Home() {
                             index: { x: sink_pos.x, y: sink_pos.y },
                         };
                     }),
-                    operators: operatorStates.map(operatorState => operatorState.operator),
+                    operators: operators,
                 };
 
                 // Run simulation to get all frames and set to reference
@@ -558,7 +557,7 @@ export default function Home() {
     }
 
     function setOperator(operator_i: number, new_operator: Operator) {
-        setOperatorStates((prev) => {
+        setOperators((prev) => {
             let prev_copy = JSON.parse(JSON.stringify(prev));
             prev_copy[operator_i] = new_operator;
             return prev_copy;
@@ -617,9 +616,7 @@ export default function Home() {
         setPrograms((prev) => viewSolution.programs);
         setMechInitPositions((prev) => viewSolution.mechs.map((mech) => mech.index));
         setMechDescriptions((prev) => viewSolution.mechs.map((mech) => mech.description));
-        setOperatorStates((prev) => viewSolution.operators.map(operator => {
-            return {operator: operator, firing: false} as OperatorState
-        }));
+        setOperators((prev) => viewSolution.operators);
         setAnimationFrame((prev) => 0);
         setFrames(_ => null);
         setPlacingFormula(_ => null)
@@ -650,8 +647,7 @@ export default function Home() {
 
             // Check validity of operator
             if (operator.output.length > operator.typ.output_atom_types.length) return prev;
-            const existingOperators = operatorStates.map(oS => oS.operator)
-            if (isAnyOperatorPositionInvalid([...existingOperators, operator])) return prev;
+            if (isAnyOperatorPositionInvalid([...operators, operator])) return prev;
             if (isOperatorPositionInvalid(operator)) return prev;
 
             const complete = operator.output.length === operator.typ.output_atom_types.length;
@@ -661,7 +657,7 @@ export default function Home() {
     }
 
     function handleConfirmFormula() {
-        setOperatorStates((prev) => [...prev, {operator:placingFormulaToOperator(placingFormula), firing:false}]);
+        setOperators((prev) => [...prev, placingFormulaToOperator(placingFormula)]);
         setPlacingFormula(null);
     }
     function handleCancelFormula() {
@@ -678,9 +674,7 @@ export default function Home() {
         setPrograms(_ => BLANK_SOLUTION.programs);
         setMechInitPositions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.index));
         setMechDescriptions(_ => BLANK_SOLUTION.mechs.map((mech) => mech.description));
-        setOperatorStates(_ => BLANK_SOLUTION.operators.map(o => {
-            return {operator:o, firing:false} as OperatorState
-        }));
+        setOperators(_ => BLANK_SOLUTION.operators);
 
         // set current mode
         setCurrMode(_ => mode);
@@ -702,7 +696,7 @@ export default function Home() {
             mode={currMode}
             onLoadSolutionClick={handleLoadSolutionClick}
             mechInitStates={mechInitStates}
-            operators={operatorStates.map(oS => oS.operator)}
+            operators={operators}
             programs={programs}
         />
     );
@@ -849,20 +843,20 @@ export default function Home() {
                         style={{
                             backgroundColor: operatorInputHighlight[operator_i]
                                 ? theme.palette.primary.main
-                                : operatorStates[operator_i].operator.typ.color + "55",
+                                : operators[operator_i].typ.color + "55",
                         }}
                     >
                         <IconButton size="small" color="secondary" onClick={() => handleFormulaDelete(operator_i)}>
                             <Delete fontSize="small" />
                         </IconButton>
 
-                        <p className={styles.input_name}>{t(operatorStates[operator_i].operator.typ.name)}</p>
+                        <p className={styles.input_name}>{t(operators[operator_i].typ.name)}</p>
 
-                        {Array.from({ length: operatorStates[operator_i].operator.input.length }).map((_, input_i) => (
+                        {Array.from({ length: operators[operator_i].input.length }).map((_, input_i) => (
                             <div key={`input-row-${operator_i}-input-${input_i}`} className={styles.input_grid}>
                                 {input_i == 0 ? (
                                     <p style={{ textAlign: "right" }} className={styles.input_text}>
-                                        {operatorStates[operator_i].operator.typ.symbol}(
+                                        {operators[operator_i].typ.symbol}(
                                     </p>
                                 ) : (
                                     <></>
@@ -872,14 +866,14 @@ export default function Home() {
                                     onChange={(event) => {
                                         // if (event.target.value.length == 0) return;
                                         // if (isNaN(parseInt(event.target.value))) return;
-                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        let newOperator = JSON.parse(JSON.stringify(operators[operator_i]));
                                         newOperator.input[input_i].x = parseInt(event.target.value);
                                         setOperator(operator_i, newOperator);
                                     }}
-                                    defaultValue={operatorStates[operator_i].operator.input[input_i].x}
+                                    defaultValue={operators[operator_i].input[input_i].x}
                                     value={
-                                        !isNaN(operatorStates[operator_i].operator.input[input_i].x)
-                                            ? operatorStates[operator_i].operator.input[input_i].x
+                                        !isNaN(operators[operator_i].input[input_i].x)
+                                            ? operators[operator_i].input[input_i].x
                                             : ""
                                     }
                                     style={{
@@ -896,14 +890,14 @@ export default function Home() {
                                     onChange={(event) => {
                                         // if (event.target.value.length == 0) return;
                                         // if (isNaN(parseInt(event.target.value))) return;
-                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        let newOperator = JSON.parse(JSON.stringify(operators[operator_i]));
                                         newOperator.input[input_i].y = parseInt(event.target.value);
                                         setOperator(operator_i, newOperator);
                                     }}
-                                    defaultValue={operatorStates[operator_i].operator.input[input_i].y}
+                                    defaultValue={operators[operator_i].input[input_i].y}
                                     value={
-                                        !isNaN(operatorStates[operator_i].operator.input[input_i].y)
-                                            ? operatorStates[operator_i].operator.input[input_i].y
+                                        !isNaN(operators[operator_i].input[input_i].y)
+                                            ? operators[operator_i].input[input_i].y
                                             : ""
                                     }
                                     style={{
@@ -916,7 +910,7 @@ export default function Home() {
                                     }}
                                     disabled={animationState == "Stop" ? false : true}
                                 ></input>
-                                {input_i == operatorStates[operator_i].operator.input.length - 1 ? (
+                                {input_i == operators[operator_i].input.length - 1 ? (
                                     <p className={styles.input_text}>{`)=`}</p>
                                 ) : (
                                     <p className={styles.input_text}>{", "}</p>
@@ -924,20 +918,20 @@ export default function Home() {
                             </div>
                         ))}
 
-                        {Array.from({ length: operatorStates[operator_i].operator.output.length }).map((_, output_i) => (
+                        {Array.from({ length: operators[operator_i].output.length }).map((_, output_i) => (
                             <div key={`input-row-${operator_i}-input-${output_i}`} className={styles.input_grid}>
                                 <input
                                     className={styles.program}
                                     onChange={(event) => {
                                         // if (event.target.value.length == 0) return;
-                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        let newOperator = JSON.parse(JSON.stringify(operators[operator_i]));
                                         newOperator.output[output_i].x = parseInt(event.target.value);
                                         setOperator(operator_i, newOperator);
                                     }}
-                                    defaultValue={operatorStates[operator_i].operator.output[output_i].x}
+                                    defaultValue={operators[operator_i].output[output_i].x}
                                     value={
-                                        !isNaN(operatorStates[operator_i].operator.output[output_i].x)
-                                            ? operatorStates[operator_i].operator.output[output_i].x
+                                        !isNaN(operators[operator_i].output[output_i].x)
+                                            ? operators[operator_i].output[output_i].x
                                             : ""
                                     }
                                     style={{
@@ -953,14 +947,14 @@ export default function Home() {
                                     className={styles.program}
                                     onChange={(event) => {
                                         // if (event.target.value.length == 0) return;
-                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        let newOperator = JSON.parse(JSON.stringify(operators[operator_i]));
                                         newOperator.output[output_i].y = parseInt(event.target.value);
                                         setOperator(operator_i, newOperator);
                                     }}
-                                    defaultValue={operatorStates[operator_i].operator.output[output_i].y}
+                                    defaultValue={operators[operator_i].output[output_i].y}
                                     value={
-                                        !isNaN(operatorStates[operator_i].operator.output[output_i].y)
-                                            ? operatorStates[operator_i].operator.output[output_i].y
+                                        !isNaN(operators[operator_i].output[output_i].y)
+                                            ? operators[operator_i].output[output_i].y
                                             : ""
                                     }
                                     style={{
@@ -973,7 +967,7 @@ export default function Home() {
                                     }}
                                     disabled={animationState == "Stop" ? false : true}
                                 ></input>
-                                {output_i != operatorStates[operator_i].operator.output.length - 1 && (
+                                {output_i != operators[operator_i].output.length - 1 && (
                                     <p className={styles.input_text}>{`,`}</p>
                                 )}
                             </div>

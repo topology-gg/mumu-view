@@ -95,6 +95,16 @@ export default function Board({
         }
     }
 
+    // demostrate getting firing info on placed formulas when animationFrame changes
+    useEffect(() => {
+        operatorStates.forEach((operatorState, i) => {
+            if (operatorState.firing) {
+                console.log(`At frame ${animationFrame}, Formula ${i} of type ${operatorState.operator.typ} is firing.`);
+            }
+        })
+    }, [animationFrame])
+
+
     // compute Grid MidiKeynums ---
     var tonic = new PitchClass(5, 0) // Traditionally tuned to F
      var fretboard = new FretBoard(
