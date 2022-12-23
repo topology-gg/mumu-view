@@ -11,6 +11,17 @@ interface Mech {
     description: string
 }
 
+interface AtomFaucetState {
+    id: number
+    type: number
+    index: Grid
+}
+
+interface AtomSinkState {
+    id: number
+    index: Grid
+}
+
 export function programsToInstructionSets (programs) {
 
     let instructionSets:string[][] = []
@@ -23,7 +34,16 @@ export function programsToInstructionSets (programs) {
     return instructionSets
 }
 
-export default function packSolution (instructionSets: string[][], mechInitPositions: Grid[], mechDesciptions: string[], operatorStates: Operator[]) {
+export default function packSolution (
+        instructionSets: string[][],
+        mechInitPositions: Grid[],
+        mechDesciptions: string[],
+        operatorStates: Operator[],
+        musicTitle: string,
+        mechVolumes: number[],
+        faucetPositions: Grid[],
+        sinkPositions: Grid[],
+    ) {
 
     if (!instructionSets || !mechInitPositions || !operatorStates || !mechDesciptions){
         console.log('oops?', instructionSets, mechInitPositions, mechDesciptions, operatorStates)
@@ -58,11 +78,18 @@ export default function packSolution (instructionSets: string[][], mechInitPosit
         }
         return acc;
     }
-    mechDesciptions.forEach((description: string, index: number) => {
+    const encodeStringToFelt = (s: string):string => {
         let encoder = new TextEncoder();
-        let buffer = encoder.encode(description)
+        let buffer = encoder.encode(s)
         let acc = bufferToInt(buffer);
-        mech_array[index].description = acc.toString();
+        return acc.toString();
+    }
+    mechDesciptions.forEach((description: string, index: number) => {
+        // let encoder = new TextEncoder();
+        // let buffer = encoder.encode(description)
+        // let acc = bufferToInt(buffer);
+        // mech_array[index].description = acc.toString();
+        mech_array[index].description = encodeStringToFelt(description)
     })
 
     // Prepare input arg on solution's operators
@@ -103,70 +130,83 @@ export default function packSolution (instructionSets: string[][], mechInitPosit
     }
 
     // Manually serialize everything into one array
-    // Note: simulator() function signature
-    // mechs_len: felt,
-    // mechs: MechState*,
-    // instructions_sets_len: felt,
-    // instructions_sets: felt*,
-    // instructions_len: felt,
-    // instructions: felt*,
-    // operators_inputs_len: felt,
-    // operators_inputs: Grid*,
-    // operators_outputs_len: felt,
-    // operators_outputs: Grid*,
-    // operators_type_len: felt,
-    // operators_type: felt*,
+    // Note: simulator() function signature:
+        // music_title: felt,
+        // mechs_len: felt,
+        // mechs: InputMechState*,
+        // instructions_sets_len: felt,
+        // instructions_sets: felt*,
+        // instructions_len: felt,
+        // instructions: felt*,
+        // operators_inputs_len: felt,
+        // operators_inputs: Grid*,
+        // operators_outputs_len: felt,
+        // operators_outputs: Grid*,
+        // operators_type_len: felt,
+        // operators_type: felt*,
+        // mech_volumes_len: felt,
+        // mech_volumes: felt*,
+        // faucets_len: felt,
+        // faucets: AtomFaucetState*,
+        // sinks_len: felt,
+        // sinks: AtomSinkState*,
+
     let args = []
 
+    // music_title
+    args.push (encodeStringToFelt(musicTitle))
+
+    // mechs
     args.push (mech_array.length)
     for (const mech of mech_array) {
         args = args.concat(serialize_mech(mech))
     }
 
+    // instructions_sets
     args.push (program_length_array.length)
     args = args.concat(program_length_array)
 
+    // instructions (serialized)
     args.push (program_serialized_array.length)
     args = args.concat(program_serialized_array)
 
+    // operators_inputs
     args.push (operator_input_serialized_array.length)
     for (const grid of operator_input_serialized_array){
         args = args.concat(serialize_grid(grid))
     }
-    // console.log ('operator_input_serialized_array:', operator_input_serialized_array)
 
+    // operators_outputs
     args.push (operator_output_serialized_array.length)
     for (const grid of operator_output_serialized_array){
         args = args.concat(serialize_grid(grid))
     }
-    // console.log ('operator_output_serialized_array:', operator_output_serialized_array)
 
+    // operators_type
     args.push (operator_type_array.length)
     args = args.concat(operator_type_array)
-    // console.log("> Packed args", args)
+
+    // mech_volumes
+    if (mechVolumes.length !== mech_array.length) throw(`mechVolumes.length (${mechVolumes.length}) !== mech_array.length (${mech_array.length})`);
+    args.push (mechVolumes.length)
+    args = args.concat(mechVolumes)
+
+    // faucets: AtomFaucetState*,
+    args.push (faucetPositions.length)
+    faucetPositions.forEach((pos, i) => {
+        const faucetState = {id: i, type:0, index: pos}
+        args = args.concat(serialize_atom_faucet_state(faucetState))
+    })
+
+    // sinks: AtomSinkState*,
+    args.push (sinkPositions.length)
+    sinkPositions.forEach((pos, i) => {
+        const sinkState = {id: i, index: pos}
+        args = args.concat(serialize_atom_sink_state(sinkState))
+    })
+
     return args
 
-    // return compileCalldata({
-
-    //     mechs_len: pack(mech_array.length),
-    //     mechs: mech_array,
-
-    //     // instructions_sets_len: pack(program_length_array.length),
-    //     // instructions_sets: program_length_array,
-
-    //     // instructions_len: pack(program_serialized_array.length),
-    //     // instructions: program_serialized_array,
-
-    //     // operators_inputs_len: pack(operator_input_serialized_array.length),
-    //     // operators_inputs: operator_input_serialized_array,
-
-    //     // operators_outputs_len: pack(operator_output_serialized_array.length),
-    //     // operators_outputs: operator_output_serialized_array,
-
-    //     // operators_type_len: pack(operator_type_array.length),
-    //     // operators_type: operator_type_array
-
-    // })
 }
 
 function serialize_mech (mech: Mech) {
@@ -188,6 +228,30 @@ function serialize_mech (mech: Mech) {
 function serialize_grid (grid: Grid) {
     return [grid.x, grid.y]
 }
+
+function serialize_atom_faucet_state (faucetState: AtomFaucetState) {
+    // interface AtomFaucetState {
+    //     id: number
+    //     type: number
+    //     index: Grid
+    // }
+
+    let arr: any[] = [faucetState.id, faucetState.type]
+    arr = arr.concat(serialize_grid(faucetState.index))
+    return arr;
+}
+
+function serialize_atom_sink_state (sinkState: AtomSinkState) {
+    // interface AtomSinkState {
+    //     id: number
+    //     index: Grid
+    // }
+
+    let arr: any[] = [sinkState.id]
+    arr = arr.concat(serialize_grid(sinkState.index))
+    return arr;
+}
+
 
 // pack for starknet.js requirement for compileCalldata()
 function pack (x: number) {

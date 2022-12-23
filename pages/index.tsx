@@ -84,20 +84,6 @@ export default function Home() {
     const [placingFormula, setPlacingFormula] = useState<PlacingFormula>();
     const numOperators = operators.length;
 
-    // React useMemo
-    const calls = useMemo(() => {
-        let instructionSets = programsToInstructionSets(programs);
-        const args = packSolution(instructionSets, mechInitPositions, mechDescriptions, operators);
-        // console.log ('> useMemo: args =', args)
-
-        const tx = {
-            contractAddress: SIMULATOR_ADDR,
-            entrypoint: "simulator",
-            calldata: args,
-        };
-        return [tx];
-    }, [programs, mechInitPositions, mechDescriptions, operators]);
-
     // React states for animation control
     const [animationState, setAnimationState] = useState("Stop");
     const [animationFrame, setAnimationFrame] = useState<number>(0);
@@ -115,6 +101,29 @@ export default function Home() {
 
     // React states for DAW mode
     const [mechVelocities, setMechVelocities] = useState<number[]>([]);
+
+    // React useMemo
+    const calls = useMemo(() => {
+        let instructionSets = programsToInstructionSets(programs);
+        const args = packSolution(
+            instructionSets,
+            mechInitPositions,
+            mechDescriptions,
+            operators,
+            'hello world',
+            mechVelocities,
+            FAUCET_POS_S,
+            SINK_POS_S,
+        );
+        // console.log ('> useMemo: args =', args)
+
+        const tx = {
+            contractAddress: SIMULATOR_ADDR,
+            entrypoint: "simulator",
+            calldata: args,
+        };
+        return [tx];
+    }, [programs, mechInitPositions, mechDescriptions, operators]);
 
     //
     // States derived from React states
