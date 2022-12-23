@@ -95,7 +95,7 @@ export default function Board({
         }
     }
 
-    // compute Grid MidiKeynums
+    // compute Grid MidiKeynums ---
     var tonic = new PitchClass(5, 0) // Traditionally tuned to F
      var fretboard = new FretBoard(
          "guqin_10_string", // name
