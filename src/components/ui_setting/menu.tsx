@@ -68,10 +68,19 @@ export default function Menu({
 
                 <MenuItemStyled>
                     <ListItemIcon>
+                        <LibraryBooksIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onManualClick}>Manual</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
                         <SchoolIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText onClick={onTutorialClick}>Tutorial Mode</ListItemText>
                 </MenuItemStyled>
+
+                <Divider />
 
                 <MenuItemStyled>
                     <ListItemIcon>
@@ -87,6 +96,8 @@ export default function Menu({
                     <ListItemText onClick={onLeaderboardClick}>Arena Leaderboard</ListItemText>
                 </MenuItemStyled>
 
+                <Divider />
+
                 <MenuItemStyled>
                     <ListItemIcon>
                         <MusicVideoIcon fontSize="small" />
@@ -99,13 +110,6 @@ export default function Menu({
                         <LibraryMusicIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText onClick={onMusicLibraryClick}>Music Library</ListItemText>
-                </MenuItemStyled>
-
-                <MenuItemStyled>
-                    <ListItemIcon>
-                        <LibraryBooksIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onManualClick}>Manual</ListItemText>
                 </MenuItemStyled>
 
                 <Divider />
