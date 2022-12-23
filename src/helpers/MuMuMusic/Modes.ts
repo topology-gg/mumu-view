@@ -21,6 +21,8 @@
 Mode Definition Map
 */
 
+export var note_keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'G', 'G#', 'A', 'A#', 'B']
+
 export const modes: { [name: string]: number[] } = {}
 
 modes.major = [2, 2, 1, 2, 2, 2, 1] //avoid notes scale degree 3
@@ -44,9 +46,25 @@ modes.hexatonic = [2, 2, 3, 2, 2, 1] // No avoid notes
 modes.minor_pentatonic = [3, 2, 2, 3, 2]
 modes.minor_hexatonic = [2, 1, 2, 2, 3, 2]
 
+var modeStepsToName = [
+  [modes.major, 'Major'],
+  [modes.mixolydian, 'Mixolydian'], 
+  [modes.dorian, 'Dorian'], 
+  [modes.aeolian, 'Aeolian'],  
+  [modes.phrygian, 'Phrygian'], 
+  [modes.lydian, 'Lydian'], 
+  [modes.locrian, 'Locrian'],  
+  [modes.mixolydian_plus_11, 'Mixolydian Plus 11'], 
+  [modes.melodicminor, 'Melodic Minor'], 
+  [modes.harmonicminor, 'Harmonic Minor'], 
+  [modes.naturalminor, 'Natural Minor'], 
+  [modes.chromatic, 'Chromatic'], 
+  [modes.pentatonic, 'Major Pentatonic'], 
+  [modes.hexatonic, 'Major Hexatonic'],
+  [modes.minor_pentatonic, 'Minor Pentatonic'], 
+  [modes.minor_hexatonic, 'Minor Hexatonic']
+];
 
-//export const major_modes = [modes.pentatonic, modes.lydian]
-//export const minor_modes = [modes.minor_pentatonic, modes.dorian]
 export const major_modes = [modes.pentatonic, modes.hexatonic]
 export const minor_modes = [modes.minor_pentatonic, modes.minor_hexatonic]
 export const mumu_modes = [major_modes, minor_modes]
@@ -89,3 +107,17 @@ lighter_to_dark_modes.dorian = modes.dorian
 lighter_to_dark_modes.aeolian = modes.aeolian
 lighter_to_dark_modes.phrygian = modes.phrygian
 lighter_to_dark_modes.locrian = modes.locrian
+
+
+// Helper function to get mode name string from mode steps
+
+export function getmodeNameBySteps(key: number[]) {
+  for (let i = 0; i < modeStepsToName.length; i++) {
+  
+   if(key.toString() === modeStepsToName[i][0].toString()){
+       var out = modeStepsToName[i][1]
+       }
+   // console.log(key.toString() === modeStepsToName[i][0].toString())
+ }
+ return out;
+ }
