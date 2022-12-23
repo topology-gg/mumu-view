@@ -1,7 +1,17 @@
 import { useState } from "react";
 import SoundFont from '../modules/sf2-player/src';
+import { OperatorState } from "../types/Operator";
 
-export default function DAWPanel ({ sf, handleSetSfFile, sfLoaded, mech_n, mechVelocities, handleMechNoteVelocityChange, animationState }) {
+export default function DAWPanel ({
+    sf,
+    handleSetSfFile,
+    sfLoaded,
+    mech_n,
+    mechVelocities,
+    handleMechNoteVelocityChange,
+    animationState,
+    operatorStates
+}) {
 
     const onChangeSf = (event: any) => {
         if (/.sf2$/.exec(event.target.value)) {
@@ -9,8 +19,11 @@ export default function DAWPanel ({ sf, handleSetSfFile, sfLoaded, mech_n, mechV
         }
     }
 
-    const DIM = '130px'
+    const operatorIndices: number[] = operatorStates.map((oS, i: number) => i)
+    const firingOperators = operatorStates && operatorStates.length>0 ? operatorIndices.filter(i => operatorStates[i].firing) : []
+    console.log('firingOperators:', firingOperators)
 
+    const DIM = '130px'
     // render
     return (
         <div style={{paddingBottom:'0.5rem'}}>
@@ -32,6 +45,13 @@ export default function DAWPanel ({ sf, handleSetSfFile, sfLoaded, mech_n, mechV
             {
                 sfLoaded ? (
                     <>
+                        <p style={{fontSize:'1rem'}}>(Debug) Indices of Firing Formulas</p>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'center', marginBottom:'10px'}}>
+                            {
+                                firingOperators.length>0 ? <p>{JSON.stringify(firingOperators)}</p> : <p>no formula is firing</p>
+                            }
+                        </div>
+
                         <p style={{fontSize:'1rem'}}>Volume Control</p>
                         <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                             {

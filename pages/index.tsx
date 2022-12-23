@@ -993,6 +993,7 @@ export default function Home() {
                 board={board}
                 stats={stats}
                 animationState={animationState}
+                operatorStates={operatorStates}
                 mech_n={numMechs}
                 sfLoaded={sfLoaded}
                 mechVelocities={mechVelocities}

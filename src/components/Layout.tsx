@@ -33,6 +33,7 @@ export default function Layout({
     board,
     stats,
     animationState,
+    operatorStates,
     mech_n,
     mechVelocities,
     sfLoaded,
@@ -154,6 +155,7 @@ export default function Layout({
                                             mechVelocities={mechVelocities}
                                             animationState={animationState}
                                             handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                                            operatorStates={operatorStates}
                                         />
                                     </Box>
                                 </Panel>
