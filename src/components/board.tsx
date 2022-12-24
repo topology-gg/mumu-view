@@ -138,8 +138,8 @@ export default function Board({
                             break;
                     case 2: //Steam Reharmonizes the Musical Sequence
                         fretboard.changeScaleDegree(
-                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9, 
-                            (operatorState.operator.output[0].y + operatorState.operator.output[1].y) % 9
+                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].y
                             );
                         console.log(fretboard.msg);
                             break; 
@@ -158,8 +158,8 @@ export default function Board({
                             break;
                     case 5: // Slow - A chord change two steps that creates a dramatic dropping feeling
                         fretboard.changeTransposeDownTwoSteps(
-                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9, 
-                            (operatorState.operator.output[0].y + operatorState.operator.output[1].y) % 9
+                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].y
                             ); //rotate no matter the x,y inputs
                         console.log(fretboard.msg);
                             break;
@@ -172,8 +172,8 @@ export default function Board({
                             break;
                     case 7: // Bake - Alters the intervals between adjecent grid coordinates 
                         fretboard.changeFrets(
-                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9, 
-                            (operatorState.operator.output[0].y + operatorState.operator.output[1].y) % 9
+                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].y
                             ); //Change Fret Interval Structure
                         console.log(fretboard.msg);
                      break;
