@@ -41,6 +41,10 @@ export default function DAWHandbook() {
             </p>
 
             <p style={{fontSize: CONTENT_FONT_SIZE, marginBottom:'1.5rem'}}>
+                A spirit that is holding onto an object will not make sound.
+            </p>
+
+            <p style={{fontSize: CONTENT_FONT_SIZE, marginBottom:'1.5rem'}}>
                 Similarly, Formulas can precipitate changes that yield satisfying and sometimes non-repeating variation. As more Spirits are introduced, polyphony arises.
             </p>
 
@@ -64,6 +68,10 @@ export default function DAWHandbook() {
                 }
 
             </ol>
+
+            <p style={{fontSize: CONTENT_FONT_SIZE, marginBottom:'1.5rem'}}>
+                Note on UI: Clicking on the grids would play the corresponding notes; try tuning the volume for each mech to accentuate particular melodic lines.
+            </p>
 
             </div>
         </Box>
