@@ -187,6 +187,8 @@ export class FretBoard {
     return out;
   }
 
+  // to modulate slowly, increase cmap index and select chord from map
+
   // dramatic shifting modal chord change, especially distinct from the diatonic operations in setNewChord and changeScaleDegree
 
   changeTransposeDownTwoSteps(x: number, y: number): any {
@@ -213,7 +215,7 @@ export class FretBoard {
     return out;
   }
 
-  flipFrets(): any {
+  flipFrets(x: number, y: number): any {
     var flippedMatrix: number[][] = this.frets.map( (row) =>  row.reverse());
       flippedMatrix.reverse(); 
       this.frets = flippedMatrix;
@@ -221,7 +223,7 @@ export class FretBoard {
       return flippedMatrix;
   }
 
-  rotateFrets(n_rotations: number): any {
+  rotateFrets(n_rotations: number, y: number): any {
     let rotatedMatrix: number[][] = this.frets.map( (row) =>  row.slice());
   
     for (let i = 0; i < n_rotations; i++) {
