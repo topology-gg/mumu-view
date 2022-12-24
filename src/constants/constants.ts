@@ -10,7 +10,7 @@ export const COLLECTION_NAME = 'mumu-s2-daw-events'
 const IS_CHRISTMAS = true
 export const BLANK_COLOR = IS_CHRISTMAS ? '#f2f1ed' : '#ffffff'
 // export const SOUNDFONT_FILENAME = 'SleighTest-1.sf2';
-export const SOUNDFONT_FILENAME = 'SleighBells_Optimized.sf2';
+export const SOUNDFONT_FILENAME = 'SleighBells_Optimized_Lower.sf2';
 // export const SOUNDFONT_FILENAME = 'Bamblong_Optimized.sf2';
 
 export enum Modes {
@@ -200,7 +200,8 @@ export const TO_PRECISION = (x) => {
 export const BLANK_SOLUTION: Solution = {
     mechs: [],
     programs: [],
-    operators: []
+    operators: [],
+    volumes: []
 }
 
 const DEMO_SOLUTION_0: Solution = {
@@ -210,7 +211,8 @@ const DEMO_SOLUTION_0: Solution = {
     programs: [
         'D,S,A,W'
     ],
-    operators: []
+    operators: [],
+    volumes: []
 }
 
 const DEMO_SOLUTION_1: Solution = {
@@ -224,7 +226,8 @@ const DEMO_SOLUTION_1: Solution = {
     ],
     operators: [
         { input:[{x:1,y:0}, {x:2,y:0}], output:[{x:3,y:0}], typ:OPERATOR_TYPES.STIR},
-    ]
+    ],
+    volumes: [0, 0]
 }
 
 const DEMO_SOLUTION_2: Solution = {
@@ -258,7 +261,8 @@ const DEMO_SOLUTION_2: Solution = {
         { input:[{x:4,y:0}, {x:4,y:1}], output:[{x:4,y:2}], typ:OPERATOR_TYPES.SHAKE},
         { input:[{x:3,y:3}, {x:4,y:3}, {x:5,y:3}], output:[{x:5,y:4},{x:6,y:4}], typ:OPERATOR_TYPES.STEAM},
         { input:[{x:1,y:5}], output:[{x:2,y:5}, {x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5}], typ:OPERATOR_TYPES.SMASH},
-    ]
+    ],
+    volumes: [0,0,0,0,0,0,0,0,0,0]
 }
 
 export const DEMO_SOLUTIONS = [
