@@ -55,7 +55,7 @@ export default function Setting({
         renderMode == 'language' ? 300 :
         renderMode == 'connect' ? 450 :
         renderMode == 'manual' ? 600 :
-        renderMode == 'dawhandbook' ? 600 :
+        renderMode == 'dawhandbook' ? 650 :
         renderMode == 'tutorial' ? 700 :
         renderMode == 'musiclib' ? 700 :
         renderMode == 'videotutorials' ? 1030 :
