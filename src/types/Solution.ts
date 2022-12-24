@@ -6,6 +6,7 @@ export default interface Solution {
     mechs: MechState[]
     programs: string[]
     operators: Operator[]
+    volumes: number[]
 }
 
 export interface WrappedSolution {

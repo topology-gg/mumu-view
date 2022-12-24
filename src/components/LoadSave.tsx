@@ -34,9 +34,10 @@ interface LoadSaveProps {
     programs: string[];
     operators: Operator[];
     mode: Modes;
+    volumes: number[];
 }
 
-const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operators, mode }: LoadSaveProps) => {
+const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operators, mode, volumes }: LoadSaveProps) => {
     const { t } = useTranslation();
 
     const [open, setOpen] = useState<boolean>(false);
@@ -100,6 +101,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operators, mo
             mechs: mechInitStates,
             programs: programs,
             operators: operators,
+            volumes: volumes
         };
         saveSolutionToLocal(`${mode}.${saveToName}`, solution);
         console.log("> saved solution:", solution);
@@ -237,6 +239,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operators, mo
                                 mechs: mechInitStates,
                                 programs: programs,
                                 operators: operators,
+                                volumes: volumes
                             };
                             const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
                                 JSON.stringify(solution)

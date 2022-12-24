@@ -90,25 +90,35 @@ const SolutionBoard = ({ loadSolution, isArenaMode=true}) => {
                         <TableBody>
                             {
                                 isArenaMode ? solutions.map((solution, index) => {
-                                    return (
-                                        <SolutionRow
-                                            key={`leaderboard-row-${index}`}
-                                            solution={solution}
-                                            index={index}
-                                            loadSolution={handleLoadSolution}
-                                            isArenaMode={true}
-                                        />
-                                    );
+                                    if ('music_title' in solution && solution.music_title !== ''){ // daw mode
+                                        return <></>
+                                    }
+                                    else{
+                                        return (
+                                            <SolutionRow
+                                                key={`leaderboard-row-${index}`}
+                                                solution={solution}
+                                                index={index}
+                                                loadSolution={handleLoadSolution}
+                                                isArenaMode={true}
+                                            />
+                                        );
+                                    }
                                 }) : solutions.map((solution, index) => {
-                                    return (
-                                        <SolutionRow
-                                            key={`leaderboard-row-${index}`}
-                                            solution={solution}
-                                            index={index}
-                                            loadSolution={handleLoadSolution}
-                                            isArenaMode={false}
-                                        />
-                                    );
+                                    if ( !('music_title' in solution) ){ // legacy documents are all arena mode
+                                        return <></>
+                                    }
+                                    else {
+                                        return (
+                                            <SolutionRow
+                                                key={`leaderboard-row-${index}`}
+                                                solution={solution}
+                                                index={index}
+                                                loadSolution={handleLoadSolution}
+                                                isArenaMode={false}
+                                            />
+                                        );
+                                    }
                                 })
                             }
                         </TableBody>

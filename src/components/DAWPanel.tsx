@@ -47,7 +47,7 @@ export default function DAWPanel ({
             {
                 sfLoaded ? (
                     <>
-                        <p style={{fontSize:'1rem'}}>(Debug) Indices of Firing Formulas</p>
+                        {/* <p style={{fontSize:'1rem'}}>(Debug) Indices of Firing Formulas</p> */}
                         <div style={{
                             display:'flex', flexDirection:'row',
                             marginBottom:'10px', justifyContent: 'center', alignItems:'center',

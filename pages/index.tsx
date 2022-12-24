@@ -126,7 +126,11 @@ export default function Home() {
             calldata: args,
         };
         return [tx];
-    }, [programs, mechInitPositions, mechDescriptions, operators]);
+    }, [
+        programs, mechInitPositions, mechDescriptions,
+        operators, musicTitle, mechVelocities,
+        FAUCET_POS_S, SINK_POS_S
+    ]);
 
     //
     // States derived from React states
@@ -621,6 +625,11 @@ export default function Home() {
 
         // If daw mode => load default soundfont
         await loadSfFileFromURL(`/${SOUNDFONT_FILENAME}`);
+        if (solutionMode == Modes.daw) {
+            setMechVelocities((_) => viewSolution.volumes)
+            console.log('volumes:',viewSolution.volumes)
+        }
+
 
         if (animationState != "Stop") {
             setAnimationState(_ => "Stop");
@@ -714,6 +723,7 @@ export default function Home() {
             mechInitStates={mechInitStates}
             operators={operators}
             programs={programs}
+            volumes={currMode == Modes.daw ? mechVelocities : mechInitStates.map((_) => 0)}
         />
     );
 

@@ -46,8 +46,8 @@
 }
 
 .atomSaffronFree, .atomSaffronPossessed {
-    /* background: url('../src/images/fire.gif') no-repeat; */
-    background: url('../src/images/gift.gif') no-repeat;
+    background: url('../src/images/fire.gif') no-repeat;
+    /* background: url('../src/images/gift.gif') no-repeat; */
     background-position: center;
     background-size: 90%;
 }
@@ -59,8 +59,8 @@
 }
 
 .atomSandglassFree, .atomSandglassPossessed {
-  /* background: url('../src/images/sandglass.gif') no-repeat; */
-  background: url('../src/images/snow.gif') no-repeat;
+  background: url('../src/images/sandglass.gif') no-repeat;
+  /* background: url('../src/images/snow.gif') no-repeat; */
   background-position: center;
   background-size: 90%;
 }

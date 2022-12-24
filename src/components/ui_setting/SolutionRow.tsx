@@ -150,6 +150,7 @@ export default function SolutionRow({ solution, index, loadSolution, isArenaMode
         }),
         programs: programs, // string[]
         operators: operators, // Operator[]
+        volumes: 'mechs_volumes' in solution ? solution.mechs_volumes : solution.mechs.map((_) => 60)
     };
 
     function handleOnClick() {
