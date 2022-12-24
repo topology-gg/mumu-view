@@ -116,7 +116,9 @@ export default function Home() {
             FAUCET_POS_S,
             SINK_POS_S,
         );
-        // console.log ('> useMemo: args =', args)
+        console.log ('> musicTitle to submit:', musicTitle)
+        console.log ('> mechVelocities to submit:', mechVelocities)
+        console.log ('> useMemo: args =', args)
 
         const tx = {
             contractAddress: SIMULATOR_ADDR,

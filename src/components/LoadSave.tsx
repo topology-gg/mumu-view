@@ -151,7 +151,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operators, mo
 
                         {Array.from({ length: SOLUTIONS.length }).map((_, i) =>
                             i == 0 ? (
-                                <MenuItem sx={{pl:5, color:'#333333', mt:1}} onClick={() => {
+                                <MenuItem key={`demo-blank`} sx={{pl:5, color:'#333333', mt:1}} onClick={() => {
                                     onLoadSolutionClick('arena', SOLUTIONS[0]);
                                 }}>
                                     <ListItemIcon>
@@ -160,7 +160,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operators, mo
                                     <ListItemText>{t("demo-blank")}</ListItemText>
                                 </MenuItem>
                             ) : (
-                                <MenuItem sx={{pl:5, color:'#333333'}} onClick={() => {
+                                <MenuItem key={`demo-${i}`} sx={{pl:5, color:'#333333'}} onClick={() => {
                                     onLoadSolutionClick('arena',SOLUTIONS[i]);
                                 }}>
                                     <ListItemIcon>
@@ -177,7 +177,7 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operators, mo
                             {
                                 namespace.map((name: string, name_i: number) => {
                                     return (
-                                        <MenuItem sx={{pl:5, color:'#333333'}} onClick={() => {
+                                        <MenuItem key={`local-saved-${name_i}`} sx={{pl:5, color:'#333333'}} onClick={() => {
                                             const solution = getSolutionFromLocal(name);
                                             const solutionMode: string = name.split('.')[0]
                                             onLoadSolutionClick(solutionMode, solution);

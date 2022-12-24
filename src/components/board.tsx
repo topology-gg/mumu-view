@@ -314,6 +314,7 @@ export default function Board({
 
                                         return (
                                             <Tooltip
+                                                key={`tooltip-unit-${j}-${i}`}
                                                 title={`${j},${i}`}
                                                 disableInteractive
                                                 arrow
