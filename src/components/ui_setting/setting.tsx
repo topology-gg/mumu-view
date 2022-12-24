@@ -11,6 +11,7 @@ import Tutorial from "./Tutorial";
 import { Box, SxProps } from "@mui/material";
 import { BLANK_COLOR, Modes } from "../../constants/constants";
 import VideoTutorials from "./VideoTutorials";
+import DAWHandbook from "./DAWHandbook";
 
 export default function Setting({
     loadSolution, loadMode,
@@ -44,15 +45,17 @@ export default function Setting({
             onDAWModeClick={() => loadMode(Modes.daw)}
             onMusicLibraryClick={() => handleModeChange('musiclib')}
             onVideoTutorialsClick={() => handleModeChange('videotutorials')}
+            onDAWHandbookClick={() => handleModeChange('dawhandbook')}
         />
     )
 
     // compute props
     const modalWidth =
-        renderMode == 'menu' ? 350 :
+        renderMode == 'menu' ? 375 :
         renderMode == 'language' ? 300 :
         renderMode == 'connect' ? 450 :
         renderMode == 'manual' ? 600 :
+        renderMode == 'dawhandbook' ? 600 :
         renderMode == 'tutorial' ? 700 :
         renderMode == 'musiclib' ? 700 :
         renderMode == 'videotutorials' ? 1030 :
@@ -103,6 +106,9 @@ export default function Setting({
                         ) :
                         (renderMode == 'videotutorials') ? (
                             <VideoTutorials />
+                        ) :
+                        (renderMode == 'dawhandbook') ? (
+                            <DAWHandbook />
                         ) :
                         MenuHooked
                     }

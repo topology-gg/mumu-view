@@ -28,6 +28,7 @@ export default function Menu({
     onLeaderboardClick,
     onDAWModeClick,
     onMusicLibraryClick,
+    onDAWHandbookClick,
     onConnectWalletClick,
     onLanguageClick,
     onTutorialClick,
@@ -79,6 +80,13 @@ export default function Menu({
                         <LibraryMusicIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText onClick={onMusicLibraryClick}>Music Library</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <LibraryBooksIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onDAWHandbookClick}>Audio Workstation Handbook</ListItemText>
                 </MenuItemStyled>
 
                 <Divider />

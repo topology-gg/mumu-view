@@ -123,69 +123,79 @@ export default function Board({
                     and the substance types at outputs are as follows: ${JSON.stringify(operatorState.operator.typ.output_atom_types)}.
                 `);
 
-                switch( i ) {
-                    case 0: // Stir - Change Chord Progression in Key
+                switch( operatorState.operator.typ ) {
+
+                    case OPERATOR_TYPES.STIR: // Stir - Change Chord Progression in Key
                         fretboard.setNewChord(
-                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].x,
                             operatorState.operator.output[0].y
                             );
                         console.log(fretboard.msg);
-                            break;
-                    case 1: // Shake - Change Chord Progression in Key
+                        break;
+
+                    case OPERATOR_TYPES.SHAKE: // Shake - Change Chord Progression in Key
                         fretboard.rotateFrets(
-                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].x,
                             operatorState.operator.output[0].y
                             );
                         console.log(fretboard.msg);
-                            break;
-                    case 2: //Steam Reharmonizes the Musical Sequence
+                        break;
+
+                    case OPERATOR_TYPES.STEAM: //Steam - Reharmonizes the Musical Sequence
                         fretboard.changeScaleDegree(
-                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9, 
+                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9,
                             (operatorState.operator.output[0].y + operatorState.operator.output[1].y) % 9
                             );
                         console.log(fretboard.msg);
-                            break; 
-                    case 3:  // Smash - Flips the frets upside down
+                        break;
+
+                    case OPERATOR_TYPES.SMASH:  // Smash - Flips the frets upside down
                         fretboard.flipFrets(
-                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].x,
                             operatorState.operator.output[0].y); //flips no matter the x,y inputs
                         console.log(fretboard.msg);
-                            break;                   
-                    case 4: // Evolve - Evolve the frets mapping
+                        break;
+
+                    case OPERATOR_TYPES.EVOLVE: // Evolve - Evolve the frets mapping
                         fretboard.changeTransposeDownNSteps(
-                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].x,
                             operatorState.operator.output[0].y
                             ); //rotate no matter the x,y inputs
                         console.log(fretboard.msg);
-                            break;
-                    case 5: // Slow - A chord change two steps that creates a dramatic dropping feeling
+                        break;
+
+                    case OPERATOR_TYPES.SLOW: // Slow - A chord change two steps that creates a dramatic dropping feeling
                         fretboard.changeTransposeDownTwoSteps(
-                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9, 
+                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9,
                             (operatorState.operator.output[0].y + operatorState.operator.output[1].y) % 9
                             ); //rotate no matter the x,y inputs
                         console.log(fretboard.msg);
-                            break;
-                    case 6: // Wilt - Changes From Major to Minor Goes from Light to Dark (and vice versa)
+                        break;
+
+                    case OPERATOR_TYPES.WILT: // Wilt - Changes From Major to Minor Goes from Light to Dark (and vice versa)
                         fretboard.changeQuality(
-                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].x,
                             operatorState.operator.output[0].y
                             ); //modulates no matter the x,y inputs
                         console.log(fretboard.msg);
-                            break;
-                    case 7: // Bake - Alters the intervals between adjecent grid coordinates 
+                        break;
+
+                    case OPERATOR_TYPES.BAKE: // Bake - Alters the intervals between adjecent grid coordinates
                         fretboard.changeFrets(
-                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9, 
+                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9,
                             (operatorState.operator.output[0].y + operatorState.operator.output[1].y) % 9
                             ); //Change Fret Interval Structure
                         console.log(fretboard.msg);
-                     break;
+                        break;
+
                     default:
-                    fretboard.setNewChord(
-                        operatorState.operator.output[0].x, 
-                        operatorState.operator.output[0].y
+                        fretboard.setNewChord(
+                            operatorState.operator.output[0].x,
+                            operatorState.operator.output[0].y
                         );
-                    console.log(fretboard.msg);
-                        }
+                        console.log(fretboard.msg);
+
+                    }
             }
         })
     }, [animationFrame])
@@ -331,7 +341,7 @@ export default function Board({
 
                                         if (isConsumed) console.log(`isConsumed at (i,j)=(${i},${j})`);
                                         if (isProduced) console.log(`isProduced at (i,j)=(${i},${j})`);
-                                        
+
                                         const rawUnit = (
                                             <div key={`${j}-${i}`}>
                                                 <Unit
