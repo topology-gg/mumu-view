@@ -125,8 +125,9 @@ export default function Board({
 
                 switch( i ) {
                     case 0: // Stir - Change Chord Progression in Key
-                        fretboard.setNewChord(operatorState.operator.output[0].x, operatorState.operator.output[0].y);
-                        console.log(operatorState.operator.output[1]);
+                        fretboard.setNewChord(
+                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].y);
                         console.log(fretboard.msg);
                             break;
                     case 1: // Shake - Change Chord Progression in Key
