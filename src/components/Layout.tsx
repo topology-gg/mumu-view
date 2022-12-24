@@ -36,6 +36,7 @@ export default function Layout({
     operatorStates,
     mech_n,
     mechVelocities,
+    musicTitle,
     sfLoaded,
     mechProgramming,
     formulaProgramming,
@@ -48,6 +49,7 @@ export default function Layout({
     handleFormulaOnclick,
     handleSetSfFile,
     handleMechNoteVelocityChange,
+    handleMusicTitleChange,
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
@@ -153,8 +155,10 @@ export default function Layout({
                                             sfLoaded={sfLoaded}
                                             mech_n={mech_n}
                                             mechVelocities={mechVelocities}
+                                            musicTitle={musicTitle}
                                             animationState={animationState}
                                             handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                                            handleMusicTitleChange={handleMusicTitleChange}
                                             operatorStates={operatorStates}
                                         />
                                     </Box>

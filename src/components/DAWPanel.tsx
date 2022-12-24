@@ -8,7 +8,9 @@ export default function DAWPanel ({
     sfLoaded,
     mech_n,
     mechVelocities,
+    musicTitle,
     handleMechNoteVelocityChange,
+    handleMusicTitleChange,
     animationState,
     operatorStates
 }) {
@@ -21,7 +23,7 @@ export default function DAWPanel ({
 
     const operatorIndices: number[] = operatorStates.map((oS, i: number) => i)
     const firingOperators = operatorStates && operatorStates.length>0 ? operatorIndices.filter(i => operatorStates[i].firing) : []
-    console.log('firingOperators:', firingOperators)
+    // console.log('firingOperators:', firingOperators)
 
     const DIM = '130px'
     // render
@@ -46,17 +48,29 @@ export default function DAWPanel ({
                 sfLoaded ? (
                     <>
                         <p style={{fontSize:'1rem'}}>(Debug) Indices of Firing Formulas</p>
-                        <div style={{display:'flex', flexDirection:'column', alignItems:'center', marginBottom:'10px'}}>
-                            {
+                        <div style={{
+                            display:'flex', flexDirection:'row',
+                            marginBottom:'10px', justifyContent: 'center', alignItems:'center',
+                        }}>
+                            {/* {
                                 firingOperators.length>0 ? <p>{JSON.stringify(firingOperators)}</p> : <p>no formula is firing</p>
-                            }
+                            } */}
+                            <p style={{fontSize:'0.85rem', marginRight:'5px'}}>Name your music:</p>
+                            <input
+                                onChange={(event) => {
+                                    handleMusicTitleChange(event.target.value);
+                                }}
+                                style={{ width: "10rem", marginRight: "8px", height: "26px", textAlign:'center' }}
+                                placeholder={'jingle bells'}
+                                value={musicTitle}
+                            ></input>
                         </div>
 
                         <p style={{fontSize:'1rem'}}>Volume Control</p>
                         <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                             {
                                 mech_n != 0 ? Array.from({length:mech_n}).map((_,mech_i) => (
-                                    <div style={{display:'flex', flexDirection:'row', marginBottom:'0.5rem'}}>
+                                    <div style={{display:'flex', flexDirection:'row', marginBottom:'0.2rem'}}>
                                         <p style={{padding:'0',margin:'0 1rem 0 0',width:'3rem'}}>Spirit {mech_i}</p>
                                         <input
                                             id="typeinp"

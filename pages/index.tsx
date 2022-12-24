@@ -15,7 +15,7 @@ import Delivery from "../src/components/delivery";
 import Summary from "../src/components/summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
 
-import { BLANK_COLOR, Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY_NON_DAW, ANIM_FRAME_LATENCY_DAW, Lesson_instruction, Lesson_objective } from "../src/constants/constants";
+import { BLANK_COLOR, Modes, Constraints, BLANK_SOLUTION, DEMO_SOLUTIONS, ANIM_FRAME_LATENCY_NON_DAW, ANIM_FRAME_LATENCY_DAW, Lesson_instruction, Lesson_objective, SOUNDFONT_FILENAME } from "../src/constants/constants";
 import { useTranslation } from "react-i18next";
 import "../config/i18n";
 import { useAccount, useStarknetExecute } from "@starknet-react/core";
@@ -101,6 +101,7 @@ export default function Home() {
 
     // React states for DAW mode
     const [mechVelocities, setMechVelocities] = useState<number[]>([]);
+    const [musicTitle, setMusicTitle] = useState<string>('');
 
     // React useMemo
     const calls = useMemo(() => {
@@ -110,7 +111,7 @@ export default function Home() {
             mechInitPositions,
             mechDescriptions,
             operators,
-            currMode == Modes.daw ? 'hello world' : '',
+            currMode == Modes.daw ? musicTitle : '',
             currMode == Modes.daw ? mechVelocities : mechInitPositions.map(_ => 0),
             FAUCET_POS_S,
             SINK_POS_S,
@@ -606,6 +607,10 @@ export default function Home() {
             return prev_copy;
         })
     }
+    function handleMusicTitleChange(value) {
+        if (value.length > 31) return;
+        setMusicTitle ((_) => value);
+    }
 
     async function handleLoadSolutionClick(solutionMode: string, viewSolution: Solution) {
         console.log('viewSolution:', viewSolution)
@@ -613,7 +618,7 @@ export default function Home() {
         setCurrMode((_) => (solutionMode as Modes));
 
         // If daw mode => load default soundfont
-        await loadSfFileFromURL('/Bamblong_Optimized.sf2');
+        await loadSfFileFromURL(`/${SOUNDFONT_FILENAME}`);
 
         if (animationState != "Stop") {
             setAnimationState(_ => "Stop");
@@ -1006,6 +1011,7 @@ export default function Home() {
                 mech_n={numMechs}
                 sfLoaded={sfLoaded}
                 mechVelocities={mechVelocities}
+                musicTitle={musicTitle}
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}
                 midScreenControlProps = {{
@@ -1022,6 +1028,7 @@ export default function Home() {
                 handleFormulaOnclick={(formula_key) => {handleOperatorClick("+", formula_key)}}
                 handleSetSfFile={handleSetSfFile}
                 handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                handleMusicTitleChange={handleMusicTitleChange}
             />
         </>
     );
