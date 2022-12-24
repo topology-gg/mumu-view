@@ -110,8 +110,8 @@ export default function Home() {
             mechInitPositions,
             mechDescriptions,
             operators,
-            'hello world',
-            mechVelocities,
+            currMode == Modes.daw ? 'hello world' : '',
+            currMode == Modes.daw ? mechVelocities : mechInitPositions.map(_ => 0),
             FAUCET_POS_S,
             SINK_POS_S,
         );

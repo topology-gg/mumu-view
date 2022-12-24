@@ -115,7 +115,13 @@ export default function Board({
     useEffect(() => {
         operatorStates.forEach((operatorState, i) => {
             if (operatorState.firing) {
-                console.log(`At frame ${animationFrame}, Formula ${i} of type ${operatorState.operator.typ} is firing.`);
+                console.log(`
+                    At frame ${animationFrame}, Formula ${i} of type ${operatorState.operator.typ} is firing;
+                    This formula spans the following input grids: ${JSON.stringify(operatorState.operator.input)},
+                    and the following output grids: ${JSON.stringify(operatorState.operator.output)};
+                    the substance types at inputs are as follows: ${JSON.stringify(operatorState.operator.typ.input_atom_types)},
+                    and the substance types at outputs are as follows: ${JSON.stringify(operatorState.operator.typ.output_atom_types)}.
+                `);
                 if(i == 0){
                    // fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
                    // console.log(fretboard.msg);

@@ -3,6 +3,9 @@ import { OPERATOR_TYPES } from "../types/Operator";
 import Solution from "../types/Solution";
 import { AtomType } from "../types/AtomState";
 
+export const DB_NAME = 'mumu-indexer-season-2'
+export const COLLECTION_NAME = 'mumu-s2-daw-events'
+
 const IS_CHRISTMAS = true
 export const BLANK_COLOR = IS_CHRISTMAS ? '#f2f1ed' : '#ffffff'
 
