@@ -122,10 +122,70 @@ export default function Board({
                     the substance types at inputs are as follows: ${JSON.stringify(operatorState.operator.typ.input_atom_types)},
                     and the substance types at outputs are as follows: ${JSON.stringify(operatorState.operator.typ.output_atom_types)}.
                 `);
-                if(i == 0){
-                   // fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                   // console.log(fretboard.msg);
-                }
+
+                switch( i ) {
+                    case 0: // Stir - Change Chord Progression in Key
+                        fretboard.setNewChord(
+                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].y
+                            );
+                        console.log(fretboard.msg);
+                            break;
+                    case 1: // Shake - Change Chord Progression in Key
+                        fretboard.rotateFrets(
+                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].y
+                            );
+                        console.log(fretboard.msg);
+                            break;
+                    case 2: //Steam Reharmonizes the Musical Sequence
+                        fretboard.changeScaleDegree(
+                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9, 
+                            (operatorState.operator.output[0].y + operatorState.operator.output[1].y) % 9
+                            );
+                        console.log(fretboard.msg);
+                            break; 
+                    case 3:  // Smash - Flips the frets upside down
+                        fretboard.flipFrets(
+                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].y); //flips no matter the x,y inputs
+                        console.log(fretboard.msg);
+                            break;                   
+                    case 4: // Evolve - Evolve the frets mapping
+                        fretboard.changeTransposeDownNSteps(
+                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].y
+                            ); //rotate no matter the x,y inputs
+                        console.log(fretboard.msg);
+                            break;
+                    case 5: // Slow - A chord change two steps that creates a dramatic dropping feeling
+                        fretboard.changeTransposeDownTwoSteps(
+                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9, 
+                            (operatorState.operator.output[0].y + operatorState.operator.output[1].y) % 9
+                            ); //rotate no matter the x,y inputs
+                        console.log(fretboard.msg);
+                            break;
+                    case 6: // Wilt - Changes From Major to Minor Goes from Light to Dark (and vice versa)
+                        fretboard.changeQuality(
+                            operatorState.operator.output[0].x, 
+                            operatorState.operator.output[0].y
+                            ); //modulates no matter the x,y inputs
+                        console.log(fretboard.msg);
+                            break;
+                    case 7: // Bake - Alters the intervals between adjecent grid coordinates 
+                        fretboard.changeFrets(
+                            (operatorState.operator.output[0].x + operatorState.operator.output[1].x) % 9, 
+                            (operatorState.operator.output[0].y + operatorState.operator.output[1].y) % 9
+                            ); //Change Fret Interval Structure
+                        console.log(fretboard.msg);
+                     break;
+                    default:
+                    fretboard.setNewChord(
+                        operatorState.operator.output[0].x, 
+                        operatorState.operator.output[0].y
+                        );
+                    console.log(fretboard.msg);
+                        }
             }
         })
     }, [animationFrame])
@@ -158,16 +218,7 @@ export default function Board({
 
                 // only open mech makes sound based on its location on the board
                 if (mechState.status == MechStatus.OPEN){
-                    // playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
-                    // notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
-
-                    fretboard.setNewChord(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                    //fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                    //fretboard.changeFrets(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                    //fretboard.changeTransposeDownTwoSteps(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                    console.log(fretboard.msg);
-                    console.log("fretboard.c_map_idx");
-                    console.log(fretboard.c_map_idx);
+                    //fretboard.setNewChord(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
                     playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
                     notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
                 }
@@ -280,11 +331,7 @@ export default function Board({
 
                                         if (isConsumed) console.log(`isConsumed at (i,j)=(${i},${j})`);
                                         if (isProduced) console.log(`isProduced at (i,j)=(${i},${j})`);
-                                        if (isProduced) {
-                                            fretboard.changeTransposeDownNSteps(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                                            console.log(fretboard.msg);
-                                        };
-
+                                        
                                         const rawUnit = (
                                             <div key={`${j}-${i}`}>
                                                 <Unit
