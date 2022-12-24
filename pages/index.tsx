@@ -695,7 +695,7 @@ export default function Home() {
 
         // load default soundfont if in daw mode
         if (mode == Modes.daw) {
-            await loadSfFileFromURL('/Bamblong_Optimized.sf2');
+            await loadSfFileFromURL(`/${SOUNDFONT_FILENAME}`);
         }
     }
 

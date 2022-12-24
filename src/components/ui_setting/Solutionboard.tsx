@@ -17,6 +17,7 @@ const SolutionBoard = ({ loadSolution, isArenaMode=true}) => {
     // const { data: dataAll } = useAllSolutions();
     const solutions: any[] = data?.solutions;
     // const solutionsAll: any[] = dataAll?.solutions;
+    console.log('fetched data:', data);
 
     const handleLoadSolution = (mode, extractedSolution) => {
         loadSolution(mode, extractedSolution);

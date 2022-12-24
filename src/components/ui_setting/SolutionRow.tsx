@@ -158,6 +158,9 @@ export default function SolutionRow({ solution, index, loadSolution, isArenaMode
         loadSolution(mode, extractedSolution);
     }
 
+    // handle DAW-specific fields
+    const musicTitle = 'music_title' in solution ? solution.music_title : ''
+
     // render table row
     return (
         <TableRow key={`sol-row-${index}`} className="solution_row" onClick={() => handleOnClick()}>
@@ -184,7 +187,7 @@ export default function SolutionRow({ solution, index, loadSolution, isArenaMode
                     </TableCell>
                 </> : <>
                     <TableCell key={`sol-account-${index}`}>{solver_name}</TableCell>
-                    <TableCell key={`sol-account-${index}-title`}>{'Title'}</TableCell>
+                    <TableCell key={`sol-account-${index}-title`}>{musicTitle}</TableCell>
                     <TableCell align="left" key={`sol-blocknumber-${index}`} sx={{pr:5}}>
                         {solution._chain.valid_from}
                     </TableCell>

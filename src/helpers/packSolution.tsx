@@ -187,7 +187,7 @@ export default function packSolution (
     args = args.concat(operator_type_array)
 
     // mech_volumes
-    if (mechVolumes.length !== mech_array.length) throw(`mechVolumes.length (${mechVolumes.length}) !== mech_array.length (${mech_array.length})`);
+    // if (mechVolumes.length !== mech_array.length) throw(`mechVolumes.length (${mechVolumes.length}) !== mech_array.length (${mech_array.length})`);
     args.push (mechVolumes.length)
     args = args.concat(mechVolumes)
 
