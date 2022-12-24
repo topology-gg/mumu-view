@@ -155,11 +155,13 @@ export default function Board({
                     // playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
                     // notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
 
-                    //fretboard.setNewChord(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
+                    fretboard.setNewChord(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
                     //fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-                    //console.log(fretboard.msg);
                     //fretboard.changeFrets(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
-
+                    //fretboard.changeTransposeDownTwoSteps(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
+                    console.log(fretboard.msg);
+                    console.log("fretboard.c_map_idx");
+                    console.log(fretboard.c_map_idx);
                     playMidiNum(mech_i, fretboard.frets[mechState.index.x][mechState.index.y]);
                     notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
                 }
@@ -273,7 +275,7 @@ export default function Board({
                                         if (isConsumed) console.log(`isConsumed at (i,j)=(${i},${j})`);
                                         if (isProduced) console.log(`isProduced at (i,j)=(${i},${j})`);
                                         if (isProduced) {
-                                            fretboard.changeScaleDegree(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
+                                            fretboard.changeTransposeDownNSteps(Math.floor(Math.random() * 9),Math.floor(Math.random() * 9));
                                             console.log(fretboard.msg);
                                         };
 

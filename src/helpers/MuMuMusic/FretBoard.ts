@@ -71,7 +71,7 @@ export class FretBoard {
     this.quality = quality
     this.offset = offset
     this.msg = this.fretDataToString()
-    this.c_map_idx = 0
+    this.c_map_idx = this.setCMapIdx()
   }
 
   fretDataToString(): string {
@@ -81,6 +81,36 @@ export class FretBoard {
   // Using note and quality as argument, output the index to collect the good chords
 
   // Returns the 6 chords that sound good in relation to the current tonic/mode
+
+  setCMapIdx(): any {
+    var qualmod = this.quality % 2;
+    var chord_xy = this.c_map[qualmod].indexOf(this.tonic.note % 12);
+
+    if(chord_xy == 0){
+      var initial_idx = 11
+    }else{
+      var initial_idx = chord_xy-1
+    }
+    this.c_map_idx = initial_idx;
+    return initial_idx
+  }
+
+  getChordsAtCMapIdx(): any {
+
+    var chords = [
+      [
+        this.c_map[0][this.c_map_idx],
+        this.c_map[0][(this.c_map_idx + 1) % 12],
+        this.c_map[0][(this.c_map_idx + 2) % 12],
+      ],
+      [
+        this.c_map[1][this.c_map_idx],
+        this.c_map[1][(this.c_map_idx + 1) % 12],
+        this.c_map[1][(this.c_map_idx + 2) % 12],
+      ],
+    ]
+    return chords
+  }
 
   getChordsAtNote(): any {
 
@@ -112,8 +142,9 @@ export class FretBoard {
 
   setNewChord(x: number, y: number): any {
 
-    var chord_options = this.getChordsAtNote();
-
+    //var chord_options = this.getChordsAtNote();
+    var chord_options = this.getChordsAtCMapIdx();
+    
     var new_note = chord_options[y % 2][x % 3];
 
     //console.log('new_note'); 
@@ -151,7 +182,9 @@ export class FretBoard {
     var mu_idx = (this.quality + 1) % 2;
     this.quality = mu_idx;
     this.mode = mumu_modes[mu_idx][(x * y) % mumu_modes[mu_idx].length]
-    return this.calculateFrets();
+    var out = this.calculateFrets();
+    this.setCMapIdx()
+    return out;
   }
 
   // dramatic shifting modal chord change, especially distinct from the diatonic operations in setNewChord and changeScaleDegree
@@ -163,8 +196,9 @@ export class FretBoard {
     }else{
      this.tonic = new PitchClass(this.tonic.note-2, 0) 
     }
-    
-    return this.calculateFrets();
+    var out = this.calculateFrets();
+    this.setCMapIdx()
+    return out;
   }
 
   changeTransposeDownNSteps(x: number, y: number): any {
@@ -174,8 +208,9 @@ export class FretBoard {
     }else{
      this.tonic = new PitchClass(this.tonic.note - modprod, 0) 
     }
-    
-    return this.calculateFrets();
+    var out = this.calculateFrets();
+    this.setCMapIdx()
+    return out;
   }
 
   flipFrets(): any {
