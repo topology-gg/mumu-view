@@ -17,7 +17,7 @@ const SolutionBoard = ({ loadSolution, isArenaMode=true}) => {
     // const { data: dataAll } = useAllSolutions();
     const solutions: any[] = data?.solutions;
     // const solutionsAll: any[] = dataAll?.solutions;
-    console.log('fetched data:', data);
+    // console.log('fetched data:', data);
 
     const handleLoadSolution = (mode, extractedSolution) => {
         loadSolution(mode, extractedSolution);
@@ -39,6 +39,7 @@ const SolutionBoard = ({ loadSolution, isArenaMode=true}) => {
             {
                 isArenaMode ? (
                 <div
+                    key={'leaderboard-stardisc-prompt'}
                     style={{
                         marginBottom: "1.5rem",
                         paddingLeft: '2rem',
@@ -96,7 +97,7 @@ const SolutionBoard = ({ loadSolution, isArenaMode=true}) => {
                                     else{
                                         return (
                                             <SolutionRow
-                                                key={`leaderboard-row-${index}`}
+                                                key={`arena-leaderboard-row-${index}`}
                                                 solution={solution}
                                                 index={index}
                                                 loadSolution={handleLoadSolution}
@@ -104,22 +105,19 @@ const SolutionBoard = ({ loadSolution, isArenaMode=true}) => {
                                             />
                                         );
                                     }
-                                }) : solutions.map((solution, index) => {
-                                    if ( !('music_title' in solution) ){ // legacy documents are all arena mode
-                                        return <></>
-                                    }
-                                    else {
+                                }) : solutions.filter(
+                                        solution => ('music_title' in solution) && (solution.music_title.length > 0)
+                                    ).map((solution, index) => {
                                         return (
                                             <SolutionRow
-                                                key={`leaderboard-row-${index}`}
+                                                key={`music-library-row-${index}`}
                                                 solution={solution}
                                                 index={index}
                                                 loadSolution={handleLoadSolution}
                                                 isArenaMode={false}
                                             />
                                         );
-                                    }
-                                })
+                                    })
                             }
                         </TableBody>
                     </Table>

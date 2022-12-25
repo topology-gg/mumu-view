@@ -26,7 +26,7 @@ import { useAccount, useStarknetExecute, useTransactionReceipt } from "@starknet
 import LayoutBox from "./LayoutBox";
 import DAWPanel from "./DAWPanel";
 
-import { BLANK_COLOR } from "../constants/constants";
+import { BLANK_COLOR, Modes } from "../constants/constants";
 
 const gridStyles: SxProps = {
     display: "flex",
@@ -107,6 +107,12 @@ export default function Layout({
         }
 
         console.log("> connected address:", String(address));
+
+        // temp fix: remind player of naming music before submission in daw mode
+        if (currMode == Modes.daw && musicTitle.length == 0){
+            alert ('Please name your music before submitting it onchain.')
+            return;
+        }
 
         // submit tx
         console.log("> submitting args to simulator() on StarkNet:", callData);
