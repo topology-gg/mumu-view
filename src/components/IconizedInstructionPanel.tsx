@@ -32,6 +32,7 @@ const IconizedInstructionPanel = ({
             {INSTRUCTION_KEYS.map((key, key_i) => {
                 return (
                     <div
+                        key={`iconized-instruction-${key_i}`}
                         style={{
                             display: "flex",
                             flexDirection: "column",

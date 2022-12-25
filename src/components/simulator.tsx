@@ -3,7 +3,7 @@ import AtomState, {AtomStatus, AtomType} from '../types/AtomState';
 import Grid from '../types/Grid'
 import BoardConfig from '../types/BoardConfig';
 import Frame from '../types/Frame';
-import { OperatorType, OPERATOR_TYPES } from '../types/Operator';
+import { OperatorType, OPERATOR_TYPES, OperatorState } from '../types/Operator';
 import { STATIC_COSTS, DYNAMIC_COSTS } from '../types/Cost';
 import { ECDH } from 'crypto';
 
@@ -69,6 +69,12 @@ export default function simulator(
     const frame_init : Frame= {
         mechs: mechs,
         atoms: atoms,
+        operatorStates: boardConfig.operators.map((operator, operator_i) => {
+            return {
+                operator: operator,
+                firing: false,
+            } as OperatorState
+        }),
         grid_populated_bools: grid_populated_bools,
         delivered_accumulated: [],
         cost_accumulated: base_cost,
@@ -130,6 +136,7 @@ function _simulate_one_cycle (
     //
     const mechs_curr = frame_curr.mechs // array of {'id':'mech..', 'index':{x:..,y:..}, 'status':'..', 'typ':'..'}
     const atoms_curr = frame_curr.atoms // array of {'id':'atom..', 'index':{x:..,y:..}, 'status':'..', 'typ':'..'}
+    const operator_states_curr = frame_curr.operatorStates
     const grid_populated_bools = frame_curr.grid_populated_bools // mapping 'x..y..' => true/false
 
     //
@@ -137,6 +144,12 @@ function _simulate_one_cycle (
     //
     var mechs_new: MechState[] = []
     var atoms_new: AtomState[] = JSON.parse(JSON.stringify(atoms_curr)) // object cloning
+    var operator_states_new: OperatorState[] = operator_states_curr.map((operatorState, _) => {
+        return {
+            operator: operatorState.operator,
+            firing: false,
+        } as OperatorState
+    })
     var grid_populated_bools_new: { [key: string] : boolean } = JSON.parse(JSON.stringify(grid_populated_bools)) // object cloning
     var cost_accumulated_new = frame_curr.cost_accumulated // a primitive type variable (number) can be cloned by '='
     var notes = ''
@@ -503,7 +516,7 @@ function _simulate_one_cycle (
     //
     // Iterate through operators
     //
-    for (const operator of boardConfig.operators){
+    boardConfig.operators.forEach((operator, operator_i) => {
 
         // check if input grids are occupied with atoms, and output grids are empty (no partial reaction allowed)
         let operator_grid_condition_met = true
@@ -536,7 +549,8 @@ function _simulate_one_cycle (
             operator.typ.input_atom_types.forEach((supposed_input_type, i) => {
                 match = match && (supposed_input_type == atom_type_for_each_input[i])
             })
-            if (match){
+            if (match){ // operator firing
+
                 notes += operator.typ.description + ';'
 
                 // updates for input; record the ids of consumed atoms
@@ -563,10 +577,13 @@ function _simulate_one_cycle (
                     produced_atom_ids.push(new_id)
                 })
 
+                // mark firing as true for this operator in operatorState
+                operator_states_new[operator_i].firing = true;
+
             }
 
         }
-    }
+    });
 
     //
     // Iterate through atom sinks
@@ -598,6 +615,7 @@ function _simulate_one_cycle (
     const frame_new: Frame = {
         mechs: mechs_new,
         atoms: atoms_new,
+        operatorStates: operator_states_new,
         grid_populated_bools: grid_populated_bools_new,
         delivered_accumulated: delivered_accumulated_new,
         cost_accumulated: cost_accumulated_new,

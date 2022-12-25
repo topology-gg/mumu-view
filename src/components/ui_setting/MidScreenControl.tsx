@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../../styles/Home.module.css";
 import { useTranslation } from "react-i18next";
-
+import { BLANK_COLOR } from "../../constants/constants";
 import { Box } from "@mui/material";
 
 const MidScreenControl = ({ runnable, animationFrame, n_cycles, animationState, handleClick, handleSlideChange }) => {
@@ -20,7 +20,7 @@ const MidScreenControl = ({ runnable, animationFrame, n_cycles, animationState, 
                 justifyContent: "center",
                 alignItems: "center",
                 width: "26rem",
-                backgroundColor: "#ffffff",
+                backgroundColor: BLANK_COLOR,
                 p: "1rem",
                 mt: "1rem",
                 border: 1,
@@ -54,6 +54,7 @@ const MidScreenControl = ({ runnable, animationFrame, n_cycles, animationState, 
                 onChange={handleSlideChange}
                 step="1"
                 style={{ width: "6.5rem" }}
+                disabled={animationState == 'Run'}
             />
 
             {/* ref: https://stackoverflow.com/questions/22885702/html-for-the-pause-symbol-in-audio-and-video-control */}

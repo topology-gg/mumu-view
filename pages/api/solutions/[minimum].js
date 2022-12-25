@@ -1,20 +1,21 @@
 
-import clientPromise from "../../lib/mongodb"
+import clientPromise from "../../../lib/mongodb"
+import { DB_NAME, COLLECTION_NAME } from '../../../src/constants/constants'
 
 export default async function handler(req, res) {
 
     const client = await clientPromise
-    const { account } = req.query
+    const { minimum } = req.query
 
-    const db = client.db('mumu_indexer_s2_1')
+    const db = client.db(DB_NAME)
     const solutions = await db
-        .collection('mumu-s2-events')
+        .collection(COLLECTION_NAME)
         .find({
             instructions: {
                 $not: { $size: 0 }
             },
             delivered: {
-                $ne: 0
+                $gte: parseInt(minimum)
             }
         })
         .sort({

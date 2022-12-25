@@ -5,14 +5,17 @@ import Menu from "./menu";
 import Manual from "./Manual";
 import ConnectWallet from "./ConnectWallet";
 import LanguageSelector from "./LanguageSelector";
-import Leaderboard from "./Leaderboard";
+import SolutionBoard from "./Solutionboard";
 import Tutorial from "./Tutorial";
 
 import { Box, SxProps } from "@mui/material";
+import { BLANK_COLOR, Modes } from "../../constants/constants";
+import VideoTutorials from "./VideoTutorials";
+import DAWHandbook from "./DAWHandbook";
 
 export default function Setting({
     loadSolution, loadMode,
-    renderMode, handleSetRenderMode, open, handleSetOpen, handleArenaModeClick
+    renderMode, handleSetRenderMode, open, handleSetOpen
 }) {
 
     const { t } = useTranslation();
@@ -38,17 +41,24 @@ export default function Setting({
             onConnectWalletClick={() => handleModeChange('connect')}
             onLeaderboardClick={() => handleModeChange('leaderboard')}
             onTutorialClick={() => handleModeChange('tutorial')}
-            onArenaModeClick={() => handleArenaModeClick()}
+            onArenaModeClick={() => loadMode(Modes.arena)}
+            onDAWModeClick={() => loadMode(Modes.daw)}
+            onMusicLibraryClick={() => handleModeChange('musiclib')}
+            onVideoTutorialsClick={() => handleModeChange('videotutorials')}
+            onDAWHandbookClick={() => handleModeChange('dawhandbook')}
         />
     )
 
     // compute props
     const modalWidth =
-        renderMode == 'menu' ? 300 :
+        renderMode == 'menu' ? 375 :
         renderMode == 'language' ? 300 :
         renderMode == 'connect' ? 450 :
         renderMode == 'manual' ? 600 :
+        renderMode == 'dawhandbook' ? 650 :
         renderMode == 'tutorial' ? 700 :
+        renderMode == 'musiclib' ? 700 :
+        renderMode == 'videotutorials' ? 1030 :
         1100 // leaderboard width
 
     // render
@@ -67,6 +77,7 @@ export default function Setting({
             >
                 <Box sx={{
                     pt: 3, pb: 0, pl: 0, pr: 0, fontFamily: "var(--font-family-secondary)",
+                    backgroundColor: BLANK_COLOR
                 }}>
                     {
                         (renderMode == 'menu') ? (
@@ -85,10 +96,19 @@ export default function Setting({
                             />
                         ) :
                         (renderMode == 'leaderboard') ? (
-                            <Leaderboard loadSolution={loadSolution} />
+                            <SolutionBoard loadSolution={loadSolution} isArenaMode={true}/>
+                        ) :
+                        (renderMode == 'musiclib') ? (
+                            <SolutionBoard loadSolution={loadSolution} isArenaMode={false}/>
                         ) :
                         (renderMode == 'tutorial') ? (
                             <Tutorial loadMode={loadMode} />
+                        ) :
+                        (renderMode == 'videotutorials') ? (
+                            <VideoTutorials />
+                        ) :
+                        (renderMode == 'dawhandbook') ? (
+                            <DAWHandbook />
                         ) :
                         MenuHooked
                     }

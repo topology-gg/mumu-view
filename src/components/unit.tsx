@@ -13,6 +13,7 @@ interface UnitProps {
     mechHighlight?: boolean;
     isSmall: boolean;
     onClick?: () => void;
+    onMouseDown?: () => void;
     isConsumed?: boolean;
     isProduced?: boolean;
 }
@@ -27,6 +28,7 @@ export default function Unit({
     mechHighlight,
     isSmall,
     onClick,
+    onMouseDown,
     isConsumed,
     isProduced,
 }: UnitProps) {
@@ -96,6 +98,7 @@ export default function Unit({
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
             onClick={onClick}
+            onMouseDown={onMouseDown}
             style={{
                 ...divStyle,
                 ...animationStyle,

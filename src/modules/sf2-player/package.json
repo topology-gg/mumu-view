@@ -1,0 +1,70 @@
+{
+  "name": "sf2-player",
+  "version": "0.0.6",
+  "description": "SoundFont2 Player",
+  "type": "module",
+  "module": "./src/index.js",
+  "exports": {
+    "import": "./src/index.js"
+  },
+  "scripts": {
+    "server": "http-server ./ -p 8080",
+    "esbuild": "npx esbuild src/index.js --bundle --sourcemap --minify --platform=browser --format=esm --outfile=pkg/index.js",
+    "esbuild:watch": "npx esbuild src/index.js --bundle --platform=browser --format=esm --watch --outfile=pkg/index.js",
+    "dev": "npx npm-run-all --parallel esbuild:watch server",
+    "build": "rm -rf pkg/ && mkdir pkg && npm run esbuild",
+    "release": "npm version patch && cp package.json ./pkg/package.json && npm publish ./pkg"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enjikaka/sf2-player.git"
+  },
+  "keywords": [
+    "midi",
+    "WebMidiLink",
+    "wml",
+    "sf2",
+    "soundfont",
+    "synthesizer",
+    "webaudio",
+    "gm",
+    "xg",
+    "gs"
+  ],
+  "author": {
+    "name": "Jeremy Karlsson",
+    "url": "https://github.com/enjikaka"
+  },
+  "contributors": [
+    {
+      "name": "imaya / GREE Inc.",
+      "url": "https://github.com/gree"
+    },
+    {
+      "name": "Logue",
+      "email": "logue@hotmail.co.jp",
+      "url": "https://logue.dev"
+    },
+    {
+      "name": "Jeremy Karlsson",
+      "email": "karlsson@jeremy.se",
+      "url": "https://github.com/enjikaka"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/enjikaka/sf2-player/issues"
+  },
+  "homepage": "https://github.com/enjikaka/sf2-player",
+  "devDependencies": {
+    "@pika/plugin-build-web": "^0.8.1",
+    "@pika/plugin-bundle-web": "^0.8.1",
+    "@pika/plugin-standard-pkg": "^0.8.1",
+    "eslint": "^6.8.0",
+    "eslint-config-tidal": "^1.2.0",
+    "http-server": "^0.12.1"
+  },
+  "dependencies": {
+    "@logue/reverb": "^0.2.2"
+  }
+}

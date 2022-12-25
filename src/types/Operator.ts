@@ -2,6 +2,7 @@ import Grid from "./Grid";
 import { AtomType } from "./AtomState";
 
 export interface OperatorType {
+    key: string;
     symbol: string;
     name: string;
     description: string;
@@ -16,9 +17,15 @@ export default interface Operator {
     typ: OperatorType;
 }
 
+export interface OperatorState {
+    operator: Operator;
+    firing: boolean;
+}
+
 // ref to color palette: https://colorhunt.co/
 export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
     STIR: {
+        key: "STIR",
         description: "vanilla & vanilla = hazelnut",
         symbol: "&",
         name: "Stir ",
@@ -27,6 +34,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         output_atom_types: [AtomType.HAZELNUT],
     },
     SHAKE: {
+        key: "SHAKE",
         description: "hazelnut % hazelnut = chocolate",
         symbol: "%",
         name: "Shake",
@@ -35,6 +43,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         output_atom_types: [AtomType.CHOCOLATE],
     },
     STEAM: {
+        key: "STEAM",
         description: "hazelnut ~ chocolate ~ chocolate  = truffle, vanilla",
         symbol: "^",
         name: "Steam",
@@ -43,6 +52,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         output_atom_types: [AtomType.TRUFFLE, AtomType.VANILLA],
     },
     SMASH: {
+        key: "SMASH",
         description: "truffle = vanilla, vanilla, vanilla, vanilla, saffron",
         symbol: "#",
         name: "Smash",
@@ -51,6 +61,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         output_atom_types: [AtomType.VANILLA, AtomType.VANILLA, AtomType.VANILLA, AtomType.VANILLA, AtomType.SAFFRON],
     },
     EVOLVE: {
+        key: "EVOLVE",
         description: "vanilla § chocolate § chocolate = turtle",
         symbol: "§",
         name: "Evolve",
@@ -59,6 +70,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         output_atom_types: [AtomType.TURTLE],
     },
     SLOW: {
+        key: "SLOW",
         description: "turtle = sandglass, sandglass",
         symbol: "|",
         name: "Slow",
@@ -67,6 +79,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         output_atom_types: [AtomType.SANDGLASS, AtomType.SANDGLASS],
     },
     WILT: {
+        key: "WILT",
         description: "chocolate ~ sandglass = wilted, hazelnut, hazelnut",
         symbol: "~",
         name: "Wilt",
@@ -75,6 +88,7 @@ export const OPERATOR_TYPES: { [key: string]: OperatorType } = {
         output_atom_types: [AtomType.WILTED, AtomType.HAZELNUT, AtomType.HAZELNUT],
     },
     BAKE: {
+        key: "BAKE",
         description: "vanilla ! wilted = saffron, saffron",
         symbol: "!",
         name: "Bake",

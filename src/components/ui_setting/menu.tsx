@@ -17,20 +17,27 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import StadiumIcon from '@mui/icons-material/Stadium';
+import MusicVideoIcon from '@mui/icons-material/MusicVideo';
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 
 export default function Menu({
     width='100%',
     onManualClick,
     onArenaModeClick,
     onLeaderboardClick,
+    onDAWModeClick,
+    onMusicLibraryClick,
+    onDAWHandbookClick,
     onConnectWalletClick,
     onLanguageClick,
     onTutorialClick,
+    onVideoTutorialsClick,
 }) {
 
-    const MenuItemStyled = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
+    const MenuItemStyled = ({ children, sx = {}, disabled=false }: { children: React.ReactNode; sx?: SxProps; disabled?: boolean }) => {
         return (
-            <MenuItem sx={{pl:5, color:'#333333'}}>
+            <MenuItem sx={{pl:5, color:'#222222'}} disabled={disabled}>
                 {children}
             </MenuItem>
         )
@@ -38,36 +45,12 @@ export default function Menu({
 
 
     return (
-        <Paper sx={{ width: width, maxWidth: '100%'}} elevation={0}>
+        <Paper sx={{ width: width, maxWidth: '100%', backgroundColor:'#ffffff00'}} elevation={0}>
             <MenuList>
 
                 <ListItemText sx={{textAlign:'center', pb:2}}>MuMu: Season 2</ListItemText>
 
                 <Divider />
-
-                <MenuItemStyled>
-                    <ListItemIcon>
-                        <WalletIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onConnectWalletClick}>Connect Wallet</ListItemText>
-                    {/* <Typography variant="body2" color="text.secondary">
-                        ⌘X
-                    </Typography> */}
-                </MenuItemStyled>
-
-                <MenuItemStyled>
-                    <ListItemIcon>
-                        <LanguageIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onLanguageClick}>Language</ListItemText>
-                </MenuItemStyled>
-
-                <MenuItemStyled>
-                    <ListItemIcon>
-                        <SchoolIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onTutorialClick}>Tutorial Mode</ListItemText>
-                </MenuItemStyled>
 
                 <MenuItemStyled>
                     <ListItemIcon>
@@ -83,11 +66,64 @@ export default function Menu({
                     <ListItemText onClick={onLeaderboardClick}>Arena Leaderboard</ListItemText>
                 </MenuItemStyled>
 
+                <Divider />
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <MusicVideoIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onDAWModeClick}>Audio Workstation Mode</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <LibraryMusicIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onMusicLibraryClick}>Music Library</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <LibraryBooksIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onDAWHandbookClick}>Audio Workstation Handbook</ListItemText>
+                </MenuItemStyled>
+
+                <Divider />
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <WalletIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onConnectWalletClick}>Connect Wallet</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <LanguageIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onLanguageClick}>Language</ListItemText>
+                </MenuItemStyled>
+
                 <MenuItemStyled>
                     <ListItemIcon>
                         <LibraryBooksIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText onClick={onManualClick}>Manual</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <SchoolIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onTutorialClick}>Tutorial Mode</ListItemText>
+                </MenuItemStyled>
+
+                <MenuItemStyled>
+                    <ListItemIcon>
+                        <OndemandVideoIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText onClick={onVideoTutorialsClick}>Video Tutorials</ListItemText>
                 </MenuItemStyled>
 
                 <Divider />

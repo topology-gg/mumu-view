@@ -10,19 +10,21 @@ import Frame from "../src/types/Frame";
 
 import UnitState, { BgStatus, BorderStatus, UnitText } from "../src/types/UnitState";
 import Grid from "../src/types/Grid";
-import Operator, { OPERATOR_TYPES, PlacingFormula } from "../src/types/Operator";
+import Operator, { OperatorState, OPERATOR_TYPES, PlacingFormula } from "../src/types/Operator";
 import Delivery from "../src/components/delivery";
 import Summary from "../src/components/summary";
 import { isGridOOB, areGridsNeighbors } from "../src/helpers/gridHelpers";
-
 import {
+    BLANK_COLOR,
     Modes,
     Constraints,
     BLANK_SOLUTION,
     DEMO_SOLUTIONS,
-    ANIM_FRAME_LATENCY,
+    ANIM_FRAME_LATENCY_NON_DAW,
+    ANIM_FRAME_LATENCY_DAW,
     Lesson_instruction,
     Lesson_objective,
+    SOUNDFONT_FILENAME
 } from "../src/constants/constants";
 import { useTranslation } from "react-i18next";
 import "../config/i18n";
@@ -41,6 +43,7 @@ import FormulaBlueprint from "../src/components/FormulaBlueprint";
 import { placingFormulaToOperator } from "../src/helpers/typeMapping";
 import Board from "../src/components/board";
 import { Delete } from "@mui/icons-material";
+import SoundFont from '../src/modules/sf2-player/src';
 
 export default function Home() {
     const { t } = useTranslation();
@@ -86,23 +89,9 @@ export default function Home() {
     const numMechs = programs.length;
 
     // React states for operators
-    const [operatorStates, setOperatorStates] = useState<Operator[]>(BLANK_SOLUTION.operators);
+    const [operators, setOperators] = useState<Operator[]>(BLANK_SOLUTION.operators);
     const [placingFormula, setPlacingFormula] = useState<PlacingFormula>();
-    const numOperators = operatorStates.length;
-
-    // React useMemo
-    const calls = useMemo(() => {
-        let instructionSets = programsToInstructionSets(programs);
-        const args = packSolution(instructionSets, mechInitPositions, mechDescriptions, operatorStates);
-        // console.log ('> useMemo: args =', args)
-
-        const tx = {
-            contractAddress: SIMULATOR_ADDR,
-            entrypoint: "simulator",
-            calldata: args,
-        };
-        return [tx];
-    }, [programs, mechInitPositions, mechDescriptions, operatorStates]);
+    const numOperators = operators.length;
 
     // React states for animation control
     const [animationState, setAnimationState] = useState("Stop");
@@ -118,6 +107,39 @@ export default function Home() {
     const [operatorInputHighlight, setOperatorInputHighlight] = useState<boolean[]>(operatorInputHighlightInit);
 
     const [mechIndexHighlighted, setMechIndexHighlighted] = useState<number>(-1);
+
+    // React states for DAW mode
+    const [mechVelocities, setMechVelocities] = useState<number[]>([]);
+    const [musicTitle, setMusicTitle] = useState<string>('');
+
+    // React useMemo
+    const calls = useMemo(() => {
+        let instructionSets = programsToInstructionSets(programs);
+        const args = packSolution(
+            instructionSets,
+            mechInitPositions,
+            mechDescriptions,
+            operators,
+            currMode == Modes.daw ? musicTitle : '',
+            currMode == Modes.daw ? mechVelocities : mechInitPositions.map(_ => 0),
+            FAUCET_POS_S,
+            SINK_POS_S,
+        );
+        // console.log ('> musicTitle to submit:', musicTitle)
+        // console.log ('> mechVelocities to submit:', mechVelocities)
+        // console.log ('> useMemo: args =', args)
+
+        const tx = {
+            contractAddress: SIMULATOR_ADDR,
+            entrypoint: "simulator",
+            calldata: args,
+        };
+        return [tx];
+    }, [
+        programs, mechInitPositions, mechDescriptions,
+        operators, musicTitle, mechVelocities,
+        FAUCET_POS_S, SINK_POS_S
+    ]);
 
     //
     // States derived from React states
@@ -144,28 +166,23 @@ export default function Home() {
     });
     const frame = frames?.[animationFrame];
     const atomStates = frame?.atoms || atomInitStates;
-    const mechStates = !frame
-        ? mechInitStates
-        : animationState == "Stop" && animationFrame == 0
-        ? mechInitStates
-        : frame.mechs;
+    const mechStates = !frame ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : frame.mechs;
+    const operatorStates: OperatorState[] = !frame ? operators.map(o => {
+        return {operator:o, firing:false} as OperatorState
+    }) : frame.operatorStates
     const unitStates = setVisualForStates(atomStates, mechStates, unitStatesInit) as UnitState[][];
 
-    let consumableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map((_) =>
-        Array.from({ length: DIM }).map((_) => null)
-    );
-    for (const operatorState of operatorStates) {
-        operatorState.input.forEach((grid, i) => {
-            consumableAtomTypes[grid.x][grid.y] = operatorState.typ.input_atom_types[i];
-        });
+    let consumableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
+        _ => Array.from({ length: DIM }).map(_ => null)
+    )
+    for (const operator of operators){
+        operator.input.forEach((grid, i) => {consumableAtomTypes[grid.x][grid.y] = operator.typ.input_atom_types[i]})
     }
-    let produceableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map((_) =>
-        Array.from({ length: DIM }).map((_) => null)
-    );
-    for (const operatorState of operatorStates) {
-        operatorState.output.forEach((grid, i) => {
-            produceableAtomTypes[grid.x][grid.y] = operatorState.typ.output_atom_types[i];
-        });
+    let produceableAtomTypes: AtomType[][] = Array.from({ length: DIM }).map(
+        _ => Array.from({ length: DIM }).map(_ => null)
+    )
+    for (const operator of operators){
+        operator.output.forEach((grid, i) => {produceableAtomTypes[grid.x][grid.y] = operator.typ.output_atom_types[i]})
     }
 
     const delivered = frame?.delivered_accumulated;
@@ -302,10 +319,10 @@ export default function Home() {
     function isOperatorPlacementLegal() {
         // impurity by dependencies: operatorStates, constants such as faucet and sink positions
 
-        if (!operatorStates) return false;
-        if (isAnyOperatorPositionInvalid(operatorStates)) return false;
+        if (!operators) return false;
+        if (isAnyOperatorPositionInvalid(operators)) return false;
 
-        for (const operator of operatorStates) {
+        for (const operator of operators) {
             if (isOperatorPositionInvalid(operator)) return false;
         }
 
@@ -338,8 +355,8 @@ export default function Home() {
         }
 
         // Operators
-        if (operatorStates && !isAnyOperatorPositionInvalid(operatorStates)) {
-            for (const operator of operatorStates) {
+        if (operators && !isAnyOperatorPositionInvalid(operators)) {
+            for (const operator of operators) {
                 if (isOperatorPositionInvalid(operator)) continue;
 
                 for (const grid of operator.input) {
@@ -419,6 +436,11 @@ export default function Home() {
                 prev_copy.push(INIT_DESCRIPTION);
                 return prev_copy;
             });
+            setMechVelocities((prev) => {
+                let prev_copy = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(60);
+                return prev_copy;
+            })
         }
     }
 
@@ -429,7 +451,7 @@ export default function Home() {
         if (mode === "+" && numOperators < MAX_NUM_OPERATORS) {
             setPlacingFormula({ type: typ, grids: [] });
         } else if (mode === "-" && numOperators > 0) {
-            setOperatorStates((prev) => {
+            setOperators((prev) => {
                 let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
                 prev_copy.pop();
                 return prev_copy;
@@ -437,8 +459,7 @@ export default function Home() {
         }
     }
     function handleFormulaDelete(operator_i) {
-        setOperatorStates((prev) => {
-            ``;
+        setOperators((prev) => {
             let prev_copy: Operator[] = JSON.parse(JSON.stringify(prev));
             prev_copy.splice(operator_i, 1);
             return prev_copy;
@@ -469,10 +490,11 @@ export default function Home() {
             else if (animationState == "Pause") {
                 // Begin animation
                 setAnimationState("Run");
+                const latency = currMode == Modes.daw ? ANIM_FRAME_LATENCY_DAW : ANIM_FRAME_LATENCY_NON_DAW
                 setLoop(
                     setInterval(() => {
                         simulationLoop(frames);
-                    }, ANIM_FRAME_LATENCY)
+                    }, latency)
                 );
             }
 
@@ -498,7 +520,7 @@ export default function Home() {
                             index: { x: sink_pos.x, y: sink_pos.y },
                         };
                     }),
-                    operators: operatorStates,
+                    operators: operators,
                 };
 
                 // Run simulation to get all frames and set to reference
@@ -520,10 +542,11 @@ export default function Home() {
 
                 // Begin animation
                 setAnimationState("Run");
+                const latency = currMode == Modes.daw ? ANIM_FRAME_LATENCY_DAW : ANIM_FRAME_LATENCY_NON_DAW
                 setLoop(
                     setInterval(() => {
                         simulationLoop(simulatedFrames);
-                    }, ANIM_FRAME_LATENCY)
+                    }, latency)
                 );
                 // console.log('Running with instruction:', instructions)
             }
@@ -536,7 +559,7 @@ export default function Home() {
     }
 
     function setOperator(operator_i: number, new_operator: Operator) {
-        setOperatorStates((prev) => {
+        setOperators((prev) => {
             let prev_copy = JSON.parse(JSON.stringify(prev));
             prev_copy[operator_i] = new_operator;
             return prev_copy;
@@ -569,21 +592,41 @@ export default function Home() {
         setGridHovering(["-", "-"]);
     }
 
-    function handleLoadSolutionClick(viewSolution: Solution) {
+    function handleMechNoteVelocityChange(mech_i, value) {
+        setMechVelocities (prev => {
+            let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
+            prev_copy[mech_i] = value
+            return prev_copy;
+        })
+    }
+    function handleMusicTitleChange(value) {
+        if (value.length > 31) return;
+        setMusicTitle ((_) => value);
+    }
+
+    async function handleLoadSolutionClick(solutionMode: string, viewSolution: Solution) {
+        console.log('viewSolution:', viewSolution)
+        // Switch to solutionMode first
+        setCurrMode((_) => (solutionMode as Modes));
+
+        // If daw mode => load default soundfont
+        await loadSfFileFromURL(`/${SOUNDFONT_FILENAME}`);
+        if (solutionMode == Modes.daw) {
+            setMechVelocities((_) => viewSolution.volumes)
+            console.log('volumes:',viewSolution.volumes)
+        }
+
         if (animationState != "Stop") {
             setAnimationState((_) => "Stop");
             clearInterval(loop); // kill the timer
         }
         setViewSolution((prev) => viewSolution);
 
-        // set mode to arena
-        setCurrMode((_) => Modes.arena);
-
         // set react states to render the solution on the board
         setPrograms((prev) => viewSolution.programs);
         setMechInitPositions((prev) => viewSolution.mechs.map((mech) => mech.index));
         setMechDescriptions((prev) => viewSolution.mechs.map((mech) => mech.description));
-        setOperatorStates((prev) => viewSolution.operators);
+        setOperators((prev) => viewSolution.operators);
         setAnimationFrame((prev) => 0);
         setFrames((_) => null);
         setPlacingFormula((_) => null);
@@ -614,7 +657,7 @@ export default function Home() {
 
             // Check validity of operator
             if (operator.output.length > operator.typ.output_atom_types.length) return prev;
-            if (isAnyOperatorPositionInvalid([...operatorStates, operator])) return prev;
+            if (isAnyOperatorPositionInvalid([...operators, operator])) return prev;
             if (isOperatorPositionInvalid(operator)) return prev;
 
             const complete = operator.output.length === operator.typ.output_atom_types.length;
@@ -624,27 +667,33 @@ export default function Home() {
     }
 
     function handleConfirmFormula() {
-        setOperatorStates((prev) => [...prev, placingFormulaToOperator(placingFormula)]);
+        setOperators((prev) => [...prev, placingFormulaToOperator(placingFormula)]);
         setPlacingFormula(null);
     }
     function handleCancelFormula() {
         setPlacingFormula(null);
     }
 
-    function handleLoadModeClick(mode: Modes) {
+    async function handleLoadModeClick(mode: Modes) {
         // reset various states
         setAnimationState((_) => "Stop");
         clearInterval(loop); // kill the timer
+
         setAnimationFrame((_) => 0);
         setFrames((_) => null);
         setPlacingFormula((_) => null);
         setPrograms((_) => BLANK_SOLUTION.programs);
         setMechInitPositions((_) => BLANK_SOLUTION.mechs.map((mech) => mech.index));
         setMechDescriptions((_) => BLANK_SOLUTION.mechs.map((mech) => mech.description));
-        setOperatorStates((_) => BLANK_SOLUTION.operators);
+        setOperators((_) => BLANK_SOLUTION.operators);
 
         // set current mode
         setCurrMode((_) => mode);
+
+        // load default soundfont if in daw mode
+        if (mode == Modes.daw) {
+            await loadSfFileFromURL(`/${SOUNDFONT_FILENAME}`);
+        }
     }
 
     // Lazy style objects
@@ -655,44 +704,82 @@ export default function Home() {
 
     const loadSave = (
         <LoadSave
+            mode={currMode}
             onLoadSolutionClick={handleLoadSolutionClick}
             mechInitStates={mechInitStates}
-            operatorStates={operatorStates}
+            operators={operators}
             programs={programs}
+            volumes={currMode == Modes.daw ? mechVelocities : mechInitStates.map((_) => 0)}
         />
     );
 
-    const board = (
-        <Board
-            mode={currMode}
-            objective={MODE_OBJECTIVE}
-            instruction={MODE_INSTRUCTION}
-            operatorStates={operatorStates}
-            operatorInputHighlight={operatorInputHighlight}
-            placingFormula={placingFormula}
-            unitStates={unitStates}
-            consumableAtomTypes={consumableAtomTypes}
-            produceableAtomTypes={produceableAtomTypes}
-            mechStates={mechStates}
-            atomStates={atomStates}
-            mechIndexHighlighted={mechIndexHighlighted}
-            handleMouseOver={(x, y) => handleMouseOver(x, y)}
-            handleMouseOut={() => handleMouseOut()}
-            handleUnitClick={(x, y) => handleUnitClick(x, y)}
-            consumedAtomIds={consumedAtomIds}
-            producedAtomIds={producedAtomIds}
-        />
-    );
+    const [sfLoaded, setSfLoaded] = useState<boolean>(false);
+    const [sf, setSF] = useState(new SoundFont());
+    const handleSetSfFile = async (file) => {
+        await sf.loadSoundFontFromFile(file);
+        sf.bank = sf.banks[0]['id'];
+        sf.program = sf.programs[0]['id'];
+        setSfLoaded((_) => true);
+    }
+
+    const loadSfFileFromURL = async (file) => {
+        await sf.loadSoundFontFromURL(file);
+        sf.bank = sf.banks[0]['id'];
+        sf.program = sf.programs[0]['id'];
+        setSfLoaded((_) => true);
+    }
+
+    const playMidiNum = (mech_i: number, midi_num: number) => {
+
+        if (!sfLoaded) {
+            setAnimationState((_) => 'Stop');
+            alert('Please load a soundfont first!');
+            return;
+        }
+
+        var velocity
+        if (mech_i == -1) velocity = 96 // note: midi velocity range is 0-127
+        else velocity = mechVelocities[mech_i]
+
+        sf.noteOn(midi_num, velocity, 0);
+    }
+
+    const stopMidiNum = (midi_num: number) => {
+
+        if (!sfLoaded) return;
+
+        sf.noteOff(midi_num, 0, 0);
+    }
+
+    const board = <Board
+        mode={currMode}
+        animationState={animationState}
+        animationFrame={animationFrame}
+        objective={MODE_OBJECTIVE}
+        instruction={MODE_INSTRUCTION}
+        operatorStates = {operatorStates}
+        operatorInputHighlight = {operatorInputHighlight}
+        placingFormula = {placingFormula}
+        unitStates = {unitStates}
+        consumableAtomTypes = {consumableAtomTypes}
+        produceableAtomTypes = {produceableAtomTypes}
+        mechStates = {mechStates}
+        atomStates = {atomStates}
+        mechIndexHighlighted = {mechIndexHighlighted}
+        handleMouseOver = {(x,y) => handleMouseOver(x,y)}
+        handleMouseOut = {() => handleMouseOut()}
+        handleUnitClick = {(x,y) => handleUnitClick(x,y)}
+        consumedAtomIds = {consumedAtomIds}
+        producedAtomIds = {producedAtomIds}
+        playMidiNum = {playMidiNum}
+        stopMidiNum = {stopMidiNum}
+    />
 
     const stats_box_sx = {
-        p: "1rem",
-        backgroundColor: "#ffffff",
-        fontSize: "0.75rem",
-        alignItems: "center",
-        border: 1,
-        borderRadius: 4,
-        boxShadow: 3,
-    };
+        p:'1rem',backgroundColor:BLANK_COLOR,fontSize:'0.75rem',alignItems:'center',
+        border: 1, borderRadius:4, boxShadow:3,
+    }
+
     const stats = (
         <div>
             {" "}
@@ -715,9 +802,11 @@ export default function Home() {
                 mechInitPositions={mechInitPositions}
                 mechDescriptions={mechDescriptions}
                 mechStates={mechStates}
+                mechVelocities={mechVelocities}
                 onMechInitPositionsChange={setMechInitPositions}
                 onMechDescriptionChange={setMechDescriptions}
                 onMechIndexHighlight={setMechIndexHighlighted}
+                onMechVelocitiesChange={setMechVelocities}
                 onProgramsChange={setPrograms}
                 programs={programs}
             />
@@ -761,20 +850,20 @@ export default function Home() {
                         style={{
                             backgroundColor: operatorInputHighlight[operator_i]
                                 ? theme.palette.primary.main
-                                : operatorStates[operator_i].typ.color + "55",
+                                : operators[operator_i].typ.color + "55",
                         }}
                     >
                         <IconButton size="small" color="secondary" onClick={() => handleFormulaDelete(operator_i)}>
                             <Delete fontSize="small" />
                         </IconButton>
 
-                        <p className={styles.input_name}>{t(operatorStates[operator_i].typ.name)}</p>
+                        <p className={styles.input_name}>{t(operators[operator_i].typ.name)}</p>
 
-                        {Array.from({ length: operatorStates[operator_i].input.length }).map((_, input_i) => (
+                        {Array.from({ length: operators[operator_i].input.length }).map((_, input_i) => (
                             <div key={`input-row-${operator_i}-input-${input_i}`} className={styles.input_grid}>
                                 {input_i == 0 ? (
                                     <p style={{ textAlign: "right" }} className={styles.input_text}>
-                                        {operatorStates[operator_i].typ.symbol}(
+                                        {operators[operator_i].typ.symbol}(
                                     </p>
                                 ) : (
                                     <></>
@@ -784,14 +873,14 @@ export default function Home() {
                                     onChange={(event) => {
                                         // if (event.target.value.length == 0) return;
                                         // if (isNaN(parseInt(event.target.value))) return;
-                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        let newOperator = JSON.parse(JSON.stringify(operators[operator_i]));
                                         newOperator.input[input_i].x = parseInt(event.target.value);
                                         setOperator(operator_i, newOperator);
                                     }}
-                                    defaultValue={operatorStates[operator_i].input[input_i].x}
+                                    defaultValue={operators[operator_i].input[input_i].x}
                                     value={
-                                        !isNaN(operatorStates[operator_i].input[input_i].x)
-                                            ? operatorStates[operator_i].input[input_i].x
+                                        !isNaN(operators[operator_i].input[input_i].x)
+                                            ? operators[operator_i].input[input_i].x
                                             : ""
                                     }
                                     style={{
@@ -808,14 +897,14 @@ export default function Home() {
                                     onChange={(event) => {
                                         // if (event.target.value.length == 0) return;
                                         // if (isNaN(parseInt(event.target.value))) return;
-                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        let newOperator = JSON.parse(JSON.stringify(operators[operator_i]));
                                         newOperator.input[input_i].y = parseInt(event.target.value);
                                         setOperator(operator_i, newOperator);
                                     }}
-                                    defaultValue={operatorStates[operator_i].input[input_i].y}
+                                    defaultValue={operators[operator_i].input[input_i].y}
                                     value={
-                                        !isNaN(operatorStates[operator_i].input[input_i].y)
-                                            ? operatorStates[operator_i].input[input_i].y
+                                        !isNaN(operators[operator_i].input[input_i].y)
+                                            ? operators[operator_i].input[input_i].y
                                             : ""
                                     }
                                     style={{
@@ -828,7 +917,7 @@ export default function Home() {
                                     }}
                                     disabled={animationState == "Stop" ? false : true}
                                 ></input>
-                                {input_i == operatorStates[operator_i].input.length - 1 ? (
+                                {input_i == operators[operator_i].input.length - 1 ? (
                                     <p className={styles.input_text}>{`)=`}</p>
                                 ) : (
                                     <p className={styles.input_text}>{", "}</p>
@@ -836,20 +925,20 @@ export default function Home() {
                             </div>
                         ))}
 
-                        {Array.from({ length: operatorStates[operator_i].output.length }).map((_, output_i) => (
+                        {Array.from({ length: operators[operator_i].output.length }).map((_, output_i) => (
                             <div key={`input-row-${operator_i}-input-${output_i}`} className={styles.input_grid}>
                                 <input
                                     className={styles.program}
                                     onChange={(event) => {
                                         // if (event.target.value.length == 0) return;
-                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        let newOperator = JSON.parse(JSON.stringify(operators[operator_i]));
                                         newOperator.output[output_i].x = parseInt(event.target.value);
                                         setOperator(operator_i, newOperator);
                                     }}
-                                    defaultValue={operatorStates[operator_i].output[output_i].x}
+                                    defaultValue={operators[operator_i].output[output_i].x}
                                     value={
-                                        !isNaN(operatorStates[operator_i].output[output_i].x)
-                                            ? operatorStates[operator_i].output[output_i].x
+                                        !isNaN(operators[operator_i].output[output_i].x)
+                                            ? operators[operator_i].output[output_i].x
                                             : ""
                                     }
                                     style={{
@@ -865,14 +954,14 @@ export default function Home() {
                                     className={styles.program}
                                     onChange={(event) => {
                                         // if (event.target.value.length == 0) return;
-                                        let newOperator = JSON.parse(JSON.stringify(operatorStates[operator_i]));
+                                        let newOperator = JSON.parse(JSON.stringify(operators[operator_i]));
                                         newOperator.output[output_i].y = parseInt(event.target.value);
                                         setOperator(operator_i, newOperator);
                                     }}
-                                    defaultValue={operatorStates[operator_i].output[output_i].y}
+                                    defaultValue={operators[operator_i].output[output_i].y}
                                     value={
-                                        !isNaN(operatorStates[operator_i].output[output_i].y)
-                                            ? operatorStates[operator_i].output[output_i].y
+                                        !isNaN(operators[operator_i].output[output_i].y)
+                                            ? operators[operator_i].output[output_i].y
                                             : ""
                                     }
                                     style={{
@@ -885,7 +974,7 @@ export default function Home() {
                                     }}
                                     disabled={animationState == "Stop" ? false : true}
                                 ></input>
-                                {output_i != operatorStates[operator_i].output.length - 1 && (
+                                {output_i != operators[operator_i].output.length - 1 && (
                                     <p className={styles.input_text}>{`,`}</p>
                                 )}
                             </div>
@@ -906,10 +995,16 @@ export default function Home() {
             </Head>
 
             <Layout
+                currMode={currMode}
                 loadSave={loadSave}
                 board={board}
                 stats={stats}
                 animationState={animationState}
+                operatorStates={operatorStates}
+                mech_n={numMechs}
+                sfLoaded={sfLoaded}
+                mechVelocities={mechVelocities}
+                musicTitle={musicTitle}
                 mechProgramming={mechProgramming}
                 formulaProgramming={formulaProgramming}
                 midScreenControlProps={{
@@ -922,10 +1017,10 @@ export default function Home() {
                 midScreenControlHandleSlideChange={handleSlideChange}
                 loadSolution={handleLoadSolutionClick}
                 loadMode={(mode: Modes) => handleLoadModeClick(mode)}
-                handleArenaModeClick={() => setCurrMode((_) => Modes.arena)}
-                handleFormulaOnclick={(formula_key) => {
-                    handleOperatorClick("+", formula_key);
-                }}
+                handleFormulaOnclick={(formula_key) => {handleOperatorClick("+", formula_key)}}
+                handleSetSfFile={handleSetSfFile}
+                handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                handleMusicTitleChange={handleMusicTitleChange}
                 callData={calls}
             />
         </>

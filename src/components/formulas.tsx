@@ -11,6 +11,7 @@ export default function Formulas({ handleFormulaOnclick, clickDisabled }) {
     Object.entries(OPERATOR_TYPES).forEach(([key, value]) =>
         formulaList.push(
             <FormulaBlueprint
+                key={`formula-blueprint-${key}`}
                 operatorType={value}
                 clickable={!clickDisabled}
                 onclick={() => handleFormulaOnclick(key)}

@@ -65,7 +65,7 @@ const FormulaBlueprint = ({ operatorType, placing, grids = [], clickable = false
             <p className={styles.input_name}>{t(operatorType.name)}:</p>
             {operatorType.symbol}(
             {operatorType.input_atom_types.map((atomType, i) => (
-                <div style={{ position: "relative" }}>
+                <div key={`formula-blueprint-input-${i}`} style={{ position: "relative" }}>
                     <div
                         className={"operand_pointer"}
                         style={{ opacity: placing && currentInputIndex === i ? 1.0 : 0 }}
@@ -88,7 +88,7 @@ const FormulaBlueprint = ({ operatorType, placing, grids = [], clickable = false
             ))}
             )<p style={{ margin: "0 0.5rem 0 0.5rem" }}> = </p>
             {operatorType.output_atom_types.map((atomType, i) => (
-                <div style={{ position: "relative" }}>
+                <div key={`formula-blueprint-output-${i}`} style={{ position: "relative" }}>
                     <div className={"operand_pointer"} style={{ opacity: currentOutputIndex === i ? 1.0 : 0 }} />
                     <Unit
                         atomOpacity={!placing || (inputAtomGridsComplete && outputAtomGrids.length > i) ? 1.0 : 0.5}

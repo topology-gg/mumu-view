@@ -7,10 +7,11 @@ import { useStardiscRegistryByAccount } from "../../../lib/api";
 import { MechStatus, MechType } from "../../types/MechState";
 import { TableCell, TableRow } from "@mui/material";
 import { INSTRUCTION_DECODE } from '../../helpers/packSolution';
+import { Modes } from "../../constants/constants";
 
 const SCALE = 10 ** 6;
 
-export default function LeaderboardRow({ solution, index, loadSolution }) {
+export default function SolutionRow({ solution, index, loadSolution, isArenaMode=true }) {
     const address = solution.solver;
     const account_str_decimal = toBN(address).toString(10);
     const { data: stardisc_query } = useStardiscRegistryByAccount(account_str_decimal); // must be a better way than fetching the entire registry
@@ -149,34 +150,51 @@ export default function LeaderboardRow({ solution, index, loadSolution }) {
         }),
         programs: programs, // string[]
         operators: operators, // Operator[]
+        volumes: 'mechs_volumes' in solution ? solution.mechs_volumes : solution.mechs.map((_) => 60)
     };
 
     function handleOnClick() {
-        loadSolution(extractedSolution);
+        const mode = isArenaMode ? 'arena' : 'daw'
+        console.log('extractedSolution:', extractedSolution)
+        loadSolution(mode, extractedSolution);
     }
+
+    // handle DAW-specific fields
+    const musicTitle = 'music_title' in solution ? solution.music_title : ''
 
     // render table row
     return (
         <TableRow key={`sol-row-${index}`} className="solution_row" onClick={() => handleOnClick()}>
-            <TableCell align="right" key={`sol-rowidx-${index}`}>
-                {index + 1}
-            </TableCell>
-            <TableCell key={`sol-account-${index}`}>{solver_name}</TableCell>
-            <TableCell align="right" key={`sol-delivered-${index}`}>
-                {solution.delivered}
-            </TableCell>
-            <TableCell align="right" key={`sol-static-cost-${index}`}>
-                {solution.static_cost}
-            </TableCell>
-            <TableCell align="right" key={`sol-latency-${index}`}>
-                {solution.latency / SCALE}
-            </TableCell>
-            <TableCell align="right" key={`sol-dynamic-cost-${index}`}>
-                {solution.dynamic_cost / SCALE}
-            </TableCell>
-            <TableCell align="right" key={`sol-blocknumber-${index}`} sx={{pr:5}}>
-                {solution._chain.valid_from}
-            </TableCell>
+            {
+                isArenaMode ? <>
+                    <TableCell align="left" key={`sol-rowidx-${index}`}>
+                        {index + 1}
+                    </TableCell>
+                    <TableCell key={`sol-account-${index}`}>{solver_name}</TableCell>
+                    <TableCell align="right" key={`sol-delivered-${index}`}>
+                        {solution.delivered}
+                    </TableCell>
+                    <TableCell align="right" key={`sol-static-cost-${index}`}>
+                        {solution.static_cost}
+                    </TableCell>
+                    <TableCell align="right" key={`sol-latency-${index}`}>
+                        {solution.latency / SCALE}
+                    </TableCell>
+                    <TableCell align="right" key={`sol-dynamic-cost-${index}`}>
+                        {solution.dynamic_cost / SCALE}
+                    </TableCell>
+                    <TableCell align="right" key={`sol-blocknumber-${index}`} sx={{pr:5}}>
+                        {solution._chain.valid_from}
+                    </TableCell>
+                </> : <>
+                    <TableCell key={`sol-account-${index}`}>{solver_name}</TableCell>
+                    <TableCell key={`sol-account-${index}-title`}>{musicTitle}</TableCell>
+                    <TableCell align="left" key={`sol-blocknumber-${index}`} sx={{pr:5}}>
+                        {solution._chain.valid_from}
+                    </TableCell>
+                </>
+            }
+
         </TableRow>
     );
 }

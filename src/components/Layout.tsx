@@ -24,6 +24,9 @@ import MidScreenControl from "./ui_setting/MidScreenControl";
 
 import { useAccount, useStarknetExecute, useTransactionReceipt } from "@starknet-react/core";
 import LayoutBox from "./LayoutBox";
+import DAWPanel from "./DAWPanel";
+
+import { BLANK_COLOR, Modes } from "../constants/constants";
 
 const gridStyles: SxProps = {
     display: "flex",
@@ -35,10 +38,16 @@ const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps 
 };
 
 export default function Layout({
+    currMode,
     loadSave,
     board,
     stats,
     animationState,
+    operatorStates,
+    mech_n,
+    mechVelocities,
+    musicTitle,
+    sfLoaded,
     mechProgramming,
     formulaProgramming,
     midScreenControlProps,
@@ -46,15 +55,17 @@ export default function Layout({
     midScreenControlHandleSlideChange,
     loadSolution,
     loadMode,
-    handleArenaModeClick,
     handleFormulaOnclick,
+    handleSetSfFile,
+    handleMechNoteVelocityChange,
+    handleMusicTitleChange,
     callData,
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
 
     // states
-    const [openedAccordion, setOpenedAccordion] = useState<string>("accordion1");
+    const [openedAccordion, setOpenedAccordion] = useState<string>(null);
     const [settingOpen, setSettingOpen] = useState<boolean>(true);
     const [settingRenderMode, setSettingRenderMode] = useState<string>("menu");
     const [txnPending, setTxnPending] = useState<boolean>(false);
@@ -97,6 +108,12 @@ export default function Layout({
 
         console.log("> connected address:", String(address));
 
+        // temp fix: remind player of naming music before submission in daw mode
+        if (currMode == Modes.daw && musicTitle.length == 0){
+            alert ('Please name your music before submitting it onchain.')
+            return;
+        }
+
         // submit tx
         console.log("> submitting args to simulator() on StarkNet:", callData);
         try {
@@ -114,6 +131,10 @@ export default function Layout({
     }
 
     const MASCOT_DIM = "13rem";
+    const stats_box_sx = {
+        p:'1rem',backgroundColor:BLANK_COLOR,fontSize:'0.75rem',alignItems:'center',
+        border: 1, borderRadius:4, boxShadow:3,
+    }
 
     return (
         <>
@@ -126,14 +147,14 @@ export default function Layout({
                                     p: 0,
                                     border: 1,
                                     borderRadius: 4,
-                                    backgroundColor: "#ffffff",
+                                    backgroundColor: BLANK_COLOR,
                                     boxShadow: 3,
                                 }}
                             >
                                 <Convo />
 
                                 <div
-                                    className={"mascot"}
+                                    className={"christmas"}
                                     style={{ width: MASCOT_DIM, height: MASCOT_DIM, margin: "0 auto 0.5rem auto" }}
                                 ></div>
 
@@ -146,7 +167,6 @@ export default function Layout({
                                             handleSetOpen={handleSetOpen}
                                             loadSolution={loadSolution}
                                             loadMode={loadMode}
-                                            handleArenaModeClick={handleArenaModeClick}
                                         />
                                     </Grid>
 
@@ -193,16 +213,39 @@ export default function Layout({
                                 />
                             </Panel>
                         </Grid>
-                        <Grid xs={12} md={4} sx={gridStyles}>
-                            <Panel>{stats}</Panel>
-                        </Grid>
+                        {
+                            currMode !== 'daw' ? (
+                                <Grid xs={12} md={4} sx={gridStyles}>
+                                    <Panel>{stats}</Panel>
+                                </Grid>
+                            ) :
+                            <Grid xs={12} md={4} sx={gridStyles}>
+                                <Panel>
+                                    <Box sx={stats_box_sx}>
+                                        <DAWPanel
+                                            sf={null}
+                                            handleSetSfFile={(file) => handleSetSfFile(file)}
+                                            sfLoaded={sfLoaded}
+                                            mech_n={mech_n}
+                                            mechVelocities={mechVelocities}
+                                            musicTitle={musicTitle}
+                                            animationState={animationState}
+                                            handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                                            handleMusicTitleChange={handleMusicTitleChange}
+                                            operatorStates={operatorStates}
+                                        />
+                                    </Box>
+                                </Panel>
+                            </Grid>
+
+                        }
                     </Grid>
 
                     <Grid container spacing={2} flex={1.25} justifyContent={"stretch"}>
                         <Grid xs={12} md={4} sx={gridStyles}>
                             <LayoutBox
                                 scrollable
-                                sx={{ bgcolor: animationState !== "Stop" ? "grey.300" : "common.white" }}
+                                sx={{ bgcolor: animationState !== "Stop" ? "grey.500" : BLANK_COLOR }}
                             >
                                 <Formulas
                                     handleFormulaOnclick={(k) => {
@@ -216,7 +259,7 @@ export default function Layout({
                         <Grid xs={12} md={8} sx={gridStyles}>
                             <LayoutBox
                                 scrollable
-                                sx={{ bgcolor: animationState !== "Stop" ? "grey.300" : "common.white" }}
+                                sx={{ bgcolor: animationState !== "Stop" ? "grey.500" : BLANK_COLOR }}
                             >
                                 <Accordion
                                     key="accordion-1"

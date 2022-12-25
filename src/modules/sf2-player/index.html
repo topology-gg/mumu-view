@@ -1,0 +1,107 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  .hidden {
+    opacity: 0
+  }
+  </style>
+</head>
+<body>
+  <fieldset>
+    <legend>Open SF2 file</legend>
+    <input type="file">
+  </fieldset>
+  <output></output>
+
+  <div id="controls" class="hidden">
+    <br><hr><br>
+
+    <fieldset>
+      <legend>Bank</legend>
+      <select name="bank" id="banks"></select>
+    </fieldset>
+
+    <fieldset>
+      <legend>Program</legend>
+      <select name="program" id="programs"></select>
+    </fieldset>
+
+    <br><hr><br>
+
+    <div id="keys">
+
+    </div>
+  </div>
+
+  <script type="module">
+  import SoundFont from './pkg/index.js';
+
+  const statusOutput = document.querySelector('output');
+  const fileInput = document.querySelector('input');
+
+  const sf = new SoundFont();
+
+  const stringToElements = str => document.createRange().createContextualFragment(str);
+
+  const buttons = stringToElements([...new Array(60)].map((_, i) => i + 30).map(midiNum => `<button>${midiNum}</button>`).join(''));
+
+  window.keys.appendChild(buttons);
+
+  function selectFirstAvailableProgram () {
+    const { banks } = sf;
+
+    const banksFragment = stringToElements(banks.map(bank => `<option value="${bank.id}">${bank.name}</option>`).join());
+
+    window.banks.appendChild(banksFragment);
+
+    sf.bank = banks[0].id;
+
+    const { programs } = sf;
+    const program = programs[0];
+
+    const programsFragment = stringToElements(programs.map(program => `<option value="${program.id}">${program.name}</option>`).join());
+
+    window.programs.appendChild(programsFragment);
+
+    sf.program = program.id;
+
+    statusOutput.textContent = 'Using ' + program.name;
+    window.controls.classList.remove('hidden');
+  }
+
+  [...document.querySelectorAll('button')].forEach(button => {
+    const midiNum = parseInt(button.textContent, 10);
+
+    button.addEventListener('mousedown', () => sf.noteOn(midiNum), false);
+    button.addEventListener('mouseup', () => sf.noteOff(midiNum), false);
+    button.addEventListener('mouseover', () => sf.noteOff(midiNum), false);
+    button.addEventListener('mouseout', () => sf.noteOff(midiNum), false);
+  });
+
+  window.banks.addEventListener('change', e => {
+    sf.bank = e.target.value;
+  })
+
+  window.programs.addEventListener('change', e => {
+    sf.program = e.target.value;
+  })
+
+  fileInput.addEventListener('change', async e => {
+    const file = e.target.files[0];
+
+    statusOutput.textContent = 'Loading soundfont ' + file.name;
+
+    await sf.loadSoundFontFromFile(file);
+
+    statusOutput.textContent = 'Choosing first available program...';
+
+    selectFirstAvailableProgram();
+  })
+
+  </script>
+</body>
+</html>
