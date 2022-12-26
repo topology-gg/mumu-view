@@ -28,7 +28,32 @@ export default function Convo() {
             <p style={{
                 textAlign:'center',
                 fontSize:'12px', padding:'0', margin:'0'
-            }}>A Topology Experiment</p>
+            }}>
+                An Experiment by
+                <a
+                    href="https://www.topology.gg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="stardisc"
+                    style={{
+                        margin: "0 5px 0 5px",
+                    }}
+                >
+                    <strong>Topology</strong>
+                </a>
+                and
+                <a
+                    href="https://twitter.com/CaseyWescott"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="stardisc"
+                    style={{
+                        margin: "0 5px 0 5px",
+                    }}
+                >
+                    <strong>Casey Wescott</strong>
+                </a>
+            </p>
 
         </Box>
     );
