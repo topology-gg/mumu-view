@@ -40,7 +40,7 @@ import LoadSave from "../src/components/LoadSave";
 import theme from "../styles/theme";
 
 import FormulaBlueprint from "../src/components/FormulaBlueprint";
-import { placingFormulaToOperator } from "../src/helpers/typeMapping";
+import { atomTypeToFreeBgStatus, placingFormulaToOperator } from "../src/helpers/typeMapping";
 import Board from "../src/components/board";
 import { Delete } from "@mui/icons-material";
 import SoundFont from '../src/modules/sf2-player/src';
@@ -289,25 +289,8 @@ export default function Home() {
         newStates[atom.index.x][atom.index.y].unit_id = atom.id;
         newStates[atom.index.x][atom.index.y].unit_text = UnitText.EMPTY;
 
-        // TODO: refactor the following code
         if (atom.status == AtomStatus.FREE) {
-            if (atom.typ == AtomType.VANILLA) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_VANILLA_FREE;
-            } else if (atom.typ == AtomType.HAZELNUT) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_HAZELNUT_FREE;
-            } else if (atom.typ == AtomType.CHOCOLATE) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_CHOCOLATE_FREE;
-            } else if (atom.typ == AtomType.TRUFFLE) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TRUFFLE_FREE;
-            } else if (atom.typ == AtomType.SAFFRON) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SAFFRON_FREE;
-            } else if (atom.typ == AtomType.TURTLE) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_TURTLE_FREE;
-            } else if (atom.typ == AtomType.SANDGLASS) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_SANDGLASS_FREE;
-            } else if (atom.typ == AtomType.WILTED) {
-                newStates[atom.index.x][atom.index.y].bg_status = BgStatus.ATOM_WILTED_FREE;
-            }
+            newStates[atom.index.x][atom.index.y].bg_status = atomTypeToFreeBgStatus(atom.typ);
         }
         return newStates;
     }
