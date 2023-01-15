@@ -41,13 +41,24 @@ export default function Setting({
             onConnectWalletClick={() => handleModeChange('connect')}
             onLeaderboardClick={() => handleModeChange('leaderboard')}
             onTutorialClick={() => handleModeChange('tutorial')}
-            onArenaModeClick={() => loadMode(Modes.arena)}
-            onDAWModeClick={() => loadMode(Modes.daw)}
+            onArenaModeClick={() => {
+                handleSetOpen(false);
+                loadMode(Modes.arena);
+            }}
+            onDAWModeClick={() => {
+                handleSetOpen(false);
+                loadMode(Modes.daw);
+            }}
             onMusicLibraryClick={() => handleModeChange('musiclib')}
             onVideoTutorialsClick={() => handleModeChange('videotutorials')}
             onDAWHandbookClick={() => handleModeChange('dawhandbook')}
         />
     )
+
+    function handleLoadSolution (mode, extractedSolution){
+        handleSetOpen(false);
+        loadSolution (mode, extractedSolution);
+    }
 
     // compute props
     const modalWidth =
@@ -96,10 +107,10 @@ export default function Setting({
                             />
                         ) :
                         (renderMode == 'leaderboard') ? (
-                            <SolutionBoard loadSolution={loadSolution} isArenaMode={true}/>
+                            <SolutionBoard loadSolution={handleLoadSolution} isArenaMode={true}/>
                         ) :
                         (renderMode == 'musiclib') ? (
-                            <SolutionBoard loadSolution={loadSolution} isArenaMode={false}/>
+                            <SolutionBoard loadSolution={handleLoadSolution} isArenaMode={false}/>
                         ) :
                         (renderMode == 'tutorial') ? (
                             <Tutorial loadMode={loadMode} />
