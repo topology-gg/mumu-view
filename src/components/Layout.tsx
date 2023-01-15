@@ -100,6 +100,7 @@ export default function Layout({
         function handleEscapeKey(event: KeyboardEvent) {
             if (event.code === 'Escape') {
                 setSettingOpen((prev) => !prev);
+                setSettingRenderMode((_) => 'menu');
             }
         }
         document.addEventListener('keydown', handleEscapeKey)
