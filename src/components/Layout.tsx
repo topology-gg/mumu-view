@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -94,6 +94,17 @@ export default function Layout({
     function handleSetOpen(bool) {
         setSettingOpen((_) => bool);
     }
+
+    // handle ESC keypress
+    useEffect(() => {
+        function handleEscapeKey(event: KeyboardEvent) {
+            if (event.code === 'Escape') {
+                setSettingOpen((prev) => !prev);
+            }
+        }
+        document.addEventListener('keydown', handleEscapeKey)
+        return () => document.removeEventListener('keydown', handleEscapeKey)
+    }, [])
 
     //
     // Handle click event for submitting solution to StarkNet
