@@ -16,6 +16,8 @@ interface UnitProps {
     onMouseDown?: () => void;
     isConsumed?: boolean;
     isProduced?: boolean;
+    gridDimensionRem: number;
+    marginRem: number;
 }
 
 export default function Unit({
@@ -31,6 +33,8 @@ export default function Unit({
     onMouseDown,
     isConsumed,
     isProduced,
+    gridDimensionRem,
+    marginRem,
 }: UnitProps) {
 
     // guardrail
@@ -102,7 +106,10 @@ export default function Unit({
             style={{
                 ...divStyle,
                 ...animationStyle,
-                opacity: atomOpacity || 1.0
+                opacity: atomOpacity || 1.0,
+                margin: `${marginRem}rem`,
+                width: `${gridDimensionRem}rem`,
+                height: `${gridDimensionRem}rem`,
             }}
         >
             {state.unit_text}

@@ -731,7 +731,7 @@ export default function Home() {
         sf.noteOff(midi_num, 0, 0);
     }
 
-    const board = <Board
+    const board = (parentDim) => <Board
         mode={currMode}
         animationState={animationState}
         animationFrame={animationFrame}
@@ -753,6 +753,7 @@ export default function Home() {
         producedAtomIds = {producedAtomIds}
         playMidiNum = {playMidiNum}
         stopMidiNum = {stopMidiNum}
+        parentDim = {parentDim}
     />
 
     const stats_box_sx = {

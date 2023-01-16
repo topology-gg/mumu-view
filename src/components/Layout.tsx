@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -71,6 +71,7 @@ export default function Layout({
     const [txnPending, setTxnPending] = useState<boolean>(false);
     const [submitText, setSubmitText] = useState<string>();
     const [hash, setHash] = useState<string>();
+    const [boardParentWidth, setBoardParentWidth] = useState<number>();
 
     const { execute } = useStarknetExecute({ calls: callData });
 
@@ -148,12 +149,18 @@ export default function Layout({
         border: 1, borderRadius:4, boxShadow:3,
     }
 
+    const ref = useRef(null);
+    useEffect(() => {
+      console.log('width', ref.current ? ref.current.offsetWidth : 0);
+      setBoardParentWidth ((prev) => ref.current ? ref.current.offsetWidth : prev);
+    }, [ref.current]);
+
     return (
         <>
             <ThemeProvider theme={theme}>
                 <Box sx={{ height: { md: "100vh" }, p: 4 }} display="flex" flexDirection="column" gap={2}>
                     <Grid container spacing={2} flex={1} flexShrink={0} disableEqualOverflow justifyContent={"stretch"}>
-                        <Grid xs={12} md={4} sx={gridStyles}>
+                        {/* <Grid xs={12} md={4} sx={gridStyles}>
                             <Panel
                                 sx={{
                                     p: 0,
@@ -211,10 +218,10 @@ export default function Layout({
                                     </Box>
                                 )}
                             </Panel>
-                        </Grid>
-                        <Grid xs={12} md={4} sx={gridStyles}>
-                            <Panel>
-                                {board}
+                        </Grid> */}
+                        <Grid xs={12} md={7} sx={gridStyles} ref={ref} style={{display:'flex', flexDirection:'column'}}>
+                            {/* <Panel> */}
+                                {board(boardParentWidth)}
                                 <MidScreenControl
                                     runnable={midScreenControlProps.runnable}
                                     animationFrame={midScreenControlProps.animationFrame}
@@ -223,37 +230,38 @@ export default function Layout({
                                     handleClick={midScreenControlHandleClick}
                                     handleSlideChange={midScreenControlHandleSlideChange}
                                 />
-                            </Panel>
+                            {/* </Panel> */}
                         </Grid>
                         {
                             currMode !== 'daw' ? (
-                                <Grid xs={12} md={4} sx={gridStyles}>
+                                <Grid xs={12} md={5} sx={gridStyles}>
                                     <Panel>{stats}</Panel>
                                 </Grid>
-                            ) :
-                            <Grid xs={12} md={4} sx={gridStyles}>
-                                <Panel>
-                                    <Box sx={stats_box_sx}>
-                                        <DAWPanel
-                                            sf={null}
-                                            handleSetSfFile={(file) => handleSetSfFile(file)}
-                                            sfLoaded={sfLoaded}
-                                            mech_n={mech_n}
-                                            mechVelocities={mechVelocities}
-                                            musicTitle={musicTitle}
-                                            animationState={animationState}
-                                            handleMechNoteVelocityChange={handleMechNoteVelocityChange}
-                                            handleMusicTitleChange={handleMusicTitleChange}
-                                            operatorStates={operatorStates}
-                                        />
-                                    </Box>
-                                </Panel>
-                            </Grid>
+                            ) : (
+                                <Grid xs={12} md={5} sx={gridStyles}>
+                                    <Panel>
+                                        <Box sx={stats_box_sx}>
+                                            <DAWPanel
+                                                sf={null}
+                                                handleSetSfFile={(file) => handleSetSfFile(file)}
+                                                sfLoaded={sfLoaded}
+                                                mech_n={mech_n}
+                                                mechVelocities={mechVelocities}
+                                                musicTitle={musicTitle}
+                                                animationState={animationState}
+                                                handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                                                handleMusicTitleChange={handleMusicTitleChange}
+                                                operatorStates={operatorStates}
+                                            />
+                                        </Box>
+                                    </Panel>
+                                </Grid>
+                            )
 
                         }
                     </Grid>
 
-                    <Grid container spacing={2} flex={1.25} justifyContent={"stretch"}>
+                    {/* <Grid container spacing={2} flex={1.25} justifyContent={"stretch"}>
                         <Grid xs={12} md={4} sx={gridStyles}>
                             <LayoutBox
                                 scrollable
@@ -306,7 +314,7 @@ export default function Layout({
                                 </Accordion>
                             </LayoutBox>
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                 </Box>
             </ThemeProvider>
         </>

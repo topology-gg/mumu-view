@@ -1,5 +1,5 @@
 import styles from "../../styles/Home.module.css";
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import MechState, { MechStatus, MechType } from "../types/MechState";
 import Unit from "./unit";
 import UnitState, { BgStatus, BorderStatus, UnitText } from "../types/UnitState";
@@ -49,6 +49,7 @@ interface BoardProps {
     stopMidiNum: (midi_num: number) => void,
     consumedAtomIds: string[];
     producedAtomIds: string[];
+    parentDim: number;
 }
 
 // compute Grid MidiKeynums ---
@@ -89,6 +90,7 @@ export default function Board({
     stopMidiNum,
     consumedAtomIds,
     producedAtomIds,
+    parentDim,
 }: BoardProps) {
 
     // render nothing if mechStates is not ready yet
@@ -96,6 +98,22 @@ export default function Board({
 
     // Unpack constants given mode
     const DIM = Constraints[mode].DIM;
+
+    // // React state tracking window dimension
+    // const [windowInnerWidth, setWindowInnerWidth] = useState<number>(0);
+    // const handleWindowResize = useCallback (event => {
+    //     setWindowInnerWidth (window.innerWidth);
+    // }, []);
+
+    // useEffect(() => {
+    //     window.addEventListener('resize', handleWindowResize);
+
+    //     window.dispatchEvent(new Event('resize'));
+
+    //     return () => {
+    //         window.removeEventListener('resize', handleWindowResize);
+    //     };
+    // }, [handleWindowResize]);
 
     // notes played in previous frame
     const [lastSimulationNotes, setLastSimulationNotes] = useState<number[]>([]);
@@ -237,17 +255,29 @@ export default function Board({
         }
     }, [animationFrame]);
 
-    const BOX_DIM: number = 10 * 2 + 10 * 2 * 0.2 + 2;
-    const BOARD_DIM: number = DIM * 2 + DIM * 2 * 0.2 + 2; // unit is rem; reflect the dimensions, padding and margin set in CSS
+    const BOARD_BORDER_REM = 1;
+    const BOARD_PADDING_REM = 1;
+    const LAYOUT_PADDING_REM = 1;
+    const GRID_DIM_REM: number = (
+        parentDim
+         - LAYOUT_PADDING_REM * 16
+         - BOARD_BORDER_REM * 2 * 16
+         - BOARD_PADDING_REM * 2 * 16
+        ) / DIM / 16 * 0.7;
+    const UNIT_MARGIN_REM = GRID_DIM_REM / 10;
+    console.log ("GRID_DIM_REM:", GRID_DIM_REM);
+    const BOX_DIM: number = DIM * GRID_DIM_REM + DIM * GRID_DIM_REM * UNIT_MARGIN_REM + GRID_DIM_REM;
+    const BOARD_DIM: number = DIM * (GRID_DIM_REM + 2 * UNIT_MARGIN_REM) + BOARD_PADDING_REM; // unit is rem; reflect the dimensions, padding and margin set in CSS
     const board = (
         <div
             style={{
-                width: `${BOX_DIM}rem`,
-                height: `${BOX_DIM}rem`,
+                width: `${BOARD_DIM}rem`,
+                height: `${BOARD_DIM}rem`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "flex-start",
+                margin: '0 auto',
             }}
         >
             {(mode !== Modes.arena) && (mode !== Modes.daw) ? (
@@ -294,15 +324,20 @@ export default function Board({
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
-                    width: BOARD_DIM.toString() + "rem",
-                    height: BOARD_DIM.toString() + "rem",
-                    border: 1,
+                    width: `${BOARD_DIM}rem`,
+                    height: `${BOARD_DIM}rem`,
+                    border: `${BOARD_BORDER_REM}rem`,
                     borderRadius: 4,
                     boxShadow: 3,
                     backgroundColor: "#FDF5E6",
                 }}
             >
-                <div className={styles.grid_parent} style={{}}>
+                <div
+                    className={styles.grid_parent}
+                    style={{
+                        padding:`${BOARD_PADDING_REM}rem`
+                    }}
+                >
                     <OperatorGridBg
                         operators={operatorStates.map(oS => oS.operator)}
                         highlighted={operatorInputHighlight}
@@ -365,6 +400,9 @@ export default function Board({
                                                     isSmall={false}
                                                     isConsumed={isConsumed}
                                                     isProduced={isProduced}
+                                                    gridDimensionRem={GRID_DIM_REM}
+                                                    marginRem={UNIT_MARGIN_REM}
+
                                                 />
                                             </div>
                                         )
