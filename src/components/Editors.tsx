@@ -24,30 +24,41 @@ export default function Editors ({
         mt: '1rem',
     }
 
+    const tabStyle = (value, target) => {
+        return {
+            borderTop: `1px solid ${value==target ? '#555555' : '#CCCCCC'}`,
+            borderLeft: `1px solid ${value==target ? '#555555' : '#CCCCCC'}`,
+            borderRight: `1px solid ${value==target ? '#555555' : '#CCCCCC'}`,
+            borderBottom: 'none',
+            backgroundColor: '#FFFFFF00',
+            borderRadius: '5px 5px 0 0'
+        }
+    }
+
     // render
     return (
         <Box sx={editorBoxSx}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={displayedIndex} onChange={handleChange} aria-label="basic tabs example">
-                <Tab label="Add Formula" {...a11yProps(0)} />
-                <Tab label="Formulas" {...a11yProps(1)} />
-                <Tab label="Spirits" {...a11yProps(2)} />
-                </Tabs>
+
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', alignItems:'left' }}>
+                {/* <Tabs value={displayedIndex} onChange={handleChange} aria-label="basic tabs example">
+                    <Tab label="Add Formula" {...a11yProps(0)} />
+                    <Tab label="Formulas" {...a11yProps(1)} />
+                    <Tab label="Spirits" {...a11yProps(2)} />
+                </Tabs> */}
+
+                <button onClick={() => setDisplayedIndex ((_) => 0)} style={tabStyle(displayedIndex, 0)}>Add Formula</button>
+                <button onClick={() => setDisplayedIndex ((_) => 1)} style={tabStyle(displayedIndex, 1)}>Formulas</button>
+                <button onClick={() => setDisplayedIndex ((_) => 2)} style={tabStyle(displayedIndex, 2)}>Spirits</button>
             </Box>
 
             <TabPanel displayedIndex={displayedIndex} index={0}>
-                {/* <LayoutBox
-                    scrollable={true}
-                    sx={{ bgcolor: animationState !== "Stop" ? "grey.500" : BLANK_COLOR }}
-                > */}
-                    <Formulas
-                        handleFormulaOnclick={(k) => {
-                            setDisplayedIndex((_) => 1);
-                            handleFormulaOnclick(k);
-                        }}
-                        clickDisabled={animationState !== "Stop" ? true : false}
-                    />
-                {/* </LayoutBox> */}
+                <Formulas
+                    handleFormulaOnclick={(k) => {
+                        setDisplayedIndex((_) => 1);
+                        handleFormulaOnclick(k);
+                    }}
+                    clickDisabled={animationState !== "Stop" ? true : false}
+                />
             </TabPanel>
 
             <TabPanel displayedIndex={displayedIndex} index={1}>
@@ -87,7 +98,6 @@ function TabPanel(props: TabPanelProps) {
       </div>
     );
 }
-
 
 function a11yProps(index: number) {
     return {

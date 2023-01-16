@@ -42,6 +42,7 @@ const FormulaRow = ({
             <Delete
                 fontSize="small"
                 sx={{ml:1, color:'#AAAAAA', "&:hover": { color:"#555555", cursor:'pointer' }}}
+                onClick={onDelete}
             />
             {/* </IconButton> */}
 
