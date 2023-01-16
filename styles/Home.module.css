@@ -72,8 +72,8 @@
 .input_row {
     display: flex;
     flex-direction: row;
-    border-radius: 10px;
-    margin-bottom: 0.2rem;
+    border-radius: 2rem;
+    margin-top: 0.5rem;
     align-items: center;
 }
 
@@ -92,7 +92,7 @@
     vertical-align: middle;
     text-align: right;
     height: 20px;
-    width: 5rem;
+    width: 3.5rem;
     line-height: 20px;
 }
 

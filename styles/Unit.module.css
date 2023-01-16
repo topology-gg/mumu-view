@@ -11,7 +11,8 @@
   /* border-radius: 50%; */
   transition: color 0.05s ease, border-color 0.05s ease;
   max-width: 300px;
-  color: #BBBBBB;
+  /* color: #BBBBBB; */
+  color: #555555;
   /* z-index: 10; */
 }
 

@@ -5,6 +5,8 @@ import Operator from "../types/Operator";
 import styles from "../../styles/Home.module.css";
 import theme from "../../styles/theme";
 import { useTranslation } from "react-i18next";
+import Unit from "./unit";
+import { AtomTypeToBg, UnitText } from "../types/UnitState";
 
 type FormulaRowProps = {
     disabled: boolean;
@@ -36,112 +38,50 @@ const FormulaRow = ({
                 backgroundColor: highlighted ? theme.palette.primary.main : operator.typ.color + "55",
             }}
         >
-            <IconButton size="small" color="secondary" onClick={onDelete}>
-                <Delete fontSize="small" />
-            </IconButton>
+            {/* <IconButton size="small" onClick={onDelete}> */}
+            <Delete
+                fontSize="small"
+                sx={{ml:1, color:'#AAAAAA', "&:hover": { color:"#555555", cursor:'pointer' }}}
+            />
+            {/* </IconButton> */}
 
             <p className={styles.input_name}>{t(operator.typ.name)}</p>
 
-            {Array.from({ length: operator.input.length }).map((_, input_i) => (
-                <div key={`operator-input-${input_i}`} className={styles.input_grid}>
-                    {input_i == 0 ? (
-                        <p style={{ textAlign: "right" }} className={styles.input_text}>
-                            {operator.typ.symbol}(
-                        </p>
-                    ) : (
-                        <></>
-                    )}
-                    <input
-                        className={styles.program}
-                        onChange={(event) => {
-                            // if (event.target.value.length == 0) return;
-                            // if (isNaN(parseInt(event.target.value))) return;
-                            let newOperator = JSON.parse(JSON.stringify(operator));
-                            newOperator.input[input_i].x = parseInt(event.target.value);
-                            onChange(newOperator);
+            {operator.typ.input_atom_types.map((atomType, i) => (
+                <div key={`formula-blueprint-input-${i}`} style={{ position: "relative" }}>
+
+                    <Unit
+                        atomOpacity={1.0}
+                        state={{
+                            bg_status: AtomTypeToBg[atomType],
+                            border_status: null,
+                            unit_text: UnitText.EMPTY,
+                            unit_id: null,
                         }}
-                        defaultValue={operator.input[input_i].x}
-                        value={!isNaN(operator.input[input_i].x) ? operator.input[input_i].x : ""}
-                        style={{
-                            width: "30px",
-                            height: "25px",
-                            textAlign: "center",
-                            border: "1px solid #CCCCCC",
-                            borderRadius: "10px 0 0 10px",
-                        }}
-                        disabled={disabled}
-                    ></input>
-                    <input
-                        className={styles.program}
-                        onChange={(event) => {
-                            // if (event.target.value.length == 0) return;
-                            // if (isNaN(parseInt(event.target.value))) return;
-                            let newOperator = JSON.parse(JSON.stringify(operator));
-                            newOperator.input[input_i].y = parseInt(event.target.value);
-                            onChange(newOperator);
-                        }}
-                        defaultValue={operator.input[input_i].y}
-                        value={!isNaN(operator.input[input_i].y) ? operator.input[input_i].y : ""}
-                        style={{
-                            width: "30px",
-                            height: "25px",
-                            textAlign: "center",
-                            border: "1px solid #CCCCCC",
-                            borderLeft: "0px",
-                            borderRadius: "0 10px 10px 0",
-                        }}
-                        disabled={disabled}
-                    ></input>
-                    {input_i == operator.input.length - 1 ? (
-                        <p className={styles.input_text}>{`)=`}</p>
-                    ) : (
-                        <p className={styles.input_text}>{", "}</p>
-                    )}
+                        handleMouseOut={() => {}}
+                        handleMouseOver={() => {}}
+                        mechHighlight={false}
+                        isSmall={true}
+                    />
                 </div>
             ))}
+            )<p style={{ margin: "0 0.5rem 0 0.5rem" }}> = </p>
+            {operator.typ.output_atom_types.map((atomType, i) => (
+                <div key={`formula-blueprint-output-${i}`} style={{ position: "relative" }}>
 
-            {Array.from({ length: operator.output.length }).map((_, output_i) => (
-                <div key={`input-${output_i}`} className={styles.input_grid}>
-                    <input
-                        className={styles.program}
-                        onChange={(event) => {
-                            // if (event.target.value.length == 0) return;
-                            let newOperator = JSON.parse(JSON.stringify(operator));
-                            newOperator.output[output_i].x = parseInt(event.target.value);
-                            onChange(newOperator);
+                    <Unit
+                        atomOpacity={1.0}
+                        state={{
+                            bg_status: AtomTypeToBg[atomType],
+                            border_status: null,
+                            unit_text: UnitText.EMPTY,
+                            unit_id: null,
                         }}
-                        defaultValue={operator.output[output_i].x}
-                        value={!isNaN(operator.output[output_i].x) ? operator.output[output_i].x : ""}
-                        style={{
-                            width: "30px",
-                            height: "25px",
-                            textAlign: "center",
-                            border: "1px solid #CCCCCC",
-                            borderRadius: "10px 0 0 10px",
-                        }}
-                        disabled={disabled}
-                    ></input>
-                    <input
-                        className={styles.program}
-                        onChange={(event) => {
-                            // if (event.target.value.length == 0) return;
-                            let newOperator = JSON.parse(JSON.stringify(operator));
-                            newOperator.output[output_i].y = parseInt(event.target.value);
-                            onChange(newOperator);
-                        }}
-                        defaultValue={operator.output[output_i].y}
-                        value={!isNaN(operator.output[output_i].y) ? operator.output[output_i].y : ""}
-                        style={{
-                            width: "30px",
-                            height: "25px",
-                            textAlign: "center",
-                            border: "1px solid #CCCCCC",
-                            borderLeft: "0px",
-                            borderRadius: "0 10px 10px 0",
-                        }}
-                        disabled={disabled}
-                    ></input>
-                    {output_i != operator.output.length - 1 && <p className={styles.input_text}>{`,`}</p>}
+                        handleMouseOut={() => {}}
+                        handleMouseOver={() => {}}
+                        mechHighlight={false}
+                        isSmall={true}
+                    />
                 </div>
             ))}
         </div>

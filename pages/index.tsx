@@ -801,27 +801,10 @@ export default function Home() {
 
     const formulaProgramming = (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            {placingFormula && (
-                <Box sx={{ display: "flex", alignItems: "baseline", gap: 2 }}>
-                    <FormulaBlueprint
-                        placing
-                        operatorType={OPERATOR_TYPES[placingFormula.type]}
-                        grids={placingFormula.grids}
-                    />
-                    <button
-                        onClick={handleConfirmFormula}
-                        disabled={!placingFormula.complete}
-                        className={placingFormula.complete ? "button_glow" : ""}
-                    >
-                        {placingFormula.complete ? t("confirmFormula") : t("placeFormula")}
-                    </button>
-                    <button onClick={handleCancelFormula}>Cancel</button>
-                </Box>
-            )}
 
             {numOperators == 0 ? <p>No formula placed yet.</p> : <></>}
 
-            <Box>
+            <Box sx={{pl:'40px', pr:'40px', textAlign: "center",}}>
                 {operators.map((operator, opIndex) => (
                     <FormulaRow
                         key={`operator-${opIndex}`}
@@ -835,6 +818,29 @@ export default function Home() {
                     />
                 ))}
             </Box>
+
+            {placingFormula && (
+                <Box sx={{ display: "flex", alignItems: "baseline", gap: 0 }}>
+
+                    <FormulaBlueprint
+                        placing
+                        operatorType={OPERATOR_TYPES[placingFormula.type]}
+                        grids={placingFormula.grids}
+                    />
+
+                    <button
+                        onClick={handleConfirmFormula}
+                        disabled={!placingFormula.complete}
+                        className={placingFormula.complete ? "button_glow" : ""}
+                        style={{marginLeft:'0.5rem'}}
+                    >
+                        {/* {placingFormula.complete ? t("confirmFormula") : t("placeFormula")} */}
+                        {t("confirmFormula")}
+                    </button>
+
+                    <button onClick={handleCancelFormula}>x</button>
+                </Box>
+            )}
         </Box>
     );
 

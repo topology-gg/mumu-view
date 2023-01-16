@@ -105,17 +105,17 @@ button:hover {
 .grid {
     display: flex;
     font-size: 0.2em;
-    margin: 0.2rem;
+    /* margin: 0.2rem; */
     padding: 0rem;
-    width: 1rem;
-    height:1rem;
+    /* width: 1rem; */
+    /* height:1rem; */
     text-align: center;
     justify-content: center;
     align-items: center;
     color: inherit;
     cursor: default;
     text-decoration: none;
-    border-radius: 0.5rem;
+    /* border-radius: 0.5rem; */
     transition: color 0.15s ease, border-color 0.15s ease;
     max-width: 300px;
 }
@@ -123,7 +123,7 @@ button:hover {
 .grid:hover {
     outline-width: 1px;
     outline-style: dashed;
-    outline-color: #63e2ff88;
+    outline-color: #777777;
 }
 
 .machine {

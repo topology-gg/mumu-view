@@ -346,7 +346,11 @@ export default function Board({
                     />
 
                     {mechStates.map((mechState, mech_i) => (
-                        <MechUnit mechState={mechState} possessedAtom={possessedAtom[mech_i]} />
+                        <MechUnit
+                            mechState={mechState} possessedAtom={possessedAtom[mech_i]}
+                            gridDimensionRem={GRID_DIM_REM}
+                            unitMarginRem={UNIT_MARGIN_REM}
+                        />
                     ))}
 
                     {Array.from({ length: DIM }).map(

@@ -21,6 +21,7 @@ import Formulas from "./formulas";
 import Convo from "./convo";
 import Submission from "./Submission";
 import MidScreenControl from "./ui_setting/MidScreenControl";
+import Editors from "./Editors";
 
 import { useAccount, useStarknetExecute, useTransactionReceipt } from "@starknet-react/core";
 import LayoutBox from "./LayoutBox";
@@ -28,9 +29,9 @@ import DAWPanel from "./DAWPanel";
 
 import { BLANK_COLOR, Modes } from "../constants/constants";
 
-const gridStyles: SxProps = {
+const flexColumn: SxProps = {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
 };
 
 const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
@@ -160,7 +161,7 @@ export default function Layout({
             <ThemeProvider theme={theme}>
                 <Box sx={{ height: { md: "100vh" }, p: 4 }} display="flex" flexDirection="column" gap={2}>
                     <Grid container spacing={2} flex={1} flexShrink={0} disableEqualOverflow justifyContent={"stretch"}>
-                        {/* <Grid xs={12} md={4} sx={gridStyles}>
+                        {/* <Grid xs={12} md={4} sx={flexColumn}>
                             <Panel
                                 sx={{
                                     p: 0,
@@ -219,7 +220,7 @@ export default function Layout({
                                 )}
                             </Panel>
                         </Grid> */}
-                        <Grid xs={12} md={7} sx={gridStyles} ref={ref} style={{display:'flex', flexDirection:'column'}}>
+                        <Grid xs={12} md={7} sx={flexColumn} ref={ref} style={{display:'flex', flexDirection:'column'}}>
                             {/* <Panel> */}
                                 {board(boardParentWidth)}
                                 <MidScreenControl
@@ -232,37 +233,41 @@ export default function Layout({
                                 />
                             {/* </Panel> */}
                         </Grid>
-                        {
-                            currMode !== 'daw' ? (
-                                <Grid xs={12} md={5} sx={gridStyles}>
-                                    <Panel>{stats}</Panel>
-                                </Grid>
-                            ) : (
-                                <Grid xs={12} md={5} sx={gridStyles}>
-                                    <Panel>
-                                        <Box sx={stats_box_sx}>
-                                            <DAWPanel
-                                                sf={null}
-                                                handleSetSfFile={(file) => handleSetSfFile(file)}
-                                                sfLoaded={sfLoaded}
-                                                mech_n={mech_n}
-                                                mechVelocities={mechVelocities}
-                                                musicTitle={musicTitle}
-                                                animationState={animationState}
-                                                handleMechNoteVelocityChange={handleMechNoteVelocityChange}
-                                                handleMusicTitleChange={handleMusicTitleChange}
-                                                operatorStates={operatorStates}
-                                            />
-                                        </Box>
-                                    </Panel>
-                                </Grid>
-                            )
-
-                        }
+                        <Grid xs={12} md={5} sx={flexColumn}>
+                            <Panel>
+                                {
+                                    currMode !== 'daw' ? (
+                                        <Panel>{stats}</Panel>
+                                    ) : (
+                                        <Panel>
+                                            <Box sx={stats_box_sx}>
+                                                <DAWPanel
+                                                    sf={null}
+                                                    handleSetSfFile={(file) => handleSetSfFile(file)}
+                                                    sfLoaded={sfLoaded}
+                                                    mech_n={mech_n}
+                                                    mechVelocities={mechVelocities}
+                                                    musicTitle={musicTitle}
+                                                    animationState={animationState}
+                                                    handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                                                    handleMusicTitleChange={handleMusicTitleChange}
+                                                    operatorStates={operatorStates}
+                                                />
+                                            </Box>
+                                        </Panel>
+                                    )
+                                }
+                                <Editors
+                                    handleFormulaOnclick={handleFormulaOnclick}
+                                    formulaProgramming={formulaProgramming}
+                                    mechProgramming={mechProgramming}
+                                />
+                            </Panel>
+                        </Grid>
                     </Grid>
 
                     {/* <Grid container spacing={2} flex={1.25} justifyContent={"stretch"}>
-                        <Grid xs={12} md={4} sx={gridStyles}>
+                        <Grid xs={12} md={4} sx={flexColumn}>
                             <LayoutBox
                                 scrollable
                                 sx={{ bgcolor: animationState !== "Stop" ? "grey.500" : BLANK_COLOR }}
@@ -276,7 +281,7 @@ export default function Layout({
                                 />
                             </LayoutBox>
                         </Grid>
-                        <Grid xs={12} md={8} sx={gridStyles}>
+                        <Grid xs={12} md={8} sx={flexColumn}>
                             <LayoutBox
                                 scrollable
                                 sx={{ bgcolor: animationState !== "Stop" ? "grey.500" : BLANK_COLOR }}
