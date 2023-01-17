@@ -140,16 +140,11 @@
   display: flex;
   flex-direction: column;
   border: 1px solid #ffffff00;
-  max-width: 800px;
 }
 
 .grid_row {
     display: flex;
     flex-direction: row;
-    /* align-items: center; */
-    /* justify-content: center; */
-    /* flex-wrap: wrap; */
-    max-width: 800px;
 }
 
 .delivered_atoms {
