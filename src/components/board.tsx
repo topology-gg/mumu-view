@@ -258,12 +258,13 @@ export default function Board({
     const BOARD_BORDER_REM = 1;
     const BOARD_PADDING_REM = 1;
     const LAYOUT_PADDING_REM = 1;
+    const GRID_DIVIDER = DIM <= 10 ? 10 : DIM;
     const GRID_DIM_REM: number = (
         parentDim
          - LAYOUT_PADDING_REM * 16
          - BOARD_BORDER_REM * 2 * 16
          - BOARD_PADDING_REM * 2 * 16
-        ) / DIM / 16 * 0.7;
+        ) / GRID_DIVIDER / 16 * 0.7;
     const UNIT_MARGIN_REM = GRID_DIM_REM / 10;
     console.log ("GRID_DIM_REM:", GRID_DIM_REM);
     const BOX_DIM: number = DIM * GRID_DIM_REM + DIM * GRID_DIM_REM * UNIT_MARGIN_REM + GRID_DIM_REM;
@@ -272,7 +273,7 @@ export default function Board({
         <div
             style={{
                 width: `${BOARD_DIM}rem`,
-                height: `${BOARD_DIM}rem`,
+                height: (mode !== Modes.arena) && (mode !== Modes.daw) ? `${BOARD_DIM+11}rem` : `${BOARD_DIM}rem`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -292,7 +293,8 @@ export default function Board({
                         border: 1,
                         borderRadius: 4,
                         boxShadow: 3,
-                        height: 150,
+                        width: '40rem',
+                        maxHeight: '11rem',
                         overflow: "hidden",
                     }}
                 >
@@ -325,7 +327,7 @@ export default function Board({
                     justifyContent: "center",
                     alignItems: "center",
                     width: `${BOARD_DIM}rem`,
-                    height: `${BOARD_DIM}rem`,
+                    height:`${BOARD_DIM}rem`,
                     border: `${BOARD_BORDER_REM}rem`,
                     borderRadius: 4,
                     boxShadow: 3,
