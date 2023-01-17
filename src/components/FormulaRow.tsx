@@ -28,6 +28,7 @@ const FormulaRow = ({
     operator,
 }: FormulaRowProps) => {
     const { t } = useTranslation();
+    const voidFunc = () => {};
 
     return (
         <div
@@ -41,8 +42,8 @@ const FormulaRow = ({
             {/* <IconButton size="small" onClick={onDelete}> */}
             <Delete
                 fontSize="small"
-                sx={{ml:1, color:'#AAAAAA', "&:hover": { color:"#555555", cursor:'pointer' }}}
-                onClick={onDelete}
+                sx={{ml:1, color:'#AAAAAA', "&:hover": { color:disabled?"#AAAAAA":"#555555", cursor:disabled?'default':'pointer' }}}
+                onClick={!disabled ? onDelete : voidFunc}
             />
             {/* </IconButton> */}
 
