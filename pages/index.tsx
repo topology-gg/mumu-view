@@ -761,15 +761,14 @@ export default function Home() {
         border: 1, borderRadius:4, boxShadow:3,
     }
 
-    const stats = (
+    const liveStats = (
         <div>
-            {" "}
-            <Box sx={stats_box_sx}>
-                <Delivery delivered={delivered} cost_accumulated={cost_accumulated} />
-            </Box>
-            <Box sx={{ ...stats_box_sx, mt: "1rem" }}>
-                <Summary mode={currMode} frames={frames} n_cycles={N_CYCLES} />
-            </Box>
+            <Delivery delivered={delivered} cost_accumulated={cost_accumulated} />
+        </div>
+    );
+    const summaryStats = (
+        <div>
+            <Summary mode={currMode} frames={frames} n_cycles={N_CYCLES} />
         </div>
     );
 
@@ -857,7 +856,8 @@ export default function Home() {
                 currMode={currMode}
                 loadSave={loadSave}
                 board={board}
-                stats={stats}
+                liveStats={liveStats}
+                summaryStats={summaryStats}
                 animationState={animationState}
                 operatorStates={operatorStates}
                 mech_n={numMechs}

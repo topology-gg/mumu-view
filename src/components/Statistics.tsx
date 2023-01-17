@@ -5,11 +5,9 @@ import { BLANK_COLOR } from "../constants/constants";
 import LayoutBox from "./LayoutBox";
 import Formulas from "./formulas";
 
-export default function Editors ({
-    animationState = 'Stop',
-    handleFormulaOnclick,
-    formulaProgramming,
-    mechProgramming,
+export default function Statistics ({
+    liveStats,
+    summaryStats
 }) {
 
     const [displayedIndex, setDisplayedIndex] = useState(0);
@@ -18,10 +16,10 @@ export default function Editors ({
         setDisplayedIndex ((_) => newValue);
     };
 
-    const editorBoxSx = {
-        p:'1rem',backgroundColor:BLANK_COLOR,fontSize:'0.75rem',alignItems:'center',
+    const statsBoxSx = {
+        p:'0',backgroundColor:BLANK_COLOR,fontSize:'0.75rem',alignItems:'center',
         border: 1, borderRadius:'0px 16px 16px 16px', boxShadow:3,
-        maxHeight: 500, overflow: 'auto'
+        height: '180px', maxHeight: '180px', overflow: 'auto'
     }
 
     const tabStyle = (value, target) => {
@@ -38,30 +36,19 @@ export default function Editors ({
     return (
         <Box>
 
-            <Box sx={{ borderColor: 'divider', display:'flex', justifyContent:"flex-start", mt: '1rem' }}>
-                    <button onClick={() => setDisplayedIndex ((_) => 0)} style={tabStyle(displayedIndex, 0)}>+ Formula</button>
-                    <button onClick={() => setDisplayedIndex ((_) => 1)} style={tabStyle(displayedIndex, 1)}>Formulas</button>
-                    <button onClick={() => setDisplayedIndex ((_) => 2)} style={tabStyle(displayedIndex, 2)}>Spirits</button>
+            <Box sx={{ borderColor: 'divider', display:'flex', justifyContent:"flex-start" }}>
+                    <button onClick={() => setDisplayedIndex ((_) => 0)} style={tabStyle(displayedIndex, 0)}>Live Stats</button>
+                    <button onClick={() => setDisplayedIndex ((_) => 1)} style={tabStyle(displayedIndex, 1)}>Summary</button>
             </Box>
 
-            <Box sx={editorBoxSx}>
+            <Box sx={statsBoxSx}>
 
                 <TabPanel displayedIndex={displayedIndex} index={0}>
-                    <Formulas
-                        handleFormulaOnclick={(k) => {
-                            setDisplayedIndex((_) => 1);
-                            handleFormulaOnclick(k);
-                        }}
-                        clickDisabled={animationState !== "Stop" ? true : false}
-                    />
+                    {liveStats}
                 </TabPanel>
 
                 <TabPanel displayedIndex={displayedIndex} index={1}>
-                    {formulaProgramming}
-                </TabPanel>
-
-                <TabPanel displayedIndex={displayedIndex} index={2}>
-                    {mechProgramming}
+                    {summaryStats}
                 </TabPanel>
 
             </Box>

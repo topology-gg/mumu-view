@@ -11,16 +11,22 @@ export default function Delivery({ delivered, cost_accumulated }) {
     if (!delivered) {
         return (
             <div  style={{alignItems:'center', margin:'0 auto'}}>
-                <p>{t('delivery.accumulatedCost')}: n/a</p>
-                <p style={{height:'38px',lineHeight:'38px'}}>{t('delivery.delivered')}: n/a</p>
+                <p style={{fontSize:'0.9rem', marginBottom:'1.5rem'}}>Live Stats</p>
+                <div>
+                    <p>{t('delivery.accumulatedCost')}: n/a</p>
+                    <p style={{height:'38px',lineHeight:'38px'}}>{t('delivery.delivered')}: n/a</p>
+                </div>
             </div>
         )
     }
     else if (delivered.length == 0) {
         return (
             <div  style={{alignItems:'center', margin:'0 auto'}}>
-                <p>{t('delivery.accumulatedCost')}: {cost_accumulated}</p>
-                <p style={{height:'38px',lineHeight:'38px'}}>{t('delivery.delivered')}: 0</p>
+                <p style={{fontSize:'0.9rem', marginBottom:'1.5rem'}}>Live Stats</p>
+                <div>
+                    <p>{t('delivery.accumulatedCost')}: {cost_accumulated}</p>
+                    <p style={{height:'38px',lineHeight:'38px'}}>{t('delivery.delivered')}: 0</p>
+                </div>
             </div>
         )
     }
@@ -36,58 +42,63 @@ export default function Delivery({ delivered, cost_accumulated }) {
 
     return (
         <div style={{alignItems:'center', margin:'0 auto'}}>
-            <p>{t('delivery.accumulatedCost')}: {cost_accumulated}</p>
+            <p style={{fontSize:'0.9rem', marginBottom:'1.5rem'}}>Live Stats</p>
 
-            <div style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'center',height:'38px'}}>
+            <div>
+                <p>{t('delivery.accumulatedCost')}: {cost_accumulated}</p>
 
-                <p>{t('delivery.delivered')}:</p>
+                <div style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'center',height:'38px'}}>
 
-                {
-                    Object.keys(counts).map(function(key: string,i: number){
-                        // const bg_status = key == AtomType.HAZELNUT ? BgStatus.ATOM_HAZELNUT_FREE : BgStatus.ATOM_VANILLA_FREE
-                        let bg_status: BgStatus
-                        switch(key) {
-                            case AtomType.VANILLA:
-                                bg_status = BgStatus.ATOM_VANILLA_FREE
-                                break;
-                            case AtomType.HAZELNUT:
-                                bg_status = BgStatus.ATOM_HAZELNUT_FREE
-                                break;
-                            case AtomType.CHOCOLATE:
-                                bg_status = BgStatus.ATOM_CHOCOLATE_FREE
-                                break;
-                            case AtomType.TRUFFLE:
-                                bg_status = BgStatus.ATOM_TRUFFLE_FREE
-                                break;
-                            case AtomType.SAFFRON:
-                                bg_status = BgStatus.ATOM_SAFFRON_FREE
-                                break;
-                            default:
-                                throw `invalid atom type encountered: ${key}`
-                        }
-                        return (
-                            <div
-                                key={`delivery-${key}`}
-                                className={styles.deliveryUnit}
-                            >
-                                <p>{counts[key]} x</p>
-                                <Unit
-                                    state={{
-                                        bg_status: bg_status,
-                                        border_status: null,
-                                        unit_text: UnitText.EMPTY,
-                                        unit_id: null
-                                    }}
-                                    handleMouseOut={() => {}}
-                                    handleMouseOver={() => {}}
-                                    mechHighlight = {false}
-                                    isSmall={true}
-                                />
-                            </div>
-                        )
-                    })
-                }
+                    <p>{t('delivery.delivered')}:</p>
+
+                    {
+                        Object.keys(counts).map(function(key: string,i: number){
+                            // const bg_status = key == AtomType.HAZELNUT ? BgStatus.ATOM_HAZELNUT_FREE : BgStatus.ATOM_VANILLA_FREE
+                            let bg_status: BgStatus
+                            switch(key) {
+                                case AtomType.VANILLA:
+                                    bg_status = BgStatus.ATOM_VANILLA_FREE
+                                    break;
+                                case AtomType.HAZELNUT:
+                                    bg_status = BgStatus.ATOM_HAZELNUT_FREE
+                                    break;
+                                case AtomType.CHOCOLATE:
+                                    bg_status = BgStatus.ATOM_CHOCOLATE_FREE
+                                    break;
+                                case AtomType.TRUFFLE:
+                                    bg_status = BgStatus.ATOM_TRUFFLE_FREE
+                                    break;
+                                case AtomType.SAFFRON:
+                                    bg_status = BgStatus.ATOM_SAFFRON_FREE
+                                    break;
+                                default:
+                                    throw `invalid atom type encountered: ${key}`
+                            }
+                            return (
+                                <div
+                                    key={`delivery-${key}`}
+                                    className={styles.deliveryUnit}
+                                >
+                                    <p>{counts[key]} x</p>
+                                    <Unit
+                                        state={{
+                                            bg_status: bg_status,
+                                            border_status: null,
+                                            unit_text: UnitText.EMPTY,
+                                            unit_id: null
+                                        }}
+                                        handleMouseOut={() => {}}
+                                        handleMouseOver={() => {}}
+                                        mechHighlight = {false}
+                                        isSmall={true}
+                                    />
+                                </div>
+                            )
+                        })
+                    }
+                </div>
             </div>
+
         </div>
     )
 }

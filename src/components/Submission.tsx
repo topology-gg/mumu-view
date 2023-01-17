@@ -13,11 +13,10 @@ export default function Submission({
 
     return (
         // <Tooltip title={t("submission")} arrow>
-        <div style={{ marginBottom: "1rem" }}>
+        <div style={{ margin: '0 6px 0 6px' }}>
             <button
                 id={"submit-button"}
                 onClick={() => handleClickSubmit()}
-                className={"big-button"}
                 disabled={isPending}
             >
                 {isPending ? (

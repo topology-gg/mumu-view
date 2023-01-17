@@ -61,7 +61,7 @@ export default function Summary ({ mode, frames, n_cycles }) {
     const celebrate_size = '4rem'
 
     return (
-        <div style={{}}>
+        <div style={{padding:'0'}}>
             <p style={{fontSize:'0.9rem'}}>{t('summary.title')}</p>
 
             {
