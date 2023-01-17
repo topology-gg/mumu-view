@@ -6,10 +6,12 @@ import LayoutBox from "./LayoutBox";
 import Formulas from "./formulas";
 
 export default function Editors ({
+    currMode = 'arena',
     animationState = 'Stop',
     handleFormulaOnclick,
     formulaProgramming,
     mechProgramming,
+    dawPanel,
 }) {
 
     const [displayedIndex, setDisplayedIndex] = useState(0);
@@ -38,10 +40,15 @@ export default function Editors ({
     return (
         <Box>
 
-            <Box sx={{ borderColor: 'divider', display:'flex', justifyContent:"flex-start", mt: '1rem' }}>
+            <Box sx={{ borderColor: 'divider', display:'flex', justifyContent:"flex-start" }}>
                     <button onClick={() => setDisplayedIndex ((_) => 0)} style={tabStyle(displayedIndex, 0)}>+ Formula</button>
                     <button onClick={() => setDisplayedIndex ((_) => 1)} style={tabStyle(displayedIndex, 1)}>Formulas</button>
                     <button onClick={() => setDisplayedIndex ((_) => 2)} style={tabStyle(displayedIndex, 2)}>Spirits</button>
+                    {
+                        currMode == 'daw' ? (
+                            <button onClick={() => setDisplayedIndex ((_) => 3)} style={tabStyle(displayedIndex, 3)}>Music</button>
+                        ) : <></>
+                    }
             </Box>
 
             <Box sx={editorBoxSx}>
@@ -64,6 +71,13 @@ export default function Editors ({
                     {mechProgramming}
                 </TabPanel>
 
+                {
+                    currMode == 'daw' ? (
+                        <TabPanel displayedIndex={displayedIndex} index={3}>
+                            {dawPanel}
+                        </TabPanel>
+                    ) : <></>
+                }
             </Box>
         </Box>
     );

@@ -158,6 +158,21 @@ export default function Layout({
       setBoardParentWidth ((prev) => ref.current ? ref.current.offsetWidth : prev);
     }, [ref.current]);
 
+    let dawPanel = (
+        <DAWPanel
+            sf={null}
+            handleSetSfFile={(file) => handleSetSfFile(file)}
+            sfLoaded={sfLoaded}
+            mech_n={mech_n}
+            mechVelocities={mechVelocities}
+            musicTitle={musicTitle}
+            animationState={animationState}
+            handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+            handleMusicTitleChange={handleMusicTitleChange}
+            operatorStates={operatorStates}
+        />
+    )
+
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -244,29 +259,32 @@ export default function Layout({
                                     currMode !== 'daw' ? (
                                         // <Panel>{stats}</Panel>
                                         <Statistics liveStats={liveStats} summaryStats={summaryStats}/>
-                                    ) : (
-                                        <Panel>
-                                            <Box sx={stats_box_sx}>
-                                                <DAWPanel
-                                                    sf={null}
-                                                    handleSetSfFile={(file) => handleSetSfFile(file)}
-                                                    sfLoaded={sfLoaded}
-                                                    mech_n={mech_n}
-                                                    mechVelocities={mechVelocities}
-                                                    musicTitle={musicTitle}
-                                                    animationState={animationState}
-                                                    handleMechNoteVelocityChange={handleMechNoteVelocityChange}
-                                                    handleMusicTitleChange={handleMusicTitleChange}
-                                                    operatorStates={operatorStates}
-                                                />
-                                            </Box>
-                                        </Panel>
-                                    )
+                                    ) : (<></>)
+                                    //     <Panel>
+                                    //         <Box sx={stats_box_sx}>
+                                    //             <DAWPanel
+                                    //                 sf={null}
+                                    //                 handleSetSfFile={(file) => handleSetSfFile(file)}
+                                    //                 sfLoaded={sfLoaded}
+                                    //                 mech_n={mech_n}
+                                    //                 mechVelocities={mechVelocities}
+                                    //                 musicTitle={musicTitle}
+                                    //                 animationState={animationState}
+                                    //                 handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                                    //                 handleMusicTitleChange={handleMusicTitleChange}
+                                    //                 operatorStates={operatorStates}
+                                    //             />
+                                    //         </Box>
+                                    //     </Panel>
+                                    // )
                                 }
                                 <Editors
+                                    currMode={currMode}
+                                    animationState={animationState}
                                     handleFormulaOnclick={handleFormulaOnclick}
                                     formulaProgramming={formulaProgramming}
                                     mechProgramming={mechProgramming}
+                                    dawPanel={dawPanel}
                                 />
                             </Panel>
                         </Grid>

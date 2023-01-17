@@ -34,7 +34,7 @@ export default function Statistics ({
 
     // render
     return (
-        <Box>
+        <Box sx={{mb:'1rem'}}>
 
             <Box sx={{ borderColor: 'divider', display:'flex', justifyContent:"flex-start" }}>
                     <button onClick={() => setDisplayedIndex ((_) => 0)} style={tabStyle(displayedIndex, 0)}>Live Stats</button>
