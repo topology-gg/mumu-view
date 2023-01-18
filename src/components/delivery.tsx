@@ -11,11 +11,8 @@ export default function Delivery({ delivered, cost_accumulated }) {
     if (!delivered) {
         return (
             <div  style={{alignItems:'center', margin:'0 auto'}}>
-                <p style={{fontSize:'0.9rem', marginBottom:'1.5rem'}}>Live Stats</p>
-                <div>
-                    <p>{t('delivery.accumulatedCost')}: n/a</p>
-                    <p style={{height:'38px',lineHeight:'38px'}}>{t('delivery.delivered')}: n/a</p>
-                </div>
+                <p style={{fontSize:'0.9rem'}}>Live Stats</p>
+                <p>n/a</p>
             </div>
         )
     }
