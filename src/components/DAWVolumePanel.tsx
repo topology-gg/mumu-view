@@ -2,7 +2,7 @@ import { useState } from "react";
 import SoundFont from '../modules/sf2-player/src';
 import { OperatorState } from "../types/Operator";
 
-export default function DAWPanel ({
+export default function DAWVolumePanel ({
     sf,
     handleSetSfFile,
     sfLoaded,

@@ -11,7 +11,8 @@ export default function Editors ({
     handleFormulaOnclick,
     formulaProgramming,
     mechProgramming,
-    dawPanel,
+    dawVolumePanel,
+    dawFaucetSinkPanel,
 }) {
 
     const [displayedIndex, setDisplayedIndex] = useState(0);
@@ -46,7 +47,10 @@ export default function Editors ({
                     <button onClick={() => setDisplayedIndex ((_) => 2)} style={tabStyle(displayedIndex, 2)}>Spirits</button>
                     {
                         currMode == 'daw' ? (
-                            <button onClick={() => setDisplayedIndex ((_) => 3)} style={tabStyle(displayedIndex, 3)}>Music</button>
+                            <>
+                                <button onClick={() => setDisplayedIndex ((_) => 3)} style={tabStyle(displayedIndex, 3)}>Music Volume</button>
+                                <button onClick={() => setDisplayedIndex ((_) => 4)} style={tabStyle(displayedIndex, 4)}>Facuets & Sinks</button>
+                            </>
                         ) : <></>
                     }
             </Box>
@@ -73,9 +77,15 @@ export default function Editors ({
 
                 {
                     currMode == 'daw' ? (
-                        <TabPanel displayedIndex={displayedIndex} index={3}>
-                            {dawPanel}
-                        </TabPanel>
+                        <>
+                            <TabPanel displayedIndex={displayedIndex} index={3}>
+                                {dawVolumePanel}
+                            </TabPanel>
+                            <TabPanel displayedIndex={displayedIndex} index={4}>
+                                {dawFaucetSinkPanel}
+                            </TabPanel>
+                        </>
+
                     ) : <></>
                 }
             </Box>

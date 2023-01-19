@@ -26,7 +26,8 @@ import Statistics from "./Statistics";
 
 import { useAccount, useStarknetExecute, useTransactionReceipt } from "@starknet-react/core";
 import LayoutBox from "./LayoutBox";
-import DAWPanel from "./DAWPanel";
+import DAWVolumePanel from "./DAWVolumePanel";
+import DAWFaucetSinkPanel from "./DAWFaucetSinkPanel"
 
 import { BLANK_COLOR, Modes } from "../constants/constants";
 
@@ -158,8 +159,8 @@ export default function Layout({
       setBoardParentWidth ((prev) => ref.current ? ref.current.offsetWidth : prev);
     }, [ref.current]);
 
-    let dawPanel = (
-        <DAWPanel
+    let dawVolumePanel = (
+        <DAWVolumePanel
             sf={null}
             handleSetSfFile={(file) => handleSetSfFile(file)}
             sfLoaded={sfLoaded}
@@ -170,6 +171,13 @@ export default function Layout({
             handleMechNoteVelocityChange={handleMechNoteVelocityChange}
             handleMusicTitleChange={handleMusicTitleChange}
             operatorStates={operatorStates}
+        />
+    )
+
+    let dawFaucetSinkPanel = (
+        <DAWFaucetSinkPanel
+            sfLoaded={sfLoaded}
+            animationState={animationState}
         />
     )
 
@@ -284,7 +292,8 @@ export default function Layout({
                                     handleFormulaOnclick={handleFormulaOnclick}
                                     formulaProgramming={formulaProgramming}
                                     mechProgramming={mechProgramming}
-                                    dawPanel={dawPanel}
+                                    dawVolumePanel={dawVolumePanel}
+                                    dawFaucetSinkPanel={dawFaucetSinkPanel}
                                 />
                             </Panel>
                         </Grid>
