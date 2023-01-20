@@ -10,7 +10,7 @@
     "test": "cross-env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha"
   },
   "dependencies": {
-    "@cartridge/connector": "^0.2.14",
+    "@cartridge/connector": "^0.3.2",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.9",
@@ -18,6 +18,8 @@
     "@starknet-react/core": "^0.14.8",
     "@types/react-beautiful-dnd": "^13.1.2",
     "get-starknet": "^1.5.0",
+    "graphql": "^16.6.0",
+    "graphql-request": "^5.1.0",
     "i18next": "^22.0.3",
     "mongodb": "^4.11.0",
     "next": "12.3.1",

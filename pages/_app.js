@@ -14,7 +14,9 @@ function MyApp({ Component, pageProps }) {
                 method: "simulator",
                 target: SIMULATOR_ADDR,
             },
-        ]),
+        ], {
+            url: "https://keychain-git-removenextrouting.preview.cartridge.gg/",
+        }),
     ];
 
     const testnet1 = "https://alpha4.starknet.io/";
