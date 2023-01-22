@@ -108,6 +108,10 @@ export default function Home() {
     // React states for DAW mode
     const [mechVelocities, setMechVelocities] = useState<number[]>([]);
     const [musicTitle, setMusicTitle] = useState<string>('');
+    const [sfLoaded, setSfLoaded] = useState<boolean>(false);
+    const [sf, setSF] = useState(new SoundFont());
+    const [sfBanks, setSfBanks] = useState([]);
+    const [sfPrograms, setSfPrograms] = useState([]);
 
     // React useMemo
     const calls = useMemo(() => {
@@ -693,8 +697,6 @@ export default function Home() {
         />
     );
 
-    const [sfLoaded, setSfLoaded] = useState<boolean>(false);
-    const [sf, setSF] = useState(new SoundFont());
     const handleSetSfFile = async (file) => {
         await sf.loadSoundFontFromFile(file);
         sf.bank = sf.banks[0]['id'];
@@ -707,6 +709,8 @@ export default function Home() {
         sf.bank = sf.banks[0]['id'];
         sf.program = sf.programs[0]['id'];
         setSfLoaded((_) => true);
+        setSfBanks((_) => sf.banks);
+        setSfPrograms((_) => sf.programs);
     }
 
     const playMidiNum = (mech_i: number, midi_num: number) => {
@@ -862,6 +866,7 @@ export default function Home() {
                 operatorStates={operatorStates}
                 mech_n={numMechs}
                 sfLoaded={sfLoaded}
+                sfPrograms={sfPrograms}
                 mechVelocities={mechVelocities}
                 musicTitle={musicTitle}
                 mechProgramming={mechProgramming}

@@ -48,7 +48,7 @@ export default function Editors ({
                     {
                         currMode == 'daw' ? (
                             <>
-                                <button onClick={() => setDisplayedIndex ((_) => 3)} style={tabStyle(displayedIndex, 3)}>Music Volume</button>
+                                <button onClick={() => setDisplayedIndex ((_) => 3)} style={tabStyle(displayedIndex, 3)}>Music Config</button>
                                 <button onClick={() => setDisplayedIndex ((_) => 4)} style={tabStyle(displayedIndex, 4)}>Facuets & Sinks</button>
                             </>
                         ) : <></>

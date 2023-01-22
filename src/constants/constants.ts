@@ -10,8 +10,9 @@ export const COLLECTION_NAME = 'mumu-s2-daw-events'
 const IS_CHRISTMAS = true
 export const BLANK_COLOR = IS_CHRISTMAS ? '#f2f1ed' : '#ffffff'
 // export const SOUNDFONT_FILENAME = 'SleighTest-1.sf2';
-export const SOUNDFONT_FILENAME = 'SleighBells_Optimized_Lower.sf2';
+// export const SOUNDFONT_FILENAME = 'SleighBells_Optimized_Lower.sf2';
 // export const SOUNDFONT_FILENAME = 'Bamblong_Optimized.sf2';
+export const SOUNDFONT_FILENAME = 'MuMu_19_1_Optimized.sf2';
 
 export enum Modes {
     lesson_1 = 'lesson_1',

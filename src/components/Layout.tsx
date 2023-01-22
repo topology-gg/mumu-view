@@ -26,7 +26,7 @@ import Statistics from "./Statistics";
 
 import { useAccount, useStarknetExecute, useTransactionReceipt } from "@starknet-react/core";
 import LayoutBox from "./LayoutBox";
-import DAWVolumePanel from "./DAWVolumePanel";
+import DAWConfigPanel from "./DAWConfigPanel";
 import DAWFaucetSinkPanel from "./DAWFaucetSinkPanel"
 
 import { BLANK_COLOR, Modes } from "../constants/constants";
@@ -52,6 +52,7 @@ export default function Layout({
     mechVelocities,
     musicTitle,
     sfLoaded,
+    sfPrograms,
     mechProgramming,
     formulaProgramming,
     midScreenControlProps,
@@ -160,10 +161,10 @@ export default function Layout({
     }, [ref.current]);
 
     let dawVolumePanel = (
-        <DAWVolumePanel
-            sf={null}
+        <DAWConfigPanel
             handleSetSfFile={(file) => handleSetSfFile(file)}
             sfLoaded={sfLoaded}
+            sfPrograms={sfPrograms}
             mech_n={mech_n}
             mechVelocities={mechVelocities}
             musicTitle={musicTitle}
