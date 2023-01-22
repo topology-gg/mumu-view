@@ -728,7 +728,7 @@ export default function Home() {
     const loadSfFileFromURL = async (file) => {
         await sf.loadSoundFontFromURL(file);
         sf.bank = sf.banks[0]['id'];
-        sf.program = sf.programs[1]['id'];
+        sf.program = sf.programs[0]['id'];
         setSfLoaded((_) => true);
         setSfPrograms((_) => sf.programs);
     }
@@ -747,7 +747,7 @@ export default function Home() {
 
         if (mech_i == -1) {
             // from board onClick
-            sf.program = sfPrograms[1].id;
+            sf.program = sfPrograms[0].id;
         }
         else {
             // grab the sound font for this mech
