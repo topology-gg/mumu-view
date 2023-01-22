@@ -10,6 +10,7 @@ export default function DAWConfigPanel ({
     mechVelocities,
     musicTitle,
     handleMechNoteVelocityChange,
+    handleMechSfProgramChange,
     handleMusicTitleChange,
     animationState,
     operatorStates
@@ -30,28 +31,29 @@ export default function DAWConfigPanel ({
     return (
         <div style={{paddingBottom:'0.5rem'}}>
 
-            <div
+            {/* <div
                 className={"notes"}
                 style={{ width: DIM, height: DIM, margin: "0 auto 0.5rem auto" }}
-            ></div>
+            ></div> */}
 
             {
                 sfLoaded ? (
                     <>
                         {/* <p style={{fontSize:'1rem'}}>(Debug) Indices of Firing Formulas</p> */}
                         <div style={{
-                            display:'flex', flexDirection:'row',
-                            marginBottom:'10px', justifyContent: 'center', alignItems:'center',
+                            display:'flex', flexDirection:'column',
+                            marginBottom:'2.5rem', justifyContent: 'center', alignItems:'center',
                         }}>
-                            {/* {
-                                firingOperators.length>0 ? <p>{JSON.stringify(firingOperators)}</p> : <p>no formula is firing</p>
-                            } */}
-                            <p style={{fontSize:'0.85rem', marginRight:'5px'}}>Name your music:</p>
+                            <p style={{fontSize:'1rem'}}>Name your music</p>
+
                             <input
                                 onChange={(event) => {
                                     handleMusicTitleChange(event.target.value);
                                 }}
-                                style={{ width: "10rem", marginRight: "8px", height: "26px", textAlign:'center' }}
+                                style={{
+                                    width: "10rem", marginRight: "8px", height: "26px", textAlign:'center',
+                                    border: '1px solid #CCCCCC', borderRadius:'10px', fontSize: '12px'
+                                }}
                                 placeholder={'jingle bells'}
                                 value={musicTitle}
                             ></input>
@@ -61,7 +63,12 @@ export default function DAWConfigPanel ({
                         <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                             {
                                 mech_n != 0 ? Array.from({length:mech_n}).map((_,mech_i) => (
-                                    <div style={{display:'flex', flexDirection:'row', marginBottom:'0.2rem'}}>
+                                    <div
+                                        style={{
+                                            display:'flex', flexDirection:'row', marginBottom:'0.2rem', height: '1.5rem',
+                                            alignItems: 'center'
+                                        }}
+                                    >
                                         <p style={{padding:'0',margin:'0 1rem 0 0',width:'3rem'}}>Spirit {mech_i}</p>
                                         <input
                                             id="typeinp"
@@ -75,10 +82,23 @@ export default function DAWConfigPanel ({
                                                 }
                                             }}
                                             step="1"
-                                            style={{ width: "10rem",}}
+                                            style={{ width: "10rem", height: '10px'}}
                                             disabled={animationState == 'Run'}
                                         />
-                                        <p style={{padding:'0',margin:'0 0 0 0.2rem',width:'4rem'}}>{mechVelocities[mech_i]} / 127</p>
+                                        {/* <p style={{padding:'0',margin:'0 0 0 0.2rem',width:'4rem'}}>{mechVelocities[mech_i]} / 127</p> */}
+
+                                        <div className="select">
+                                            <select
+                                                name="program" id="programs"
+                                                onChange={event => handleMechSfProgramChange(mech_i, event.target.value)}
+                                                className="sf-program-select"
+                                                style={{fontSize:'11px'}}
+                                            >
+                                            {
+                                                sfPrograms.map((program: any) => <option value={program.id} key={program.id}>{program.name}</option>)
+                                            }
+                                            </select>
+                                        </div>
                                     </div>
                                 )) : <p style={{padding:'0',margin:'0'}}>(No spirit yet)</p>
                             }
@@ -92,7 +112,7 @@ export default function DAWConfigPanel ({
                                         }
                                     })
                                 }}
-                                    style={{marginTop:'0.3rem'}}
+                                    style={{marginTop:'0.5rem'}}
                                     disabled={animationState == 'Run'}
                                 >Reset Volume</button>
                             ) : <></>

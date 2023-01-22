@@ -112,6 +112,7 @@ export default function Home() {
     const [sf, setSF] = useState(new SoundFont());
     const [sfBanks, setSfBanks] = useState([]);
     const [sfPrograms, setSfPrograms] = useState([]);
+    const [mechSfProgramIds, setMechSfProgramIds] = useState([]);
 
     // React useMemo
     const calls = useMemo(() => {
@@ -425,6 +426,12 @@ export default function Home() {
                 prev_copy.push(60);
                 return prev_copy;
             })
+            setMechSfProgramIds (prev => {
+                let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
+                prev_copy.push (sfPrograms[0].id);
+                return prev_copy;
+            });
+
         }
     }
 
@@ -576,12 +583,19 @@ export default function Home() {
         setGridHovering(["-", "-"]);
     }
 
-    function handleMechNoteVelocityChange(mech_i, value) {
+    function handleMechNoteVelocityChange (mech_i: number, value: number) {
         setMechVelocities (prev => {
             let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
             prev_copy[mech_i] = value
             return prev_copy;
         })
+    }
+    function handleMechSfProgramChange (mech_i: number, sfProgramId) {
+        setMechSfProgramIds (prev => {
+            let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
+            prev_copy[mech_i] = sfProgramId;
+            return prev_copy;
+        });
     }
     function handleMusicTitleChange(value) {
         if (value.length > 31) return;
@@ -597,6 +611,12 @@ export default function Home() {
         await loadSfFileFromURL(`/${SOUNDFONT_FILENAME}`);
         if (solutionMode == Modes.daw) {
             setMechVelocities((_) => viewSolution.volumes)
+
+            //
+            // TODO: update Cairo side interface to allow specification of per-mech sound font program
+            //
+            setMechSfProgramIds((_) => viewSolution.volumes.map(_ => sfPrograms[0].id))
+
             console.log('volumes:',viewSolution.volumes)
         }
 
@@ -677,6 +697,7 @@ export default function Home() {
         // load default soundfont if in daw mode
         if (mode == Modes.daw) {
             await loadSfFileFromURL(`/${SOUNDFONT_FILENAME}`);
+            setMechSfProgramIds((_) => BLANK_SOLUTION.mechs.map((_) => sfPrograms[0].id));
         }
     }
 
@@ -707,9 +728,8 @@ export default function Home() {
     const loadSfFileFromURL = async (file) => {
         await sf.loadSoundFontFromURL(file);
         sf.bank = sf.banks[0]['id'];
-        sf.program = sf.programs[0]['id'];
+        sf.program = sf.programs[1]['id'];
         setSfLoaded((_) => true);
-        setSfBanks((_) => sf.banks);
         setSfPrograms((_) => sf.programs);
     }
 
@@ -725,6 +745,16 @@ export default function Home() {
         if (mech_i == -1) velocity = 96 // note: midi velocity range is 0-127
         else velocity = mechVelocities[mech_i]
 
+        if (mech_i == -1) {
+            // from board onClick
+            sf.program = sfPrograms[1].id;
+        }
+        else {
+            // grab the sound font for this mech
+            sf.program = mechSfProgramIds[mech_i];
+            // sf.program = sfPrograms[1].id;
+        }
+        // console.log('playMidiNum sf program id:', sf.program)
         sf.noteOn(midi_num, velocity, 0);
     }
 
@@ -884,6 +914,7 @@ export default function Home() {
                 handleFormulaOnclick={(formula_key) => {handleOperatorClick("+", formula_key)}}
                 handleSetSfFile={handleSetSfFile}
                 handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                handleMechSfProgramChange={handleMechSfProgramChange}
                 handleMusicTitleChange={handleMusicTitleChange}
                 callData={calls}
             />

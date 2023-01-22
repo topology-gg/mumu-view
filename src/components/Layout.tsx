@@ -63,6 +63,7 @@ export default function Layout({
     handleFormulaOnclick,
     handleSetSfFile,
     handleMechNoteVelocityChange,
+    handleMechSfProgramChange,
     handleMusicTitleChange,
     callData,
 }) {
@@ -170,6 +171,7 @@ export default function Layout({
             musicTitle={musicTitle}
             animationState={animationState}
             handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+            handleMechSfProgramChange={handleMechSfProgramChange}
             handleMusicTitleChange={handleMusicTitleChange}
             operatorStates={operatorStates}
         />

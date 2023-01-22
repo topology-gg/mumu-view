@@ -362,3 +362,52 @@ input::placeholder {
     background-position: center;
     background-size: 100%;
 }
+
+/*  */
+/* reference for styling select: https://moderncss.dev/custom-select-styles-with-pure-css/ */
+/*  */
+select {
+    appearance: none;
+
+    background-color: transparent;
+    border: none;
+    /* border: 1px solid #777777; */
+    /* border-radius: 10px; */
+    padding: 0 1rem 0 0.5rem;
+    /* margin: 0 0 0 0.8rem;  */
+    height: 1rem;
+    font-family: inherit;
+    font-size: '8px';
+    cursor: inherit;
+    line-height: inherit;
+    outline: none;
+}
+select::-ms-expand {
+    display: none;
+}
+.select {
+    height: 1.4rem;
+    margin: 0 0 0 0.8rem;
+    padding-right: 0.5rem;
+    border: 1px solid #CCCCCC;
+    border-radius: 10px;
+    cursor: pointer;
+    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+}
+
+.select::after {
+    content: "";
+    width: 0.8em;
+    height: 0.5em;
+    background-color: #999999;
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    justify-self: end;
+}
+
+select,
+.select:after {
+  grid-area: select;
+}

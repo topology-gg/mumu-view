@@ -266,7 +266,7 @@ export default function Board({
          - BOARD_PADDING_REM * 2 * 16
         ) / GRID_DIVIDER / 16 * 0.7;
     const UNIT_MARGIN_REM = GRID_DIM_REM / 10;
-    console.log ("GRID_DIM_REM:", GRID_DIM_REM);
+    // console.log ("GRID_DIM_REM:", GRID_DIM_REM);
     const BOX_DIM: number = DIM * GRID_DIM_REM + DIM * GRID_DIM_REM * UNIT_MARGIN_REM + GRID_DIM_REM;
     const BOARD_DIM: number = DIM * (GRID_DIM_REM + 2 * UNIT_MARGIN_REM) + BOARD_PADDING_REM; // unit is rem; reflect the dimensions, padding and margin set in CSS
     const board = (
