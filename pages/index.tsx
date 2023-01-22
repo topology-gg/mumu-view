@@ -3,6 +3,7 @@ import React, { useState, useMemo } from "react";
 import simulator from "../src/components/simulator";
 import MechState, { MechStatus, MechType } from "../src/types/MechState";
 import AtomState, { AtomStatus, AtomType } from "../src/types/AtomState";
+import AtomFaucetState from "../src/types/AtomFaucetState";
 import BoardConfig from "../src/types/BoardConfig";
 import Frame from "../src/types/Frame";
 
@@ -55,7 +56,7 @@ export default function Home() {
     const MAX_NUM_MECHS = Constraints[currMode].MAX_NUM_MECHS;
     const MAX_NUM_OPERATORS = Constraints[currMode].MAX_NUM_OPERATORS;
     const N_CYCLES = Constraints[currMode].N_CYCLES;
-    const FAUCET_POS_S = Constraints[currMode].FAUCETS;
+    const FAUCET_POS_S = Constraints[currMode].FAUCETS.map(f => f.index);
     const SINK_POS_S = Constraints[currMode].SINKS;
     const ATOMS = Constraints[currMode].ATOMS;
     const MODE_OBJECTIVE = currMode == Modes.arena ? "" : Lesson_objective[currMode];

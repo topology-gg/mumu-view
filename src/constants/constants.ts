@@ -2,6 +2,7 @@ import { MechStatus, MechType } from "../types/MechState";
 import { OPERATOR_TYPES } from "../types/Operator";
 import Solution from "../types/Solution";
 import { AtomType } from "../types/AtomState";
+import AtomFaucetState from "../types/AtomFaucetState";
 
 // export const DB_NAME = 'mumu-indexer-season-2'
 export const DB_NAME = 'mumu_indexer_s2_daw_1'
@@ -79,7 +80,9 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 150,
         MAX_NUM_MECHS: 25,
         MAX_NUM_OPERATORS: 20,
-        FAUCETS: [{ x: 0, y: 0 }],
+        FAUCETS: [
+            { id:'0', typ:AtomType.VANILLA, index:{ x: 0, y: 0 } }
+        ] as AtomFaucetState[],
         SINKS: [
             { x: 0, y: 10 - 1 },
             { x: 10 - 1, y: 0 },
@@ -95,14 +98,15 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 200,
         MAX_NUM_MECHS: 8,
         MAX_NUM_OPERATORS: 16,
-        FAUCETS: [{x:0, y:0}, {x:3, y:3}, {x:3, y:6}, {x:6, y:3}, {x:6, y:6}, {x:9, y:9}],
+        FAUCETS: [
+            { id:'0', typ:AtomType.VANILLA, index:{ x: 0, y: 0 } },
+            { id:'1', typ:AtomType.VANILLA, index:{ x: 3, y: 3 } },
+            { id:'2', typ:AtomType.VANILLA, index:{ x: 3, y: 6 } },
+            { id:'3', typ:AtomType.VANILLA, index:{ x: 6, y: 3 } },
+            { id:'4', typ:AtomType.VANILLA, index:{ x: 6, y: 6 } },
+            { id:'5', typ:AtomType.VANILLA, index:{ x: 9, y: 9 } },
+        ] as AtomFaucetState[],
         SINKS: [{x:0, y:9}, {x:9, y:0}],
-        // FAUCETS: [{ x: 0, y: 0 }],
-        // SINKS: [
-        //     { x: 0, y: 10 - 1 },
-        //     { x: 10 - 1, y: 0 },
-        //     { x: 10 - 1, y: 10 - 1 },
-        // ],
         ATOMS: [],
         TARGET_TYPE: AtomType.SAFFRON
     },
@@ -113,7 +117,7 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 10,
         MAX_NUM_MECHS: 1,
         MAX_NUM_OPERATORS: 0,
-        FAUCETS: [],
+        FAUCETS: [] as AtomFaucetState[],
         SINKS: [{ x: 3 - 1, y: 3 - 1 }],
         ATOMS: [
             {index:{x:0,y:0}, typ:AtomType.VANILLA},
@@ -128,7 +132,7 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 15,
         MAX_NUM_MECHS: 1,
         MAX_NUM_OPERATORS: 1,
-        FAUCETS: [],
+        FAUCETS: [] as AtomFaucetState[],
         SINKS: [{ x: 3 - 1, y: 3 - 1 }],
         ATOMS: [
             {index:{x:0,y:0}, typ:AtomType.VANILLA},
@@ -144,7 +148,9 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 15,
         MAX_NUM_MECHS: 1,
         MAX_NUM_OPERATORS: 1,
-        FAUCETS: [{ x: 0, y: 0 }],
+        FAUCETS: [
+            { id:'0', typ:AtomType.VANILLA, index:{ x: 0, y: 0 } },
+        ] as AtomFaucetState[],
         SINKS: [{ x: 3 - 1, y: 3 - 1 }],
         ATOMS: [],
         TARGET_TYPE: AtomType.HAZELNUT,
@@ -157,7 +163,9 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 50,
         MAX_NUM_MECHS: 2,
         MAX_NUM_OPERATORS: 2,
-        FAUCETS: [{ x: 0, y: 0 }],
+        FAUCETS: [
+            { id:'0', typ:AtomType.VANILLA, index:{ x: 0, y: 0 } },
+        ] as AtomFaucetState[],
         SINKS: [{ x: 4 - 1, y: 4 - 1 }],
         ATOMS: [],
         TARGET_TYPE: AtomType.CHOCOLATE,
@@ -170,7 +178,9 @@ export const Constraints: { [key in Modes]: any } = {
         N_CYCLES: 50,
         MAX_NUM_MECHS: 4,
         MAX_NUM_OPERATORS: 3,
-        FAUCETS: [{ x: 0, y: 0 }],
+        FAUCETS: [
+            { id:'0', typ:AtomType.VANILLA, index:{ x: 0, y: 0 } },
+        ] as AtomFaucetState[],
         SINKS: [{ x: 5 - 1, y: 5 - 1 }],
         ATOMS: [],
         TARGET_TYPE: AtomType.CHOCOLATE,
