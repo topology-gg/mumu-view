@@ -8,14 +8,14 @@ export enum AtomStatus {
 }
 
 export enum AtomType {
-    VANILLA = 'VANILLA',
-    HAZELNUT = 'HAZELNUT',
-    CHOCOLATE = 'CHOCOLATE',
-    TRUFFLE = 'TRUFFLE',
-    SAFFRON = 'SAFFRON',
-    TURTLE = 'TURTLE',
-    SANDGLASS = 'SANDGLASS',
-    WILTED = 'WILTED',
+    VANILLA = 'Wood',
+    HAZELNUT = 'Clover',
+    CHOCOLATE = 'Rose',
+    TRUFFLE = 'Fox',
+    SAFFRON = 'Fire',
+    TURTLE = 'Turtle',
+    SANDGLASS = 'Sandglass',
+    WILTED = 'Wilted Rose',
 }
 
 export default interface AtomState {

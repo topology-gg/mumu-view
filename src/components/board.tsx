@@ -410,7 +410,7 @@ export default function Board({
                                                     isProduced={isProduced}
                                                     gridDimensionRem={GRID_DIM_REM}
                                                     marginRem={UNIT_MARGIN_REM}
-                                                    isHovered={hoveredGrid ? (hoveredGrid.x == i)&&(hoveredGrid.y == j) : false}
+                                                    isHovered={hoveredGrid ? (hoveredGrid.x == j)&&(hoveredGrid.y == i) : false}
                                                 />
                                             </div>
                                         )

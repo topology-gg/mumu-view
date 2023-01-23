@@ -100,7 +100,7 @@ export const Constraints: { [key in Modes]: any } = {
         MAX_NUM_MECHS: 8,
         MAX_NUM_OPERATORS: 16,
         FAUCETS: [
-            { id:'0', typ:AtomType.VANILLA, index:{ x: 0, y: 0 } },
+            { id:'0', typ:AtomType.CHOCOLATE, index:{ x: 0, y: 0 } },
             { id:'1', typ:AtomType.VANILLA, index:{ x: 3, y: 3 } },
             { id:'2', typ:AtomType.VANILLA, index:{ x: 3, y: 6 } },
             { id:'3', typ:AtomType.VANILLA, index:{ x: 6, y: 3 } },

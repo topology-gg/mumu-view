@@ -382,9 +382,10 @@ export default function Home() {
         });
 
         let faucet_sink_indices_in_str = placedSinks.map(s => JSON.stringify(s.index));
-        faucet_sink_indices_in_str.concat(placedFaucets.map(f => JSON.stringify(f.index)));
+        faucet_sink_indices_in_str = faucet_sink_indices_in_str.concat(placedFaucets.map(f => JSON.stringify(f.index)));
 
         const all_indices = adder_indices_in_str.concat(faucet_sink_indices_in_str);
+        console.log('all_indices:', all_indices)
         const unique_indices = all_indices.filter(onlyUnique);
 
         // if unique operation reduces array length, we have duplicate indices
@@ -510,7 +511,7 @@ export default function Home() {
                     atom_faucets: placedFaucets.map((f, index) => {
                         return {
                             id: `atom_faucet${index}`,
-                            typ: AtomType.VANILLA,
+                            typ: f.typ,
                             index: { x: f.index.x, y: f.index.y },
                         };
                     }),
@@ -676,11 +677,26 @@ export default function Home() {
 
                 return { ...newPlacingFormula, complete };
             });
+            return;
         }
         if (placingFaucet) {
+            setPlacingFaucet((prev) => {
+                // fabricate a fake operator for the purpose of checking position validity
+                const fakeOperator: Operator = {input:[{ x,y }], output:[], typ:OPERATOR_TYPES.STIR};
+                if (isAnyOperatorPositionInvalid([...operators, fakeOperator])) return prev;
+
+                return {id:prev.id, typ:prev.typ, index:{x,y}, complete:true};
+            });
             return;
         }
         if (placingSink) {
+            setPlacingSink((prev) => {
+                // fabricate a fake operator for the purpose of checking position validity
+                const fakeOperator: Operator = {input:[{ x,y }], output:[], typ:OPERATOR_TYPES.STIR};
+                if (isAnyOperatorPositionInvalid([...operators, fakeOperator])) return prev;
+
+                return {id:prev.id, index:{x,y}, complete:true};
+            });
             return;
         }
 
@@ -703,6 +719,8 @@ export default function Home() {
         setAnimationFrame((_) => 0);
         setFrames((_) => null);
         setPlacingFormula((_) => null);
+        setPlacingFaucet((_) => null);
+        setPlacingSink((_) => null);
         setPrograms((_) => BLANK_SOLUTION.programs);
         setMechInitPositions((_) => BLANK_SOLUTION.mechs.map((mech) => mech.index));
         setMechDescriptions((_) => BLANK_SOLUTION.mechs.map((mech) => mech.description));
@@ -921,6 +939,71 @@ export default function Home() {
     function handleOnMouseLeaveGrid (index: Grid) {
         setHoveredGrid((_) => null);
     }
+    function handleFaucetAtomTypeChange (f_i: number, atomType: AtomType) {
+        if (f_i == -1) {
+            // changing atom type for the faucet in placement
+            setPlacingFaucet((prev) => {
+                return {
+                    id: prev.id,
+                    index: prev.index,
+                    typ: atomType,
+                    complete: prev.complete
+                } as PlacingAtomFaucet
+            })
+        }
+        else {
+            setPlacedFaucets((prev) => {
+                let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                prev_copy[f_i].typ = atomType;
+                return prev_copy;
+            });
+        }
+    }
+    function handleAddFaucet () {
+        if (placingFaucet || placingSink) return;
+
+        setPlacingFaucet({
+            id: `${placedFaucets.length}`,
+            typ: AtomType.VANILLA,
+            index: null,
+            complete: false,
+        });
+    }
+    function handleAddSink () {
+        if (placingFaucet || placingSink) return;
+
+        setPlacingSink({
+            id: `${placedSinks.length}`,
+            index: null,
+            complete: false,
+        });
+    }
+    function handleCancelFaucetSinkPlacing () {
+        if (placingFaucet) {
+            setPlacingFaucet((_) => null);
+        }
+        else if (placingSink) {
+            setPlacingSink((_) => null);
+        }
+    }
+    function handleConfirmFaucetSinkPlacing () {
+        if (placingFaucet){
+            setPlacedFaucets((prev) => {
+                let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                prev_copy.push({id:placingFaucet.id, index:placingFaucet.index, typ:placingFaucet.typ} as AtomFaucetState)
+                return prev_copy;
+            });
+            setPlacingFaucet((_) => null);
+        }
+        else {
+            setPlacedSinks((prev) => {
+                let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
+                prev_copy.push({id:placingSink.id, index:placingSink.index} as AtomSinkState)
+                return prev_copy;
+            });
+            setPlacingSink((_) => null);
+        }
+    }
 
     // Render
     return (
@@ -964,10 +1047,20 @@ export default function Home() {
                 handleMechSfProgramChange={handleMechSfProgramChange}
                 handleMusicTitleChange={handleMusicTitleChange}
                 callData={calls}
+                handleAddFaucet={handleAddFaucet}
+                handleAddSink={handleAddSink}
                 handleRemoveFaucet={handleRemoveFaucet}
                 handleRemoveSink={handleRemoveSink}
                 handleOnMouseEnterGrid={handleOnMouseEnterGrid}
                 handleOnMouseLeaveGrid={handleOnMouseLeaveGrid}
+                handleFaucetAtomTypeChange={handleFaucetAtomTypeChange}
+
+                isPlacingFaucetSink={placingFaucet || placingSink}
+                isPlacingFaucet={placingFaucet}
+                placingFaucet={placingFaucet}
+                placingSink={placingSink}
+                handleCancelFaucetSinkPlacing={handleCancelFaucetSinkPlacing}
+                handleConfirmFaucetSinkPlacing={handleConfirmFaucetSinkPlacing}
             />
         </>
     );

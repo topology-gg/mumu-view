@@ -67,13 +67,21 @@ export default function Layout({
     handleMechNoteVelocityChange,
     handleMechSfProgramChange,
     handleMusicTitleChange,
-    // handleAddFaucet={() => {}} //(index: Grid, atomType: AtomType) => void;
+    handleAddFaucet,
     handleRemoveFaucet,
-    // handleAddSink={() => {}} //(index: Grid, ) => void;
+    handleAddSink,
     handleRemoveSink,
     handleOnMouseEnterGrid,
     handleOnMouseLeaveGrid,
+    handleFaucetAtomTypeChange,
     callData,
+
+    isPlacingFaucetSink,
+    isPlacingFaucet,
+    placingFaucet,
+    placingSink,
+    handleCancelFaucetSinkPlacing,
+    handleConfirmFaucetSinkPlacing,
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
@@ -188,15 +196,22 @@ export default function Layout({
     let dawFaucetSinkPanel = (
         <DAWFaucetSinkPanel
             sfLoaded={sfLoaded}
+            placing={isPlacingFaucetSink}
+            isPlacingFaucet={isPlacingFaucet}
+            placingFaucet={placingFaucet}
+            placingSink={placingSink}
             faucets={faucets}
             sinks={sinks}
             animationState={animationState}
-            handleAddFaucet={() => {}} //(index: Grid, atomType: AtomType) => void;
+            handleAddFaucet={handleAddFaucet}
             handleRemoveFaucet={handleRemoveFaucet} //(id: string) => void;
-            handleAddSink={() => {}} //(index: Grid, ) => void;
+            handleAddSink={handleAddSink}
             handleRemoveSink={handleRemoveSink} //(id: string) => void;
             handleOnMouseEnterGrid={handleOnMouseEnterGrid}
             handleOnMouseLeaveGrid={handleOnMouseLeaveGrid}
+            handleFaucetAtomTypeChange={handleFaucetAtomTypeChange}
+            handleCancelPlacing={handleCancelFaucetSinkPlacing}
+            handleConfirmPlacing={handleConfirmFaucetSinkPlacing}
         />
     )
 
