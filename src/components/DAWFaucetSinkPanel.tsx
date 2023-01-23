@@ -3,8 +3,7 @@ import { OperatorState } from "../types/Operator";
 import AtomFaucetState from "../types/AtomFaucetState";
 import AtomSinkState from "../types/AtomSinkState";
 import { Constraints } from "../constants/constants";
-import DAWFaucetRow from "./DAWFaucetRow";
-import DAWSinkRow from "./DAWSinkRow";
+import DAWFaucetSinkRow from "./DAWFaucetRow";
 import { AtomType } from "../types/AtomState";
 import Grid from "../types/Grid";
 
@@ -17,6 +16,8 @@ interface DAWFaucetSinkPanelProps {
     handleRemoveFaucet: (i: number) => void;
     handleAddSink: (index: Grid, ) => void;
     handleRemoveSink: (i: number) => void;
+    handleOnMouseEnterGrid: (index: Grid) => void;
+    handleOnMouseLeaveGrid: (index: Grid) => void;
 }
 
 export default function DAWFaucetSinkPanel ({
@@ -28,6 +29,8 @@ export default function DAWFaucetSinkPanel ({
     handleRemoveFaucet,
     handleAddSink,
     handleRemoveSink,
+    handleOnMouseEnterGrid,
+    handleOnMouseLeaveGrid,
 } : DAWFaucetSinkPanelProps) {
 
     // render
@@ -41,17 +44,21 @@ export default function DAWFaucetSinkPanel ({
                         <div style={{display:'flex', flexDirection:'column', alignItems:'center', marginBottom:'0.5rem'}}>
                             {
                                 faucets.map((f,f_i) => (
-                                    <DAWFaucetRow
-                                        faucet={f} animationState={animationState}
+                                    <DAWFaucetSinkRow
+                                        isFaucet={true} faucetSink={f} animationState={animationState}
                                         handleOnDelete={() => handleRemoveFaucet(f_i)}
+                                        handleOnMouseEnter={() => handleOnMouseEnterGrid(f.index)}
+                                        handleOnMouseLeave={() => handleOnMouseLeaveGrid(f.index)}
                                     />
                                 ))
                             }
                             {
                                 sinks.map((s,s_i) => (
-                                    <DAWSinkRow
-                                        sink={s} animationState={animationState}
+                                    <DAWFaucetSinkRow
+                                        isFaucet={false} faucetSink={s} animationState={animationState}
                                         handleOnDelete={() => handleRemoveSink(s_i)}
+                                        handleOnMouseEnter={() => handleOnMouseEnterGrid(s.index)}
+                                        handleOnMouseLeave={() => handleOnMouseLeaveGrid(s.index)}
                                     />
                                 ))
                             }

@@ -18,6 +18,7 @@ interface UnitProps {
     isProduced?: boolean;
     gridDimensionRem?: number;
     marginRem?: number;
+    isHovered?: boolean;
 }
 
 export default function Unit({
@@ -35,6 +36,7 @@ export default function Unit({
     isProduced,
     gridDimensionRem = 2,
     marginRem = 0.2,
+    isHovered = false,
 }: UnitProps) {
 
     // guardrail
@@ -104,7 +106,7 @@ export default function Unit({
     // Render
     return (
         <animated.div
-            className={`grid ${styles.unit} ${className}`}
+            className={`grid ${styles.unit} ${className} ${isHovered ? 'grid-hovered' : ''}`}
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
             onClick={onClick}
@@ -115,8 +117,6 @@ export default function Unit({
                 opacity: atomOpacity || 1.0,
                 margin: `${marginRem}rem`,
                 borderRadius: `${gridDimensionRem/2}rem`,
-                // width: `${gridDimensionRem}rem`,
-                // height: `${gridDimensionRem}rem`,
             }}
         >
             {state.unit_text}

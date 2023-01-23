@@ -97,6 +97,7 @@ export default function Home() {
     const [placedSinks, setPlacedSinks] = useState<AtomSinkState[]>(DEFAULT_SINKS);
     const [placingFaucet, setPlacingFaucet] = useState<PlacingAtomFaucet>();
     const [placingSink, setPlacingSink] = useState<PlacingAtomSink>();
+    const [hoveredGrid, setHoveredGrid] = useState<Grid | null>();
 
     // React states for animation control
     const [animationState, setAnimationState] = useState("Stop");
@@ -808,6 +809,8 @@ export default function Home() {
         playMidiNum = {playMidiNum}
         stopMidiNum = {stopMidiNum}
         parentDim = {parentDim}
+        hoveredGrid = {hoveredGrid}
+
     />
 
     const stats_box_sx = {
@@ -912,6 +915,12 @@ export default function Home() {
             return prev_copy;
         });
     }
+    function handleOnMouseEnterGrid (index: Grid) {
+        setHoveredGrid((_) => index);
+    }
+    function handleOnMouseLeaveGrid (index: Grid) {
+        setHoveredGrid((_) => null);
+    }
 
     // Render
     return (
@@ -957,6 +966,8 @@ export default function Home() {
                 callData={calls}
                 handleRemoveFaucet={handleRemoveFaucet}
                 handleRemoveSink={handleRemoveSink}
+                handleOnMouseEnterGrid={handleOnMouseEnterGrid}
+                handleOnMouseLeaveGrid={handleOnMouseLeaveGrid}
             />
         </>
     );

@@ -116,12 +116,17 @@ button:hover {
     cursor: default;
     text-decoration: none;
     /* border-radius: 0.5rem; */
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color 0.15s ease, border-color 0.15s ease, outline-color 0.3s ease;
     max-width: 300px;
 }
 
 .grid:hover {
     outline-width: 1px;
+    outline-style: dashed;
+    outline-color: #777777;
+}
+.grid-hovered {
+    outline-width: 2px;
     outline-style: dashed;
     outline-color: #777777;
 }
@@ -410,4 +415,8 @@ select::-ms-expand {
 select,
 .select:after {
   grid-area: select;
+}
+
+.daw-faucet-row-div:hover {
+    background-color: #fedfb0;
 }

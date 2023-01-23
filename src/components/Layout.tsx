@@ -71,6 +71,8 @@ export default function Layout({
     handleRemoveFaucet,
     // handleAddSink={() => {}} //(index: Grid, ) => void;
     handleRemoveSink,
+    handleOnMouseEnterGrid,
+    handleOnMouseLeaveGrid,
     callData,
 }) {
     const { t } = useTranslation();
@@ -193,6 +195,8 @@ export default function Layout({
             handleRemoveFaucet={handleRemoveFaucet} //(id: string) => void;
             handleAddSink={() => {}} //(index: Grid, ) => void;
             handleRemoveSink={handleRemoveSink} //(id: string) => void;
+            handleOnMouseEnterGrid={handleOnMouseEnterGrid}
+            handleOnMouseLeaveGrid={handleOnMouseLeaveGrid}
         />
     )
 
