@@ -1,4 +1,4 @@
-import { getmodeNameBySteps, mumu_modes, note_keys } from "./Modes"
+import { getmodeNameBySteps, modes, mumu_modes, note_keys } from "./Modes"
 import { keynumToPitchClass, num_steps_from_scale_degree, PitchClass } from "./PitchClass"
 
 /* 
@@ -39,8 +39,16 @@ EG: Standard Guqin Tuning:
  more info at: https://ledgernote.com/columns/music-theory/circle-of-fifths-explained/
 */
 
+// Define default FretBoard Values
 
-// double check that PC to Keynum and Keynum to PC functions return the correct octave
+var default_fretboard_name : string = "guqin_10_string"
+var default_tonic : PitchClass = new PitchClass(5, 0)
+var default_scale_degree : number = 3
+var default_num_frets : number = 10
+var default_string_steps : number[] = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+var default_mode : number[] = modes.pentatonic
+var default_quality : number = 0
+var default_offset : number = 3
 
 export class FretBoard {
   name: string
@@ -56,22 +64,58 @@ export class FretBoard {
   msg: string
   c_map_idx: number
 
-  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[], c_map: number[][], quality: number, offset: number, msg: string, c_map_idx: number) {
-    this.name = name
-    this.string_steps = string_steps
-    this.num_frets = num_frets
-    this.scale_degree = scale_degree
-    this.tonic = tonic
-    this.mode = mode  
-    this.frets = []    
-    this.c_map = [
-      [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5], //major modes/chords
-      [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2], //minor modes/chords
-    ]
-    this.quality = quality
-    this.offset = offset
-    this.msg = this.fretDataToString()
+  constructor(name?: string, string_steps?: number[], num_frets?: number, scale_degree?: number, tonic?: PitchClass, mode?: number[], c_map?: number[][], quality?: number, offset?: number, msg?: string, c_map_idx?: number) {
+    
+    if(tonic === undefined){
+      this.name = default_fretboard_name
+      this.string_steps = default_string_steps
+      this.num_frets = default_num_frets
+      this.scale_degree = default_scale_degree
+      this.tonic = default_tonic
+      this.mode = default_mode
+      this.frets = this.calculateFrets()    
+      this.c_map = [
+        [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5], //major modes/chords
+        [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2], //minor modes/chords
+      ]
+      this.quality = default_quality
+      this.offset = default_offset
+      this.msg =  this.fretDataToString()
+      this.c_map_idx = this.setCMapIdx()
+
+    }else{
+      this.name = name
+      this.string_steps = string_steps
+      this.num_frets = num_frets
+      this.scale_degree = scale_degree
+      this.tonic = tonic
+      this.mode = mode  
+      this.frets = []    
+      this.c_map = [
+        [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5], //major modes/chords
+        [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2], //minor modes/chords
+      ]
+      this.quality = quality
+      this.offset = offset
+      this.msg = this.fretDataToString()
+      this.c_map_idx = this.setCMapIdx()
+    }
+  }
+
+  // Reset function called when game loop stops or frame == 0
+
+  setFretBoardToInitialState(): number[][] {
+    this.name = default_fretboard_name
+    this.string_steps = default_string_steps
+    this.scale_degree = default_scale_degree
+    this.tonic = default_tonic
+    this.mode = default_mode
+    this.quality = default_quality
+    this.offset = default_offset
+    this.msg = `FretBoard Set to Initial State: ${this.fretDataToString()}`
     this.c_map_idx = this.setCMapIdx()
+    console.log(this.msg)
+  return this.calculateFrets();
   }
 
   fretDataToString(): string {

@@ -21,9 +21,6 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
 
 import SoundFont from '../modules/sf2-player/src';
-
-import { keynumToPitchClass, num_steps_from_scale_degree, PitchClass } from "../helpers/MuMuMusic/PitchClass"
-import { modes } from "../helpers/MuMuMusic/Modes";
 import { FretBoard } from "../helpers/MuMuMusic/FretBoard";
 
 
@@ -52,20 +49,7 @@ interface BoardProps {
     parentDim: number;
 }
 
-// compute Grid MidiKeynums ---
-var tonic = new PitchClass(5, 0) // Traditionally tuned to F
-var fretboard = new FretBoard(
-    "guqin_10_string", // name
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1], // string_steps
-    10, // num_frets
-    3, // scale_degree
-    tonic, // tonic
-    modes.pentatonic, // mode
-    null,
-    0,
-    3, null, null
-  )
-// compute keynums
+var fretboard = new FretBoard()
 fretboard.calculateFrets()
 
 export default function Board({
@@ -236,6 +220,13 @@ export default function Board({
 */
     // firing note.play in parent
     useEffect(() => {
+
+        // Reset FretBoard when game loop is stopped
+        
+        if(mode == Modes.daw && animationState=='Stop' && animationFrame==0 ){
+            fretboard.setFretBoardToInitialState()
+        }
+
         if (mode == Modes.daw && animationState=='Run'){
 
             var notes = []
