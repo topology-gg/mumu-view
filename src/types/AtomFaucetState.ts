@@ -6,3 +6,10 @@ export default interface AtomFaucetState {
   typ: AtomType
   index: Grid
 }
+
+export interface PlacingAtomFaucet {
+    id: string;
+    typ: AtomType;
+    index: Grid;
+    complete?: boolean;
+}

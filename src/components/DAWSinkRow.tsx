@@ -6,26 +6,26 @@ import { AtomTypeToBg } from "../types/UnitState";
 import { UnitText } from "../types/UnitState";
 import Unit from "./unit";
 import { Delete } from "@mui/icons-material";
+import AtomSinkState from "../types/AtomSinkState";
 
-interface DAWFaucetRowProps {
-    faucet: AtomFaucetState;
+interface DAWSinkRowProps {
+    sink: AtomSinkState;
     animationState: string;
     handleOnDelete: () => void;
 }
 
-export default function DAWFaucetRow ({
-    faucet,
+export default function DAWSinkRow ({
+    sink,
     animationState,
     handleOnDelete,
-} : DAWFaucetRowProps) {
+} : DAWSinkRowProps) {
 
     const disabled = animationState != 'Stop';
     const voidFunc = () => {};
 
     // render
     return (
-        <div style={{
-            marginBottom:'0.3rem', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'left',
+        <div style={{marginBottom:'0.3rem', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'left',
             width: '10rem',
         }}>
 
@@ -35,20 +35,7 @@ export default function DAWFaucetRow ({
                 onClick={!disabled ? handleOnDelete : voidFunc}
             />
 
-            <p>Faucet  @({faucet.index.x},{faucet.index.y})</p>
-            <Unit
-                atomOpacity={1.0}
-                state={{
-                    bg_status: AtomTypeToBg[faucet.typ],
-                    border_status: null,
-                    unit_text: UnitText.EMPTY,
-                    unit_id: null,
-                }}
-                handleMouseOut={() => {}}
-                handleMouseOver={() => {}}
-                mechHighlight={false}
-                isSmall={true}
-            />
+            <p>Sink  @({sink.index.x},{sink.index.y})</p>
         </div>
     );
 }

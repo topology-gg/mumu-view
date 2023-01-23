@@ -44,6 +44,8 @@ export default function Layout({
     currMode,
     loadSave,
     board,
+    faucets,
+    sinks,
     liveStats,
     summaryStats,
     animationState,
@@ -65,6 +67,10 @@ export default function Layout({
     handleMechNoteVelocityChange,
     handleMechSfProgramChange,
     handleMusicTitleChange,
+    // handleAddFaucet={() => {}} //(index: Grid, atomType: AtomType) => void;
+    handleRemoveFaucet,
+    // handleAddSink={() => {}} //(index: Grid, ) => void;
+    handleRemoveSink,
     callData,
 }) {
     const { t } = useTranslation();
@@ -180,7 +186,13 @@ export default function Layout({
     let dawFaucetSinkPanel = (
         <DAWFaucetSinkPanel
             sfLoaded={sfLoaded}
+            faucets={faucets}
+            sinks={sinks}
             animationState={animationState}
+            handleAddFaucet={() => {}} //(index: Grid, atomType: AtomType) => void;
+            handleRemoveFaucet={handleRemoveFaucet} //(id: string) => void;
+            handleAddSink={() => {}} //(index: Grid, ) => void;
+            handleRemoveSink={handleRemoveSink} //(id: string) => void;
         />
     )
 
