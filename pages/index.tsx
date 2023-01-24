@@ -93,6 +93,8 @@ export default function Home() {
     // React states for faucets and sinks
     const DEFAULT_FAUCETS = Constraints[currMode].FAUCETS;
     const DEFAULT_SINKS = Constraints[currMode].SINKS;
+    const [isEditingFaucetIndex, setIsEditingFaucetIndex] = useState<number | null>(null);
+    const [isEditingSinkIndex, setIsEditingSinkIndex] = useState<number | null>(null);
     const [placedFaucets, setPlacedFaucets] = useState<AtomFaucetState[]>(DEFAULT_FAUCETS);
     const [placedSinks, setPlacedSinks] = useState<AtomSinkState[]>(DEFAULT_SINKS);
     const [placingFaucet, setPlacingFaucet] = useState<PlacingAtomFaucet>();
@@ -981,9 +983,11 @@ export default function Home() {
     function handleCancelFaucetSinkPlacing () {
         if (placingFaucet) {
             setPlacingFaucet((_) => null);
+            setIsEditingFaucetIndex((_) => null);
         }
         else if (placingSink) {
             setPlacingSink((_) => null);
+            setIsEditingSinkIndex((_) => null);
         }
     }
     function handleConfirmFaucetSinkPlacing () {
@@ -993,7 +997,6 @@ export default function Home() {
                 prev_copy.push({id:placingFaucet.id, index:placingFaucet.index, typ:placingFaucet.typ} as AtomFaucetState)
                 return prev_copy;
             });
-            setPlacingFaucet((_) => null);
         }
         else {
             setPlacedSinks((prev) => {
@@ -1001,7 +1004,28 @@ export default function Home() {
                 prev_copy.push({id:placingSink.id, index:placingSink.index} as AtomSinkState)
                 return prev_copy;
             });
-            setPlacingSink((_) => null);
+        }
+        handleCancelFaucetSinkPlacing ();
+    }
+    function handleRequestToEdit (isFaucet: boolean, index: number) {
+        if (placingFaucet || placingSink) return;
+
+        if (isFaucet) {
+            setPlacingFaucet({
+                id: placedFaucets[index].id,
+                typ: placedFaucets[index].typ,
+                index: null,
+                complete: false,
+            });
+            setIsEditingFaucetIndex((_) => index);
+        }
+        else {
+            setPlacingSink({
+                id: placedSinks[index].id,
+                index: null,
+                complete: false,
+            });
+            setIsEditingSinkIndex((_) => index);
         }
     }
 
@@ -1055,12 +1079,15 @@ export default function Home() {
                 handleOnMouseLeaveGrid={handleOnMouseLeaveGrid}
                 handleFaucetAtomTypeChange={handleFaucetAtomTypeChange}
 
+                isEditingFaucetIndex={isEditingFaucetIndex}
+                isEditingSinkIndex={isEditingSinkIndex}
                 isPlacingFaucetSink={placingFaucet || placingSink}
                 isPlacingFaucet={placingFaucet}
                 placingFaucet={placingFaucet}
                 placingSink={placingSink}
                 handleCancelFaucetSinkPlacing={handleCancelFaucetSinkPlacing}
                 handleConfirmFaucetSinkPlacing={handleConfirmFaucetSinkPlacing}
+                handleRequestToEdit={handleRequestToEdit}
             />
         </>
     );

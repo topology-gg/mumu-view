@@ -100,7 +100,7 @@ button:hover {
 }
 
 .p_glow {
-    animation: glowing_from_blank 700ms infinite;
+    animation: glowing 700ms infinite;
 }
 
 @keyframes blinking {
@@ -406,7 +406,7 @@ select::-ms-expand {
     height: 1.4rem;
     margin: 0 0 0 0.8rem;
     padding-right: 0.5rem;
-    border: 1px solid #CCCCCC;
+    border: 1px solid #555555;
     border-radius: 10px;
     cursor: pointer;
     background-color: #FFFFFF;
@@ -430,5 +430,15 @@ select,
 }
 
 .daw-faucet-row-div:hover {
+    /* background-color: #fedfb0; */
+    background-color: #DDDDDD
+}
+
+.editable-placement {
+    background-color:#FFFFFF;
+}
+
+.editable-placement:hover {
+    cursor: pointer;
     background-color: #fedfb0;
 }

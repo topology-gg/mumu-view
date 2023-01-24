@@ -10,6 +10,8 @@ import Grid from "../types/Grid";
 interface DAWFaucetSinkPanelProps {
     sfLoaded: boolean;
     placing: boolean;
+    isEditingFaucetIndex: number | null;
+    isEditingSinkIndex: number | null;
     isPlacingFaucet: boolean;
     placingFaucet: PlacingAtomFaucet;
     placingSink: PlacingAtomSink;
@@ -25,11 +27,14 @@ interface DAWFaucetSinkPanelProps {
     handleFaucetAtomTypeChange: (i: number, atomType: AtomType) => void;
     handleCancelPlacing: () => void;
     handleConfirmPlacing: () => void;
+    handleRequestToEdit: (isFaucet: boolean, index: number) => void;
 }
 
 export default function DAWFaucetSinkPanel ({
     sfLoaded,
     placing,
+    isEditingFaucetIndex,
+    isEditingSinkIndex,
     isPlacingFaucet,
     placingFaucet,
     placingSink,
@@ -45,6 +50,7 @@ export default function DAWFaucetSinkPanel ({
     handleFaucetAtomTypeChange,
     handleCancelPlacing,
     handleConfirmPlacing,
+    handleRequestToEdit,
 } : DAWFaucetSinkPanelProps) {
 
     // render
@@ -60,12 +66,14 @@ export default function DAWFaucetSinkPanel ({
                                 faucets.map((f,f_i) => (
                                     <DAWFaucetSinkRow
                                         key={`dawfaucetsinkrow-faucet-${f_i}`}
-                                        placing={false}
+                                        placing={placing && (isEditingFaucetIndex == f_i)}
                                         isFaucet={true} faucetSink={f} animationState={animationState}
                                         handleOnDelete={() => handleRemoveFaucet(f_i)}
+                                        handleCancel={() => handleCancelPlacing()}
                                         handleOnMouseEnter={() => handleOnMouseEnterGrid(f.index)}
                                         handleOnMouseLeave={() => handleOnMouseLeaveGrid(f.index)}
                                         handleAtomTypeChange={(atomType: AtomType) => handleFaucetAtomTypeChange(f_i, atomType)}
+                                        handleRequestToEdit={() => { handleRequestToEdit(true, f_i) }}
                                     />
                                 ))
                             }
@@ -73,16 +81,18 @@ export default function DAWFaucetSinkPanel ({
                                 sinks.map((s,s_i) => (
                                     <DAWFaucetSinkRow
                                         key={`dawfaucetsinkrow-faucet-${s_i}`}
-                                        placing={false}
+                                        placing={placing && (isEditingSinkIndex == s_i)}
                                         isFaucet={false} faucetSink={s} animationState={animationState}
                                         handleOnDelete={() => handleRemoveSink(s_i)}
+                                        handleCancel={() => handleCancelPlacing()}
                                         handleOnMouseEnter={() => handleOnMouseEnterGrid(s.index)}
                                         handleOnMouseLeave={() => handleOnMouseLeaveGrid(s.index)}
+                                        handleRequestToEdit={() => { handleRequestToEdit(false, s_i) }}
                                     />
                                 ))
                             }
                             {
-                                placing ? (
+                                placing && (isEditingFaucetIndex == null) && (isEditingFaucetIndex == null) ? (
                                     <DAWFaucetSinkRow
                                         key={`dawfaucetsinkrow-placing`}
                                         placing={true}
@@ -91,10 +101,11 @@ export default function DAWFaucetSinkPanel ({
                                         faucetSink={isPlacingFaucet ? placingFaucet : placingSink}
                                         animationState={animationState}
                                         handleAtomTypeChange={(atomType: AtomType) => handleFaucetAtomTypeChange(-1, atomType)}
-                                        handleOnDelete={() => {handleCancelPlacing()}}
+                                        handleCancel={() => {handleCancelPlacing()}}
                                         handleOnMouseEnter={() => {}}
                                         handleOnMouseLeave={() => {}}
                                         handleConfirm={() => {handleConfirmPlacing()}}
+                                        handleRequestToEdit={() => {}}
                                     />
                                 ) : <></>
                             }

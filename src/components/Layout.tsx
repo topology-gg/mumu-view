@@ -76,12 +76,15 @@ export default function Layout({
     handleFaucetAtomTypeChange,
     callData,
 
+    isEditingFaucetIndex,
+    isEditingSinkIndex,
     isPlacingFaucetSink,
     isPlacingFaucet,
     placingFaucet,
     placingSink,
     handleCancelFaucetSinkPlacing,
     handleConfirmFaucetSinkPlacing,
+    handleRequestToEdit,
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
@@ -196,6 +199,8 @@ export default function Layout({
     let dawFaucetSinkPanel = (
         <DAWFaucetSinkPanel
             sfLoaded={sfLoaded}
+            isEditingFaucetIndex={isEditingFaucetIndex}
+            isEditingSinkIndex={isEditingSinkIndex}
             placing={isPlacingFaucetSink}
             isPlacingFaucet={isPlacingFaucet}
             placingFaucet={placingFaucet}
@@ -212,6 +217,7 @@ export default function Layout({
             handleFaucetAtomTypeChange={handleFaucetAtomTypeChange}
             handleCancelPlacing={handleCancelFaucetSinkPlacing}
             handleConfirmPlacing={handleConfirmFaucetSinkPlacing}
+            handleRequestToEdit={handleRequestToEdit}
         />
     )
 

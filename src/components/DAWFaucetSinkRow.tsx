@@ -16,11 +16,13 @@ interface DAWFaucetSinkRowProps {
     isFaucet: boolean;
     faucetSink: AtomFaucetState | AtomSinkState;
     animationState: string;
-    handleOnDelete: () => void;
+    handleOnDelete?: () => void;
     handleOnMouseEnter: () => void;
     handleOnMouseLeave: () => void;
     handleAtomTypeChange?: (atomType: AtomType) => void;
     handleConfirm?: () => void;
+    handleCancel?: () => void;
+    handleRequestToEdit?: () => void;
 }
 
 export default function DAWFaucetSinkRow ({
@@ -34,6 +36,8 @@ export default function DAWFaucetSinkRow ({
     handleOnMouseLeave,
     handleAtomTypeChange,
     handleConfirm,
+    handleCancel,
+    handleRequestToEdit,
 } : DAWFaucetSinkRowProps) {
 
     const disabled = animationState != 'Stop';
@@ -71,10 +75,21 @@ export default function DAWFaucetSinkRow ({
                     <p style={{width:'3rem', textAlign:'left'}}>
                         {isFaucet ? 'Faucet' : 'Sink'}
                     </p>
-                    <div className={`${placing && !complete ? 'p_glow' : ''}`} style={{borderRadius:'10px', padding:'0 10px 0 10px'}}>
-                        <p>
-                            @({faucetSink.index ? `${faucetSink.index.x},${faucetSink.index.y}` : '?,?'})
-                        </p>
+                    <div
+                        className={`${placing && !complete ? 'p_glow' : 'editable-placement'}`}
+                        style={{
+                            borderRadius:'10px', padding:'0 10px 0 10px', display:'flex', flexDirection:'row', alignItems:'center',
+                            border: '1px solid #555555', margin: '8px auto'
+                        }}
+                        onClick={()=>{ handleRequestToEdit(); }}
+                    >
+                        <div style={{width:'1rem'}}>
+                            {faucetSink.index ? faucetSink.index.x : '?'}
+                        </div>
+                        <div>,</div>
+                        <div style={{width:'1rem'}}>
+                            {faucetSink.index ? faucetSink.index.y : '?'}
+                        </div>
                     </div>
                 </div>
 
@@ -111,7 +126,7 @@ export default function DAWFaucetSinkRow ({
                             style={{marginLeft:'0.5rem'}}
                         > ✓ </button>
 
-                        <button onClick={handleOnDelete}> x </button>
+                        <button onClick={handleCancel}> x </button>
                     </> : <></>
                 }
 

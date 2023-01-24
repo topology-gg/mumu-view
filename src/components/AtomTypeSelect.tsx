@@ -18,8 +18,6 @@ export function AtomTypeSelect ({
     handleAtomTypeChange,
 } : AtomTypeSelectProps) {
 
-    console.log('AtomTypeSelect currAtomType:', currAtomType);
-
     return (
         <div className="select" style={{marginLeft:'0.5rem'}}>
             <select
