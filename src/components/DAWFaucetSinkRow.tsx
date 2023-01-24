@@ -76,18 +76,18 @@ export default function DAWFaucetSinkRow ({
                         {isFaucet ? 'Faucet' : 'Sink'}
                     </p>
                     <div
-                        className={`${placing && !complete ? 'p_glow' : 'editable-placement'}`}
+                        className={`${disabled ? 'disabled-editable-placement' : placing && !complete ? 'p_glow' : 'editable-placement'}`}
                         style={{
                             borderRadius:'10px', padding:'0 10px 0 10px', display:'flex', flexDirection:'row', alignItems:'center',
                             border: '1px solid #555555', margin: '8px auto'
                         }}
-                        onClick={()=>{ handleRequestToEdit(); }}
+                        onClick={()=>{ disabled ? voidFunc() : handleRequestToEdit(); }}
                     >
-                        <div style={{width:'1rem'}}>
+                        <div style={{width:'1rem', color: disabled ? '#999999' : '#222222'}}>
                             {faucetSink.index ? faucetSink.index.x : '?'}
                         </div>
                         <div>,</div>
-                        <div style={{width:'1rem'}}>
+                        <div style={{width:'1rem', color: disabled ? '#999999' : '#222222'}}>
                             {faucetSink.index ? faucetSink.index.y : '?'}
                         </div>
                     </div>
@@ -110,6 +110,7 @@ export default function DAWFaucetSinkRow ({
                                 isSmall={true}
                             />
                             <AtomTypeSelect
+                                disabled={disabled}
                                 currAtomType={(faucetSink as AtomFaucetState).typ}
                                 handleAtomTypeChange={handleAtomTypeChange}
                             />

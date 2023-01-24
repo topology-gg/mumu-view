@@ -434,6 +434,10 @@ select,
     background-color: #DDDDDD
 }
 
+.disabled-editable-placement {
+    background-color:#CCCCCC;
+}
+
 .editable-placement {
     background-color:#FFFFFF;
 }

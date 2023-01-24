@@ -9,17 +9,19 @@ import Unit from "./unit";
 import { AtomType } from "../types/AtomState";
 
 interface AtomTypeSelectProps {
+    disabled: boolean;
     currAtomType: AtomType;
     handleAtomTypeChange: (atomType: AtomType) => void;
 }
 
 export function AtomTypeSelect ({
+    disabled,
     currAtomType,
     handleAtomTypeChange,
 } : AtomTypeSelectProps) {
 
     return (
-        <div className="select" style={{marginLeft:'0.5rem'}}>
+        <div className="select" style={{marginLeft:'0.5rem', backgroundColor: disabled ? '#CCCCCC' : '#FFFFFF'}}>
             <select
                 name="unit" id="units"
                 onChange={event => {
@@ -28,6 +30,7 @@ export function AtomTypeSelect ({
                 }}
                 style={{fontSize:'11px'}}
                 defaultValue={currAtomType}
+                disabled={disabled}
             >
             {
                 Object.values(AtomType).map((atomType: AtomType) => (
