@@ -44,6 +44,8 @@ export default function Layout({
     currMode,
     loadSave,
     board,
+    faucets,
+    sinks,
     liveStats,
     summaryStats,
     animationState,
@@ -65,7 +67,24 @@ export default function Layout({
     handleMechNoteVelocityChange,
     handleMechSfProgramChange,
     handleMusicTitleChange,
+    handleAddFaucet,
+    handleRemoveFaucet,
+    handleAddSink,
+    handleRemoveSink,
+    handleOnMouseEnterGrid,
+    handleOnMouseLeaveGrid,
+    handleFaucetAtomTypeChange,
     callData,
+
+    isEditingFaucetIndex,
+    isEditingSinkIndex,
+    isPlacingFaucetSink,
+    isPlacingFaucet,
+    placingFaucet,
+    placingSink,
+    handleCancelFaucetSinkPlacing,
+    handleConfirmFaucetSinkPlacing,
+    handleRequestToEdit,
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
@@ -180,7 +199,25 @@ export default function Layout({
     let dawFaucetSinkPanel = (
         <DAWFaucetSinkPanel
             sfLoaded={sfLoaded}
+            isEditingFaucetIndex={isEditingFaucetIndex}
+            isEditingSinkIndex={isEditingSinkIndex}
+            placing={isPlacingFaucetSink}
+            isPlacingFaucet={isPlacingFaucet}
+            placingFaucet={placingFaucet}
+            placingSink={placingSink}
+            faucets={faucets}
+            sinks={sinks}
             animationState={animationState}
+            handleAddFaucet={handleAddFaucet}
+            handleRemoveFaucet={handleRemoveFaucet} //(id: string) => void;
+            handleAddSink={handleAddSink}
+            handleRemoveSink={handleRemoveSink} //(id: string) => void;
+            handleOnMouseEnterGrid={handleOnMouseEnterGrid}
+            handleOnMouseLeaveGrid={handleOnMouseLeaveGrid}
+            handleFaucetAtomTypeChange={handleFaucetAtomTypeChange}
+            handleCancelPlacing={handleCancelFaucetSinkPlacing}
+            handleConfirmPlacing={handleConfirmFaucetSinkPlacing}
+            handleRequestToEdit={handleRequestToEdit}
         />
     )
 

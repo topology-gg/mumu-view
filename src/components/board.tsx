@@ -50,6 +50,7 @@ interface BoardProps {
     consumedAtomIds: string[];
     producedAtomIds: string[];
     parentDim: number;
+    hoveredGrid: Grid | null;
 }
 
 // compute Grid MidiKeynums ---
@@ -91,6 +92,7 @@ export default function Board({
     consumedAtomIds,
     producedAtomIds,
     parentDim,
+    hoveredGrid,
 }: BoardProps) {
 
     // render nothing if mechStates is not ready yet
@@ -408,7 +410,7 @@ export default function Board({
                                                     isProduced={isProduced}
                                                     gridDimensionRem={GRID_DIM_REM}
                                                     marginRem={UNIT_MARGIN_REM}
-
+                                                    isHovered={hoveredGrid ? (hoveredGrid.x == j)&&(hoveredGrid.y == i) : false}
                                                 />
                                             </div>
                                         )

@@ -87,6 +87,22 @@ button:hover {
     animation: glowing 700ms infinite;
 }
 
+@keyframes glowing_from_blank {
+    0% {
+        background-color: #F2F1ED00;
+    }
+    30% {
+        background-color: #fedfb0;
+    }
+    100% {
+        background-color: #F2F1ED00;
+    }
+}
+
+.p_glow {
+    animation: glowing 700ms infinite;
+}
+
 @keyframes blinking {
     0% {
         background-color: #FFFFFF;
@@ -116,12 +132,17 @@ button:hover {
     cursor: default;
     text-decoration: none;
     /* border-radius: 0.5rem; */
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color 0.15s ease, border-color 0.15s ease, outline-color 0.3s ease;
     max-width: 300px;
 }
 
 .grid:hover {
     outline-width: 1px;
+    outline-style: dashed;
+    outline-color: #777777;
+}
+.grid-hovered {
+    outline-width: 2px;
     outline-style: dashed;
     outline-color: #777777;
 }
@@ -368,13 +389,9 @@ input::placeholder {
 /*  */
 select {
     appearance: none;
-
     background-color: transparent;
     border: none;
-    /* border: 1px solid #777777; */
-    /* border-radius: 10px; */
     padding: 0 1rem 0 0.5rem;
-    /* margin: 0 0 0 0.8rem;  */
     height: 1rem;
     font-family: inherit;
     font-size: '8px';
@@ -389,10 +406,10 @@ select::-ms-expand {
     height: 1.4rem;
     margin: 0 0 0 0.8rem;
     padding-right: 0.5rem;
-    border: 1px solid #CCCCCC;
+    border: 1px solid #555555;
     border-radius: 10px;
     cursor: pointer;
-    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+    background-color: #FFFFFF;
     display: grid;
     grid-template-areas: "select";
     align-items: center;
@@ -410,4 +427,18 @@ select::-ms-expand {
 select,
 .select:after {
   grid-area: select;
+}
+
+.daw-faucet-row-div:hover {
+    /* background-color: #fedfb0; */
+    background-color: #DDDDDD
+}
+
+.editable-placement {
+    background-color:#FFFFFF;
+}
+
+.editable-placement:hover {
+    cursor: pointer;
+    background-color: #fedfb0;
 }
