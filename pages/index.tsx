@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React, { useState, useMemo } from "react";
 import simulator from "../src/components/simulator";
-import MechState, { MechStatus, MechType } from "../src/types/MechState";
+import MechState, { MechPositionPlacing, MechStatus, MechType } from "../src/types/MechState";
 import AtomState, { AtomStatus, AtomType } from "../src/types/AtomState";
 import AtomFaucetState, { PlacingAtomFaucet } from "../src/types/AtomFaucetState";
 import AtomSinkState, { PlacingAtomSink } from "../src/types/AtomSinkState";
@@ -82,7 +82,7 @@ export default function Home() {
     const [mechDescriptions, setMechDescriptions] = useState<string[]>(
         BLANK_SOLUTION.mechs.map((mech) => mech.description)
     );
-
+    const [placingMech, setPlacingMech] = useState<MechPositionPlacing | null>(null);
     const numMechs = programs.length;
 
     // React states for operators
@@ -93,6 +93,8 @@ export default function Home() {
     // React states for faucets and sinks
     const DEFAULT_FAUCETS = Constraints[currMode].FAUCETS;
     const DEFAULT_SINKS = Constraints[currMode].SINKS;
+    const [cachedFaucetPos, setCachedFaucetPos] = useState<Grid>(null);
+    const [cachedSinkPos, setCachedSinkPos] = useState<Grid>(null);
     const [isEditingFaucetIndex, setIsEditingFaucetIndex] = useState<number | null>(null);
     const [isEditingSinkIndex, setIsEditingSinkIndex] = useState<number | null>(null);
     const [placedFaucets, setPlacedFaucets] = useState<AtomFaucetState[]>(DEFAULT_FAUCETS);
@@ -128,7 +130,7 @@ export default function Home() {
     // React useMemo
     const calls = useMemo(() => {
         let instructionSets = programsToInstructionSets(programs);
-        const args = packSolution(
+        const args = placingFaucet || placingSink ? [] : packSolution(
             instructionSets,
             mechInitPositions,
             mechDescriptions,
@@ -343,10 +345,12 @@ export default function Home() {
 
         // Faucet & Sink
         for (const faucet_pos of placedFaucets.map(f => f.index)) {
+            if (faucet_pos == null) continue;
             newStates[faucet_pos.x][faucet_pos.y].unit_text = UnitText.FAUCET;
         }
 
         for (const sink_pos of placedSinks.map(s => s.index)) {
+            if (sink_pos == null) continue;
             newStates[sink_pos.x][sink_pos.y].unit_text = UnitText.SINK;
         }
 
@@ -387,7 +391,6 @@ export default function Home() {
         faucet_sink_indices_in_str = faucet_sink_indices_in_str.concat(placedFaucets.map(f => JSON.stringify(f.index)));
 
         const all_indices = adder_indices_in_str.concat(faucet_sink_indices_in_str);
-        console.log('all_indices:', all_indices)
         const unique_indices = all_indices.filter(onlyUnique);
 
         // if unique operation reduces array length, we have duplicate indices
@@ -417,34 +420,42 @@ export default function Home() {
     // Handle click event for adding/removing mechs
     function handleMechClick(mode: string) {
         if (animationState != "Stop") return; // only when in Stop mode can player add/remove mechs
+
         if (mode === "+" && numMechs < MAX_NUM_MECHS) {
-            setMechInitPositions((prev) => {
-                let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
-                prev_copy.push({ x: 0, y: 0 });
-                return prev_copy;
-            });
-            setPrograms((prev) => {
-                let prev_copy = JSON.parse(JSON.stringify(prev));
-                prev_copy.push(INIT_PROGRAM);
-                return prev_copy;
-            });
-            setMechDescriptions((prev) => {
-                let prev_copy = JSON.parse(JSON.stringify(prev));
-                prev_copy.push(INIT_DESCRIPTION);
-                return prev_copy;
-            });
-            setMechVelocities((prev) => {
-                let prev_copy = JSON.parse(JSON.stringify(prev));
-                prev_copy.push(60);
-                return prev_copy;
+            setPlacingMech((_) => {
+                return { index: null, complete: false } as MechPositionPlacing;
             })
-            setMechSfProgramIds (prev => {
-                let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
-                prev_copy.push (sfPrograms[0].id);
-                return prev_copy;
-            });
+
+            // setMechInitPositions((prev) => {
+            //     let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+            //     prev_copy.push({ x: 0, y: 0 });
+            //     return prev_copy;
+            // });
+            // setPrograms((prev) => {
+            //     let prev_copy = JSON.parse(JSON.stringify(prev));
+            //     prev_copy.push(INIT_PROGRAM);
+            //     return prev_copy;
+            // });
+            // setMechDescriptions((prev) => {
+            //     let prev_copy = JSON.parse(JSON.stringify(prev));
+            //     prev_copy.push(INIT_DESCRIPTION);
+            //     return prev_copy;
+            // });
+            // setMechVelocities((prev) => {
+            //     let prev_copy = JSON.parse(JSON.stringify(prev));
+            //     prev_copy.push(60);
+            //     return prev_copy;
+            // })
+            // setMechSfProgramIds (prev => {
+            //     let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
+            //     prev_copy.push (sfPrograms[0].id);
+            //     return prev_copy;
+            // });
 
         }
+    }
+    function handleEditMechClick() {
+
     }
 
     // Handle click even for addming/removing Adder (operator)
@@ -687,6 +698,15 @@ export default function Home() {
                 const fakeOperator: Operator = {input:[{ x,y }], output:[], typ:OPERATOR_TYPES.STIR};
                 if (isAnyOperatorPositionInvalid([...operators, fakeOperator])) return prev;
 
+                // if editing => update placed values directly
+                if (isEditingFaucetIndex !== null){
+                    setPlacedFaucets((prev) => {
+                        let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                        prev_copy[isEditingFaucetIndex].index = {x,y};
+                        return prev_copy;
+                    });
+                }
+
                 return {id:prev.id, typ:prev.typ, index:{x,y}, complete:true};
             });
             return;
@@ -696,6 +716,15 @@ export default function Home() {
                 // fabricate a fake operator for the purpose of checking position validity
                 const fakeOperator: Operator = {input:[{ x,y }], output:[], typ:OPERATOR_TYPES.STIR};
                 if (isAnyOperatorPositionInvalid([...operators, fakeOperator])) return prev;
+
+                // if editing => update placed values directly
+                if (isEditingSinkIndex !== null){
+                    setPlacedSinks((prev) => {
+                        let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
+                        prev_copy[isEditingSinkIndex].index = {x,y};
+                        return prev_copy;
+                    });
+                }
 
                 return {id:prev.id, index:{x,y}, complete:true};
             });
@@ -980,37 +1009,72 @@ export default function Home() {
             complete: false,
         });
     }
-    function handleCancelFaucetSinkPlacing () {
+    function handleCancelFaucetSinkPlacing (hasConfirmed: boolean) {
         if (placingFaucet) {
+            if ( (isEditingFaucetIndex !== null) && !hasConfirmed ) { // in edit mode => canceling edit without confirm sets position to cached value
+                setPlacedFaucets((prev) => {
+                    let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy[isEditingFaucetIndex].index = cachedFaucetPos;
+                    return prev_copy;
+                })
+            }
             setPlacingFaucet((_) => null);
             setIsEditingFaucetIndex((_) => null);
+            setCachedFaucetPos((_) => null);
         }
         else if (placingSink) {
+            if ( (isEditingSinkIndex !== null) && !hasConfirmed ) { // in edit mode => canceling edit without confirm sets position to cached value
+                setPlacedSinks((prev) => {
+                    let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy[isEditingSinkIndex].index = cachedSinkPos;
+                    return prev_copy;
+                })
+            }
             setPlacingSink((_) => null);
             setIsEditingSinkIndex((_) => null);
+            setCachedSinkPos((_) => null);
         }
     }
     function handleConfirmFaucetSinkPlacing () {
         if (placingFaucet){
-            setPlacedFaucets((prev) => {
-                let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
-                prev_copy.push({id:placingFaucet.id, index:placingFaucet.index, typ:placingFaucet.typ} as AtomFaucetState)
-                return prev_copy;
-            });
+
+            if (isEditingFaucetIndex !== null) {
+                // editing; placedFaucets already updated in handleUnitClick
+            }
+            else {
+                // adding
+                setPlacedFaucets((prev) => {
+                    let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy.push({id:placingFaucet.id, index:placingFaucet.index, typ:placingFaucet.typ} as AtomFaucetState)
+                    return prev_copy;
+                });
+            }
         }
         else {
-            setPlacedSinks((prev) => {
-                let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
-                prev_copy.push({id:placingSink.id, index:placingSink.index} as AtomSinkState)
-                return prev_copy;
-            });
+            if (isEditingSinkIndex !== null) {
+                // editing; placedSinks already updated in handleUnitClick
+            }
+            else {
+                // adding
+                setPlacedSinks((prev) => {
+                    let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy.push({id:placingSink.id, index:placingSink.index} as AtomSinkState)
+                    return prev_copy;
+                });
+            }
         }
-        handleCancelFaucetSinkPlacing ();
+        handleCancelFaucetSinkPlacing (true);
     }
     function handleRequestToEdit (isFaucet: boolean, index: number) {
         if (placingFaucet || placingSink) return;
 
         if (isFaucet) {
+            setPlacedFaucets((prev) => {
+                setCachedFaucetPos((_) => placedFaucets[index].index)
+                let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                prev_copy[index].index = null;
+                return prev_copy;
+            })
             setPlacingFaucet({
                 id: placedFaucets[index].id,
                 typ: placedFaucets[index].typ,
@@ -1020,6 +1084,12 @@ export default function Home() {
             setIsEditingFaucetIndex((_) => index);
         }
         else {
+            setPlacedSinks((prev) => {
+                setCachedSinkPos((_) => placedSinks[index].index)
+                let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
+                prev_copy[index].index = null;
+                return prev_copy;
+            })
             setPlacingSink({
                 id: placedSinks[index].id,
                 index: null,
@@ -1037,6 +1107,8 @@ export default function Home() {
                 <meta name="MuMu" content="Generated by create next app" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
+
+            <p style={{color:'#ffffff'}}>cachedFaucetPos:{JSON.stringify(cachedFaucetPos)}, isEditingFaucetIndex:{isEditingFaucetIndex}</p>
 
             <Layout
                 currMode={currMode}
@@ -1085,7 +1157,7 @@ export default function Home() {
                 isPlacingFaucet={placingFaucet}
                 placingFaucet={placingFaucet}
                 placingSink={placingSink}
-                handleCancelFaucetSinkPlacing={handleCancelFaucetSinkPlacing}
+                handleCancelFaucetSinkPlacing={ () => handleCancelFaucetSinkPlacing(false) }
                 handleConfirmFaucetSinkPlacing={handleConfirmFaucetSinkPlacing}
                 handleRequestToEdit={handleRequestToEdit}
             />

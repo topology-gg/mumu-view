@@ -67,12 +67,14 @@ export default function DAWFaucetSinkPanel ({
                                     <DAWFaucetSinkRow
                                         key={`dawfaucetsinkrow-faucet-${f_i}`}
                                         placing={placing && (isEditingFaucetIndex == f_i)}
+                                        complete={!placing ? false : isPlacingFaucet ? placingFaucet.complete : placingSink.complete}
                                         isFaucet={true} faucetSink={f} animationState={animationState}
                                         handleOnDelete={() => handleRemoveFaucet(f_i)}
                                         handleCancel={() => handleCancelPlacing()}
                                         handleOnMouseEnter={() => handleOnMouseEnterGrid(f.index)}
                                         handleOnMouseLeave={() => handleOnMouseLeaveGrid(f.index)}
                                         handleAtomTypeChange={(atomType: AtomType) => handleFaucetAtomTypeChange(f_i, atomType)}
+                                        handleConfirm={() => {handleConfirmPlacing()}}
                                         handleRequestToEdit={() => { handleRequestToEdit(true, f_i) }}
                                     />
                                 ))
@@ -82,17 +84,19 @@ export default function DAWFaucetSinkPanel ({
                                     <DAWFaucetSinkRow
                                         key={`dawfaucetsinkrow-faucet-${s_i}`}
                                         placing={placing && (isEditingSinkIndex == s_i)}
+                                        complete={!placing ? false : isPlacingFaucet ? placingFaucet.complete : placingSink.complete}
                                         isFaucet={false} faucetSink={s} animationState={animationState}
                                         handleOnDelete={() => handleRemoveSink(s_i)}
                                         handleCancel={() => handleCancelPlacing()}
                                         handleOnMouseEnter={() => handleOnMouseEnterGrid(s.index)}
                                         handleOnMouseLeave={() => handleOnMouseLeaveGrid(s.index)}
+                                        handleConfirm={() => {handleConfirmPlacing()}}
                                         handleRequestToEdit={() => { handleRequestToEdit(false, s_i) }}
                                     />
                                 ))
                             }
                             {
-                                placing && (isEditingFaucetIndex == null) && (isEditingFaucetIndex == null) ? (
+                                placing && (isEditingFaucetIndex == null) && (isEditingSinkIndex == null) ? (
                                     <DAWFaucetSinkRow
                                         key={`dawfaucetsinkrow-placing`}
                                         placing={true}
