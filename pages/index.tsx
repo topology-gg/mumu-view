@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React, { useState, useMemo } from "react";
 import simulator from "../src/components/simulator";
-import MechState, { MechStatus, MechType } from "../src/types/MechState";
+import MechState, { MechPositionPlacing, MechStatus, MechType } from "../src/types/MechState";
 import AtomState, { AtomStatus, AtomType } from "../src/types/AtomState";
 import AtomFaucetState, { PlacingAtomFaucet } from "../src/types/AtomFaucetState";
 import AtomSinkState, { PlacingAtomSink } from "../src/types/AtomSinkState";
@@ -82,7 +82,9 @@ export default function Home() {
     const [mechDescriptions, setMechDescriptions] = useState<string[]>(
         BLANK_SOLUTION.mechs.map((mech) => mech.description)
     );
-
+    const [placingMech, setPlacingMech] = useState<MechPositionPlacing | null>(null);
+    const [isEditingMechIndex, setIsEditingMechIndex] = useState<number | null>(null);
+    const [cachedMechPos, setCachedMechPos] = useState<Grid | null>(null);
     const numMechs = programs.length;
 
     // React states for operators
@@ -93,6 +95,8 @@ export default function Home() {
     // React states for faucets and sinks
     const DEFAULT_FAUCETS = Constraints[currMode].FAUCETS;
     const DEFAULT_SINKS = Constraints[currMode].SINKS;
+    const [cachedFaucetPos, setCachedFaucetPos] = useState<Grid>(null);
+    const [cachedSinkPos, setCachedSinkPos] = useState<Grid>(null);
     const [isEditingFaucetIndex, setIsEditingFaucetIndex] = useState<number | null>(null);
     const [isEditingSinkIndex, setIsEditingSinkIndex] = useState<number | null>(null);
     const [placedFaucets, setPlacedFaucets] = useState<AtomFaucetState[]>(DEFAULT_FAUCETS);
@@ -125,38 +129,10 @@ export default function Home() {
     const [sfPrograms, setSfPrograms] = useState([]);
     const [mechSfProgramIds, setMechSfProgramIds] = useState([]);
 
-    // React useMemo
-    const calls = useMemo(() => {
-        let instructionSets = programsToInstructionSets(programs);
-        const args = packSolution(
-            instructionSets,
-            mechInitPositions,
-            mechDescriptions,
-            operators,
-            currMode == Modes.daw ? musicTitle : '',
-            currMode == Modes.daw ? mechVelocities : mechInitPositions.map(_ => 0),
-            placedFaucets.map(f => f.index),
-            placedSinks.map(s => s.index),
-        );
-        // console.log ('> musicTitle to submit:', musicTitle)
-        // console.log ('> mechVelocities to submit:', mechVelocities)
-        // console.log ('> useMemo: args =', args)
-
-        const tx = {
-            contractAddress: SIMULATOR_ADDR,
-            entrypoint: "simulator",
-            calldata: args,
-        };
-        return [tx];
-    }, [
-        programs, mechInitPositions, mechDescriptions,
-        operators, musicTitle, mechVelocities,
-        placedFaucets, placedSinks
-    ]);
-
     //
     // States derived from React states
     //
+    const isPlacingSomething = placingFaucet || placingSink || placingMech;
     const runnable = isRunnable();
     const mechInitStates: MechState[] = mechInitPositions.map((pos, mech_i) => {
         return {
@@ -231,12 +207,43 @@ export default function Home() {
         }
     });
 
+    // React useMemo
+    const calls = useMemo(() => {
+        let instructionSets = programsToInstructionSets(programs);
+        const args = isPlacingSomething ? [] : packSolution(
+            instructionSets,
+            mechInitPositions,
+            mechDescriptions,
+            operators,
+            currMode == Modes.daw ? musicTitle : '',
+            currMode == Modes.daw ? mechVelocities : mechInitPositions.map(_ => 0),
+            placedFaucets.map(f => f.index),
+            placedSinks.map(s => s.index),
+        );
+        // console.log ('> musicTitle to submit:', musicTitle)
+        // console.log ('> mechVelocities to submit:', mechVelocities)
+        // console.log ('> useMemo: args =', args)
+
+        const tx = {
+            contractAddress: SIMULATOR_ADDR,
+            entrypoint: "simulator",
+            calldata: args,
+        };
+        return [tx];
+    }, [
+        programs, mechInitPositions, mechDescriptions,
+        operators, musicTitle, mechVelocities,
+        placedFaucets, placedSinks
+    ]);
+
     ////////////////////
 
     //
     // Style the Run button based on solution legality == operator placement legality && mech initial placement legality
     //
     function isRunnable() {
+        if (isPlacingSomething) return false;
+
         // impurity by dependencies: operatorStates, mechInitPosition, programs
         if (!isOperatorPlacementLegal()) {
             console.log("> simulation not runnable because of operator placement illegality");
@@ -279,6 +286,9 @@ export default function Home() {
     function setMechVisualForStates(mech: MechState, states: UnitState[][]) {
         // duplicate
         let newStates: UnitState[][] = JSON.parse(JSON.stringify(states));
+
+        // if this mech has undefined position, return
+        if (mech.index == null) return newStates;
 
         // if this mech is positioned illegally, don't render it
         if (isGridOOB(mech.index, DIM)) {
@@ -343,10 +353,12 @@ export default function Home() {
 
         // Faucet & Sink
         for (const faucet_pos of placedFaucets.map(f => f.index)) {
+            if (faucet_pos == null) continue;
             newStates[faucet_pos.x][faucet_pos.y].unit_text = UnitText.FAUCET;
         }
 
         for (const sink_pos of placedSinks.map(s => s.index)) {
+            if (sink_pos == null) continue;
             newStates[sink_pos.x][sink_pos.y].unit_text = UnitText.SINK;
         }
 
@@ -387,7 +399,6 @@ export default function Home() {
         faucet_sink_indices_in_str = faucet_sink_indices_in_str.concat(placedFaucets.map(f => JSON.stringify(f.index)));
 
         const all_indices = adder_indices_in_str.concat(faucet_sink_indices_in_str);
-        console.log('all_indices:', all_indices)
         const unique_indices = all_indices.filter(onlyUnique);
 
         // if unique operation reduces array length, we have duplicate indices
@@ -417,34 +428,16 @@ export default function Home() {
     // Handle click event for adding/removing mechs
     function handleMechClick(mode: string) {
         if (animationState != "Stop") return; // only when in Stop mode can player add/remove mechs
-        if (mode === "+" && numMechs < MAX_NUM_MECHS) {
-            setMechInitPositions((prev) => {
-                let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
-                prev_copy.push({ x: 0, y: 0 });
-                return prev_copy;
-            });
-            setPrograms((prev) => {
-                let prev_copy = JSON.parse(JSON.stringify(prev));
-                prev_copy.push(INIT_PROGRAM);
-                return prev_copy;
-            });
-            setMechDescriptions((prev) => {
-                let prev_copy = JSON.parse(JSON.stringify(prev));
-                prev_copy.push(INIT_DESCRIPTION);
-                return prev_copy;
-            });
-            setMechVelocities((prev) => {
-                let prev_copy = JSON.parse(JSON.stringify(prev));
-                prev_copy.push(60);
-                return prev_copy;
-            })
-            setMechSfProgramIds (prev => {
-                let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
-                prev_copy.push (sfPrograms[0].id);
-                return prev_copy;
-            });
+        if (isPlacingSomething) return;
 
+        if (mode === "+" && numMechs < MAX_NUM_MECHS) {
+            setPlacingMech((_) => {
+                return { index: null, complete: false } as MechPositionPlacing;
+            })
         }
+    }
+    function handleEditMechClick() {
+
     }
 
     // Handle click even for addming/removing Adder (operator)
@@ -687,6 +680,15 @@ export default function Home() {
                 const fakeOperator: Operator = {input:[{ x,y }], output:[], typ:OPERATOR_TYPES.STIR};
                 if (isAnyOperatorPositionInvalid([...operators, fakeOperator])) return prev;
 
+                // if editing => update placed values directly
+                if (isEditingFaucetIndex !== null){
+                    setPlacedFaucets((prev) => {
+                        let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                        prev_copy[isEditingFaucetIndex].index = {x,y};
+                        return prev_copy;
+                    });
+                }
+
                 return {id:prev.id, typ:prev.typ, index:{x,y}, complete:true};
             });
             return;
@@ -697,9 +699,33 @@ export default function Home() {
                 const fakeOperator: Operator = {input:[{ x,y }], output:[], typ:OPERATOR_TYPES.STIR};
                 if (isAnyOperatorPositionInvalid([...operators, fakeOperator])) return prev;
 
+                // if editing => update placed values directly
+                if (isEditingSinkIndex !== null){
+                    setPlacedSinks((prev) => {
+                        let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
+                        prev_copy[isEditingSinkIndex].index = {x,y};
+                        return prev_copy;
+                    });
+                }
+
                 return {id:prev.id, index:{x,y}, complete:true};
             });
             return;
+        }
+        if (placingMech) {
+            setPlacingMech((prev) => {
+
+                // if editing => update placed values directly
+                if (isEditingMechIndex !== null) {
+                    setMechInitPositions((prev) => {
+                        let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+                        prev_copy[isEditingMechIndex] = {x,y};
+                        return prev_copy;
+                    })
+                }
+
+                return {index:{x,y}, complete:true};
+            })
         }
 
         return;
@@ -849,6 +875,66 @@ export default function Home() {
         </div>
     );
 
+    function handleMechConfirm () {
+        if (isEditingMechIndex !== null) {
+            // editing
+        }
+        else {
+            // adding
+            setMechInitPositions((prev) => {
+                let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(placingMech.index);
+                return prev_copy;
+            });
+            setPrograms((prev) => {
+                let prev_copy = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(INIT_PROGRAM);
+                return prev_copy;
+            });
+            setMechDescriptions((prev) => {
+                let prev_copy = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(INIT_DESCRIPTION);
+                return prev_copy;
+            });
+            setMechVelocities((prev) => {
+                let prev_copy = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(60);
+                return prev_copy;
+            })
+            if (currMode == Modes.daw){
+                setMechSfProgramIds (prev => {
+                    let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy.push (sfPrograms[0].id);
+                    return prev_copy;
+                });
+            }
+        }
+
+        handleMechCancel (true)
+    }
+    function handleMechCancel (hasConfirmed: boolean) {
+        if (!hasConfirmed) {
+            setMechInitPositions((prev) => {
+                let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+                prev_copy[isEditingMechIndex] = cachedMechPos;
+                return prev_copy;
+            })
+        }
+        setPlacingMech((_) => null);
+        setIsEditingMechIndex((_) => null);
+        setCachedMechPos((_) => null);
+    }
+    function handleRequestToEditMech (mech_i: number) {
+        setPlacingMech((_) => { return { index: null, complete: false } as MechPositionPlacing; });
+        setIsEditingMechIndex((_) => mech_i);
+        setMechInitPositions((prev) => {
+            setCachedMechPos((_) => mechInitPositions[mech_i]);
+
+            let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+            prev_copy[mech_i] = null;
+            return prev_copy;
+        })
+    }
     const mechProgramming = (
         <div>
             <MechProgramming
@@ -866,6 +952,12 @@ export default function Home() {
                 onMechVelocitiesChange={setMechVelocities}
                 onProgramsChange={setPrograms}
                 programs={programs}
+
+                placingMech={placingMech}
+                isEditingMechIndex={isEditingMechIndex}
+                handleConfirm={handleMechConfirm}
+                handleCancel={() => handleMechCancel(false)}
+                handleRequestToEdit={handleRequestToEditMech}
             />
             <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "0.3rem" }}>
                 <button onClick={() => handleMechClick("+")} disabled={animationState !== "Stop" ? true : false}>
@@ -962,7 +1054,7 @@ export default function Home() {
         }
     }
     function handleAddFaucet () {
-        if (placingFaucet || placingSink) return;
+        if (isPlacingSomething) return;
 
         setPlacingFaucet({
             id: `${placedFaucets.length}`,
@@ -972,7 +1064,7 @@ export default function Home() {
         });
     }
     function handleAddSink () {
-        if (placingFaucet || placingSink) return;
+        if (isPlacingSomething) return;
 
         setPlacingSink({
             id: `${placedSinks.length}`,
@@ -980,37 +1072,72 @@ export default function Home() {
             complete: false,
         });
     }
-    function handleCancelFaucetSinkPlacing () {
+    function handleCancelFaucetSinkPlacing (hasConfirmed: boolean) {
         if (placingFaucet) {
+            if ( (isEditingFaucetIndex !== null) && !hasConfirmed ) { // in edit mode => canceling edit without confirm sets position to cached value
+                setPlacedFaucets((prev) => {
+                    let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy[isEditingFaucetIndex].index = cachedFaucetPos;
+                    return prev_copy;
+                })
+            }
             setPlacingFaucet((_) => null);
             setIsEditingFaucetIndex((_) => null);
+            setCachedFaucetPos((_) => null);
         }
         else if (placingSink) {
+            if ( (isEditingSinkIndex !== null) && !hasConfirmed ) { // in edit mode => canceling edit without confirm sets position to cached value
+                setPlacedSinks((prev) => {
+                    let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy[isEditingSinkIndex].index = cachedSinkPos;
+                    return prev_copy;
+                })
+            }
             setPlacingSink((_) => null);
             setIsEditingSinkIndex((_) => null);
+            setCachedSinkPos((_) => null);
         }
     }
     function handleConfirmFaucetSinkPlacing () {
         if (placingFaucet){
-            setPlacedFaucets((prev) => {
-                let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
-                prev_copy.push({id:placingFaucet.id, index:placingFaucet.index, typ:placingFaucet.typ} as AtomFaucetState)
-                return prev_copy;
-            });
+
+            if (isEditingFaucetIndex !== null) {
+                // editing; placedFaucets already updated in handleUnitClick
+            }
+            else {
+                // adding
+                setPlacedFaucets((prev) => {
+                    let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy.push({id:placingFaucet.id, index:placingFaucet.index, typ:placingFaucet.typ} as AtomFaucetState)
+                    return prev_copy;
+                });
+            }
         }
         else {
-            setPlacedSinks((prev) => {
-                let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
-                prev_copy.push({id:placingSink.id, index:placingSink.index} as AtomSinkState)
-                return prev_copy;
-            });
+            if (isEditingSinkIndex !== null) {
+                // editing; placedSinks already updated in handleUnitClick
+            }
+            else {
+                // adding
+                setPlacedSinks((prev) => {
+                    let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy.push({id:placingSink.id, index:placingSink.index} as AtomSinkState)
+                    return prev_copy;
+                });
+            }
         }
-        handleCancelFaucetSinkPlacing ();
+        handleCancelFaucetSinkPlacing (true);
     }
-    function handleRequestToEdit (isFaucet: boolean, index: number) {
-        if (placingFaucet || placingSink) return;
+    function handleRequestToEditFaucetSink (isFaucet: boolean, index: number) {
+        if (isPlacingSomething) return;
 
         if (isFaucet) {
+            setPlacedFaucets((prev) => {
+                setCachedFaucetPos((_) => placedFaucets[index].index)
+                let prev_copy: AtomFaucetState[] = JSON.parse(JSON.stringify(prev));
+                prev_copy[index].index = null;
+                return prev_copy;
+            })
             setPlacingFaucet({
                 id: placedFaucets[index].id,
                 typ: placedFaucets[index].typ,
@@ -1020,6 +1147,12 @@ export default function Home() {
             setIsEditingFaucetIndex((_) => index);
         }
         else {
+            setPlacedSinks((prev) => {
+                setCachedSinkPos((_) => placedSinks[index].index)
+                let prev_copy: AtomSinkState[] = JSON.parse(JSON.stringify(prev));
+                prev_copy[index].index = null;
+                return prev_copy;
+            })
             setPlacingSink({
                 id: placedSinks[index].id,
                 index: null,
@@ -1085,9 +1218,9 @@ export default function Home() {
                 isPlacingFaucet={placingFaucet}
                 placingFaucet={placingFaucet}
                 placingSink={placingSink}
-                handleCancelFaucetSinkPlacing={handleCancelFaucetSinkPlacing}
+                handleCancelFaucetSinkPlacing={ () => handleCancelFaucetSinkPlacing(false) }
                 handleConfirmFaucetSinkPlacing={handleConfirmFaucetSinkPlacing}
-                handleRequestToEdit={handleRequestToEdit}
+                handleRequestToEdit={handleRequestToEditFaucetSink}
             />
         </>
     );

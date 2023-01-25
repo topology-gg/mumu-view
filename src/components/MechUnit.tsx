@@ -15,6 +15,7 @@ interface MechUnitProps {
 export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, unitMarginRem }: MechUnitProps) {
 
     if (!mechState) return <></>
+    if (mechState.index == null) return <></>
 
     const lastMechGridRef = useRef<Grid>({x:0,y:0});
 
