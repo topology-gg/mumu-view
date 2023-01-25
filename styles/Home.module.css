@@ -75,6 +75,7 @@
     border-radius: 2rem;
     margin-top: 0.5rem;
     align-items: center;
+    justify-content: start;
 }
 
 .input_row:hover {

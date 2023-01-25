@@ -83,6 +83,8 @@ export default function Home() {
         BLANK_SOLUTION.mechs.map((mech) => mech.description)
     );
     const [placingMech, setPlacingMech] = useState<MechPositionPlacing | null>(null);
+    const [isEditingMechIndex, setIsEditingMechIndex] = useState<number | null>(null);
+    const [cachedMechPos, setCachedMechPos] = useState<Grid | null>(null);
     const numMechs = programs.length;
 
     // React states for operators
@@ -420,38 +422,12 @@ export default function Home() {
     // Handle click event for adding/removing mechs
     function handleMechClick(mode: string) {
         if (animationState != "Stop") return; // only when in Stop mode can player add/remove mechs
+        if (placingFaucet || placingSink || placingMech) return;
 
         if (mode === "+" && numMechs < MAX_NUM_MECHS) {
             setPlacingMech((_) => {
                 return { index: null, complete: false } as MechPositionPlacing;
             })
-
-            // setMechInitPositions((prev) => {
-            //     let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
-            //     prev_copy.push({ x: 0, y: 0 });
-            //     return prev_copy;
-            // });
-            // setPrograms((prev) => {
-            //     let prev_copy = JSON.parse(JSON.stringify(prev));
-            //     prev_copy.push(INIT_PROGRAM);
-            //     return prev_copy;
-            // });
-            // setMechDescriptions((prev) => {
-            //     let prev_copy = JSON.parse(JSON.stringify(prev));
-            //     prev_copy.push(INIT_DESCRIPTION);
-            //     return prev_copy;
-            // });
-            // setMechVelocities((prev) => {
-            //     let prev_copy = JSON.parse(JSON.stringify(prev));
-            //     prev_copy.push(60);
-            //     return prev_copy;
-            // })
-            // setMechSfProgramIds (prev => {
-            //     let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
-            //     prev_copy.push (sfPrograms[0].id);
-            //     return prev_copy;
-            // });
-
         }
     }
     function handleEditMechClick() {
@@ -730,6 +706,11 @@ export default function Home() {
             });
             return;
         }
+        if (placingMech) {
+            setPlacingMech((prev) => {
+                return {index:{x,y}, complete:true};
+            })
+        }
 
         return;
     }
@@ -878,6 +859,47 @@ export default function Home() {
         </div>
     );
 
+    function handleMechConfirm () {
+        if (isEditingMechIndex !== null) {
+            // editing
+        }
+        else {
+            // adding
+            setMechInitPositions((prev) => {
+                let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(placingMech.index);
+                return prev_copy;
+            });
+            setPrograms((prev) => {
+                let prev_copy = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(INIT_PROGRAM);
+                return prev_copy;
+            });
+            setMechDescriptions((prev) => {
+                let prev_copy = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(INIT_DESCRIPTION);
+                return prev_copy;
+            });
+            setMechVelocities((prev) => {
+                let prev_copy = JSON.parse(JSON.stringify(prev));
+                prev_copy.push(60);
+                return prev_copy;
+            })
+            if (currMode == Modes.daw){
+                setMechSfProgramIds (prev => {
+                    let prev_copy: number[] = JSON.parse(JSON.stringify(prev));
+                    prev_copy.push (sfPrograms[0].id);
+                    return prev_copy;
+                });
+            }
+        }
+        handleMechCancel ()
+    }
+    function handleMechCancel () {
+        setPlacingMech((_) => null);
+        setIsEditingMechIndex((_) => null);
+        setCachedMechPos((_) => null);
+    }
     const mechProgramming = (
         <div>
             <MechProgramming
@@ -895,6 +917,11 @@ export default function Home() {
                 onMechVelocitiesChange={setMechVelocities}
                 onProgramsChange={setPrograms}
                 programs={programs}
+
+                placingMech={placingMech}
+                isEditingMechIndex={isEditingMechIndex}
+                handleConfirm={handleMechConfirm}
+                handleCancel={handleMechCancel}
             />
             <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "0.3rem" }}>
                 <button onClick={() => handleMechClick("+")} disabled={animationState !== "Stop" ? true : false}>
@@ -991,7 +1018,7 @@ export default function Home() {
         }
     }
     function handleAddFaucet () {
-        if (placingFaucet || placingSink) return;
+        if (placingFaucet || placingSink || placingMech) return;
 
         setPlacingFaucet({
             id: `${placedFaucets.length}`,
@@ -1001,7 +1028,7 @@ export default function Home() {
         });
     }
     function handleAddSink () {
-        if (placingFaucet || placingSink) return;
+        if (placingFaucet || placingSink || placingMech) return;
 
         setPlacingSink({
             id: `${placedSinks.length}`,
@@ -1065,8 +1092,8 @@ export default function Home() {
         }
         handleCancelFaucetSinkPlacing (true);
     }
-    function handleRequestToEdit (isFaucet: boolean, index: number) {
-        if (placingFaucet || placingSink) return;
+    function handleRequestToEditFaucetSink (isFaucet: boolean, index: number) {
+        if (placingFaucet || placingSink || placingMech) return;
 
         if (isFaucet) {
             setPlacedFaucets((prev) => {
@@ -1107,8 +1134,6 @@ export default function Home() {
                 <meta name="MuMu" content="Generated by create next app" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-
-            <p style={{color:'#ffffff'}}>cachedFaucetPos:{JSON.stringify(cachedFaucetPos)}, isEditingFaucetIndex:{isEditingFaucetIndex}</p>
 
             <Layout
                 currMode={currMode}
@@ -1159,7 +1184,7 @@ export default function Home() {
                 placingSink={placingSink}
                 handleCancelFaucetSinkPlacing={ () => handleCancelFaucetSinkPlacing(false) }
                 handleConfirmFaucetSinkPlacing={handleConfirmFaucetSinkPlacing}
-                handleRequestToEdit={handleRequestToEdit}
+                handleRequestToEdit={handleRequestToEditFaucetSink}
             />
         </>
     );
