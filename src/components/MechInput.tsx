@@ -204,7 +204,6 @@ const MechInput = ({
                     let encoder = new TextEncoder();
                     onDescriptionChange(mechIndex, event.target.value);
                 }}
-                defaultValue={description}
                 value={description}
                 size={DESCRIPTION_SIZE_MAX}
                 maxLength={DESCRIPTION_SIZE_MAX}
@@ -217,6 +216,7 @@ const MechInput = ({
                     border: "none",
                     borderRadius: "7px",
                     fontSize: '12px',
+                    backgroundColor:'#FFFFFF00'
                 }}
                 disabled={disabled}
             ></input>
@@ -265,22 +265,27 @@ const MechInput = ({
                             <p
                                 style={{
                                     margin: "0 1rem 0 1rem",
-                                    width: "2.5rem",
+                                    width: "3rem",
                                 }}
                             >
-                                {mechIndex == -1 ? '+ spirit' : t("mech")+mechIndex.toString()}
+                                {mechIndex == -1 ? '+ Spirit' : 'Spirit ' + mechIndex.toString()}
                             </p>
                         </div>
 
-                        <IconButton disabled={!onProgramDelete} size="small" color="secondary" onClick={handleDeleteConfirm}>
-                            <Delete fontSize="small" />
-                        </IconButton>
-
+                        {
+                            placing ? <></> : (
+                                <Delete
+                                    fontSize="small"
+                                    sx={{mr:1, color:'#AAAAAA', "&:hover": { color:disabled?"#AAAAAA":"#555555", cursor:disabled?'default':'pointer' }}}
+                                    onClick={!disabled ? handleDeleteConfirm : voidFunc}
+                                />
+                            )
+                        }
                         <div
                             className={`${disabled ? 'disabled-editable-placement' : placing && (placingMech !== null) && !completePlacing ? 'p_glow' : 'editable-placement'}`}
                             style={{
                                 borderRadius:'10px', padding:'0 10px 0 10px', display:'flex', flexDirection:'row', alignItems:'center',
-                                border: '1px solid #555555',
+                                border: '1px solid #555555', height: '22px',
                             }}
                             onClick={()=>{ disabled ? voidFunc() : voidFunc(); }}
                         >
