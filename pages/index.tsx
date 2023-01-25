@@ -129,38 +129,10 @@ export default function Home() {
     const [sfPrograms, setSfPrograms] = useState([]);
     const [mechSfProgramIds, setMechSfProgramIds] = useState([]);
 
-    // React useMemo
-    const calls = useMemo(() => {
-        let instructionSets = programsToInstructionSets(programs);
-        const args = placingFaucet || placingSink ? [] : packSolution(
-            instructionSets,
-            mechInitPositions,
-            mechDescriptions,
-            operators,
-            currMode == Modes.daw ? musicTitle : '',
-            currMode == Modes.daw ? mechVelocities : mechInitPositions.map(_ => 0),
-            placedFaucets.map(f => f.index),
-            placedSinks.map(s => s.index),
-        );
-        // console.log ('> musicTitle to submit:', musicTitle)
-        // console.log ('> mechVelocities to submit:', mechVelocities)
-        // console.log ('> useMemo: args =', args)
-
-        const tx = {
-            contractAddress: SIMULATOR_ADDR,
-            entrypoint: "simulator",
-            calldata: args,
-        };
-        return [tx];
-    }, [
-        programs, mechInitPositions, mechDescriptions,
-        operators, musicTitle, mechVelocities,
-        placedFaucets, placedSinks
-    ]);
-
     //
     // States derived from React states
     //
+    const isPlacingSomething = placingFaucet || placingSink || placingMech;
     const runnable = isRunnable();
     const mechInitStates: MechState[] = mechInitPositions.map((pos, mech_i) => {
         return {
@@ -235,12 +207,43 @@ export default function Home() {
         }
     });
 
+    // React useMemo
+    const calls = useMemo(() => {
+        let instructionSets = programsToInstructionSets(programs);
+        const args = isPlacingSomething ? [] : packSolution(
+            instructionSets,
+            mechInitPositions,
+            mechDescriptions,
+            operators,
+            currMode == Modes.daw ? musicTitle : '',
+            currMode == Modes.daw ? mechVelocities : mechInitPositions.map(_ => 0),
+            placedFaucets.map(f => f.index),
+            placedSinks.map(s => s.index),
+        );
+        // console.log ('> musicTitle to submit:', musicTitle)
+        // console.log ('> mechVelocities to submit:', mechVelocities)
+        // console.log ('> useMemo: args =', args)
+
+        const tx = {
+            contractAddress: SIMULATOR_ADDR,
+            entrypoint: "simulator",
+            calldata: args,
+        };
+        return [tx];
+    }, [
+        programs, mechInitPositions, mechDescriptions,
+        operators, musicTitle, mechVelocities,
+        placedFaucets, placedSinks
+    ]);
+
     ////////////////////
 
     //
     // Style the Run button based on solution legality == operator placement legality && mech initial placement legality
     //
     function isRunnable() {
+        if (isPlacingSomething) return false;
+
         // impurity by dependencies: operatorStates, mechInitPosition, programs
         if (!isOperatorPlacementLegal()) {
             console.log("> simulation not runnable because of operator placement illegality");
@@ -283,6 +286,9 @@ export default function Home() {
     function setMechVisualForStates(mech: MechState, states: UnitState[][]) {
         // duplicate
         let newStates: UnitState[][] = JSON.parse(JSON.stringify(states));
+
+        // if this mech has undefined position, return
+        if (mech.index == null) return newStates;
 
         // if this mech is positioned illegally, don't render it
         if (isGridOOB(mech.index, DIM)) {
@@ -422,7 +428,7 @@ export default function Home() {
     // Handle click event for adding/removing mechs
     function handleMechClick(mode: string) {
         if (animationState != "Stop") return; // only when in Stop mode can player add/remove mechs
-        if (placingFaucet || placingSink || placingMech) return;
+        if (isPlacingSomething) return;
 
         if (mode === "+" && numMechs < MAX_NUM_MECHS) {
             setPlacingMech((_) => {
@@ -708,6 +714,16 @@ export default function Home() {
         }
         if (placingMech) {
             setPlacingMech((prev) => {
+
+                // if editing => update placed values directly
+                if (isEditingMechIndex !== null) {
+                    setMechInitPositions((prev) => {
+                        let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+                        prev_copy[isEditingMechIndex] = {x,y};
+                        return prev_copy;
+                    })
+                }
+
                 return {index:{x,y}, complete:true};
             })
         }
@@ -893,12 +909,31 @@ export default function Home() {
                 });
             }
         }
-        handleMechCancel ()
+
+        handleMechCancel (true)
     }
-    function handleMechCancel () {
+    function handleMechCancel (hasConfirmed: boolean) {
+        if (!hasConfirmed) {
+            setMechInitPositions((prev) => {
+                let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+                prev_copy[isEditingMechIndex] = cachedMechPos;
+                return prev_copy;
+            })
+        }
         setPlacingMech((_) => null);
         setIsEditingMechIndex((_) => null);
         setCachedMechPos((_) => null);
+    }
+    function handleRequestToEditMech (mech_i: number) {
+        setPlacingMech((_) => { return { index: null, complete: false } as MechPositionPlacing; });
+        setIsEditingMechIndex((_) => mech_i);
+        setMechInitPositions((prev) => {
+            setCachedMechPos((_) => mechInitPositions[mech_i]);
+
+            let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+            prev_copy[mech_i] = null;
+            return prev_copy;
+        })
     }
     const mechProgramming = (
         <div>
@@ -921,7 +956,8 @@ export default function Home() {
                 placingMech={placingMech}
                 isEditingMechIndex={isEditingMechIndex}
                 handleConfirm={handleMechConfirm}
-                handleCancel={handleMechCancel}
+                handleCancel={() => handleMechCancel(false)}
+                handleRequestToEdit={handleRequestToEditMech}
             />
             <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "0.3rem" }}>
                 <button onClick={() => handleMechClick("+")} disabled={animationState !== "Stop" ? true : false}>
@@ -1018,7 +1054,7 @@ export default function Home() {
         }
     }
     function handleAddFaucet () {
-        if (placingFaucet || placingSink || placingMech) return;
+        if (isPlacingSomething) return;
 
         setPlacingFaucet({
             id: `${placedFaucets.length}`,
@@ -1028,7 +1064,7 @@ export default function Home() {
         });
     }
     function handleAddSink () {
-        if (placingFaucet || placingSink || placingMech) return;
+        if (isPlacingSomething) return;
 
         setPlacingSink({
             id: `${placedSinks.length}`,
@@ -1093,7 +1129,7 @@ export default function Home() {
         handleCancelFaucetSinkPlacing (true);
     }
     function handleRequestToEditFaucetSink (isFaucet: boolean, index: number) {
-        if (placingFaucet || placingSink || placingMech) return;
+        if (isPlacingSomething) return;
 
         if (isFaucet) {
             setPlacedFaucets((prev) => {

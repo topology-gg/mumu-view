@@ -38,6 +38,7 @@ interface MechInputProps {
     isEditingMechIndex: number | null;
     handleConfirm: () => void;
     handleCancel: () => void;
+    handleRequestToEdit?: () => void;
 }
 
 const MechInput = ({
@@ -64,6 +65,7 @@ const MechInput = ({
     isEditingMechIndex,
     handleConfirm,
     handleCancel,
+    handleRequestToEdit,
 
 }: MechInputProps) => {
     const { t } = useTranslation();
@@ -287,7 +289,7 @@ const MechInput = ({
                                 borderRadius:'10px', padding:'0 10px 0 10px', display:'flex', flexDirection:'row', alignItems:'center',
                                 border: '1px solid #555555', height: '22px',
                             }}
-                            onClick={()=>{ disabled ? voidFunc() : voidFunc(); }}
+                            onClick={()=>{ disabled ? voidFunc() : handleRequestToEdit(); }}
                         >
                             <div style={{width:'1rem', color: disabled ? '#999999' : '#222222'}}>
                                 {position ? position.x : '?'}

@@ -28,6 +28,7 @@ interface MechProgrammingProps {
     isEditingMechIndex: number | null;
     handleConfirm: () => void;
     handleCancel: () => void;
+    handleRequestToEdit: (mech_i: number) => void;
 }
 
 const MechProgramming = ({
@@ -50,7 +51,7 @@ const MechProgramming = ({
     isEditingMechIndex,
     handleConfirm,
     handleCancel,
-
+    handleRequestToEdit,
 
 }: MechProgrammingProps) => {
     let programKeyDownInit = {};
@@ -175,8 +176,9 @@ const MechProgramming = ({
                                         completePlacing={placing ? placingMech.complete : false}
                                         placingMech={placingMech}
                                         isEditingMechIndex={isEditingMechIndex}
-                                        handleConfirm={() => {}}
-                                            handleCancel={() => {}}
+                                        handleConfirm={handleConfirm}
+                                        handleCancel={handleCancel}
+                                        handleRequestToEdit={() => handleRequestToEdit(mech_i)}
                                     />
                                 ))
                                 : Array.from({ length: numMechs }).map((_, mech_i) => (
@@ -208,12 +210,13 @@ const MechProgramming = ({
                                             isEditingMechIndex={null}
                                             handleConfirm={() => {}}
                                             handleCancel={() => {}}
+                                            handleRequestToEdit={() => {}}
                                         />
                                     ))
                                 }
 
                                 {
-                                    placingMech ? (
+                                    placingMech && (isEditingMechIndex == null) ? (
                                         <MechInput
                                             key={`mech-input-new`}
                                             mode={mode}
@@ -239,6 +242,7 @@ const MechProgramming = ({
                                             isEditingMechIndex={isEditingMechIndex}
                                             handleConfirm={handleConfirm}
                                             handleCancel={handleCancel}
+                                            handleRequestToEdit={() => {}}
                                         />
                                     ) : <></>
                                 }
