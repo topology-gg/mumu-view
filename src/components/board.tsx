@@ -82,6 +82,9 @@ export default function Board({
     // render nothing if mechStates is not ready yet
     if (!mechStates) return <></>;
 
+    // render nothing if parentDim is not set yet
+    if (parentDim == null) return <></>;
+
     // Unpack constants given mode
     const DIM = Constraints[mode].DIM;
 
@@ -224,7 +227,7 @@ export default function Board({
     useEffect(() => {
 
         // Reset FretBoard when game loop is stopped
-        
+
         if(mode == Modes.daw && animationState=='Stop' && animationFrame==0 ){
             fretboard.setFretBoardToInitialState()
         }
