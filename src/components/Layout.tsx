@@ -266,6 +266,7 @@ export default function Layout({
                                             handleSetOpen={handleSetOpen}
                                             loadSolution={loadSolution}
                                             loadMode={loadMode}
+                                            sfLoaded={sfLoaded}
                                         />
                                     {/* </Grid> */}
 

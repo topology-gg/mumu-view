@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { SxProps } from "@mui/material";
+import { CircularProgress, SxProps } from "@mui/material";
 
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
@@ -23,6 +23,7 @@ import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 
 export default function Menu({
     width='100%',
+    sfLoaded,
     onManualClick,
     onArenaModeClick,
     onLeaderboardClick,
@@ -43,6 +44,7 @@ export default function Menu({
         )
     };
 
+    // TODO: disable Audio Workstation Mode and Music Library until sound font is fully loaded
 
     return (
         <Paper sx={{ width: width, maxWidth: '100%', backgroundColor:'#ffffff00'}} elevation={0}>
@@ -69,17 +71,33 @@ export default function Menu({
                 <Divider />
 
                 <MenuItemStyled>
-                    <ListItemIcon>
-                        <MusicVideoIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onDAWModeClick}>Audio Workstation Mode</ListItemText>
+                    {
+                        sfLoaded ? (
+                            <>
+                                <ListItemIcon>
+                                    <MusicVideoIcon fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText onClick={onDAWModeClick}>Audio Workstation Mode</ListItemText>
+                            </>
+                        ) : (
+                            <ListItemText onClick={() => {}} sx={{color:'#CCCCCC'}}>loading ...</ListItemText>
+                        )
+                    }
                 </MenuItemStyled>
 
                 <MenuItemStyled>
-                    <ListItemIcon>
-                        <LibraryMusicIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText onClick={onMusicLibraryClick}>Music Library</ListItemText>
+                    {
+                        sfLoaded ? (
+                            <>
+                                <ListItemIcon>
+                                    <LibraryMusicIcon fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText onClick={onMusicLibraryClick}>Music Library</ListItemText>
+                            </>
+                        ) : (
+                            <ListItemText onClick={() => {}} sx={{color:'#CCCCCC'}}>loading ...</ListItemText>
+                        )
+                    }
                 </MenuItemStyled>
 
                 <MenuItemStyled>

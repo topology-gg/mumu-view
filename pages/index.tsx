@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import simulator from "../src/components/simulator";
 import MechState, { MechPositionPlacing, MechStatus, MechType } from "../src/types/MechState";
 import AtomState, { AtomStatus, AtomType } from "../src/types/AtomState";
@@ -206,6 +206,30 @@ export default function Home() {
             mech_carries[mech_index] = bgStatus;
         }
     });
+
+    // Load soundfont
+    const handleSetSfFile = async (file) => {
+        await sf.loadSoundFontFromFile(file);
+        sf.bank = sf.banks[0]['id'];
+        sf.program = sf.programs[0]['id'];
+        setSfLoaded((_) => true);
+    }
+    const loadSfFileFromURL = async (file) => {
+        if (sfLoaded) return;
+
+        await sf.loadSoundFontFromURL(file);
+        sf.bank = sf.banks[0]['id'];
+        sf.program = sf.programs[0]['id'];
+        setSfLoaded((_) => true);
+        setSfPrograms((_) => sf.programs);
+    }
+    const loadSoundfont = async () => {
+        await loadSfFileFromURL(`/${SOUNDFONT_FILENAME}`);
+        setMechSfProgramIds((_) => BLANK_SOLUTION.mechs.map((_) => sfPrograms[0].id));
+    }
+    useEffect(() => {
+        loadSoundfont ();
+    }, [])
 
     // React useMemo
     const calls = useMemo(() => {
@@ -760,12 +784,6 @@ export default function Home() {
         // set faucets and sinks
         setPlacedFaucets((_) => Constraints[mode].FAUCETS);
         setPlacedSinks((_) => Constraints[mode].SINKS);
-
-        // load default soundfont if in daw mode
-        if (mode == Modes.daw) {
-            await loadSfFileFromURL(`/${SOUNDFONT_FILENAME}`);
-            setMechSfProgramIds((_) => BLANK_SOLUTION.mechs.map((_) => sfPrograms[0].id));
-        }
     }
 
     // Lazy style objects
@@ -784,21 +802,6 @@ export default function Home() {
             volumes={currMode == Modes.daw ? mechVelocities : mechInitStates.map((_) => 0)}
         />
     );
-
-    const handleSetSfFile = async (file) => {
-        await sf.loadSoundFontFromFile(file);
-        sf.bank = sf.banks[0]['id'];
-        sf.program = sf.programs[0]['id'];
-        setSfLoaded((_) => true);
-    }
-
-    const loadSfFileFromURL = async (file) => {
-        await sf.loadSoundFontFromURL(file);
-        sf.bank = sf.banks[0]['id'];
-        sf.program = sf.programs[0]['id'];
-        setSfLoaded((_) => true);
-        setSfPrograms((_) => sf.programs);
-    }
 
     const playMidiNum = (mech_i: number, midi_num: number) => {
 
