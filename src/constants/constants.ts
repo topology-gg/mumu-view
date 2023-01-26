@@ -4,6 +4,7 @@ import Solution from "../types/Solution";
 import { AtomType } from "../types/AtomState";
 import AtomFaucetState from "../types/AtomFaucetState";
 import AtomSinkState from "../types/AtomSinkState";
+import { DYNAMIC_COSTS } from "../types/Cost";
 
 // export const DB_NAME = 'mumu-indexer-season-2'
 export const DB_NAME = 'mumu_indexer_s2_daw_1'
@@ -316,14 +317,14 @@ export const INSTRUCTION_ICON_MAP = {
 };
 
 export const INSTRUCTION_KEY_TO_DESCRIPTION = {
-    'w' : 'move up by 1 grid',
-    'a' : 'move left by 1 grid',
-    's' : 'move down by 1 grid',
-    'd' : 'move right by 1 grid',
-    'z' : 'pick up object if empty-handed AND the underlying grid has one; do nothing if not applicable ',
-    'x' : 'drop off object if full-handed AND the underlying grid is empty; do nothing if not applicable',
-    'g' : 'stay put and wait until an object is available for pick up, and pick it up; do nothing if full-handed',
-    'h' : 'stay put and wait until the underlying grid is empty, and drop off the object in holding; do nothing if empty-handed',
-    'c' : 'drop off object in holding carelessly; destroy the object if the underlying grid is not empty; do nothing if not applicable',
-    '.' : 'do nothing',
+    'w' : 'Move up by 1 grid',
+    'a' : 'Move left by 1 grid',
+    's' : 'Move down by 1 grid',
+    'd' : 'Move right by 1 grid',
+    'z' : 'Pick up object if empty-handed AND the underlying grid has one; do nothing if not applicable ',
+    'x' : 'Drop off object if full-handed AND the underlying grid is empty; do nothing if not applicable',
+    'g' : 'Stay put and wait until an object is available for pick up, and pick it up; do nothing if full-handed',
+    'h' : 'Stay put and wait until the underlying grid is empty, and drop off the object in holding; do nothing if empty-handed',
+    'c' : 'Drop off object in holding carelessly; destroy the object if the underlying grid is not empty; do nothing if not applicable',
+    '.' : 'Do nothing',
 }
