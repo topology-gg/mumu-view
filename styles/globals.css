@@ -461,3 +461,67 @@ select,
     cursor: pointer;
     background-color: #fedfb0;
 }
+
+/*  */
+/* for animation cover screen */
+/*  */
+.hide_fast {
+    -webkit-animation: fadeinout 0.2s linear forwards;
+    animation: fadeinout 0.2s linear forwards;
+}
+.hide_slow {
+    -webkit-animation: fadeinout 0.7s linear forwards;
+    animation: fadeinout 0.7s linear forwards;
+}
+
+@-webkit-keyframes fadeinout {
+    0% { opacity: 1.0; z-index: 2000}
+    50% { opacity: 0.5; z-index: 5000}
+    100% { opacity: 0; z-index: -1}
+}
+
+@keyframes fadeinout {
+    0% { opacity: 1.0; z-index: 2000}
+    50% { opacity: 0.5; z-index: 5000}
+    100% { opacity: 0; z-index: -1}
+}
+
+.show {
+    -webkit-animation: display .3s linear forwards;
+    animation: display .3s linear forwards;
+}
+
+.cover_art {
+    z-index: 1000;
+	position: absolute;
+    margin: 0;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    /* background-color: #f9ffff; */
+    background-color: #2c2a25;
+    /* background-image: url("../public/cover-art.png"); */
+    background-position: center center;
+    background-repeat:no-repeat;
+    background-size: contain;
+}
+
+.cover_screen_base {
+	position: absolute;
+    margin: 0;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    /* background-color: #f9ffff; */
+    background-color: #2c2a25;
+}
+
+.cover_screen {
+    z-index: 2000;
+}
+
+.cover_screen_front {
+    z-index: 2500;
+}
