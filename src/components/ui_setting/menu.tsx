@@ -43,6 +43,7 @@ export default function Menu({
         )
     };
 
+    // TODO: disable Audio Workstation Mode and Music Library until sound font is fully loaded
 
     return (
         <Paper sx={{ width: width, maxWidth: '100%', backgroundColor:'#ffffff00'}} elevation={0}>
