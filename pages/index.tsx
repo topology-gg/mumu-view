@@ -960,7 +960,7 @@ export default function Home() {
                 handleCancel={() => handleMechCancel(false)}
                 handleRequestToEdit={handleRequestToEditMech}
             />
-            <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "0.3rem" }}>
+            <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "3rem" }}>
                 <button onClick={() => handleMechClick("+")} disabled={animationState !== "Stop" ? true : false}>
                     {t("newMech")}
                 </button>
@@ -970,6 +970,8 @@ export default function Home() {
 
     const formulaProgramming = (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+
+            <p style={{fontSize:'1rem'}}>Placed Formulas</p>
 
             {numOperators == 0 ? <p>No formula placed yet.</p> : <></>}
 

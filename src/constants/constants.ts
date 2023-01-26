@@ -314,3 +314,16 @@ export const INSTRUCTION_ICON_MAP = {
     ".": "minimize",
     _: "minimize",
 };
+
+export const INSTRUCTION_KEY_TO_DESCRIPTION = {
+    'w' : 'move up by 1 grid',
+    'a' : 'move left by 1 grid',
+    's' : 'move down by 1 grid',
+    'd' : 'move right by 1 grid',
+    'z' : 'pick up object if empty-handed AND the underlying grid has one; do nothing if not applicable ',
+    'x' : 'drop off object if full-handed AND the underlying grid is empty; do nothing if not applicable',
+    'g' : 'stay put and wait until an object is available for pick up, and pick it up; do nothing if full-handed',
+    'h' : 'stay put and wait until the underlying grid is empty, and drop off the object in holding; do nothing if empty-handed',
+    'c' : 'drop off object in holding carelessly; destroy the object if the underlying grid is not empty; do nothing if not applicable',
+    '.' : 'do nothing',
+}
