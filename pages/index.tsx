@@ -62,7 +62,7 @@ export default function Home() {
     const MODE_INSTRUCTION = currMode == Modes.arena ? [] : Lesson_instruction[currMode];
 
     // Other constants
-    const INIT_PROGRAM = ".";
+    const INIT_PROGRAM = "";
     const INIT_DESCRIPTION = "New Spirit";
     var unitStatesInit = [];
     for (var x = 0; x < DIM; x++) {
@@ -927,13 +927,14 @@ export default function Home() {
     function handleRequestToEditMech (mech_i: number) {
         setPlacingMech((_) => { return { index: null, complete: false } as MechPositionPlacing; });
         setIsEditingMechIndex((_) => mech_i);
-        setMechInitPositions((prev) => {
-            setCachedMechPos((_) => mechInitPositions[mech_i]);
+        setCachedMechPos((_) => mechInitPositions[mech_i]);
+        // setMechInitPositions((prev) => {
+        //     setCachedMechPos((_) => mechInitPositions[mech_i]);
 
-            let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
-            prev_copy[mech_i] = null;
-            return prev_copy;
-        })
+        //     let prev_copy: Grid[] = JSON.parse(JSON.stringify(prev));
+        //     prev_copy[mech_i] = null;
+        //     return prev_copy;
+        // })
     }
     const mechProgramming = (
         <div>
@@ -959,7 +960,7 @@ export default function Home() {
                 handleCancel={() => handleMechCancel(false)}
                 handleRequestToEdit={handleRequestToEditMech}
             />
-            <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "0.3rem" }}>
+            <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "3rem" }}>
                 <button onClick={() => handleMechClick("+")} disabled={animationState !== "Stop" ? true : false}>
                     {t("newMech")}
                 </button>
@@ -969,6 +970,8 @@ export default function Home() {
 
     const formulaProgramming = (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+
+            <p style={{fontSize:'1rem'}}>Placed Formulas</p>
 
             {numOperators == 0 ? <p>No formula placed yet.</p> : <></>}
 

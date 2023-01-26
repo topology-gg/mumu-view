@@ -64,6 +64,7 @@ const NewInstruction = ({
                     color: "secondary.contrastText",
                     transition: "ease-in-out .2s",
                 }}
+                className={selected ? 'card_glow' : ''}
             />
             {!selected ? <Add color="info" fontSize="small" /> : null}
         </InstructionToken>

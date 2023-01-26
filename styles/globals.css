@@ -99,6 +99,21 @@ button:hover {
     }
 }
 
+@keyframes glowing_instruction_card {
+    0% {
+        background-color: #303a43;
+    }
+    30% {
+        background-color: #F2F1ED;
+    }
+    100% {
+        background-color: #303a43;
+    }
+}
+.card_glow {
+    animation: glowing_instruction_card 700ms infinite;
+}
+
 .p_glow {
     animation: glowing 700ms infinite;
 }

@@ -99,9 +99,7 @@ const MechProgramming = ({
 
     const handleInstructionPanelPress = (key: InstructionKey) => {
         // No selected mech, return
-
         // Insert the instruction in the currently selected mech
-        console.log("key pressed", key);
     };
 
     function handleMechInitPositionChange(mech_i: number, position: Grid) {
@@ -128,6 +126,8 @@ const MechProgramming = ({
 
     return (
         <>
+            <p style={{fontSize:'1rem'}}>Program your Spirits</p>
+
             <IconizedInstructionPanel programKeyDown={programKeyDown} onPress={handleInstructionPanelPress} />
 
             <DragDropContext onDragEnd={handleDragEnd}>
