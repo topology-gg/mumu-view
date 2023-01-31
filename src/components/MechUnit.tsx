@@ -17,7 +17,6 @@ export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, 
 
     if (!mechState) return <></>
     if (mechState.index == null) return <></>
-
     
     const lastMechGridRef = useRef<Grid>({x:mechState.index.x,y:mechState.index.y});
     
