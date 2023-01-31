@@ -7,8 +7,8 @@ import { Modes } from "../constants/constants";
 
 interface UnitProps {
     atomOpacity?: number;
-    mode: Modes;
-    noteNum: number;
+    mode?: Modes;
+    noteNum?: number;
     state: UnitState;
     consumableAtomType?: AtomType;
     produceableAtomType?: AtomType;
