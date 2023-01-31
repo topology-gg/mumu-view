@@ -342,6 +342,15 @@ export class FretBoard {
   }else{
     this.frets = notearr
   }
+
+  //check and transpose up n octaves if the lower range is negative
+   
+  var lownote = this.frets[0][0];
+
+  if(lownote < 0){
+    var increment = (Math.trunc( Math.abs(lownote) / 12) * 12) + 12;
+    this.frets = notearr.map(function(entry) { return entry.map(function(entry3) { return entry3 + increment;})})
+   }
   
   this.msg = this.fretDataToString();
 
