@@ -38,7 +38,7 @@ interface BoardProps {
     produceableAtomTypes: AtomType[][];
     mechStates: MechState[];
     atomStates: AtomState[];
-    mechIndexHighlighted: number;
+    mechIndexHighlighted: number | undefined;
     handleMouseOver: (x: number, y: number) => void;
     handleMouseOut: () => void;
     handleUnitClick: (x: number, y: number) => void;
@@ -48,6 +48,7 @@ interface BoardProps {
     producedAtomIds: string[];
     parentDim: number;
     hoveredGrid: Grid | null;
+    spiritPreview : MechState[]
 }
 
 var fretboard = new FretBoard()
@@ -77,6 +78,7 @@ export default function Board({
     producedAtomIds,
     parentDim,
     hoveredGrid,
+    spiritPreview
 }: BoardProps) {
 
     // render nothing if mechStates is not ready yet
@@ -108,6 +110,28 @@ export default function Board({
     const [lastSimulationNotes, setLastSimulationNotes] = useState<number[]>([]);
     // notes played by onMouseDown Grid cells
     const [lastPreviewNote, setLastPreviewNote] = useState<number>(null);
+    const [currPreviewFrame, setCurrPreviewFrame] = useState<number>(0);
+
+
+    useEffect(() => {
+        setCurrPreviewFrame(0)
+        console.log("current frame 0")
+    }, [mechIndexHighlighted])
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(currPreviewFrame < spiritPreview.length - 1)
+            {
+                setCurrPreviewFrame(currPreviewFrame+1)
+            }else{
+                
+                setCurrPreviewFrame(0)
+            }
+            
+        }, 750)
+        return () => clearInterval(interval);
+
+    }, [currPreviewFrame, spiritPreview, mechIndexHighlighted])
 
     // build mapping from mech_i to possessed atom (if any)
     var possessedAtom = mechStates.map((_) => null);
@@ -344,12 +368,25 @@ export default function Board({
                     />
 
                     {mechStates.map((mechState, mech_i) => (
+                        mech_i != mechIndexHighlighted ? 
                         <MechUnit
                             mechState={mechState} possessedAtom={possessedAtom[mech_i]}
                             gridDimensionRem={GRID_DIM_REM}
                             unitMarginRem={UNIT_MARGIN_REM}
-                        />
+                            isTransparent={mechIndexHighlighted >= 0? true : false}
+                            isAnimated={true}
+                            key={mech_i}
+                        />  : null
                     ))}
+
+                    {mechIndexHighlighted >= 0 ? <MechUnit
+                            key={mechIndexHighlighted}
+                            mechState={spiritPreview[currPreviewFrame]} possessedAtom={null}
+                            gridDimensionRem={GRID_DIM_REM}
+                            unitMarginRem={UNIT_MARGIN_REM}
+                            isTransparent={false}
+                            isAnimated={false}
+                        /> : null}
 
                     {Array.from({ length: DIM }).map(
                         (
