@@ -10,11 +10,10 @@ interface MechUnitProps {
     possessedAtom?: AtomState
     gridDimensionRem: number
     unitMarginRem: number
-    isAnimated : boolean
     isTransparent : boolean
 }
 
-export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, unitMarginRem, isAnimated, isTransparent }: MechUnitProps) {
+export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, unitMarginRem, isTransparent }: MechUnitProps) {
 
     if (!mechState) return <></>
     if (mechState.index == null) return <></>
@@ -27,12 +26,10 @@ export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, 
     const { left } = useSpring({
         from: {left: 16 + marginPixel + lastMechGridRef.current.x * (gridPixel + marginPixel*2)},
         left: 16 + marginPixel + mechState.index.x * (gridPixel + marginPixel*2),      
-       // immediate : isAnimated ? true : false  
     })
     const { top } = useSpring({
         from: {top: 16 + marginPixel + lastMechGridRef.current.y * (gridPixel + marginPixel*2)},
         top: 16 + marginPixel + mechState.index.y * (gridPixel + marginPixel*2),     
-        //immediate : isAnimated ? true : false   
     })
 
     // remember mech index in useRef

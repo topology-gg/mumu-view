@@ -382,7 +382,6 @@ export default function Board({
                             gridDimensionRem={GRID_DIM_REM}
                             unitMarginRem={UNIT_MARGIN_REM}
                             isTransparent={mechIndexHighlighted >= 0? true : false}
-                            isAnimated={true}
                             key={mech_i}
                         />  : null
                     ))}
@@ -393,7 +392,6 @@ export default function Board({
                             gridDimensionRem={GRID_DIM_REM}
                             unitMarginRem={UNIT_MARGIN_REM}
                             isTransparent={false}
-                            isAnimated={false}
                         /> : null}
 
                     {Array.from({ length: DIM }).map(
