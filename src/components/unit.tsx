@@ -114,14 +114,13 @@ export default function Unit({
         renderedText = state.unit_text;
     }
     else {
+        renderedText = keynumToMuMuView(noteNum);
+
         if (state.unit_text == 'F') {
             className += styles.faucet + ' ';
         }
         else if (state.unit_text == 'S') {
             className += styles.sink + ' ';
-        }
-        else {
-            renderedText = keynumToMuMuView(noteNum);
         }
     }
 
