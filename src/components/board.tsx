@@ -22,11 +22,11 @@ import ListItem from "@mui/material/ListItem";
 
 import SoundFont from '../modules/sf2-player/src';
 import { FretBoard } from "../helpers/MuMuMusic/FretBoard";
-
+import { AnimationStates } from '../constants/constants';
 
 interface BoardProps {
     mode: Modes;
-    animationState: string;
+    animationState: AnimationStates;
     animationFrame: number;
     objective: string;
     instruction: string[];
@@ -115,6 +115,8 @@ export default function Board({
         return 0
     }));
 
+    const previewStates = [AnimationStates.PAUSE, AnimationStates.STOP]
+    const spiritPreviewAvailable = previewStates.includes(animationState) && animationFrame == 0 && mechIndexHighlighted >= 0
 
     useEffect(() => {
         setCurrPreviewFrame(mechStates.map(_ => {
@@ -376,17 +378,17 @@ export default function Board({
                     />
 
                     {mechStates.map((mechState, mech_i) => (
-                        mech_i != mechIndexHighlighted ? 
+                        mech_i != mechIndexHighlighted || spiritPreviewAvailable == false ? 
                         <MechUnit
                             mechState={mechState} possessedAtom={possessedAtom[mech_i]}
                             gridDimensionRem={GRID_DIM_REM}
                             unitMarginRem={UNIT_MARGIN_REM}
-                            isTransparent={mechIndexHighlighted >= 0? true : false}
+                            isTransparent={spiritPreviewAvailable ? true : false}
                             key={mech_i}
                         />  : null
                     ))}
 
-                    {mechIndexHighlighted >= 0 ? <MechUnit
+                    {spiritPreviewAvailable ? <MechUnit
                             key={mechIndexHighlighted}
                             mechState={spiritPreview[currPreviewFrame[mechIndexHighlighted]]} possessedAtom={null}
                             gridDimensionRem={GRID_DIM_REM}
