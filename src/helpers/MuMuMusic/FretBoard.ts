@@ -302,8 +302,6 @@ export class FretBoard {
   }
 
   calculateFrets(): number[][] {
-    console.log("keynumToMuMuView(13)")
-    console.log(keynumToMuMuView(1))
     var notearr =  Array()   
   
     var step_offset =  this.offset * 12;
