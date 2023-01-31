@@ -110,22 +110,30 @@ export default function Board({
     const [lastSimulationNotes, setLastSimulationNotes] = useState<number[]>([]);
     // notes played by onMouseDown Grid cells
     const [lastPreviewNote, setLastPreviewNote] = useState<number>(null);
-    const [currPreviewFrame, setCurrPreviewFrame] = useState<number>(0);
+
+    const [currPreviewFrame, setCurrPreviewFrame] = useState<number[]>(mechStates.map(_ => {
+        return 0
+    }));
 
 
     useEffect(() => {
-        setCurrPreviewFrame(0)
-        console.log("current frame 0")
+        setCurrPreviewFrame(mechStates.map(_ => {
+            return 0
+        }))
     }, [mechIndexHighlighted])
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if(currPreviewFrame < spiritPreview.length - 1)
-            {
-                setCurrPreviewFrame(currPreviewFrame+1)
+            if(currPreviewFrame[mechIndexHighlighted] < spiritPreview.length - 1)
+            {   
+                // Array copy in order to trigger rerender
+                let updatedPreview = [...currPreviewFrame];
+                updatedPreview[mechIndexHighlighted] = updatedPreview[mechIndexHighlighted] + 1;
+                setCurrPreviewFrame(updatedPreview)
             }else{
-                
-                setCurrPreviewFrame(0)
+                let updatedPreview = [...currPreviewFrame];
+                updatedPreview[mechIndexHighlighted] = 0;
+                setCurrPreviewFrame(updatedPreview)
             }
             
         }, 750)
@@ -381,7 +389,7 @@ export default function Board({
 
                     {mechIndexHighlighted >= 0 ? <MechUnit
                             key={mechIndexHighlighted}
-                            mechState={spiritPreview[currPreviewFrame]} possessedAtom={null}
+                            mechState={spiritPreview[currPreviewFrame[mechIndexHighlighted]]} possessedAtom={null}
                             gridDimensionRem={GRID_DIM_REM}
                             unitMarginRem={UNIT_MARGIN_REM}
                             isTransparent={false}
