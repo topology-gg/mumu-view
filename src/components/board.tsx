@@ -26,7 +26,7 @@ import { AnimationStates } from '../constants/constants';
 
 interface BoardProps {
     mode: Modes;
-    animationState: AnimationStates;
+    animationState: string;
     animationFrame: number;
     objective: string;
     instruction: string[];
