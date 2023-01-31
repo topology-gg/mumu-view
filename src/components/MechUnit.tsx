@@ -25,11 +25,11 @@ export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, 
     const marginPixel = unitMarginRem * 16
     const { left } = useSpring({
         from: {left: 16 + marginPixel + lastMechGridRef.current.x * (gridPixel + marginPixel*2)},
-        left: 16 + marginPixel + mechState.index.x * (gridPixel + marginPixel*2),      
+        left: 16 + marginPixel + mechState.index.x * (gridPixel + marginPixel*2)      
     })
     const { top } = useSpring({
         from: {top: 16 + marginPixel + lastMechGridRef.current.y * (gridPixel + marginPixel*2)},
-        top: 16 + marginPixel + mechState.index.y * (gridPixel + marginPixel*2),     
+        top: 16 + marginPixel + mechState.index.y * (gridPixel + marginPixel*2)     
     })
 
     // remember mech index in useRef
