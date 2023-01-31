@@ -95,12 +95,12 @@ export function keynumToNote(keynum: number) {
 export function keynumToMuMuView(keynum: number) {
 
   var note = note_keys[keynum % octavebase];
-  var octave = keynum / octavebase;
+  var octave = Math.trunc(keynum / octavebase);
 
   if(note.length == 1){
       var notation = note + octave;
-    }else{
-      var notation = note.charAt(0) + octave + note.charAt(1);
+    }else{      
+      var notation = note[0] + octave + note[1];
     };
   
     return notation

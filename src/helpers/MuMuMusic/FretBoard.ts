@@ -1,5 +1,5 @@
 import { getmodeNameBySteps, modes, mumu_modes, note_keys } from "./Modes"
-import { keynumToPitchClass, num_steps_from_scale_degree, PitchClass } from "./PitchClass"
+import { keynumToMuMuView, keynumToPitchClass, num_steps_from_scale_degree, PitchClass } from "./PitchClass"
 
 /* 
 This function calculates the notes of any zither/guitar FretBoard for N Strings X N Frets in any Tuning:
@@ -302,7 +302,8 @@ export class FretBoard {
   }
 
   calculateFrets(): number[][] {
-    
+    console.log("keynumToMuMuView(13)")
+    console.log(keynumToMuMuView(1))
     var notearr =  Array()   
   
     var step_offset =  this.offset * 12;
