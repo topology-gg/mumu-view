@@ -3,6 +3,8 @@
  For Microtonal mode definition, change the OCTAVEBASE and represent scales as intervallic ratios summing to OCTAVEBASE
 */
 
+import { note_keys } from "./Modes"
+
 export const octavebase: number = 12
 
 /*
@@ -86,6 +88,24 @@ export class PitchClass {
 export function keynumToNote(keynum: number) {
   return keynum % octavebase
 }
+
+
+// Function To calculate notation from keynum to display on grid
+
+export function keynumToMuMuView(keynum: number) {
+
+  var note = note_keys[keynum % octavebase];
+  var octave = Math.trunc(keynum / octavebase);
+
+  if(note.length == 1){
+      var notation = note + octave;
+    }else{      
+      var notation = note[0] + octave + note[1];
+    };
+  
+    return notation
+}
+
 
 export function keynumToPitchClass(keynum: number) {
   let pc = new PitchClass(
