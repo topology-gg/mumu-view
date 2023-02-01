@@ -49,7 +49,8 @@ interface BoardProps {
     parentDim: number;
     hoveredGrid: Grid | null;
     spiritPreview : MechState[];
-    currPreviewFrame : number[]
+    currPreviewFrame : number[];
+    isPlacingMech : boolean;
 }
 
 var fretboard = new FretBoard()
@@ -80,7 +81,8 @@ export default function Board({
     parentDim,
     hoveredGrid,
     spiritPreview,
-    currPreviewFrame
+    currPreviewFrame,
+    isPlacingMech
 }: BoardProps) {
 
     // render nothing if mechStates is not ready yet
@@ -115,7 +117,7 @@ export default function Board({
 
 
     const previewStates = [AnimationStates.PAUSE, AnimationStates.STOP]
-    const spiritPreviewAvailable = previewStates.includes(animationState as AnimationStates) && animationFrame == 0 && mechIndexHighlighted >= 0
+    const spiritPreviewAvailable = previewStates.includes(animationState as AnimationStates) && animationFrame == 0 && mechIndexHighlighted >= 0 && !isPlacingMech
 
     // build mapping from mech_i to possessed atom (if any)
     var possessedAtom = mechStates.map((_) => null);

@@ -896,6 +896,7 @@ export default function Home() {
         hoveredGrid = {hoveredGrid}
         spiritPreview = {spiritPreview}
         currPreviewFrame = {currPreviewFrame}
+        isPlacingMech = {placingMech != null}
     />
 
     const stats_box_sx = {
