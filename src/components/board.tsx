@@ -48,7 +48,8 @@ interface BoardProps {
     producedAtomIds: string[];
     parentDim: number;
     hoveredGrid: Grid | null;
-    spiritPreview : MechState[]
+    spiritPreview : MechState[];
+    currPreviewFrame : number[]
 }
 
 var fretboard = new FretBoard()
@@ -78,7 +79,8 @@ export default function Board({
     producedAtomIds,
     parentDim,
     hoveredGrid,
-    spiritPreview
+    spiritPreview,
+    currPreviewFrame
 }: BoardProps) {
 
     // render nothing if mechStates is not ready yet
@@ -111,37 +113,9 @@ export default function Board({
     // notes played by onMouseDown Grid cells
     const [lastPreviewNote, setLastPreviewNote] = useState<number>(null);
 
-    const [currPreviewFrame, setCurrPreviewFrame] = useState<number[]>(mechStates.map(_ => {
-        return 0
-    }));
 
     const previewStates = [AnimationStates.PAUSE, AnimationStates.STOP]
-    const spiritPreviewAvailable = previewStates.includes(animationState) && animationFrame == 0 && mechIndexHighlighted >= 0
-
-    useEffect(() => {
-        setCurrPreviewFrame(mechStates.map(_ => {
-            return 0
-        }))
-    }, [mechIndexHighlighted])
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if(currPreviewFrame[mechIndexHighlighted] < spiritPreview.length - 1)
-            {   
-                // Array copy in order to trigger rerender
-                let updatedPreview = [...currPreviewFrame];
-                updatedPreview[mechIndexHighlighted] = updatedPreview[mechIndexHighlighted] + 1;
-                setCurrPreviewFrame(updatedPreview)
-            }else{
-                let updatedPreview = [...currPreviewFrame];
-                updatedPreview[mechIndexHighlighted] = 0;
-                setCurrPreviewFrame(updatedPreview)
-            }
-            
-        }, 750)
-        return () => clearInterval(interval);
-
-    }, [currPreviewFrame, spiritPreview, mechIndexHighlighted])
+    const spiritPreviewAvailable = previewStates.includes(animationState as AnimationStates) && animationFrame == 0 && mechIndexHighlighted >= 0
 
     // build mapping from mech_i to possessed atom (if any)
     var possessedAtom = mechStates.map((_) => null);

@@ -29,6 +29,7 @@ interface MechProgrammingProps {
     handleConfirm: () => void;
     handleCancel: () => void;
     handleRequestToEdit: (mech_i: number) => void;
+    currPreviewFrame: number;
 }
 
 const MechProgramming = ({
@@ -52,6 +53,7 @@ const MechProgramming = ({
     handleConfirm,
     handleCancel,
     handleRequestToEdit,
+    currPreviewFrame
 
 }: MechProgrammingProps) => {
     let programKeyDownInit = {};
@@ -146,7 +148,7 @@ const MechProgramming = ({
                                         position={mechInitPositions[mech_i]}
                                         description={mechDescriptions[mech_i]}
                                         program={programs[mech_i]}
-                                        pc={0}
+                                        pc={mech_i == mechIndexHighlighted ? currPreviewFrame : 0}
                                         onPositionChange={(index, position) => {
                                             handleMechInitPositionChange(index, position);
                                         }}

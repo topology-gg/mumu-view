@@ -162,6 +162,9 @@ export default function Home() {
     const frame = frames?.[animationFrame];
     const atomStates = frame?.atoms || atomInitStates;
     const mechStates = !frame ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : frame.mechs;
+    const [currPreviewFrame, setCurrPreviewFrame] = useState<number[]>(mechStates.map(_ => {
+        return 0
+    }));
     const operatorStates: OperatorState[] = !frame ? operators.map(o => {
         return {operator:o, firing:false} as OperatorState
     }) : frame.operatorStates
@@ -236,6 +239,32 @@ export default function Home() {
     useEffect(() => {
         loadSoundfont ();
     }, [])
+
+
+    useEffect(() => {
+        setCurrPreviewFrame(mechStates.map(_ => {
+            return 0
+        }))
+    }, [mechIndexHighlighted])
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(currPreviewFrame[mechIndexHighlighted] < spiritPreview.length - 1)
+            {   
+                // Array copy in order to trigger rerender
+                let updatedPreview = [...currPreviewFrame];
+                updatedPreview[mechIndexHighlighted] = updatedPreview[mechIndexHighlighted] + 1;
+                setCurrPreviewFrame(updatedPreview)
+            }else{
+                let updatedPreview = [...currPreviewFrame];
+                updatedPreview[mechIndexHighlighted] = 0;
+                setCurrPreviewFrame(updatedPreview)
+            }
+            
+        }, ANIM_FRAME_LATENCY_DAW)
+        return () => clearInterval(interval);
+
+    }, [currPreviewFrame, spiritPreview, mechIndexHighlighted])
 
     // React useMemo
     const calls = useMemo(() => {
@@ -866,6 +895,7 @@ export default function Home() {
         parentDim = {parentDim}
         hoveredGrid = {hoveredGrid}
         spiritPreview = {spiritPreview}
+        currPreviewFrame = {currPreviewFrame}
     />
 
     const stats_box_sx = {
@@ -985,6 +1015,7 @@ export default function Home() {
                 handleConfirm={handleMechConfirm}
                 handleCancel={() => handleMechCancel(false)}
                 handleRequestToEdit={handleRequestToEditMech}
+                currPreviewFrame={currPreviewFrame[mechIndexHighlighted]}
             />
             <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "3rem" }}>   
                 <button onClick={() => handleMechClick("+")} disabled={animationState !== "Stop" ? true : false}>
