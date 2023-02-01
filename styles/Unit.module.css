@@ -68,6 +68,15 @@
   background-size: 90%;
 }
 
+/* https://pbs.twimg.com/media/FngOEKXaQAE8RyV?format=png&name=medium -- brick */
+.faucet {
+    background-color: #8c574788;
+}
+/* https://pbs.twimg.com/media/FngOEKXaQAE8RyV?format=png&name=medium -- charcoal */
+.sink {
+    background-color: #27272788;
+}
+
 .mechSingletonOpen {
   border-color: #BBBBBB;
 }

@@ -85,6 +85,7 @@ export default function Layout({
     handleCancelFaucetSinkPlacing,
     handleConfirmFaucetSinkPlacing,
     handleRequestToEdit,
+    mechSfProgramIds,
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
@@ -193,6 +194,7 @@ export default function Layout({
             handleMechSfProgramChange={handleMechSfProgramChange}
             handleMusicTitleChange={handleMusicTitleChange}
             operatorStates={operatorStates}
+            mechSfProgramIds={mechSfProgramIds}
         />
     )
 

@@ -13,7 +13,8 @@ export default function DAWConfigPanel ({
     handleMechSfProgramChange,
     handleMusicTitleChange,
     animationState,
-    operatorStates
+    operatorStates,
+    mechSfProgramIds,
 }) {
 
     const onChangeSf = (event: any) => {
@@ -26,6 +27,7 @@ export default function DAWConfigPanel ({
     const firingOperators = operatorStates && operatorStates.length>0 ? operatorIndices.filter(i => operatorStates[i].firing) : []
     // console.log('firingOperators:', firingOperators)
 
+    const disabled = animationState != 'Stop'
     const DIM = '130px'
     // render
     return (
@@ -93,9 +95,18 @@ export default function DAWConfigPanel ({
                                                 onChange={event => handleMechSfProgramChange(mech_i, event.target.value)}
                                                 className="sf-program-select"
                                                 style={{fontSize:'11px'}}
+                                                defaultValue={mechSfProgramIds[mech_i]}
+                                                disabled={disabled}
                                             >
                                             {
-                                                sfPrograms.map((program: any) => <option value={program.id} key={program.id}>{program.name}</option>)
+                                                sfPrograms.map((program: any) => (
+                                                    <option
+                                                        value={program.id}
+                                                        key={program.id}
+                                                    >
+                                                        {program.name}
+                                                    </option>
+                                                ))
                                             }
                                             </select>
                                         </div>

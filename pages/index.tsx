@@ -1253,6 +1253,7 @@ export default function Home() {
                 handleCancelFaucetSinkPlacing={ () => handleCancelFaucetSinkPlacing(false) }
                 handleConfirmFaucetSinkPlacing={handleConfirmFaucetSinkPlacing}
                 handleRequestToEdit={handleRequestToEditFaucetSink}
+                mechSfProgramIds={mechSfProgramIds}
             />
         </>
     );

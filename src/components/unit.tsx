@@ -2,9 +2,13 @@ import UnitState, { BgStatus, BorderStatus } from "../types/UnitState";
 import styles from "../../styles/Unit.module.css";
 import { useSpring, animated } from "react-spring";
 import { AtomType } from "../types/AtomState";
+import { keynumToMuMuView } from "../helpers/MuMuMusic/PitchClass";
+import { Modes } from "../constants/constants";
 
 interface UnitProps {
     atomOpacity?: number;
+    mode?: Modes;
+    noteNum?: number;
     state: UnitState;
     consumableAtomType?: AtomType;
     produceableAtomType?: AtomType;
@@ -23,6 +27,8 @@ interface UnitProps {
 
 export default function Unit({
     atomOpacity,
+    mode,
+    noteNum,
     state,
     consumableAtomType,
     produceableAtomType,
@@ -103,6 +109,21 @@ export default function Unit({
 
     const mechId = state.unit_id && state.unit_id.includes("mech") && state.unit_id.replace("mech", "");
 
+    let renderedText = ''
+    if (mode != Modes.daw) {
+        renderedText = state.unit_text;
+    }
+    else {
+        renderedText = keynumToMuMuView(noteNum);
+
+        if (state.unit_text == 'F') {
+            className += styles.faucet + ' ';
+        }
+        else if (state.unit_text == 'S') {
+            className += styles.sink + ' ';
+        }
+    }
+
     // Render
     return (
         <animated.div
@@ -119,7 +140,7 @@ export default function Unit({
                 borderRadius: `${gridDimensionRem/2}rem`,
             }}
         >
-            {state.unit_text}
+            {renderedText}
         </animated.div>
     );
 }

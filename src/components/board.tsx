@@ -428,6 +428,8 @@ export default function Board({
                                             <div key={`${j}-${i}`}>
                                                 <Unit
                                                     key={`unit-${j}-${i}`}
+                                                    mode={mode}
+                                                    noteNum={fretboard.frets[j][i]}
                                                     state={unitStates[j][i]}
                                                     consumableAtomType={consumableAtomTypes[j][i]}
                                                     produceableAtomType={produceableAtomTypes[j][i]}
