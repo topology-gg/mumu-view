@@ -10,7 +10,7 @@
     "test": "cross-env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha"
   },
   "dependencies": {
-    "@cartridge/connector": "^0.2.14",
+    "@cartridge/connector": "^0.3.10",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.9",
