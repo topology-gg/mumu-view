@@ -156,7 +156,7 @@ export class FretBoard {
     return chords
   }
 
-  // Using the Cycle of Fifths Wheel, select the 5 adacent chords to the currrent chord
+  // Using the Cycle of Fifths Wheel, select the 5 adacent chords to the current chord
 
   getChordsAtNote(): any {
 
