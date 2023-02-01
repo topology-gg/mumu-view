@@ -156,10 +156,13 @@ export class FretBoard {
     return chords
   }
 
+  // Using the Cycle of Fifths Wheel, select the 5 adacent chords to the currrent chord
+
   getChordsAtNote(): any {
 
     var qualmod = this.quality % 2;
     var chord_xy = this.c_map[qualmod].indexOf(this.tonic.note % 12);
+    var chords: number[][];
     
     if(chord_xy == 0){
       var initial_idx = 11
@@ -167,32 +170,50 @@ export class FretBoard {
       var initial_idx = chord_xy-1
     }
 
-    var chords = [
-      [
-        this.c_map[0][initial_idx],
-        this.c_map[0][(chord_xy)],
-        this.c_map[0][(chord_xy + 1) % 12],
-      ],
-      [
-        this.c_map[1][initial_idx],
-        this.c_map[1][chord_xy],
-        this.c_map[1][(chord_xy + 1) % 12],
-      ],
-    ]
+    if(qualmod == 0){
+
+      chords = [
+        [
+          this.c_map[0][initial_idx],
+          this.c_map[0][(chord_xy + 1) % 12],
+        ],
+        [
+          this.c_map[1][initial_idx],
+          this.c_map[1][chord_xy],
+          this.c_map[1][(chord_xy + 1) % 12],
+        ],
+      ];
+
+    }else{
+
+      chords = [
+        [
+          this.c_map[0][initial_idx],
+          this.c_map[0][(chord_xy)],
+          this.c_map[0][(chord_xy + 1) % 12],
+        ],
+        [
+          this.c_map[1][initial_idx],
+          this.c_map[1][(chord_xy + 1) % 12],
+        ],
+      ];
+
+    };
+
     return chords
   }
 
-  //changes the chord in a pleasing way based on x,y coordinate
+  // Changes chord in a pleasing way based on x,y coordinate
+  // Configured to avoid repeated chords
 
   setNewChord(x: number, y: number): any {
 
     //var chord_options = this.getChordsAtNote();
     var chord_options = this.getChordsAtCMapIdx();
+    var y_idx = y % 2;
+    var x_idx = x % chord_options[y_idx].length;
     
-    var new_note = chord_options[y % 2][x % 3];
-
-    //console.log('new_note'); 
-    //console.log(new_note); 
+    var new_note = chord_options[y_idx][x_idx];
 
     var new_tonic = new PitchClass(new_note, 0);
     this.tonic = new_tonic;
@@ -208,7 +229,6 @@ export class FretBoard {
     console.log(new_mode); 
     
     return this.calculateFrets();
-    //return [new_tonic, new_mode]
   }
   
   //subtle change, Sound like a harmonization of the original trajectory - Same harmonic space usually will s
