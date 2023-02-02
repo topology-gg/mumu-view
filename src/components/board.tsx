@@ -244,21 +244,6 @@ export default function Board({
 
         var notes = []
 
-        // Play music when previewing mech
-        if (spiritPreviewAvailable) {
-
-            lastSimulationNotes.forEach(lastSimulationNote => {
-                stopMidiNum(lastSimulationNote);
-            });
-
-            const previewedMech = spiritPreview[currPreviewFrame[mechIndexHighlighted]];
-            const previewedMechI = -1
-            // only open mech makes sound based on its location on the board
-            if (previewedMech.status == MechStatus.OPEN){
-                playMidiNum(previewedMechI, fretboard.frets[previewedMech.index.x][previewedMech.index.y]);
-                notes.push(fretboard.frets[previewedMech.index.x][previewedMech.index.y])
-            }
-        }
 
         // play music in Run mode
         if (mode == Modes.daw && animationState=='Run'){
@@ -279,6 +264,25 @@ export default function Board({
         setLastSimulationNotes(_ => notes);
 
     }, [animationFrame]);
+
+    useEffect(() => {
+            var notes = []
+            // Play music when previewing mech
+            if (spiritPreviewAvailable) {
+                lastSimulationNotes.forEach(lastSimulationNote => {
+                    stopMidiNum(lastSimulationNote);
+                });
+    
+                const previewedMech = spiritPreview[currPreviewFrame[mechIndexHighlighted]];
+                const previewedMechI = -1
+                // only open mech makes sound based on its location on the board
+                if (previewedMech.status == MechStatus.OPEN){
+                    playMidiNum(previewedMechI, fretboard.frets[previewedMech.index.x][previewedMech.index.y]);
+                    notes.push(fretboard.frets[previewedMech.index.x][previewedMech.index.y])
+                }
+            }
+        
+    }, [currPreviewFrame])
 
     const BOARD_BORDER_REM = 1;
     const BOARD_PADDING_REM = 1;
