@@ -242,9 +242,27 @@ export default function Board({
             fretboard.setFretBoardToInitialState()
         }
 
+        var notes = []
+
+        // Play music when previewing mech
+        if (spiritPreviewAvailable) {
+
+            lastSimulationNotes.forEach(lastSimulationNote => {
+                stopMidiNum(lastSimulationNote);
+            });
+
+            const previewedMech = spiritPreview[currPreviewFrame[mechIndexHighlighted]];
+            const previewedMechI = -1
+            // only open mech makes sound based on its location on the board
+            if (previewedMech.status == MechStatus.OPEN){
+                playMidiNum(previewedMechI, fretboard.frets[previewedMech.index.x][previewedMech.index.y]);
+                notes.push(fretboard.frets[previewedMech.index.x][previewedMech.index.y])
+            }
+        }
+
+        // play music in Run mode
         if (mode == Modes.daw && animationState=='Run'){
 
-            var notes = []
             mechStates.forEach((mechState, mech_i) => {
                 lastSimulationNotes.forEach(lastSimulationNote => {
                     stopMidiNum(lastSimulationNote);
@@ -257,8 +275,9 @@ export default function Board({
                     notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
                 }
             });
-            setLastSimulationNotes(_ => notes);
         }
+        setLastSimulationNotes(_ => notes);
+
     }, [animationFrame]);
 
     const BOARD_BORDER_REM = 1;
@@ -354,7 +373,7 @@ export default function Board({
                     />
 
                     {mechStates.map((mechState, mech_i) => (
-                        mech_i != mechIndexHighlighted || spiritPreviewAvailable == false ? 
+                        mech_i != mechIndexHighlighted || spiritPreviewAvailable == false ?
                         <MechUnit
                             mechState={mechState} possessedAtom={possessedAtom[mech_i]}
                             gridDimensionRem={GRID_DIM_REM}
