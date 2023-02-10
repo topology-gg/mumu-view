@@ -46,6 +46,7 @@ import FormulaRow from "../src/components/FormulaRow";
 
 import CoverScreen from "../src/components/CoverScreen";
 import CoverScreenFront from "../src/components/CoverScreenFront";
+import previewSpirit from "../src/components/SpiritPreview";
 
 export default function Home() {
     const { t } = useTranslation();
@@ -85,6 +86,8 @@ export default function Home() {
     const [mechDescriptions, setMechDescriptions] = useState<string[]>(
         BLANK_SOLUTION.mechs.map((mech) => mech.description)
     );
+    const [spiritPreview, setSpiritPreview] = useState<MechState[]>([]);
+
     const [placingMech, setPlacingMech] = useState<MechPositionPlacing | null>(null);
     const [isEditingMechIndex, setIsEditingMechIndex] = useState<number | null>(null);
     const [cachedMechPos, setCachedMechPos] = useState<Grid | null>(null);
@@ -121,7 +124,7 @@ export default function Home() {
     let operatorInputHighlightInit: boolean[] = Array(numOperators).fill(false);
     const [operatorInputHighlight, setOperatorInputHighlight] = useState<boolean[]>(operatorInputHighlightInit);
 
-    const [mechIndexHighlighted, setMechIndexHighlighted] = useState<number>(-1);
+    const [mechIndexHighlighted, setMechIndexHighlighted] = useState<number | undefined>(undefined);
 
     // React states for DAW mode
     const [mechVelocities, setMechVelocities] = useState<number[]>([]);
@@ -159,6 +162,9 @@ export default function Home() {
     const frame = frames?.[animationFrame];
     const atomStates = frame?.atoms || atomInitStates;
     const mechStates = !frame ? mechInitStates : (animationState=='Stop' && animationFrame==0) ? mechInitStates : frame.mechs;
+    const [currPreviewFrame, setCurrPreviewFrame] = useState<number[]>(mechStates.map(_ => {
+        return 0
+    }));
     const operatorStates: OperatorState[] = !frame ? operators.map(o => {
         return {operator:o, firing:false} as OperatorState
     }) : frame.operatorStates
@@ -233,6 +239,32 @@ export default function Home() {
     useEffect(() => {
         loadSoundfont ();
     }, [])
+
+
+    useEffect(() => {
+        setCurrPreviewFrame(mechStates.map(_ => {
+            return 0
+        }))
+    }, [mechIndexHighlighted])
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(currPreviewFrame[mechIndexHighlighted] < spiritPreview.length - 1)
+            {   
+                // Array copy in order to trigger rerender
+                let updatedPreview = [...currPreviewFrame];
+                updatedPreview[mechIndexHighlighted] = updatedPreview[mechIndexHighlighted] + 1;
+                setCurrPreviewFrame(updatedPreview)
+            }else{
+                let updatedPreview = [...currPreviewFrame];
+                updatedPreview[mechIndexHighlighted] = 0;
+                setCurrPreviewFrame(updatedPreview)
+            }
+            
+        }, ANIM_FRAME_LATENCY_DAW)
+        return () => clearInterval(interval);
+
+    }, [currPreviewFrame, spiritPreview, mechIndexHighlighted])
 
     // React useMemo
     const calls = useMemo(() => {
@@ -862,7 +894,9 @@ export default function Home() {
         stopMidiNum = {stopMidiNum}
         parentDim = {parentDim}
         hoveredGrid = {hoveredGrid}
-
+        spiritPreview = {spiritPreview}
+        currPreviewFrame = {currPreviewFrame}
+        isPlacingMech = {placingMech != null}
     />
 
     const stats_box_sx = {
@@ -942,6 +976,23 @@ export default function Home() {
         //     return prev_copy;
         // })
     }
+    
+    function onIndexHighlight(index)  {
+        setMechIndexHighlighted(index);
+
+        if(index == -1)
+        {
+            setSpiritPreview([])
+        }
+
+        let mech = mechInitStates[index]
+        let instructionSets = programsToInstructionSets(programs);
+        let instructionSet = instructionSets[index]
+
+        let mechStates = previewSpirit(mech, instructionSet);
+        setSpiritPreview(mechStates)
+    }
+
     const mechProgramming = (
         <div>
             <MechProgramming
@@ -955,7 +1006,7 @@ export default function Home() {
                 mechVelocities={mechVelocities}
                 onMechInitPositionsChange={setMechInitPositions}
                 onMechDescriptionChange={setMechDescriptions}
-                onMechIndexHighlight={setMechIndexHighlighted}
+                onMechIndexHighlight={onIndexHighlight}
                 onMechVelocitiesChange={setMechVelocities}
                 onProgramsChange={setPrograms}
                 programs={programs}
@@ -965,8 +1016,9 @@ export default function Home() {
                 handleConfirm={handleMechConfirm}
                 handleCancel={() => handleMechCancel(false)}
                 handleRequestToEdit={handleRequestToEditMech}
+                currPreviewFrame={currPreviewFrame[mechIndexHighlighted]}
             />
-            <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "3rem" }}>
+            <Box sx={{ display: "flex", flexDirection: "row", marginTop: "0.6rem", marginLeft: "3rem" }}>   
                 <button onClick={() => handleMechClick("+")} disabled={animationState !== "Stop" ? true : false}>
                     {t("newMech")}
                 </button>

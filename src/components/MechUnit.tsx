@@ -10,24 +10,25 @@ interface MechUnitProps {
     possessedAtom?: AtomState
     gridDimensionRem: number
     unitMarginRem: number
+    isTransparent : boolean
 }
 
-export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, unitMarginRem }: MechUnitProps) {
+export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, unitMarginRem, isTransparent }: MechUnitProps) {
 
     if (!mechState) return <></>
     if (mechState.index == null) return <></>
-
-    const lastMechGridRef = useRef<Grid>({x:0,y:0});
-
+    
+    const lastMechGridRef = useRef<Grid>({x:mechState.index.x,y:mechState.index.y});
+    
     const gridPixel = gridDimensionRem * 16
     const marginPixel = unitMarginRem * 16
     const { left } = useSpring({
         from: {left: 16 + marginPixel + lastMechGridRef.current.x * (gridPixel + marginPixel*2)},
-        left: 16 + marginPixel + mechState.index.x * (gridPixel + marginPixel*2)
+        left: 16 + marginPixel + mechState.index.x * (gridPixel + marginPixel*2)      
     })
     const { top } = useSpring({
         from: {top: 16 + marginPixel + lastMechGridRef.current.y * (gridPixel + marginPixel*2)},
-        top: 16 + marginPixel + mechState.index.y * (gridPixel + marginPixel*2)
+        top: 16 + marginPixel + mechState.index.y * (gridPixel + marginPixel*2)     
     })
 
     // remember mech index in useRef
@@ -51,6 +52,7 @@ export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, 
 
     const mech_id = mechState.id.replace('mech','')
 
+    const mech_opacity = isTransparent ? '.5' : '1';
     // Render
     // ref to making child div having lower z-index than parent div:
     // https://stackoverflow.com/questions/2503705/how-to-get-a-child-element-to-show-behind-lower-z-index-than-its-parent
@@ -68,6 +70,7 @@ export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, 
             lineHeight: `${gridDimensionRem}rem`,
             zIndex: '30',
             transformStyle:'preserve-3d',
+            opacity : mech_opacity
         }}>
             {
                 possessedAtom !== null ?

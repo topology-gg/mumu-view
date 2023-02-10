@@ -328,3 +328,10 @@ export const INSTRUCTION_KEY_TO_DESCRIPTION = {
     'c' : 'Drop off object in holding carelessly; destroy the object if the underlying grid is not empty; do nothing if not applicable',
     '.' : 'Do nothing',
 }
+
+
+export enum AnimationStates {
+    STOP = "Stop",
+    PAUSE = "Pause",
+    RUN = "Run"
+}

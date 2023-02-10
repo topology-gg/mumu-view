@@ -22,7 +22,7 @@ import ListItem from "@mui/material/ListItem";
 
 import SoundFont from '../modules/sf2-player/src';
 import { FretBoard } from "../helpers/MuMuMusic/FretBoard";
-
+import { AnimationStates } from '../constants/constants';
 
 interface BoardProps {
     mode: Modes;
@@ -38,7 +38,7 @@ interface BoardProps {
     produceableAtomTypes: AtomType[][];
     mechStates: MechState[];
     atomStates: AtomState[];
-    mechIndexHighlighted: number;
+    mechIndexHighlighted: number | undefined;
     handleMouseOver: (x: number, y: number) => void;
     handleMouseOut: () => void;
     handleUnitClick: (x: number, y: number) => void;
@@ -48,6 +48,9 @@ interface BoardProps {
     producedAtomIds: string[];
     parentDim: number;
     hoveredGrid: Grid | null;
+    spiritPreview : MechState[];
+    currPreviewFrame : number[];
+    isPlacingMech : boolean;
 }
 
 var fretboard = new FretBoard()
@@ -77,6 +80,9 @@ export default function Board({
     producedAtomIds,
     parentDim,
     hoveredGrid,
+    spiritPreview,
+    currPreviewFrame,
+    isPlacingMech
 }: BoardProps) {
 
     // render nothing if mechStates is not ready yet
@@ -108,6 +114,10 @@ export default function Board({
     const [lastSimulationNotes, setLastSimulationNotes] = useState<number[]>([]);
     // notes played by onMouseDown Grid cells
     const [lastPreviewNote, setLastPreviewNote] = useState<number>(null);
+
+
+    const previewStates = [AnimationStates.PAUSE, AnimationStates.STOP]
+    const spiritPreviewAvailable = previewStates.includes(animationState as AnimationStates) && animationFrame == 0 && mechIndexHighlighted >= 0 && !isPlacingMech
 
     // build mapping from mech_i to possessed atom (if any)
     var possessedAtom = mechStates.map((_) => null);
@@ -232,9 +242,12 @@ export default function Board({
             fretboard.setFretBoardToInitialState()
         }
 
+        var notes = []
+
+
+        // play music in Run mode
         if (mode == Modes.daw && animationState=='Run'){
 
-            var notes = []
             mechStates.forEach((mechState, mech_i) => {
                 lastSimulationNotes.forEach(lastSimulationNote => {
                     stopMidiNum(lastSimulationNote);
@@ -247,9 +260,29 @@ export default function Board({
                     notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
                 }
             });
-            setLastSimulationNotes(_ => notes);
         }
+        setLastSimulationNotes(_ => notes);
+
     }, [animationFrame]);
+
+    useEffect(() => {
+            var notes = []
+            // Play music when previewing mech
+            if (spiritPreviewAvailable) {
+                lastSimulationNotes.forEach(lastSimulationNote => {
+                    stopMidiNum(lastSimulationNote);
+                });
+    
+                const previewedMech = spiritPreview[currPreviewFrame[mechIndexHighlighted]];
+                const previewedMechI = -1
+                // only open mech makes sound based on its location on the board
+                if (previewedMech.status == MechStatus.OPEN){
+                    playMidiNum(previewedMechI, fretboard.frets[previewedMech.index.x][previewedMech.index.y]);
+                    notes.push(fretboard.frets[previewedMech.index.x][previewedMech.index.y])
+                }
+            }
+        
+    }, [currPreviewFrame])
 
     const BOARD_BORDER_REM = 1;
     const BOARD_PADDING_REM = 1;
@@ -344,12 +377,23 @@ export default function Board({
                     />
 
                     {mechStates.map((mechState, mech_i) => (
+                        mech_i != mechIndexHighlighted || spiritPreviewAvailable == false ?
                         <MechUnit
                             mechState={mechState} possessedAtom={possessedAtom[mech_i]}
                             gridDimensionRem={GRID_DIM_REM}
                             unitMarginRem={UNIT_MARGIN_REM}
-                        />
+                            isTransparent={spiritPreviewAvailable ? true : false}
+                            key={mech_i}
+                        />  : null
                     ))}
+
+                    {spiritPreviewAvailable ? <MechUnit
+                            key={mechIndexHighlighted}
+                            mechState={spiritPreview[currPreviewFrame[mechIndexHighlighted]]} possessedAtom={null}
+                            gridDimensionRem={GRID_DIM_REM}
+                            unitMarginRem={UNIT_MARGIN_REM}
+                            isTransparent={false}
+                        /> : null}
 
                     {Array.from({ length: DIM }).map(
                         (

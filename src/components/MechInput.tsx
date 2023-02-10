@@ -233,10 +233,10 @@ const MechInput = ({
                         ref={provided.innerRef}
                         key={`input-row-${mechIndex}`}
                         className={styles.input_row}
-                        onMouseOver={() => {
+                        onMouseEnter={() => {
                             handleMouseOver();
                         }}
-                        onMouseOut={() => {
+                        onMouseLeave={() => {
                             handleMouseOut();
                         }}
                         {...provided.draggableProps}
