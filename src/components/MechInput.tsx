@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import { Delete } from "@mui/icons-material";
 import { Dialog, DialogActions, DialogContent, DialogContentText, IconButton } from "@mui/material";
 import { NumericType } from "mongodb";
+import { MechPositionPlacing } from "../types/MechState";
 
 interface MechInputProps {
     mode: Modes
@@ -30,6 +31,14 @@ interface MechInputProps {
     handleKeyDown: (event) => void;
     handleKeyUp: (event) => void;
     unitBgStatus: BgStatus;
+
+    placing: boolean;
+    completePlacing: boolean;
+    placingMech: MechPositionPlacing;
+    isEditingMechIndex: number | null;
+    handleConfirm: () => void;
+    handleCancel: () => void;
+    handleRequestToEdit?: () => void;
 }
 
 const MechInput = ({
@@ -49,6 +58,15 @@ const MechInput = ({
     handleKeyDown: onKeyDown,
     handleKeyUp,
     unitBgStatus,
+
+    placing,
+    completePlacing,
+    placingMech,
+    isEditingMechIndex,
+    handleConfirm,
+    handleCancel,
+    handleRequestToEdit,
+
 }: MechInputProps) => {
     const { t } = useTranslation();
 
@@ -114,6 +132,99 @@ const MechInput = ({
         setDeleteDialogOpen(false);
     };
 
+    const voidFunc = () => {};
+
+    let uiAfterPos = placing ? (
+        <>
+            <button
+                onClick={handleConfirm}
+                disabled={!placingMech.complete}
+                className={placingMech.complete ? "button_glow" : ""}
+                style={{marginLeft:'0.5rem'}}
+            > ✓ </button>
+
+            <button
+                onClick={handleCancel}
+            > x </button>
+        </>
+    ) : (
+        <div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'0.5rem'}}>
+            <div
+                className={styles.programWrapper}
+                style={{
+                    height: "25px",
+                    borderRadius: "5px",
+                    backgroundColor: program.split(",").length > PROGRAM_SIZE_MAX ? "#FFCBCB" : "#FFFFFF00",
+                }}
+            >
+                {instructions.map((instruction, index) => (
+                    <SingleInstruction
+                        instruction={instruction}
+                        active={currentInstructionIndex === index}
+                        selected={selectedInstructionIndex === index}
+                        onSelect={() => {
+                            setSelectedInstructionIndex(index);
+                            setSelectedNewInstruction(false);
+                        }}
+                        onBlur={() => setSelectedInstructionIndex((prev) => (prev === index ? null : prev))}
+                        onKeyUp={handleChangeInstruction}
+                    />
+                ))}
+                <NewInstruction
+                    onInsert={handleInsertInstruction}
+                    onSelect={() => {
+                        setSelectedInstructionIndex(null);
+                        setSelectedNewInstruction(true);
+                    }}
+                    onBlur={() => setSelectedNewInstruction(false)}
+                    selected={selectedNewInstruction}
+                    onKeyDown={handleKeyDown}
+                    onKeyUp={handleKeyUp}
+                />
+            </div>
+
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <p
+                    style={{
+                        marginLeft: "1rem",
+                        color: "#999999",
+                    }}
+                >
+                    //
+                </p>
+            </div>
+
+            <input
+                className={styles.programComment}
+                onChange={(event) => {
+                    let encoder = new TextEncoder();
+                    onDescriptionChange(mechIndex, event.target.value);
+                }}
+                value={description}
+                size={DESCRIPTION_SIZE_MAX}
+                maxLength={DESCRIPTION_SIZE_MAX}
+                style={{
+                    height: "25px",
+                    width: "auto",
+                    marginLeft: "0.3rem",
+                    padding: "0 5px",
+                    color: "#999999",
+                    border: "none",
+                    borderRadius: "7px",
+                    fontSize: '12px',
+                    backgroundColor:'#FFFFFF00'
+                }}
+                disabled={disabled}
+            ></input>
+        </div>
+    )
+
     return (
         <>
             <Draggable draggableId={mechIndex.toString()} index={mechIndex}>
@@ -122,10 +233,10 @@ const MechInput = ({
                         ref={provided.innerRef}
                         key={`input-row-${mechIndex}`}
                         className={styles.input_row}
-                        onMouseOver={() => {
+                        onMouseEnter={() => {
                             handleMouseOver();
                         }}
-                        onMouseOut={() => {
+                        onMouseLeave={() => {
                             handleMouseOut();
                         }}
                         {...provided.draggableProps}
@@ -156,135 +267,40 @@ const MechInput = ({
                             <p
                                 style={{
                                     margin: "0 1rem 0 1rem",
-                                    width: "2.5rem",
+                                    width: "3rem",
                                 }}
                             >
-                                {t("mech")}
-                                {mechIndex}
+                                {mechIndex == -1 ? '+ Spirit' : 'Spirit ' + mechIndex.toString()}
                             </p>
                         </div>
 
-                        <IconButton disabled={!onProgramDelete} size="small" color="secondary" onClick={handleDeleteConfirm}>
-                            <Delete fontSize="small" />
-                        </IconButton>
-
-                        <input
-                            className={styles.program}
-                            onChange={(event) => {
-                                if (isNaN(parseInt(event.target.value))) return;
-                                onPositionChange(mechIndex, {
-                                    ...position,
-                                    x: parseInt(event.target.value),
-                                });
-                            }}
-                            defaultValue={position.x}
-                            value={position.x}
-                            style={{
-                                width: "30px",
-                                height: "25px",
-                                textAlign: "center",
-                                border: "1px solid #CCCCCC",
-                                borderRadius: "10px 0 0 10px",
-                            }}
-                            disabled={disabled}
-                        ></input>
-
-                        <input
-                            className={styles.program}
-                            onChange={(event) => {
-                                if (isNaN(parseInt(event.target.value))) return;
-                                onPositionChange(mechIndex, {
-                                    ...position,
-                                    y: parseInt(event.target.value),
-                                });
-                            }}
-                            defaultValue={position.y}
-                            value={position.y}
-                            style={{
-                                width: "30px",
-                                height: "25px",
-                                textAlign: "center",
-                                marginRight: "0.8rem",
-                                border: "1px solid #CCCCCC",
-                                borderLeft: "0px",
-                                borderRadius: "0 10px 10px 0",
-                            }}
-                            disabled={disabled}
-                        ></input>
-
-                        <div
-                            className={styles.programWrapper}
-                            style={{
-                                height: "25px",
-                                borderRadius: "5px",
-                                backgroundColor: program.split(",").length > PROGRAM_SIZE_MAX ? "#FFCBCB" : "#FFFFFF00",
-                            }}
-                        >
-                            {instructions.map((instruction, index) => (
-                                <SingleInstruction
-                                    instruction={instruction}
-                                    active={currentInstructionIndex === index}
-                                    selected={selectedInstructionIndex === index}
-                                    onSelect={() => {
-                                        setSelectedInstructionIndex(index);
-                                        setSelectedNewInstruction(false);
-                                    }}
-                                    onBlur={() => setSelectedInstructionIndex((prev) => (prev === index ? null : prev))}
-                                    onKeyUp={handleChangeInstruction}
+                        {
+                            placing ? <></> : (
+                                <Delete
+                                    fontSize="small"
+                                    sx={{mr:1, color:'#AAAAAA', "&:hover": { color:disabled?"#AAAAAA":"#555555", cursor:disabled?'default':'pointer' }}}
+                                    onClick={!disabled ? handleDeleteConfirm : voidFunc}
                                 />
-                            ))}
-                            <NewInstruction
-                                onInsert={handleInsertInstruction}
-                                onSelect={() => {
-                                    setSelectedInstructionIndex(null);
-                                    setSelectedNewInstruction(true);
-                                }}
-                                onBlur={() => setSelectedNewInstruction(false)}
-                                selected={selectedNewInstruction}
-                                onKeyDown={handleKeyDown}
-                                onKeyUp={handleKeyUp}
-                            />
-                        </div>
-
+                            )
+                        }
                         <div
+                            className={`${disabled ? 'disabled-editable-placement' : placing && (placingMech !== null) && !completePlacing ? 'p_glow' : 'editable-placement'}`}
                             style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
+                                borderRadius:'10px', padding:'0 10px 0 10px', display:'flex', flexDirection:'row', alignItems:'center',
+                                border: '1px solid #555555', height: '22px',
                             }}
+                            onClick={()=>{ disabled ? voidFunc() : handleRequestToEdit(); }}
                         >
-                            <p
-                                style={{
-                                    marginLeft: "1rem",
-                                    color: "#999999",
-                                }}
-                            >
-                                //
-                            </p>
+                            <div style={{width:'1rem', color: disabled ? '#999999' : '#222222'}}>
+                                {position ? position.x : '?'}
+                            </div>
+                            <div>,</div>
+                            <div style={{width:'1rem', color: disabled ? '#999999' : '#222222'}}>
+                                {position ? position.y : '?'}
+                            </div>
                         </div>
 
-                        <input
-                            className={styles.programComment}
-                            onChange={(event) => {
-                                let encoder = new TextEncoder();
-                                onDescriptionChange(mechIndex, event.target.value);
-                            }}
-                            defaultValue={description}
-                            value={description}
-                            size={DESCRIPTION_SIZE_MAX}
-                            maxLength={DESCRIPTION_SIZE_MAX}
-                            style={{
-                                height: "25px",
-                                width: "auto",
-                                marginLeft: "0.3rem",
-                                padding: "0 5px",
-                                color: "#999999",
-                                border: "none",
-                                borderRadius: "7px",
-                                fontSize: '12px',
-                            }}
-                            disabled={disabled}
-                        ></input>
+                        {uiAfterPos}
 
                     </div>
                 )}

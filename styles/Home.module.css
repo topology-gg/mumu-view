@@ -72,13 +72,14 @@
 .input_row {
     display: flex;
     flex-direction: row;
-    border-radius: 10px;
-    margin-bottom: 0.2rem;
+    border-radius: 2rem;
+    /* margin-top: 0.3rem; */
     align-items: center;
+    justify-content: start;
 }
 
 .input_row:hover {
-    background-color: #FFFE71;
+    background-color: #DDDDDD;
 }
 
 .input_grid {
@@ -92,7 +93,7 @@
     vertical-align: middle;
     text-align: right;
     height: 20px;
-    width: 5rem;
+    width: 3.5rem;
     line-height: 20px;
 }
 
@@ -140,21 +141,11 @@
   display: flex;
   flex-direction: column;
   border: 1px solid #ffffff00;
-  /* border-radius: 10px; */
-  padding: 1rem;
-  /* align-items: center; */
-  /* justify-content: center; */
-  /* flex-wrap: wrap; */
-  max-width: 800px;
 }
 
 .grid_row {
     display: flex;
     flex-direction: row;
-    /* align-items: center; */
-    /* justify-content: center; */
-    /* flex-wrap: wrap; */
-    max-width: 800px;
 }
 
 .delivered_atoms {

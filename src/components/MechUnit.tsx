@@ -8,21 +8,27 @@ import styles from "../../styles/Unit.module.css";
 interface MechUnitProps {
     mechState: MechState
     possessedAtom?: AtomState
+    gridDimensionRem: number
+    unitMarginRem: number
+    isTransparent : boolean
 }
 
-export default function MechUnit ({ mechState, possessedAtom }: MechUnitProps) {
+export default function MechUnit ({ mechState, possessedAtom, gridDimensionRem, unitMarginRem, isTransparent }: MechUnitProps) {
 
     if (!mechState) return <></>
-
-    const lastMechGridRef = useRef<Grid>({x:0,y:0});
-
+    if (mechState.index == null) return <></>
+    
+    const lastMechGridRef = useRef<Grid>({x:mechState.index.x,y:mechState.index.y});
+    
+    const gridPixel = gridDimensionRem * 16
+    const marginPixel = unitMarginRem * 16
     const { left } = useSpring({
-        from: {left: 16 + 3.2 + lastMechGridRef.current.x * (32+3.2*2)},
-        left: 16 + 3.2 + mechState.index.x * (32+3.2*2)
+        from: {left: 16 + marginPixel + lastMechGridRef.current.x * (gridPixel + marginPixel*2)},
+        left: 16 + marginPixel + mechState.index.x * (gridPixel + marginPixel*2)      
     })
     const { top } = useSpring({
-        from: {top: 16 + 3.2 + lastMechGridRef.current.y * (32+3.2*2)},
-        top: 16 + 3.2 + mechState.index.y * (32+3.2*2)
+        from: {top: 16 + marginPixel + lastMechGridRef.current.y * (gridPixel + marginPixel*2)},
+        top: 16 + marginPixel + mechState.index.y * (gridPixel + marginPixel*2)     
     })
 
     // remember mech index in useRef
@@ -46,6 +52,7 @@ export default function MechUnit ({ mechState, possessedAtom }: MechUnitProps) {
 
     const mech_id = mechState.id.replace('mech','')
 
+    const mech_opacity = isTransparent ? '.5' : '1';
     // Render
     // ref to making child div having lower z-index than parent div:
     // https://stackoverflow.com/questions/2503705/how-to-get-a-child-element-to-show-behind-lower-z-index-than-its-parent
@@ -57,12 +64,13 @@ export default function MechUnit ({ mechState, possessedAtom }: MechUnitProps) {
             // border: '1px solid #555555',
             left: left,
             top: top,
-            width: '2rem',
-            height: '2rem',
+            width: `${gridDimensionRem}rem`,
+            height: `${gridDimensionRem}rem`,
             alignItems: 'center',
-            lineHeight: '2rem',
+            lineHeight: `${gridDimensionRem}rem`,
             zIndex: '30',
             transformStyle:'preserve-3d',
+            opacity : mech_opacity
         }}>
             {
                 possessedAtom !== null ?

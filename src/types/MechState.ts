@@ -18,3 +18,8 @@ export default interface MechState {
     description: string
     pc_next: number
 }
+
+export interface MechPositionPlacing {
+    index: Grid
+    complete: boolean
+}

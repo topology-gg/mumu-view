@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { InstructionKey, INSTRUCTION_KEYS, Modes } from "../constants/constants";
 import { reorder } from "../helpers/reorder";
 import Grid from "../types/Grid";
-import MechState from "../types/MechState";
+import MechState, { MechPositionPlacing } from "../types/MechState";
 import { BgStatus } from "../types/UnitState";
 import IconizedInstructionPanel from "./IconizedInstructionPanel";
 import MechInput from "./MechInput";
@@ -23,6 +23,13 @@ interface MechProgrammingProps {
     onMechInitPositionsChange: (mechInitPositions: Grid[]) => void;
     onMechIndexHighlight: (index: number) => void;
     onMechVelocitiesChange: (velocities: number[]) => void;
+
+    placingMech: MechPositionPlacing;
+    isEditingMechIndex: number | null;
+    handleConfirm: () => void;
+    handleCancel: () => void;
+    handleRequestToEdit: (mech_i: number) => void;
+    currPreviewFrame: number;
 }
 
 const MechProgramming = ({
@@ -40,6 +47,14 @@ const MechProgramming = ({
     onMechDescriptionChange,
     onMechIndexHighlight,
     onMechVelocitiesChange,
+
+    placingMech,
+    isEditingMechIndex,
+    handleConfirm,
+    handleCancel,
+    handleRequestToEdit,
+    currPreviewFrame
+
 }: MechProgrammingProps) => {
     let programKeyDownInit = {};
     for (const key of INSTRUCTION_KEYS) {
@@ -86,9 +101,7 @@ const MechProgramming = ({
 
     const handleInstructionPanelPress = (key: InstructionKey) => {
         // No selected mech, return
-
         // Insert the instruction in the currently selected mech
-        console.log("key pressed", key);
     };
 
     function handleMechInitPositionChange(mech_i: number, position: Grid) {
@@ -111,8 +124,12 @@ const MechProgramming = ({
         onMechVelocitiesChange(mechVelocities.filter((_v, i) => i !== index));
     }
 
+    const placing = placingMech !== null;
+
     return (
         <>
+            <p style={{fontSize:'1rem'}}>Program your Spirits</p>
+
             <IconizedInstructionPanel programKeyDown={programKeyDown} onPress={handleInstructionPanelPress} />
 
             <DragDropContext onDragEnd={handleDragEnd}>
@@ -124,64 +141,113 @@ const MechProgramming = ({
 
                             {animationState == "Stop"
                                 ? Array.from({ length: numMechs }).map((_, mech_i) => (
-                                      <MechInput
-                                          key={`mech-input-${mech_i}`}
-                                          mode={mode}
-                                          mechIndex={mech_i}
-                                          position={mechInitPositions[mech_i]}
-                                          description={mechDescriptions[mech_i]}
-                                          program={programs[mech_i]}
-                                          pc={0}
-                                          onPositionChange={(index, position) => {
-                                              handleMechInitPositionChange(index, position);
-                                          }}
-                                          onDescriptionChange={(index, description) => {
-                                              handleMechDescriptionChange(index, description);
-                                          }}
-                                          onProgramChange={(index, program) =>
-                                              onProgramsChange(programs.map((p, i) => (i === index ? program : p)))
-                                          }
-                                          onProgramDelete={handleProgramDelete}
-                                          disabled={animationState == "Stop" ? false : true}
-                                          handleMouseOver={() => {
-                                              handleMouseOverMechInput(mech_i);
-                                          }}
-                                          handleMouseOut={() => {
-                                              handleMouseOutMechInput(mech_i);
-                                          }}
-                                          handleKeyDown={(event) => {
-                                              handleKeyMechInputProgram(event, "down");
-                                          }}
-                                          handleKeyUp={(event) => {
-                                              handleKeyMechInputProgram(event, "up");
-                                          }}
-                                          unitBgStatus={mechCarries[mech_i]}
-                                      />
-                                  ))
+                                    <MechInput
+                                        key={`mech-input-${mech_i}`}
+                                        mode={mode}
+                                        mechIndex={mech_i}
+                                        position={mechInitPositions[mech_i]}
+                                        description={mechDescriptions[mech_i]}
+                                        program={programs[mech_i]}
+                                        pc={mech_i == mechIndexHighlighted ? currPreviewFrame : 0}
+                                        onPositionChange={(index, position) => {
+                                            handleMechInitPositionChange(index, position);
+                                        }}
+                                        onDescriptionChange={(index, description) => {
+                                            handleMechDescriptionChange(index, description);
+                                        }}
+                                        onProgramChange={(index, program) =>
+                                            onProgramsChange(programs.map((p, i) => (i === index ? program : p)))
+                                        }
+                                        onProgramDelete={handleProgramDelete}
+                                        disabled={animationState == "Stop" ? false : true}
+                                        handleMouseOver={() => {
+                                            handleMouseOverMechInput(mech_i);
+                                        }}
+                                        handleMouseOut={() => {
+                                            handleMouseOutMechInput(mech_i);
+                                        }}
+                                        handleKeyDown={(event) => {
+                                            handleKeyMechInputProgram(event, "down");
+                                        }}
+                                        handleKeyUp={(event) => {
+                                            handleKeyMechInputProgram(event, "up");
+                                        }}
+                                        unitBgStatus={mechCarries[mech_i]}
+
+                                        placing={placing && (isEditingMechIndex == mech_i)}
+                                        completePlacing={placing ? placingMech.complete : false}
+                                        placingMech={placingMech}
+                                        isEditingMechIndex={isEditingMechIndex}
+                                        handleConfirm={handleConfirm}
+                                        handleCancel={handleCancel}
+                                        handleRequestToEdit={() => handleRequestToEdit(mech_i)}
+                                    />
+                                ))
                                 : Array.from({ length: numMechs }).map((_, mech_i) => (
-                                      <MechInput
-                                          key={`mech-input-${mech_i}`}
-                                          mode={mode}
-                                          mechIndex={mech_i}
-                                          position={mechInitPositions[mech_i]}
-                                          description={mechDescriptions[mech_i]}
-                                          program={programs[mech_i]}
-                                          pc={mechStates[mech_i].pc_next}
-                                          onPositionChange={(index, position) => {}}
-                                          onDescriptionChange={(index, description) => {}}
-                                          onProgramChange={(index, program) => {}}
-                                          disabled={animationState == "Stop" ? false : true}
-                                          handleMouseOver={() => {
-                                              handleMouseOverMechInput(mech_i);
-                                          }}
-                                          handleMouseOut={() => {
-                                              handleMouseOutMechInput(mech_i);
-                                          }}
-                                          handleKeyDown={() => {}}
-                                          handleKeyUp={() => {}}
-                                          unitBgStatus={mechCarries[mech_i]}
-                                      />
-                                  ))}
+                                        <MechInput
+                                            key={`mech-input-${mech_i}`}
+                                            mode={mode}
+                                            mechIndex={mech_i}
+                                            position={mechInitPositions[mech_i]}
+                                            description={mechDescriptions[mech_i]}
+                                            program={programs[mech_i]}
+                                            pc={mechStates[mech_i].pc_next}
+                                            onPositionChange={(index, position) => {}}
+                                            onDescriptionChange={(index, description) => {}}
+                                            onProgramChange={(index, program) => {}}
+                                            disabled={animationState == "Stop" ? false : true}
+                                            handleMouseOver={() => {
+                                                handleMouseOverMechInput(mech_i);
+                                            }}
+                                            handleMouseOut={() => {
+                                                handleMouseOutMechInput(mech_i);
+                                            }}
+                                            handleKeyDown={() => {}}
+                                            handleKeyUp={() => {}}
+                                            unitBgStatus={mechCarries[mech_i]}
+
+                                            placing={placing && (isEditingMechIndex == mech_i)}
+                                            completePlacing={placing ? placingMech.complete : false}
+                                            placingMech={null}
+                                            isEditingMechIndex={null}
+                                            handleConfirm={() => {}}
+                                            handleCancel={() => {}}
+                                            handleRequestToEdit={() => {}}
+                                        />
+                                    ))
+                                }
+
+                                {
+                                    placingMech && (isEditingMechIndex == null) ? (
+                                        <MechInput
+                                            key={`mech-input-new`}
+                                            mode={mode}
+                                            mechIndex={-1}
+                                            position={placingMech.index}
+                                            description={''}
+                                            program={''}
+                                            pc={0}
+                                            onPositionChange={() => {}}
+                                            onDescriptionChange={() => {}}
+                                            onProgramChange={() => {}}
+                                            onProgramDelete={handleProgramDelete}
+                                            disabled={animationState == "Stop" ? false : true}
+                                            handleMouseOver={() => {}}
+                                            handleMouseOut={() => {}}
+                                            handleKeyDown={(event) => {}}
+                                            handleKeyUp={(event) => {}}
+                                            unitBgStatus={BgStatus.EMPTY}
+
+                                            placing={true}
+                                            completePlacing={placingMech.complete}
+                                            placingMech={placingMech}
+                                            isEditingMechIndex={isEditingMechIndex}
+                                            handleConfirm={handleConfirm}
+                                            handleCancel={handleCancel}
+                                            handleRequestToEdit={() => {}}
+                                        />
+                                    ) : <></>
+                                }
                             {provided.placeholder}
                         </div>
                     )}

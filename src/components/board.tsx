@@ -1,5 +1,5 @@
 import styles from "../../styles/Home.module.css";
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import MechState, { MechStatus, MechType } from "../types/MechState";
 import Unit from "./unit";
 import UnitState, { BgStatus, BorderStatus, UnitText } from "../types/UnitState";
@@ -21,11 +21,8 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
 
 import SoundFont from '../modules/sf2-player/src';
-
-import { keynumToPitchClass, num_steps_from_scale_degree, PitchClass } from "../helpers/MuMuMusic/PitchClass"
-import { modes } from "../helpers/MuMuMusic/Modes";
 import { FretBoard } from "../helpers/MuMuMusic/FretBoard";
-
+import { AnimationStates } from '../constants/constants';
 
 interface BoardProps {
     mode: Modes;
@@ -41,7 +38,7 @@ interface BoardProps {
     produceableAtomTypes: AtomType[][];
     mechStates: MechState[];
     atomStates: AtomState[];
-    mechIndexHighlighted: number;
+    mechIndexHighlighted: number | undefined;
     handleMouseOver: (x: number, y: number) => void;
     handleMouseOut: () => void;
     handleUnitClick: (x: number, y: number) => void;
@@ -49,22 +46,14 @@ interface BoardProps {
     stopMidiNum: (midi_num: number) => void,
     consumedAtomIds: string[];
     producedAtomIds: string[];
+    parentDim: number;
+    hoveredGrid: Grid | null;
+    spiritPreview : MechState[];
+    currPreviewFrame : number[];
+    isPlacingMech : boolean;
 }
 
-// compute Grid MidiKeynums ---
-var tonic = new PitchClass(5, 0) // Traditionally tuned to F
-var fretboard = new FretBoard(
-    "guqin_10_string", // name
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1], // string_steps
-    10, // num_frets
-    3, // scale_degree
-    tonic, // tonic
-    modes.pentatonic, // mode
-    null,
-    0,
-    3, null, null
-  )
-// compute keynums
+var fretboard = new FretBoard()
 fretboard.calculateFrets()
 
 export default function Board({
@@ -89,18 +78,46 @@ export default function Board({
     stopMidiNum,
     consumedAtomIds,
     producedAtomIds,
+    parentDim,
+    hoveredGrid,
+    spiritPreview,
+    currPreviewFrame,
+    isPlacingMech
 }: BoardProps) {
 
     // render nothing if mechStates is not ready yet
     if (!mechStates) return <></>;
 
+    // render nothing if parentDim is not set yet
+    if (parentDim == null) return <></>;
+
     // Unpack constants given mode
     const DIM = Constraints[mode].DIM;
+
+    // // React state tracking window dimension
+    // const [windowInnerWidth, setWindowInnerWidth] = useState<number>(0);
+    // const handleWindowResize = useCallback (event => {
+    //     setWindowInnerWidth (window.innerWidth);
+    // }, []);
+
+    // useEffect(() => {
+    //     window.addEventListener('resize', handleWindowResize);
+
+    //     window.dispatchEvent(new Event('resize'));
+
+    //     return () => {
+    //         window.removeEventListener('resize', handleWindowResize);
+    //     };
+    // }, [handleWindowResize]);
 
     // notes played in previous frame
     const [lastSimulationNotes, setLastSimulationNotes] = useState<number[]>([]);
     // notes played by onMouseDown Grid cells
     const [lastPreviewNote, setLastPreviewNote] = useState<number>(null);
+
+
+    const previewStates = [AnimationStates.PAUSE, AnimationStates.STOP]
+    const spiritPreviewAvailable = previewStates.includes(animationState as AnimationStates) && animationFrame == 0 && mechIndexHighlighted >= 0 && !isPlacingMech
 
     // build mapping from mech_i to possessed atom (if any)
     var possessedAtom = mechStates.map((_) => null);
@@ -218,9 +235,19 @@ export default function Board({
 */
     // firing note.play in parent
     useEffect(() => {
+
+        // Reset FretBoard when game loop is stopped
+
+        if(mode == Modes.daw && animationState=='Stop' && animationFrame==0 ){
+            fretboard.setFretBoardToInitialState()
+        }
+
+        var notes = []
+
+
+        // play music in Run mode
         if (mode == Modes.daw && animationState=='Run'){
 
-            var notes = []
             mechStates.forEach((mechState, mech_i) => {
                 lastSimulationNotes.forEach(lastSimulationNote => {
                     stopMidiNum(lastSimulationNote);
@@ -233,21 +260,54 @@ export default function Board({
                     notes.push(fretboard.frets[mechState.index.x][mechState.index.y])
                 }
             });
-            setLastSimulationNotes(_ => notes);
         }
+        setLastSimulationNotes(_ => notes);
+
     }, [animationFrame]);
 
-    const BOX_DIM: number = 10 * 2 + 10 * 2 * 0.2 + 2;
-    const BOARD_DIM: number = DIM * 2 + DIM * 2 * 0.2 + 2; // unit is rem; reflect the dimensions, padding and margin set in CSS
+    useEffect(() => {
+            var notes = []
+            // Play music when previewing mech
+            if (spiritPreviewAvailable) {
+                lastSimulationNotes.forEach(lastSimulationNote => {
+                    stopMidiNum(lastSimulationNote);
+                });
+    
+                const previewedMech = spiritPreview[currPreviewFrame[mechIndexHighlighted]];
+                const previewedMechI = -1
+                // only open mech makes sound based on its location on the board
+                if (previewedMech.status == MechStatus.OPEN){
+                    playMidiNum(previewedMechI, fretboard.frets[previewedMech.index.x][previewedMech.index.y]);
+                    notes.push(fretboard.frets[previewedMech.index.x][previewedMech.index.y])
+                }
+            }
+        
+    }, [currPreviewFrame])
+
+    const BOARD_BORDER_REM = 1;
+    const BOARD_PADDING_REM = 1;
+    const LAYOUT_PADDING_REM = 1;
+    const GRID_DIVIDER = DIM <= 10 ? 10 : DIM;
+    const GRID_DIM_REM: number = (
+        parentDim
+         - LAYOUT_PADDING_REM * 16
+         - BOARD_BORDER_REM * 2 * 16
+         - BOARD_PADDING_REM * 2 * 16
+        ) / GRID_DIVIDER / 16 * 0.7;
+    const UNIT_MARGIN_REM = GRID_DIM_REM / 10;
+    // console.log ("GRID_DIM_REM:", GRID_DIM_REM);
+    const BOX_DIM: number = DIM * GRID_DIM_REM + DIM * GRID_DIM_REM * UNIT_MARGIN_REM + GRID_DIM_REM;
+    const BOARD_DIM: number = DIM * (GRID_DIM_REM + 2 * UNIT_MARGIN_REM) + BOARD_PADDING_REM; // unit is rem; reflect the dimensions, padding and margin set in CSS
     const board = (
         <div
             style={{
-                width: `${BOX_DIM}rem`,
-                height: `${BOX_DIM}rem`,
+                width: `${BOARD_DIM}rem`,
+                height: (mode !== Modes.arena) && (mode !== Modes.daw) ? `${BOARD_DIM+11}rem` : `${BOARD_DIM}rem`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "flex-start",
+                margin: '0 auto',
             }}
         >
             {(mode !== Modes.arena) && (mode !== Modes.daw) ? (
@@ -262,7 +322,8 @@ export default function Board({
                         border: 1,
                         borderRadius: 4,
                         boxShadow: 3,
-                        height: 150,
+                        width: '40rem',
+                        maxHeight: '11rem',
                         overflow: "hidden",
                     }}
                 >
@@ -294,15 +355,20 @@ export default function Board({
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
-                    width: BOARD_DIM.toString() + "rem",
-                    height: BOARD_DIM.toString() + "rem",
-                    border: 1,
+                    width: `${BOARD_DIM}rem`,
+                    height:`${BOARD_DIM}rem`,
+                    border: `${BOARD_BORDER_REM}rem`,
                     borderRadius: 4,
                     boxShadow: 3,
                     backgroundColor: "#FDF5E6",
                 }}
             >
-                <div className={styles.grid_parent} style={{}}>
+                <div
+                    className={styles.grid_parent}
+                    style={{
+                        padding:`${BOARD_PADDING_REM}rem`
+                    }}
+                >
                     <OperatorGridBg
                         operators={operatorStates.map(oS => oS.operator)}
                         highlighted={operatorInputHighlight}
@@ -311,8 +377,23 @@ export default function Board({
                     />
 
                     {mechStates.map((mechState, mech_i) => (
-                        <MechUnit mechState={mechState} possessedAtom={possessedAtom[mech_i]} />
+                        mech_i != mechIndexHighlighted || spiritPreviewAvailable == false ?
+                        <MechUnit
+                            mechState={mechState} possessedAtom={possessedAtom[mech_i]}
+                            gridDimensionRem={GRID_DIM_REM}
+                            unitMarginRem={UNIT_MARGIN_REM}
+                            isTransparent={spiritPreviewAvailable ? true : false}
+                            key={mech_i}
+                        />  : null
                     ))}
+
+                    {spiritPreviewAvailable ? <MechUnit
+                            key={mechIndexHighlighted}
+                            mechState={spiritPreview[currPreviewFrame[mechIndexHighlighted]]} possessedAtom={null}
+                            gridDimensionRem={GRID_DIM_REM}
+                            unitMarginRem={UNIT_MARGIN_REM}
+                            isTransparent={false}
+                        /> : null}
 
                     {Array.from({ length: DIM }).map(
                         (
@@ -346,6 +427,8 @@ export default function Board({
                                             <div key={`${j}-${i}`}>
                                                 <Unit
                                                     key={`unit-${j}-${i}`}
+                                                    mode={mode}
+                                                    noteNum={fretboard.frets[j][i]}
                                                     state={unitStates[j][i]}
                                                     consumableAtomType={consumableAtomTypes[j][i]}
                                                     produceableAtomType={produceableAtomTypes[j][i]}
@@ -365,6 +448,9 @@ export default function Board({
                                                     isSmall={false}
                                                     isConsumed={isConsumed}
                                                     isProduced={isProduced}
+                                                    gridDimensionRem={GRID_DIM_REM}
+                                                    marginRem={UNIT_MARGIN_REM}
+                                                    isHovered={hoveredGrid ? (hoveredGrid.x == j)&&(hoveredGrid.y == i) : false}
                                                 />
                                             </div>
                                         )

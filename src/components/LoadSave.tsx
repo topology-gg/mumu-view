@@ -134,8 +134,8 @@ const LoadSave = ({ onLoadSolutionClick, mechInitStates, programs, operators, mo
         )
     };
     return (
-        <Box sx={{ mb: 2 }}>
-            <button onClick={handleOpen} className={'big-button'}>
+        <Box sx={{ margin: '0 6px 0 6px' }}>
+            <button onClick={handleOpen}>
                 <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.1rem' }}>
                     save
                 </i>

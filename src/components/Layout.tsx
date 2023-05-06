@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -21,16 +21,19 @@ import Formulas from "./formulas";
 import Convo from "./convo";
 import Submission from "./Submission";
 import MidScreenControl from "./ui_setting/MidScreenControl";
+import Editors from "./Editors";
+import Statistics from "./Statistics";
 
 import { useAccount, useStarknetExecute, useTransactionReceipt } from "@starknet-react/core";
 import LayoutBox from "./LayoutBox";
-import DAWPanel from "./DAWPanel";
+import DAWConfigPanel from "./DAWConfigPanel";
+import DAWFaucetSinkPanel from "./DAWFaucetSinkPanel"
 
 import { BLANK_COLOR, Modes } from "../constants/constants";
 
-const gridStyles: SxProps = {
+const flexColumn: SxProps = {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
 };
 
 const Panel = ({ children, sx = {} }: { children: React.ReactNode; sx?: SxProps }) => {
@@ -41,13 +44,17 @@ export default function Layout({
     currMode,
     loadSave,
     board,
-    stats,
+    faucets,
+    sinks,
+    liveStats,
+    summaryStats,
     animationState,
     operatorStates,
     mech_n,
     mechVelocities,
     musicTitle,
     sfLoaded,
+    sfPrograms,
     mechProgramming,
     formulaProgramming,
     midScreenControlProps,
@@ -58,8 +65,27 @@ export default function Layout({
     handleFormulaOnclick,
     handleSetSfFile,
     handleMechNoteVelocityChange,
+    handleMechSfProgramChange,
     handleMusicTitleChange,
+    handleAddFaucet,
+    handleRemoveFaucet,
+    handleAddSink,
+    handleRemoveSink,
+    handleOnMouseEnterGrid,
+    handleOnMouseLeaveGrid,
+    handleFaucetAtomTypeChange,
     callData,
+
+    isEditingFaucetIndex,
+    isEditingSinkIndex,
+    isPlacingFaucetSink,
+    isPlacingFaucet,
+    placingFaucet,
+    placingSink,
+    handleCancelFaucetSinkPlacing,
+    handleConfirmFaucetSinkPlacing,
+    handleRequestToEdit,
+    mechSfProgramIds,
 }) {
     const { t } = useTranslation();
     const { account, address, status } = useAccount();
@@ -71,6 +97,7 @@ export default function Layout({
     const [txnPending, setTxnPending] = useState<boolean>(false);
     const [submitText, setSubmitText] = useState<string>();
     const [hash, setHash] = useState<string>();
+    const [boardParentWidth, setBoardParentWidth] = useState<number>();
 
     const { execute } = useStarknetExecute({ calls: callData });
 
@@ -148,30 +175,92 @@ export default function Layout({
         border: 1, borderRadius:4, boxShadow:3,
     }
 
+    const ref = useRef(null);
+    useEffect(() => {
+      console.log('width', ref.current ? ref.current.offsetWidth : 0);
+      setBoardParentWidth ((prev) => ref.current ? ref.current.offsetWidth : prev);
+    }, [ref.current]);
+
+    let dawVolumePanel = (
+        <DAWConfigPanel
+            handleSetSfFile={(file) => handleSetSfFile(file)}
+            sfLoaded={sfLoaded}
+            sfPrograms={sfPrograms}
+            mech_n={mech_n}
+            mechVelocities={mechVelocities}
+            musicTitle={musicTitle}
+            animationState={animationState}
+            handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+            handleMechSfProgramChange={handleMechSfProgramChange}
+            handleMusicTitleChange={handleMusicTitleChange}
+            operatorStates={operatorStates}
+            mechSfProgramIds={mechSfProgramIds}
+        />
+    )
+
+    let dawFaucetSinkPanel = (
+        <DAWFaucetSinkPanel
+            sfLoaded={sfLoaded}
+            isEditingFaucetIndex={isEditingFaucetIndex}
+            isEditingSinkIndex={isEditingSinkIndex}
+            placing={isPlacingFaucetSink}
+            isPlacingFaucet={isPlacingFaucet}
+            placingFaucet={placingFaucet}
+            placingSink={placingSink}
+            faucets={faucets}
+            sinks={sinks}
+            animationState={animationState}
+            handleAddFaucet={handleAddFaucet}
+            handleRemoveFaucet={handleRemoveFaucet} //(id: string) => void;
+            handleAddSink={handleAddSink}
+            handleRemoveSink={handleRemoveSink} //(id: string) => void;
+            handleOnMouseEnterGrid={handleOnMouseEnterGrid}
+            handleOnMouseLeaveGrid={handleOnMouseLeaveGrid}
+            handleFaucetAtomTypeChange={handleFaucetAtomTypeChange}
+            handleCancelPlacing={handleCancelFaucetSinkPlacing}
+            handleConfirmPlacing={handleConfirmFaucetSinkPlacing}
+            handleRequestToEdit={handleRequestToEdit}
+        />
+    )
+
     return (
         <>
             <ThemeProvider theme={theme}>
                 <Box sx={{ height: { md: "100vh" }, p: 4 }} display="flex" flexDirection="column" gap={2}>
                     <Grid container spacing={2} flex={1} flexShrink={0} disableEqualOverflow justifyContent={"stretch"}>
-                        <Grid xs={12} md={4} sx={gridStyles}>
-                            <Panel
+                        {/* <Grid xs={12} md={4} sx={flexColumn}>
+
+                        </Grid> */}
+                        <Grid xs={12} md={7} sx={flexColumn} ref={ref} style={{display:'flex', flexDirection:'column'}}>
+
+                            {board(boardParentWidth)}
+
+                            <MidScreenControl
+                                runnable={midScreenControlProps.runnable}
+                                animationFrame={midScreenControlProps.animationFrame}
+                                n_cycles={midScreenControlProps.n_cycles}
+                                animationState={midScreenControlProps.animationState}
+                                handleClick={midScreenControlHandleClick}
+                                handleSlideChange={midScreenControlHandleSlideChange}
+                            />
+
+                            <Box
                                 sx={{
-                                    p: 0,
+                                    p: '1rem',
                                     border: 1,
                                     borderRadius: 4,
                                     backgroundColor: BLANK_COLOR,
                                     boxShadow: 3,
+                                    width: "26rem",
+                                    margin:'0 auto',
+                                    justifyContent:'center',
+                                    display: 'flex',
+                                    flexDirection: 'row',
                                 }}
                             >
-                                <Convo />
 
-                                <div
-                                    className={"christmas"}
-                                    style={{ width: MASCOT_DIM, height: MASCOT_DIM, margin: "0 auto 0.5rem auto" }}
-                                ></div>
-
-                                <Grid container spacing={1}>
-                                    <Grid xs={3} xsOffset={1.5} lg={2} lgOffset={3}>
+                                {/* <Grid container spacing={1} sx={{justifyContent:'center', p:0}}> */}
+                                    {/* <Grid xs={3} xsOffset={1.5} lg={2} lgOffset={3}> */}
                                         <Setting
                                             renderMode={settingRenderMode}
                                             handleSetRenderMode={handleSetRenderMode}
@@ -179,17 +268,18 @@ export default function Layout({
                                             handleSetOpen={handleSetOpen}
                                             loadSolution={loadSolution}
                                             loadMode={loadMode}
+                                            sfLoaded={sfLoaded}
                                         />
-                                    </Grid>
+                                    {/* </Grid> */}
 
-                                    <Grid xs={3} lg={2}>
+                                    {/* <Grid xs={3} lg={2}> */}
                                         {loadSave}
-                                    </Grid>
+                                    {/* </Grid> */}
 
-                                    <Grid xs={3} lg={2}>
+                                    {/* <Grid xs={3} lg={2}> */}
                                         <Submission handleClickSubmit={handleClickSubmit} isPending={txnPending} />
-                                    </Grid>
-                                </Grid>
+                                    {/* </Grid> */}
+                                {/* </Grid> */}
 
                                 {hash && (
                                     <Box fontSize="0.75em" display="flex" justifyContent="center" alignItems="center">
@@ -210,103 +300,48 @@ export default function Layout({
                                         </Tooltip>
                                     </Box>
                                 )}
-                            </Panel>
+                            </Box>
+
                         </Grid>
-                        <Grid xs={12} md={4} sx={gridStyles}>
+
+                        <Grid xs={12} md={5} sx={flexColumn}>
                             <Panel>
-                                {board}
-                                <MidScreenControl
-                                    runnable={midScreenControlProps.runnable}
-                                    animationFrame={midScreenControlProps.animationFrame}
-                                    n_cycles={midScreenControlProps.n_cycles}
-                                    animationState={midScreenControlProps.animationState}
-                                    handleClick={midScreenControlHandleClick}
-                                    handleSlideChange={midScreenControlHandleSlideChange}
+                                {
+                                    currMode !== 'daw' ? (
+                                        // <Panel>{stats}</Panel>
+                                        <Statistics liveStats={liveStats} summaryStats={summaryStats}/>
+                                    ) : (<></>)
+                                    //     <Panel>
+                                    //         <Box sx={stats_box_sx}>
+                                    //             <DAWPanel
+                                    //                 sf={null}
+                                    //                 handleSetSfFile={(file) => handleSetSfFile(file)}
+                                    //                 sfLoaded={sfLoaded}
+                                    //                 mech_n={mech_n}
+                                    //                 mechVelocities={mechVelocities}
+                                    //                 musicTitle={musicTitle}
+                                    //                 animationState={animationState}
+                                    //                 handleMechNoteVelocityChange={handleMechNoteVelocityChange}
+                                    //                 handleMusicTitleChange={handleMusicTitleChange}
+                                    //                 operatorStates={operatorStates}
+                                    //             />
+                                    //         </Box>
+                                    //     </Panel>
+                                    // )
+                                }
+                                <Editors
+                                    currMode={currMode}
+                                    animationState={animationState}
+                                    handleFormulaOnclick={handleFormulaOnclick}
+                                    formulaProgramming={formulaProgramming}
+                                    mechProgramming={mechProgramming}
+                                    dawVolumePanel={dawVolumePanel}
+                                    dawFaucetSinkPanel={dawFaucetSinkPanel}
                                 />
                             </Panel>
                         </Grid>
-                        {
-                            currMode !== 'daw' ? (
-                                <Grid xs={12} md={4} sx={gridStyles}>
-                                    <Panel>{stats}</Panel>
-                                </Grid>
-                            ) :
-                            <Grid xs={12} md={4} sx={gridStyles}>
-                                <Panel>
-                                    <Box sx={stats_box_sx}>
-                                        <DAWPanel
-                                            sf={null}
-                                            handleSetSfFile={(file) => handleSetSfFile(file)}
-                                            sfLoaded={sfLoaded}
-                                            mech_n={mech_n}
-                                            mechVelocities={mechVelocities}
-                                            musicTitle={musicTitle}
-                                            animationState={animationState}
-                                            handleMechNoteVelocityChange={handleMechNoteVelocityChange}
-                                            handleMusicTitleChange={handleMusicTitleChange}
-                                            operatorStates={operatorStates}
-                                        />
-                                    </Box>
-                                </Panel>
-                            </Grid>
-
-                        }
                     </Grid>
 
-                    <Grid container spacing={2} flex={1.25} justifyContent={"stretch"}>
-                        <Grid xs={12} md={4} sx={gridStyles}>
-                            <LayoutBox
-                                scrollable
-                                sx={{ bgcolor: animationState !== "Stop" ? "grey.500" : BLANK_COLOR }}
-                            >
-                                <Formulas
-                                    handleFormulaOnclick={(k) => {
-                                        setOpenedAccordion((_) => "accordion1");
-                                        handleFormulaOnclick(k);
-                                    }}
-                                    clickDisabled={animationState !== "Stop" ? true : false}
-                                />
-                            </LayoutBox>
-                        </Grid>
-                        <Grid xs={12} md={8} sx={gridStyles}>
-                            <LayoutBox
-                                scrollable
-                                sx={{ bgcolor: animationState !== "Stop" ? "grey.500" : BLANK_COLOR }}
-                            >
-                                <Accordion
-                                    key="accordion-1"
-                                    expanded={openedAccordion == "accordion1"}
-                                    onChange={(_, expanded) => setOpenedAccordion(expanded ? "accordion1" : null)}
-                                    style={{ boxShadow: "none", backgroundColor: "#ffffff00" }}
-                                >
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
-                                    >
-                                        {t("Formula placement")}
-                                    </AccordionSummary>
-                                    <AccordionDetails>{formulaProgramming}</AccordionDetails>
-                                </Accordion>
-
-                                <Accordion
-                                    key="accordion-2"
-                                    expanded={openedAccordion == "accordion2"}
-                                    onChange={(_, expanded) => setOpenedAccordion(expanded ? "accordion2" : null)}
-                                    style={{ boxShadow: "none", backgroundColor: "#ffffff00" }}
-                                >
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
-                                    >
-                                        {t("Mech programming")}
-                                    </AccordionSummary>
-                                    <AccordionDetails>{mechProgramming}</AccordionDetails>
-                                </Accordion>
-                            </LayoutBox>
-                        </Grid>
-                    </Grid>
                 </Box>
             </ThemeProvider>
         </>

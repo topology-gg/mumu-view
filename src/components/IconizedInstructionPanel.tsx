@@ -1,7 +1,9 @@
+import { Tooltip } from "@mui/material";
 import {
     InstructionKey,
     INSTRUCTION_ICON_MAP,
     INSTRUCTION_KEYS,
+    INSTRUCTION_KEY_TO_DESCRIPTION,
 } from "../constants/constants";
 
 const IconizedInstructionPanel = ({
@@ -25,39 +27,50 @@ const IconizedInstructionPanel = ({
             style={{
                 display: "flex",
                 flexDirection: "row",
-                margin: "0rem 0 2rem 0",
+                margin: "0rem 0 4rem 0",
                 justifyContent: "center",
             }}
         >
             {INSTRUCTION_KEYS.map((key, key_i) => {
                 return (
-                    <div
-                        key={`iconized-instruction-${key_i}`}
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            textAlign: "center",
-                            width: "2.5rem",
-                            marginRight: "0.3rem",
-                            padding: "0.3rem",
-                            border: "1px solid #CCCCCC",
-                            borderRadius: "0.8rem",
-                            backgroundColor: colors[key],
-                            transitionDuration: "50ms",
-                            cursor: "pointer",
-                        }}
-                        onClick={() => onPress(key)}
+                    <Tooltip
+                        key={`tooltip-iconized-instruction-${key_i}`}
+                        title={`${INSTRUCTION_KEY_TO_DESCRIPTION[key]}`}
+                        disableInteractive
+                        arrow
+                        enterDelay={0}
+                        leaveDelay={0}
+                        placement="bottom"
+                        TransitionProps={{ timeout: 100 }}
                     >
-                        <i
-                            className="material-icons"
-                            style={{ fontSize: "1rem" }}
+                        <div
+                            key={`iconized-instruction-${key_i}`}
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                textAlign: "center",
+                                width: "2.5rem",
+                                marginRight: "0.3rem",
+                                padding: "0.3rem",
+                                border: "1px solid #CCCCCC",
+                                borderRadius: "0.8rem",
+                                backgroundColor: colors[key],
+                                transitionDuration: "50ms",
+                                cursor: "default",
+                            }}
+                            onClick={() => onPress(key)}
                         >
-                            {INSTRUCTION_ICON_MAP[key]}
-                        </i>
-                        <p style={{ marginTop: "0.1rem", marginBottom: "0" }}>
-                            {key}
-                        </p>
-                    </div>
+                            <i
+                                className="material-icons"
+                                style={{ fontSize: "1rem" }}
+                            >
+                                {INSTRUCTION_ICON_MAP[key]}
+                            </i>
+                            <p style={{ marginTop: "0.1rem", marginBottom: "0" }}>
+                                {key}
+                            </p>
+                        </div>
+                    </Tooltip>
                 );
             })}
         </div>

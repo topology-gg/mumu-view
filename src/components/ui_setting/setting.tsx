@@ -15,7 +15,8 @@ import DAWHandbook from "./DAWHandbook";
 
 export default function Setting({
     loadSolution, loadMode,
-    renderMode, handleSetRenderMode, open, handleSetOpen
+    renderMode, handleSetRenderMode, open, handleSetOpen,
+    sfLoaded,
 }) {
 
     const { t } = useTranslation();
@@ -36,6 +37,7 @@ export default function Setting({
     // alias menu component
     const MenuHooked = (
         <Menu
+            sfLoaded={sfLoaded}
             onManualClick={() => handleModeChange('manual')}
             onLanguageClick={() => handleModeChange('language')}
             onConnectWalletClick={() => handleModeChange('connect')}
@@ -74,10 +76,10 @@ export default function Setting({
 
     // render
     return (
-        <div>
+        <div style={{margin:'0 6px 0 0'}}>
 
-            <button onClick={handleOpen} className={'big-button'}>
-                <i className="material-icons" style={{ fontSize: "1rem" }}>
+            <button onClick={handleOpen} >
+                <i className="material-icons" style={{ fontSize: "1rem", paddingTop:'0.1rem' }}>
                     settings
                 </i>
             </button>

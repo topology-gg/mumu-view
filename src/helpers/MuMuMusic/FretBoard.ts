@@ -1,5 +1,5 @@
-import { getmodeNameBySteps, mumu_modes, note_keys } from "./Modes"
-import { keynumToPitchClass, num_steps_from_scale_degree, PitchClass } from "./PitchClass"
+import { getmodeNameBySteps, modes, mumu_modes, note_keys } from "./Modes"
+import { keynumToMuMuView, keynumToPitchClass, num_steps_from_scale_degree, PitchClass } from "./PitchClass"
 
 /* 
 This function calculates the notes of any zither/guitar FretBoard for N Strings X N Frets in any Tuning:
@@ -39,8 +39,16 @@ EG: Standard Guqin Tuning:
  more info at: https://ledgernote.com/columns/music-theory/circle-of-fifths-explained/
 */
 
+// Define default FretBoard Values
 
-// double check that PC to Keynum and Keynum to PC functions return the correct octave
+var default_fretboard_name : string = "guqin_10_string"
+var default_tonic : PitchClass = new PitchClass(5, 0)
+var default_scale_degree : number = 3
+var default_num_frets : number = 10
+var default_string_steps : number[] = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+var default_mode : number[] = modes.pentatonic
+var default_quality : number = 0
+var default_offset : number = 3
 
 export class FretBoard {
   name: string
@@ -56,22 +64,58 @@ export class FretBoard {
   msg: string
   c_map_idx: number
 
-  constructor(name: string, string_steps: number[], num_frets: number, scale_degree: number, tonic: PitchClass, mode: number[], c_map: number[][], quality: number, offset: number, msg: string, c_map_idx: number) {
-    this.name = name
-    this.string_steps = string_steps
-    this.num_frets = num_frets
-    this.scale_degree = scale_degree
-    this.tonic = tonic
-    this.mode = mode  
-    this.frets = []    
-    this.c_map = [
-      [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5], //major modes/chords
-      [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2], //minor modes/chords
-    ]
-    this.quality = quality
-    this.offset = offset
-    this.msg = this.fretDataToString()
+  constructor(name?: string, string_steps?: number[], num_frets?: number, scale_degree?: number, tonic?: PitchClass, mode?: number[], c_map?: number[][], quality?: number, offset?: number, msg?: string, c_map_idx?: number) {
+    
+    if(tonic === undefined){
+      this.name = default_fretboard_name
+      this.string_steps = default_string_steps
+      this.num_frets = default_num_frets
+      this.scale_degree = default_scale_degree
+      this.tonic = default_tonic
+      this.mode = default_mode
+      this.frets = this.calculateFrets()    
+      this.c_map = [
+        [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5], //major modes/chords
+        [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2], //minor modes/chords
+      ]
+      this.quality = default_quality
+      this.offset = default_offset
+      this.msg =  this.fretDataToString()
+      this.c_map_idx = this.setCMapIdx()
+
+    }else{
+      this.name = name
+      this.string_steps = string_steps
+      this.num_frets = num_frets
+      this.scale_degree = scale_degree
+      this.tonic = tonic
+      this.mode = mode  
+      this.frets = []    
+      this.c_map = [
+        [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5], //major modes/chords
+        [9, 4, 11, 6, 1, 8, 3, 10, 5, 0, 7, 2], //minor modes/chords
+      ]
+      this.quality = quality
+      this.offset = offset
+      this.msg = this.fretDataToString()
+      this.c_map_idx = this.setCMapIdx()
+    }
+  }
+
+  // Reset function called when game loop stops or frame == 0
+
+  setFretBoardToInitialState(): number[][] {
+    this.name = default_fretboard_name
+    this.string_steps = default_string_steps
+    this.scale_degree = default_scale_degree
+    this.tonic = default_tonic
+    this.mode = default_mode
+    this.quality = default_quality
+    this.offset = default_offset
+    this.msg = `FretBoard Set to Initial State: ${this.fretDataToString()}`
     this.c_map_idx = this.setCMapIdx()
+    console.log(this.msg)
+  return this.calculateFrets();
   }
 
   fretDataToString(): string {
@@ -112,10 +156,13 @@ export class FretBoard {
     return chords
   }
 
+  // Using the Cycle of Fifths Wheel, select the 5 adacent chords to the current chord
+
   getChordsAtNote(): any {
 
     var qualmod = this.quality % 2;
     var chord_xy = this.c_map[qualmod].indexOf(this.tonic.note % 12);
+    var chords: number[][];
     
     if(chord_xy == 0){
       var initial_idx = 11
@@ -123,32 +170,50 @@ export class FretBoard {
       var initial_idx = chord_xy-1
     }
 
-    var chords = [
-      [
-        this.c_map[0][initial_idx],
-        this.c_map[0][(chord_xy)],
-        this.c_map[0][(chord_xy + 1) % 12],
-      ],
-      [
-        this.c_map[1][initial_idx],
-        this.c_map[1][chord_xy],
-        this.c_map[1][(chord_xy + 1) % 12],
-      ],
-    ]
+    if(qualmod == 0){
+
+      chords = [
+        [
+          this.c_map[0][initial_idx],
+          this.c_map[0][(chord_xy + 1) % 12],
+        ],
+        [
+          this.c_map[1][initial_idx],
+          this.c_map[1][chord_xy],
+          this.c_map[1][(chord_xy + 1) % 12],
+        ],
+      ];
+
+    }else{
+
+      chords = [
+        [
+          this.c_map[0][initial_idx],
+          this.c_map[0][(chord_xy)],
+          this.c_map[0][(chord_xy + 1) % 12],
+        ],
+        [
+          this.c_map[1][initial_idx],
+          this.c_map[1][(chord_xy + 1) % 12],
+        ],
+      ];
+
+    };
+
     return chords
   }
 
-  //changes the chord in a pleasing way based on x,y coordinate
+  // Changes chord in a pleasing way based on x,y coordinate
+  // Configured to avoid repeated chords
 
   setNewChord(x: number, y: number): any {
 
     //var chord_options = this.getChordsAtNote();
     var chord_options = this.getChordsAtCMapIdx();
+    var y_idx = y % 2;
+    var x_idx = x % chord_options[y_idx].length;
     
-    var new_note = chord_options[y % 2][x % 3];
-
-    //console.log('new_note'); 
-    //console.log(new_note); 
+    var new_note = chord_options[y_idx][x_idx];
 
     var new_tonic = new PitchClass(new_note, 0);
     this.tonic = new_tonic;
@@ -164,7 +229,6 @@ export class FretBoard {
     console.log(new_mode); 
     
     return this.calculateFrets();
-    //return [new_tonic, new_mode]
   }
   
   //subtle change, Sound like a harmonization of the original trajectory - Same harmonic space usually will s
@@ -258,7 +322,6 @@ export class FretBoard {
   }
 
   calculateFrets(): number[][] {
-    
     var notearr =  Array()   
   
     var step_offset =  this.offset * 12;
@@ -299,6 +362,15 @@ export class FretBoard {
   }else{
     this.frets = notearr
   }
+
+  //check and transpose up n octaves if the lower range is negative
+   
+  var lownote = this.frets[0][0];
+
+  if(lownote < 0){
+    var increment = (Math.trunc( Math.abs(lownote) / 12) * 12) + 12;
+    this.frets = notearr.map(function(entry) { return entry.map(function(entry3) { return entry3 + increment;})})
+   }
   
   this.msg = this.fretDataToString();
 

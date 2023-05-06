@@ -12,7 +12,12 @@ export default function Summary ({ mode, frames, n_cycles }) {
     const { t } = useTranslation();
 
     if (!frames) {
-        return <>{t('summary.title')}: n/a</>
+        return (
+            <div style={{padding:'0'}}>
+                <p style={{fontSize:'0.9rem'}}>{t('summary.title')}</p>
+                <p>n/a</p>
+            </div>
+        )
     }
 
     const target_type: AtomType = Constraints[mode].TARGET_TYPE
@@ -61,7 +66,7 @@ export default function Summary ({ mode, frames, n_cycles }) {
     const celebrate_size = '4rem'
 
     return (
-        <div style={{}}>
+        <div style={{padding:'0'}}>
             <p style={{fontSize:'0.9rem'}}>{t('summary.title')}</p>
 
             {

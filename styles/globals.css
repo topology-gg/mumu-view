@@ -87,6 +87,37 @@ button:hover {
     animation: glowing 700ms infinite;
 }
 
+@keyframes glowing_from_blank {
+    0% {
+        background-color: #F2F1ED00;
+    }
+    30% {
+        background-color: #fedfb0;
+    }
+    100% {
+        background-color: #F2F1ED00;
+    }
+}
+
+@keyframes glowing_instruction_card {
+    0% {
+        background-color: #303a43;
+    }
+    30% {
+        background-color: #F2F1ED;
+    }
+    100% {
+        background-color: #303a43;
+    }
+}
+.card_glow {
+    animation: glowing_instruction_card 700ms infinite;
+}
+
+.p_glow {
+    animation: glowing 700ms infinite;
+}
+
 @keyframes blinking {
     0% {
         background-color: #FFFFFF;
@@ -105,25 +136,30 @@ button:hover {
 .grid {
     display: flex;
     font-size: 0.2em;
-    margin: 0.2rem;
+    /* margin: 0.2rem; */
     padding: 0rem;
-    width: 1rem;
-    height:1rem;
+    /* width: 1rem; */
+    /* height:1rem; */
     text-align: center;
     justify-content: center;
     align-items: center;
     color: inherit;
     cursor: default;
     text-decoration: none;
-    border-radius: 0.5rem;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    /* border-radius: 0.5rem; */
+    transition: color 0.15s ease, border-color 0.15s ease, outline-color 0.3s ease;
     max-width: 300px;
 }
 
 .grid:hover {
     outline-width: 1px;
     outline-style: dashed;
-    outline-color: #63e2ff88;
+    outline-color: #777777;
+}
+.grid-hovered {
+    outline-width: 2px;
+    outline-style: dashed;
+    outline-color: #777777;
 }
 
 .machine {
@@ -361,4 +397,131 @@ input::placeholder {
     background: url('../src/images/celebrate.gif') no-repeat;
     background-position: center;
     background-size: 100%;
+}
+
+/*  */
+/* reference for styling select: https://moderncss.dev/custom-select-styles-with-pure-css/ */
+/*  */
+select {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0 1rem 0 0.5rem;
+    height: 1rem;
+    font-family: inherit;
+    font-size: '8px';
+    cursor: inherit;
+    line-height: inherit;
+    outline: none;
+}
+select::-ms-expand {
+    display: none;
+}
+.select {
+    height: 1.4rem;
+    margin: 0 0 0 0.8rem;
+    padding-right: 0.5rem;
+    border: 1px solid #555555;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #FFFFFF;
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+}
+
+.select::after {
+    content: "";
+    width: 0.8em;
+    height: 0.5em;
+    background-color: #999999;
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    justify-self: end;
+}
+
+select,
+.select:after {
+  grid-area: select;
+}
+
+.daw-faucet-row-div:hover {
+    /* background-color: #fedfb0; */
+    background-color: #DDDDDD
+}
+
+.disabled-editable-placement {
+    background-color:#CCCCCC;
+}
+
+.editable-placement {
+    background-color:#FFFFFF;
+}
+
+.editable-placement:hover {
+    cursor: pointer;
+    background-color: #fedfb0;
+}
+
+/*  */
+/* for animation cover screen */
+/*  */
+.hide_fast {
+    -webkit-animation: fadeinout 0.3s linear forwards;
+    animation: fadeinout 0.3s linear forwards;
+}
+.hide_slow {
+    -webkit-animation: fadeinout 0.7s linear forwards;
+    animation: fadeinout 0.7s linear forwards;
+}
+
+@-webkit-keyframes fadeinout {
+    0% { opacity: 1.0; z-index: 2000}
+    50% { opacity: 0.5; z-index: 500}
+    100% { opacity: 0; z-index: -1}
+}
+
+@keyframes fadeinout {
+    0% { opacity: 1.0; z-index: 2000}
+    50% { opacity: 0.5; z-index: 500}
+    100% { opacity: 0; z-index: -1}
+}
+
+.show {
+    -webkit-animation: display .3s linear forwards;
+    animation: display .3s linear forwards;
+}
+
+.cover_art {
+    z-index: 1000;
+	position: absolute;
+    margin: 0;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    /* background-color: #f9ffff; */
+    background-color: #2c2a25;
+    /* background-image: url("../public/cover-art.png"); */
+    background-position: center center;
+    background-repeat:no-repeat;
+    background-size: contain;
+}
+
+.cover_screen_base {
+	position: absolute;
+    margin: 0;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    /* background-color: #f9ffff; */
+    background-color: #2c2a25;
+}
+
+.cover_screen {
+    z-index: 2000;
+}
+
+.cover_screen_front {
+    z-index: 2500;
 }

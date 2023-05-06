@@ -2,9 +2,13 @@ import UnitState, { BgStatus, BorderStatus } from "../types/UnitState";
 import styles from "../../styles/Unit.module.css";
 import { useSpring, animated } from "react-spring";
 import { AtomType } from "../types/AtomState";
+import { keynumToMuMuView } from "../helpers/MuMuMusic/PitchClass";
+import { Modes } from "../constants/constants";
 
 interface UnitProps {
     atomOpacity?: number;
+    mode?: Modes;
+    noteNum?: number;
     state: UnitState;
     consumableAtomType?: AtomType;
     produceableAtomType?: AtomType;
@@ -16,10 +20,15 @@ interface UnitProps {
     onMouseDown?: () => void;
     isConsumed?: boolean;
     isProduced?: boolean;
+    gridDimensionRem?: number;
+    marginRem?: number;
+    isHovered?: boolean;
 }
 
 export default function Unit({
     atomOpacity,
+    mode,
+    noteNum,
     state,
     consumableAtomType,
     produceableAtomType,
@@ -31,6 +40,9 @@ export default function Unit({
     onMouseDown,
     isConsumed,
     isProduced,
+    gridDimensionRem = 2,
+    marginRem = 0.2,
+    isHovered = false,
 }: UnitProps) {
 
     // guardrail
@@ -41,26 +53,32 @@ export default function Unit({
     // animation prop
     // note: if this unit is an output of a formula && the unit is not producing nor occupied in the current frame,
     // .     return the backgroundSize of this unit to 0 to prepare for the animation for next producing frame
+    const fullBackgroundSize = 0.9 * gridDimensionRem * 16// 90% of grid dimension
     const animationStyle = isSmall ? useSpring({}) :
     isConsumed ? useSpring({
-        from: {backgroundSize: 28.8}, // 90% of 32px is 28.8px
+        from: {backgroundSize: fullBackgroundSize},
         backgroundSize: 0,
         config: {friction: 45}
     }) :
     isProduced ? useSpring({
         from: {backgroundSize: 0},
-        backgroundSize: 28.8,
+        backgroundSize: fullBackgroundSize,
         config: {friction: 40}
     }) :
     (produceableAtomType !== null && state.bg_status == BgStatus.EMPTY) ? useSpring({
         backgroundSize: 0
     }) : useSpring({
-        backgroundSize: 28.8
+        backgroundSize: fullBackgroundSize
     })
 
     // Compute atom styles
     let divStyle: React.CSSProperties = {};
-    if (isSmall) divStyle = { ...divStyle, width: "1.6rem", height: "1.6rem" };
+    if (isSmall) {
+        divStyle = { ...divStyle, width: `${gridDimensionRem*0.8}rem`, height: `${gridDimensionRem*0.8}rem` };
+    }
+    else {
+        divStyle = { ...divStyle, width: `${gridDimensionRem}rem`, height: `${gridDimensionRem}rem` };
+    }
     divStyle = { ...divStyle, zIndex: "20" };
 
     let className: string = '';
@@ -91,10 +109,25 @@ export default function Unit({
 
     const mechId = state.unit_id && state.unit_id.includes("mech") && state.unit_id.replace("mech", "");
 
+    let renderedText = ''
+    if (mode != Modes.daw) {
+        renderedText = state.unit_text;
+    }
+    else {
+        renderedText = keynumToMuMuView(noteNum);
+
+        if (state.unit_text == 'F') {
+            className += styles.faucet + ' ';
+        }
+        else if (state.unit_text == 'S') {
+            className += styles.sink + ' ';
+        }
+    }
+
     // Render
     return (
         <animated.div
-            className={`grid ${styles.unit} ${className}`}
+            className={`grid ${styles.unit} ${className} ${isHovered ? 'grid-hovered' : ''}`}
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
             onClick={onClick}
@@ -102,10 +135,12 @@ export default function Unit({
             style={{
                 ...divStyle,
                 ...animationStyle,
-                opacity: atomOpacity || 1.0
+                opacity: atomOpacity || 1.0,
+                margin: `${marginRem}rem`,
+                borderRadius: `${gridDimensionRem/2}rem`,
             }}
         >
-            {state.unit_text}
+            {renderedText}
         </animated.div>
     );
 }
